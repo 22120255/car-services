@@ -1,0 +1,5 @@
+-   Install dependencies
+    -   npm i
+-   Run
+    -   npm start
+    -   npm run watch
