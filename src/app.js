@@ -4,15 +4,13 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const route = require('./routes');
-const cors = require('cors');  
 const { engine } = require('express-handlebars');
-const db = require('./config/db');  
+const db = require('./config/db');
 
 // Connect to DB
 db.connectDB();
 
 // Body parser
-app.use(cors());
 app.use(express.json());
 
 // Static file
