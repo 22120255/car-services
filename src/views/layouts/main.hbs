@@ -18,24 +18,48 @@
     <link
       rel="shortcut icon"
       type="image/icon"
-      href="../assets/logo/favicon.png"
+      href="/vender/logo/favicon.png"
     />
-    <link rel="stylesheet" href="../assets/css/linearicons.css" />
-    <link rel="stylesheet" href="../assets/css/flaticon.css" />
-    <link rel="stylesheet" href="../assets/css/animate.css" />
-    <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/css/bootsnav.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/responsive.css" />
-    <link rel="stylesheet" href="../css/dashboard/styles.css" />
-    <link rel="stylesheet" href="../css/styles.css" />
-  </head>
+    <link rel="stylesheet" href="/vender/css/linearicons.css" />
+    <link rel="stylesheet" href="/vender/css/flaticon.css" />
+    <link rel="stylesheet" href="/vender/css/animate.css" />
+    <link rel="stylesheet" href="/vender/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/vender/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/vender/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/vender/css/bootsnav.css" />
+    <link rel="stylesheet" href="/vender/css/style.css" />
+    <link rel="stylesheet" href="/vender/css/responsive.css" />
+    <link rel="stylesheet" href="/css/home.css" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentPage = window.location.pathname.split("/").pop();
+
+            let customCss = document.createElement("link");
+            customCss.rel = "stylesheet";
+
+            switch (currentPage) {
+                case "about":
+                    customCss.href = "/css/about.css";
+                    break;
+                case "contact":
+                    customCss.href = "/css/contact.css";
+                    break;
+                case "trang3.html":
+                    customCss.href = "/css/trang3.css";
+                    break;
+                default:
+                    customCss.href = "/css/home.css";
+                    break;
+            }
+
+            document.head.appendChild(customCss);
+        });
+    </script>
 </head>
 <body>
 
     {{{body}}}
-
+  
 </body>
 </html>
