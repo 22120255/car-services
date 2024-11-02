@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../variables';
 
 .social-media-links {
     margin-top: 10%;
@@ -9,7 +9,11 @@
     margin-right: 10px;
 }
 .overlay {
-    background-image: linear-gradient(to right, rgba(90, 100, 232, 0.116), rgba(105, 109, 161, 0.548));
+    background-image: linear-gradient(
+        to right,
+        rgba(90, 100, 232, 0.116),
+        rgba(105, 109, 161, 0.548)
+    );
     width: 100%;
     height: 100%;
     z-index: 1;
@@ -40,7 +44,7 @@
     left: 0;
     border-radius: 6px;
     background: #ffffff;
-    box-shadow: 10px 40px 40px rgba(0,0,0,.2);
+    box-shadow: 10px 40px 40px rgba(0, 0, 0, 0.2);
     pointer-events: none;
     right: auto;
     width: 100vw;
@@ -67,9 +71,9 @@
     background-image: none;
     border-radius: 0;
     -webkit-appearance: none;
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
     border: 2px solid transparent;
-    border-bottom-color: rgba(0,0,0,.1);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 
 .contact-form textarea {
@@ -87,16 +91,15 @@
     background-image: none;
     border-radius: 0;
     -webkit-appearance: none;
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
     border: 2px solid transparent;
-    border-bottom-color: rgba(0,0,0,.1);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 .contact-form input::placeholder {
-  color:#222;
+    color: #222;
 }
 .contact-form textarea::placeholder {
-  color:#222;
-
+    color: #222;
 }
 .contact-form input {
     margin-bottom: 30px;
@@ -104,23 +107,22 @@
     font-weight: 600;
     height: 55px;
 }
-.contact-form input:hover, .contact-form input:focus{
+.contact-form input:hover,
+.contact-form input:focus {
     outline: none;
     box-shadow: none;
     background: transparent;
     border: 2px solid transparent;
     border-bottom-color: rgb(254, 132, 111);
-
 }
-.contact-form textarea:hover, .contact-form textarea:focus{
-  background: transparent; 
+.contact-form textarea:hover,
+.contact-form textarea:focus {
+    background: transparent;
     outline: none;
-  box-shadow: none;
-     border: 2px solid transparent;
+    box-shadow: none;
+    border: 2px solid transparent;
     border-bottom-color: rgb(254, 132, 111);
-
 }
-
 
 .taso-btn {
     background-color: #fff;
@@ -152,8 +154,6 @@ ul.contact-info li {
     margin-bottom: 22px;
 }
 
-
-
 ul.contact-info span {
     font-size: 20px;
     line-height: 26px;
@@ -179,11 +179,11 @@ ul.contact-info li {
     color: #fff;
     font-size: 18px;
 }
-.contact-page .info-left i{
-color: #FE846F;
+.contact-page .info-left i {
+    color: #fe846f;
 }
 .btn {
-display: inline-block;
+    display: inline-block;
     font-weight: 400;
     text-align: center;
     white-space: nowrap;
@@ -198,11 +198,32 @@ display: inline-block;
     line-height: 28px;
     border: 0px;
     border-radius: 10px;
-    -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    -o-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    -webkit-transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        -webkit-box-shadow 0.15s ease-in-out;
+    transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        -webkit-box-shadow 0.15s ease-in-out;
+    -o-transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+    transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out;
+    transition:
+        color 0.15s ease-in-out,
+        background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out,
+        -webkit-box-shadow 0.15s ease-in-out;
 }
 .btn-big {
     color: #ffffff;
@@ -210,18 +231,22 @@ display: inline-block;
     box-shadow: 2px 5px 10px 0px rgba(45, 45, 45, 0.19);
     color: #fff !important;
     margin-right: 20px;
-    background: #FE846F;
-    transition: .2s;
-    border: 2px solid #FE846F;
+    background: #fe846f;
+    transition: 0.2s;
+    border: 2px solid #fe846f;
     margin-top: 50px;
 }
 
 @media only screen and (max-width: 767px) {
-.contact-form {
-    padding: 30px;
-}
-.contact-form:before {
-    width: 100%;
+    .contact-form {
+        padding: 30px;
+    }
+    .contact-form:before {
+        width: 100%;
+    }
 }
 
+// Custom styles
+.wrapper-contact {
+    background-image: url('/vender/images/welcome-hero/welcome-banner.jpg');
 }

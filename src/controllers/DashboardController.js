@@ -5,7 +5,7 @@ class DashboardController {
     }
 
     // [GET] /about
-    aboutUs(req, res) {
+    about(req, res) {
         res.render("dashboard/about");
     }
 

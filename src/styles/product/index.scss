@@ -1,0 +1,54 @@
+@import '../variables';
+
+.header-area {
+    background-color: $bg-header;
+}
+
+.main-title {
+    font-size: 3em;
+    font-weight: 800;
+    color: #2c3e50;
+    text-align: center;
+    margin: 20px 0 10px;
+    position: relative;
+    animation: fadeInUp 1s ease;
+}
+
+/* Phần phụ đề */
+.sub-title {
+    font-size: 1.2em;
+    color: #3498db;
+    text-align: center;
+    margin: 0;
+    animation: fadeInDown 1s ease;
+}
+
+.section-description {
+    text-align: center;
+    font-size: 1em;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+/* Hiệu ứng fadeIn */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

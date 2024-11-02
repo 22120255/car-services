@@ -62,7 +62,7 @@
   background-image: none;
   border-radius: 0;
   -webkit-appearance: none;
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
   border: 2px solid transparent;
   border-bottom-color: rgba(0, 0, 0, 0.1); }
 
@@ -80,7 +80,7 @@
   background-image: none;
   border-radius: 0;
   -webkit-appearance: none;
-  transition: .3s ease-in-out;
+  transition: 0.3s ease-in-out;
   border: 2px solid transparent;
   border-bottom-color: rgba(0, 0, 0, 0.1); }
 
@@ -96,14 +96,16 @@
   font-weight: 600;
   height: 55px; }
 
-.contact-form input:hover, .contact-form input:focus {
+.contact-form input:hover,
+.contact-form input:focus {
   outline: none;
   box-shadow: none;
   background: transparent;
   border: 2px solid transparent;
   border-bottom-color: #fe846f; }
 
-.contact-form textarea:hover, .contact-form textarea:focus {
+.contact-form textarea:hover,
+.contact-form textarea:focus {
   background: transparent;
   outline: none;
   box-shadow: none;
@@ -158,7 +160,7 @@ ul.contact-info li {
   font-size: 18px; }
 
 .contact-page .info-left i {
-  color: #FE846F; }
+  color: #fe846f; }
 
 .btn {
   display: inline-block;
@@ -188,9 +190,9 @@ ul.contact-info li {
   box-shadow: 2px 5px 10px 0px rgba(45, 45, 45, 0.19);
   color: #fff !important;
   margin-right: 20px;
-  background: #FE846F;
-  transition: .2s;
-  border: 2px solid #FE846F;
+  background: #fe846f;
+  transition: 0.2s;
+  border: 2px solid #fe846f;
   margin-top: 50px; }
 
 @media only screen and (max-width: 767px) {
@@ -198,3 +200,6 @@ ul.contact-info li {
     padding: 30px; }
   .contact-form:before {
     width: 100%; } }
+
+.wrapper-contact {
+  background-image: url("/vender/images/welcome-hero/welcome-banner.jpg"); }
