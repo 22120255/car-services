@@ -67,3 +67,9 @@ h3,
 h4,
 .h4 {
   font-size: calc(1.275rem + 0.3vw); }
+
+.flex-1 {
+  flex: 1; }
+
+.fs-075 {
+  font-size: 0.75rem; }

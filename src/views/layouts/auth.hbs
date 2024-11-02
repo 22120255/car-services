@@ -28,8 +28,10 @@
     <link rel="stylesheet" href="/vender/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/vender/css/bootsnav.css" />
     <link rel="stylesheet" href="/vender/css/style.css" />
+    <link rel="stylesheet" href="/vender/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/vender/css/responsive.css" />
-    <link rel="stylesheet" href="/css/home.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/partials/auth.css" />
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -39,17 +41,16 @@
             customCss.rel = "stylesheet";
 
             switch (currentPage) {
-                case "about":
-                    customCss.href = "/css/about.css";
+                case "login":
+                    customCss.href = "/css/auth/login.css";
                     break;
-                case "contact":
-                    customCss.href = "/css/contact.css";
+                case "register":
+                    customCss.href = "/css/auth/register.css";
                     break;
-                case "trang3.html":
-                    customCss.href = "/css/trang3.css";
+                case "forgot-password":
+                    customCss.href = "/css/auth/forgot-password.css";
                     break;
                 default:
-                    customCss.href = "/css/home.css";
                     break;
             }
 
@@ -61,5 +62,12 @@
 
     {{{body}}}
   
+  <script src="/vender/js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="/vender/js/bootstrap.min.js"></script>
+    <script src="/vender/js/bootsnav.js"></script>
+    <script src="/vender/js/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="/vender/js/custom.js"></script>
 </body>
 </html>

@@ -1,0 +1,69 @@
+// File CSS for auth layout
+.logo {
+    width: 32px;
+    height: 32px;
+}
+
+.note-message {
+    text-align: center;
+}
+
+.term {
+    font-size: 12px;
+}
+
+.btn-login,
+.btn-register {
+    width: 360px;
+    margin-top: 8px;
+    border-radius: 32px;
+}
+
+.form-register {
+    width: 360px;
+    margin-top: 8px;
+    border-radius: 32px;
+}
+
+.btn-back {
+    position: absolute;
+    top: 16;
+    left: 16;
+}
+
+.icon-warning {
+    margin-left: -32px;
+}
+
+.message-warning {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.text-login {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.method {
+    cursor: pointer;
+    font-weight: 500;
+    opacity: 0.7;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.country {
+    width: 96px;
+    border-right: 1px solid #333;
+}
+.country select {
+    border: 0;
+    outline: none;
+}
+.country select:focus,
+.country select:focus-visible {
+    border: 0;
+    outline: none;
+}
