@@ -4,7 +4,7 @@ const router = express.Router();
 const dashboardController = require("../controllers/DashboardController");
 
 router.get("/contact", dashboardController.contact);
-router.get("/about-us", dashboardController.aboutUs);
+router.get("/about", dashboardController.about);
 router.get("/", dashboardController.index);
 
 module.exports = router;

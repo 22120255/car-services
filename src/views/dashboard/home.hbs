@@ -1,74 +1,20 @@
-<section id="home" class="welcome-hero">
-      <div class="top-area">
-        <div class="header-area">
-          <!-- Start Navigation -->
-          <nav
-            class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy"
-            data-minus-value-desktop="70"
-            data-minus-value-mobile="55"
-            data-speed="1000"
-          >
-            <div class="container">
-              <div class="navbar-header">
-                <button
-                  type="button"
-                  class="navbar-toggle"
-                  data-toggle="collapse"
-                  data-target="#navbar-menu"
-                >
-                  <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="#"
-                  ><span>3N</span></a
-                >
-              </div>
-              <div
-                class="collapse navbar-collapse menu-ui-design flex"
-                id="navbar-menu"
-              >
-                <ul
-                  class="nav navbar-nav navbar-right"
-                  data-in="fadeInDown"
-                  data-out="fadeOutUp"
-                >
-                  <li class="active">
-                    <a href="/">Home</a>
-                  </li>
-                  <li class="">
-                    <a href="product">Product</a>
-                  </li>
-                  <li class="">
-                    <a href="about">About</a>
-                  </li>
-                  <li class="">
-                    <a href="contact">Contact</a>
-                  </li>
-                  <li class="">
-                    <a role="button" href="../auth/login/index.html">Login</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-          <!-- End Navigation -->
-        </div>
-        <div class="clearfix"></div>
-      </div>
-
-      <div class="container">
-        <div class="welcome-hero-txt">
-          <h2>Sở hữu chiếc xe bạn mong muốn với mức giá hợp lý</h2>
-          <p>
+<div class='container-fuild welcome-hero'>
+    <div class='welcome-hero-txt'>
+        <h2>Sở hữu chiếc xe bạn mong muốn với mức giá hợp lý</h2>
+        <p>
             Chúng tôi cung cấp các dòng xe đa dạng, từ những mẫu xe phổ thông
             đến cao cấp, phù hợp với nhu cầu và ngân sách của bạn.
-          </p>
-          <button class="welcome-btn" onclick="window.location.href='#contact'">
+        </p>
+        <button
+            class='welcome-btn'
+            onclick="window.location.href='/dashboard/contact'"
+        >
             Liên hệ ngay
-          </button>
-        </div>
-      </div>
+        </button>
+    </div>
+</div>
 
-      <div class="container">
+{{! <div class="container">
         <div class="row">
           <div class="col-md-12">
             <div class="model-search-content">
@@ -169,360 +115,203 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </div> }}
 
-    <section id="service" class="service">
-      <div class="container">
-        <div class="service-content">
-          <div class="row">
-            <div class="col-md-4 col-sm-6">
-              <div class="single-service-item">
-                <div class="single-service-icon">
-                  <i class="flaticon-car"></i>
-                </div>
-                <h2><a href="#">Hệ thống đại lý ô tô lớn nhất</a></h2>
-                <p>
-                  Cung cấp đa dạng mẫu mã với dịch vụ chăm sóc khách hàng tận
-                  tình và chu đáo.
-                </p>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-service-item">
-                <div class="single-service-icon">
-                  <i class="flaticon-car-repair"></i>
-                </div>
-                <h2><a href="#">Bảo hành sửa chữa không giới hạn</a></h2>
-                <p>
-                  Dịch vụ bảo hành và sửa chữa tận nơi cho khách hàng trong thời
-                  gian bảo hành.
-                </p>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-service-item">
-                <div class="single-service-icon">
-                  <i class="flaticon-car-1"></i>
-                </div>
-                <h2><a href="#">Hỗ trợ bảo hiểm</a></h2>
-                <p>
-                  Đối tác bảo hiểm uy tín, giúp quý khách an tâm khi di chuyển.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--/.container-->
-    </section>
-
-    <!--/.new-cars-->
-    <!--new-cars end -->
-
-    <!--featured-cars start -->
-    >
-    <!--/.featured-cars-->
-    <!--featured-cars end -->
-
-    <!-- clients-say strat -->
-    <section id="clients-say" class="clients-say">
-      <div class="container">
-        <div class="section-header">
-          <h2>Khách hàng nói gì</h2>
-        </div>
-        <!--/.section-header-->
-        <div class="row">
-          <div class="owl-carousel testimonial-carousel">
-            <!-- Khách hàng 1 -->
-            <div class="col-sm-3 col-xs-12">
-              <div class="single-testimonial-box">
-                <div class="testimonial-description">
-                  <div class="testimonial-info">
-                    <div class="testimonial-img">
-                      <img
-                        src="/vender/images/clients/c1.png"
-                        alt="Hình ảnh của khách hàng"
-                      />
+<section id='service' class='service'>
+    <div class='container'>
+        <div class='service-content'>
+            <div class='row'>
+                <div class='col-md-4 col-sm-6'>
+                    <div class='single-service-item'>
+                        <div class='single-service-icon'>
+                            <i class='flaticon-car'></i>
+                        </div>
+                        <h2><a href='#'>Hệ thống đại lý ô tô lớn nhất</a></h2>
+                        <p>
+                            Cung cấp đa dạng mẫu mã với dịch vụ chăm sóc khách
+                            hàng tận tình và chu đáo.
+                        </p>
                     </div>
-                  </div>
-                  <div class="testimonial-comment">
-                    <p>
-                      "Dịch vụ ở đây thực sự tuyệt vời! Tôi đã trải nghiệm và
-                      cảm thấy rất hài lòng về chất lượng và sự tận tâm."
-                    </p>
-                  </div>
-                  <div class="testimonial-person">
-                    <h2><a href="#">Nguyễn Văn A</a></h2>
-                    <h4>Hà Nội</h4>
-                  </div>
                 </div>
-              </div>
-            </div>
-            <!--/.col-->
-            <!-- Khách hàng 2 -->
-            <div class="col-sm-3 col-xs-12">
-              <div class="single-testimonial-box">
-                <div class="testimonial-description">
-                  <div class="testimonial-info">
-                    <div class="testimonial-img">
-                      <img
-                        src="/vender/images/clients/c2.png"
-                        alt="Hình ảnh của khách hàng"
-                      />
+                <div class='col-md-4 col-sm-6'>
+                    <div class='single-service-item'>
+                        <div class='single-service-icon'>
+                            <i class='flaticon-car-repair'></i>
+                        </div>
+                        <h2><a href='#'>Bảo hành sửa chữa không giới hạn</a></h2>
+                        <p>
+                            Dịch vụ bảo hành và sửa chữa tận nơi cho khách hàng
+                            trong thời gian bảo hành.
+                        </p>
                     </div>
-                  </div>
-                  <div class="testimonial-comment">
-                    <p>
-                      "Tôi rất ấn tượng với thái độ phục vụ nhiệt tình của nhân
-                      viên. Xe của tôi được bảo dưỡng nhanh chóng và hiệu quả."
-                    </p>
-                  </div>
-                  <div class="testimonial-person">
-                    <h2><a href="#">Trần Thị B</a></h2>
-                    <h4>Đà Nẵng</h4>
-                  </div>
                 </div>
-              </div>
-            </div>
-            <!--/.col-->
-            <!-- Khách hàng 3 -->
-            <div class="col-sm-3 col-xs-12">
-              <div class="single-testimonial-box">
-                <div class="testimonial-description">
-                  <div class="testimonial-info">
-                    <div class="testimonial-img">
-                      <img
-                        src="/vender/images/clients/c3.png"
-                        alt="Hình ảnh của khách hàng"
-                      />
+                <div class='col-md-4 col-sm-6'>
+                    <div class='single-service-item'>
+                        <div class='single-service-icon'>
+                            <i class='flaticon-car-1'></i>
+                        </div>
+                        <h2><a href='#'>Hỗ trợ bảo hiểm</a></h2>
+                        <p>
+                            Đối tác bảo hiểm uy tín, giúp quý khách an tâm khi
+                            di chuyển.
+                        </p>
                     </div>
-                  </div>
-                  <div class="testimonial-comment">
-                    <p>
-                      "Chất lượng dịch vụ cao, giá cả hợp lý. Tôi chắc chắn sẽ
-                      quay lại khi cần bảo dưỡng xe lần tới."
-                    </p>
-                  </div>
-                  <div class="testimonial-person">
-                    <h2><a href="#">Lê C</a></h2>
-                    <h4>Hồ Chí Minh</h4>
-                  </div>
                 </div>
-              </div>
             </div>
-            <!--/.col-->
-          </div>
-          <!--/.testimonial-carousel-->
         </div>
-        <!--/.row-->
-      </div>
-      <!--/.container-->
-    </section>
+    </div>
+</section>
 
-    <!--/.clients-say-->
-    <!-- clients-say end -->
-
-    <!--brand strat -->
-    <section id="brand" class="brand">
-      <div class="container">
-        <div class="brand-area">
-          <div class="owl-carousel owl-theme brand-item">
-            <div class="item">
-              <a href="#">
-                <img src="/vender/images/brand/br1.png" alt="brand-image" />
-              </a>
-            </div>
-            <!--/.item-->
-            <div class="item">
-              <a href="#">
-                <img src="/vender/images/brand/br2.png" alt="brand-image" />
-              </a>
-            </div>
-            <!--/.item-->
-            <div class="item">
-              <a href="#">
-                <img src="/vender/images/brand/br3.png" alt="brand-image" />
-              </a>
-            </div>
-            <!--/.item-->
-            <div class="item">
-              <a href="#">
-                <img src="/vender/images/brand/br4.png" alt="brand-image" />
-              </a>
-            </div>
-            <!--/.item-->
-            <div class="item">
-              <a href="#">
-                <img src="/vender/images/brand/br5.png" alt="brand-image" />
-              </a>
-            </div>
-            <!--/.item-->
-
-            <div class="item">
-              <a href="#">
-                <img src="/vender/images/brand/br6.png" alt="brand-image" />
-              </a>
-            </div>
-            <!--/.item-->
-          </div>
-          <!--/.owl-carousel-->
+<section id='clients-say' class='clients-say'>
+    <div class='container'>
+        <div class='section-header'>
+            <h2>Khách hàng nói gì</h2>
         </div>
-        <!--/.clients-area-->
-      </div>
-      <!--/.container-->
-    </section>
-    <!--/brand-->
-    <!--brand end -->
+        <div class='row'>
+            <div class='owl-carousel testimonial-carousel'>
 
-    <!--blog start -->
-    <footer id="contact" class="contact">
-      <div class="container">
-        <div class="footer-top">
-          <div class="row">
-            <div class="col-md-3 col-sm-6">
-              <div class="single-footer-widget">
-                <div class="footer-logo">
-                  <a href="/">3N</a>
+                <div class='col-sm-3 col-xs-12'>
+                    <div class='single-testimonial-box'>
+                        <div class='testimonial-description'>
+                            <div class='testimonial-info'>
+                                <div class='testimonial-img'>
+                                    <img
+                                        src='/vender/images/clients/c1.png'
+                                        alt='Hình ảnh của khách hàng'
+                                    />
+                                </div>
+                            </div>
+                            <div class='testimonial-comment'>
+                                <p>
+                                    "Dịch vụ ở đây thực sự tuyệt vời! Tôi đã
+                                    trải nghiệm và cảm thấy rất hài lòng về chất
+                                    lượng và sự tận tâm."
+                                </p>
+                            </div>
+                            <div class='testimonial-person'>
+                                <h2><a href='#'>Nguyễn Văn A</a></h2>
+                                <h4>Hà Nội</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p>
-                  3N Car Dealer chuyên cung cấp các dòng xe đa dạng từ các
-                  thương hiệu hàng đầu thế giới, với nhiều lựa chọn phù hợp cho
-                  mọi nhu cầu và ngân sách. Đến ngay để trải nghiệm dịch vụ
-                  tuyệt vời!
-                </p>
-                <div class="footer-contact">
-                  <p>contact@realestate.vn</p>
-                  <p>(+84) 123 456 789</p>
+                <!--/.col-->
+                <!-- Khách hàng 2 -->
+                <div class='col-sm-3 col-xs-12'>
+                    <div class='single-testimonial-box'>
+                        <div class='testimonial-description'>
+                            <div class='testimonial-info'>
+                                <div class='testimonial-img'>
+                                    <img
+                                        src='/vender/images/clients/c2.png'
+                                        alt='Hình ảnh của khách hàng'
+                                    />
+                                </div>
+                            </div>
+                            <div class='testimonial-comment'>
+                                <p>
+                                    "Tôi rất ấn tượng với thái độ phục vụ nhiệt
+                                    tình của nhân viên. Xe của tôi được bảo
+                                    dưỡng nhanh chóng và hiệu quả."
+                                </p>
+                            </div>
+                            <div class='testimonial-person'>
+                                <h2><a href='#'>Trần Thị B</a></h2>
+                                <h4>Đà Nẵng</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                <!--/.col-->
+                <!-- Khách hàng 3 -->
+                <div class='col-sm-3 col-xs-12'>
+                    <div class='single-testimonial-box'>
+                        <div class='testimonial-description'>
+                            <div class='testimonial-info'>
+                                <div class='testimonial-img'>
+                                    <img
+                                        src='/vender/images/clients/c3.png'
+                                        alt='Hình ảnh của khách hàng'
+                                    />
+                                </div>
+                            </div>
+                            <div class='testimonial-comment'>
+                                <p>
+                                    "Chất lượng dịch vụ cao, giá cả hợp lý. Tôi
+                                    chắc chắn sẽ quay lại khi cần bảo dưỡng xe
+                                    lần tới."
+                                </p>
+                            </div>
+                            <div class='testimonial-person'>
+                                <h2><a href='#'>Lê C</a></h2>
+                                <h4>Hồ Chí Minh</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2 col-sm-6">
-              <div class="single-footer-widget">
-                <h2>about devloon</h2>
-                <ul>
-                  <li><a href="about">about us</a></li>
-                  <li><a href="#">career</a></li>
-                  <li>
-                    <a href="#">terms <span> of service</span></a>
-                  </li>
-                  <li><a href="#">privacy policy</a></li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-3 col-xs-12">
-              <div class="single-footer-widget">
-                <h2>top brands</h2>
-                <div class="row">
-                  <div class="col-md-7 col-xs-6">
-                    <ul>
-                      <li><a href="#">BMW</a></li>
-                      <li><a href="#">lamborghini</a></li>
-                      <li><a href="#">camaro</a></li>
-                      <li><a href="#">audi</a></li>
-                      <li><a href="#">infiniti</a></li>
-                      <li><a href="#">nissan</a></li>
-                    </ul>
-                  </div>
-                  <div class="col-md-5 col-xs-6">
-                    <ul>
-                      <li><a href="#">ferrari</a></li>
-                      <li><a href="#">porsche</a></li>
-                      <li><a href="#">land rover</a></li>
-                      <li><a href="#">aston martin</a></li>
-                      <li><a href="#">mersedes</a></li>
-                      <li><a href="#">opel</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-offset-1 col-md-3 col-sm-6">
-              <div class="single-footer-widget">
-                <h2>news letter</h2>
-                <div class="footer-newsletter">
-                  <p>Subscribe to get latest news update and informations</p>
-                </div>
-                <div class="hm-foot-email">
-                  <div class="foot-email-box">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Add Email"
-                    />
-                  </div>
-                  <!--/.foot-email-box-->
-                  <div class="foot-email-subscribe">
-                    <span><i class="fa fa-arrow-right"></i></span>
-                  </div>
-                  <!--/.foot-email-icon-->
-                </div>
-                <!--/.hm-foot-email-->
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="footer-copyright">
-          <div class="row">
-            <div class="col-sm-6">
-              <p>
-                &copy; copyright.designed and developed by
-                <a href="https://www.themesine.com/">themesine</a>.
-              </p>
-              <!--/p-->
+    </div>
+</section>
+
+
+<section id='brand' class='brand'>
+    <div class='container'>
+        <div class='brand-area'>
+            <div class='owl-carousel owl-theme brand-item'>
+                <div class='item'>
+                    <a href='#'>
+                        <img
+                            src='/vender/images/brand/br1.png'
+                            alt='brand-image'
+                        />
+                    </a>
+                </div>
+                <!--/.item-->
+                <div class='item'>
+                    <a href='#'>
+                        <img
+                            src='/vender/images/brand/br2.png'
+                            alt='brand-image'
+                        />
+                    </a>
+                </div>
+                <!--/.item-->
+                <div class='item'>
+                    <a href='#'>
+                        <img
+                            src='/vender/images/brand/br3.png'
+                            alt='brand-image'
+                        />
+                    </a>
+                </div>
+                <!--/.item-->
+                <div class='item'>
+                    <a href='#'>
+                        <img
+                            src='/vender/images/brand/br4.png'
+                            alt='brand-image'
+                        />
+                    </a>
+                </div>
+                <div class='item'>
+                    <a href='#'>
+                        <img
+                            src='/vender/images/brand/br5.png'
+                            alt='brand-image'
+                        />
+                    </a>
+                </div>
+
+                <div class='item'>
+                    <a href='#'>
+                        <img
+                            src='/vender/images/brand/br6.png'
+                            alt='brand-image'
+                        />
+                    </a>
+                </div>
             </div>
-            <div class="col-sm-6">
-              <div class="footer-social">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-instagram"></i></a>
-                <a href="#"><i class="fa fa-linkedin"></i></a>
-                <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                <a href="#"><i class="fa fa-behance"></i></a>
-              </div>
-            </div>
-          </div>
         </div>
-        <!--/.footer-copyright-->
-      </div>
-      <!--/.container-->
-
-      <div id="scroll-Top">
-        <div class="return-to-top">
-          <i
-            class="fa fa-angle-up"
-            id="scroll-top"
-            data-toggle="tooltip"
-            data-placement="top"
-            title=""
-            data-original-title="Back to Top"
-            aria-hidden="true"
-          ></i>
-        </div>
-      </div>
-      <!--/.scroll-Top-->
-    </footer>
-    <!--/.blog-->
-    <!--blog end -->
-
-    <!-- Include all js compiled plugins (below), or include individual files as needed -->
-
-    <script src="/vender/js/jquery.js"></script>
-
-    <!--modernizr.min.js-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-
-    <!--bootstrap.min.js-->
-    <script src="/vender/js/bootstrap.min.js"></script>
-
-    <!-- bootsnav js -->
-    <script src="/vender/js/bootsnav.js"></script>
-
-    <!--owl.carousel.js-->
-    <script src="/vender/js/owl.carousel.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-
-    <!--Custom JS-->
-    <script src="/vender/js/custom.js"></script>
-  </body>
-</html>
+    </div>
+</section>

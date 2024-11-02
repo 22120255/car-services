@@ -1,6 +1,6 @@
 /* custom */
 .container {
-  margin-top: var(--height-navigation); }
+  margin-top: var(--height-header); }
 
 .team {
   display: flex;
@@ -294,3 +294,6 @@
 .member-image {
   max-height: 400px;
   object-fit: cover; }
+
+.header-area {
+  background-color: #666; }

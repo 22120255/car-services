@@ -29,8 +29,9 @@
     <link rel="stylesheet" href="/vender/css/bootsnav.css" />
     <link rel="stylesheet" href="/vender/css/style.css" />
     <link rel="stylesheet" href="/vender/css/responsive.css" />
-    <link rel="stylesheet" href="/css/home.css" />
-
+    <link rel="stylesheet" href="/vender/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/partials/main.css" />
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const currentPage = window.location.pathname.split("/").pop();
@@ -40,16 +41,19 @@
 
             switch (currentPage) {
                 case "about":
-                    customCss.href = "/css/about.css";
+                    customCss.href = "/css/dashboard/about.css";
                     break;
                 case "contact":
-                    customCss.href = "/css/contact.css";
+                    customCss.href = "/css/dashboard/contact.css";
                     break;
-                case "trang3.html":
-                    customCss.href = "/css/trang3.css";
+                case "product":
+                    customCss.href = "/css/product/index.css";
+                    break;
+                case "dashboard":
+                    customCss.href = "/css/dashboard/home.css";
                     break;
                 default:
-                    customCss.href = "/css/home.css";
+                    customCss.href = "/css/product/detail.css";
                     break;
             }
 
@@ -59,7 +63,21 @@
 </head>
 <body>
 
-    {{{body}}}
-  
+    <header>
+    {{!-- <header id="home" > --}}
+        {{> header}}
+    </header>
+    <main>
+        {{{body}}}
+    </main>
+    {{> footer}}
+
+    <script src="/vender/js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <script src="/vender/js/bootstrap.min.js"></script>
+    <script src="/vender/js/bootsnav.js"></script>
+    <script src="/vender/js/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="/vender/js/custom.js"></script>
 </body>
 </html>

@@ -1,0 +1,67 @@
+<div class='top-area'>
+    <div class='header-area'>
+        <nav
+            class='navbar navbar-default bootsnav navbar-sticky navbar-scrollspy'
+            data-minus-value-desktop='70'
+            data-minus-value-mobile='55'
+            data-speed='1000'
+        >
+            <div class='container'>
+                <div class='navbar-header'>
+                    <button
+                        type='button'
+                        class='navbar-toggle'
+                        data-toggle='collapse'
+                        data-target='#navbar-menu'
+                    >
+                        <i class='fa fa-bars'></i>
+                    </button>
+                    <a class='navbar-brand' href='#'><span>3N</span></a>
+                </div>
+                <div
+                    class='collapse navbar-collapse menu-ui-design flex'
+                    id='navbar-menu'
+                >
+                    <ul
+                        class='nav navbar-nav navbar-right'
+                        data-in='fadeInDown'
+                        data-out='fadeOutUp'
+                    >
+                        <li>
+                            <a href='/dashboard'>Home</a>
+                        </li>
+                        <li>
+                            <a href='/product'>Product</a>
+                        </li>
+                        <li>
+                            <a href='/dashboard/about'>About</a>
+                        </li>
+                        <li>
+                            <a href='/dashboard/contact'>Contact</a>
+                        </li>
+                        <li>
+                            <a
+                                role='button'
+                                href='/auth/login'
+                            >Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class='clearfix'></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const links = document.querySelectorAll(".navbar-nav li a");
+
+        links.forEach(link => {
+            if (link.getAttribute("href") === window.location.pathname) {
+                link.parentElement.classList.add("active");
+            } else {
+                link.parentElement.classList.remove("active");
+            }
+        });
+    });
+    </script>
+</div>
