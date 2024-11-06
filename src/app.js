@@ -27,6 +27,8 @@ app.engine(
         defaultLayout: "main",
         partialsDir: [
             path.join(__dirname, "views/partials/main"),
+            path.join(__dirname, "views/partials/auth"),
+            path.join(__dirname, "views/partials"),
         ],
     }),
 );

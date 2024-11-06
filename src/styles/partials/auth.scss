@@ -1,69 +1,111 @@
+@import '../variables';
 // File CSS for auth layout
-.logo {
-    width: 32px;
-    height: 32px;
-}
+// .logo {
+//     width: 32px;
+//     height: 32px;
+// }
 
-.note-message {
-    text-align: center;
-}
+// .note-message {
+//     text-align: center;
+// }
 
-.term {
-    font-size: 12px;
-}
+// .term {
+//     font-size: 12px;
+// }
 
-.btn-login,
-.btn-register {
-    width: 360px;
-    margin-top: 8px;
-    border-radius: 32px;
-}
+// .btn-login,
+// .btn-register {
+//     width: 360px;
+//     margin-top: 8px;
+//     border-radius: 32px;
+// }
 
-.form-register {
-    width: 360px;
-    margin-top: 8px;
-    border-radius: 32px;
-}
+// .form-register {
+//     width: 360px;
+//     margin-top: 8px;
+//     border-radius: 32px;
+// }
 
-.btn-back {
+// .btn-back {
+//     position: absolute;
+//     top: 16;
+//     left: 16;
+// }
+
+// .icon-warning {
+//     margin-left: -32px;
+// }
+
+// .message-warning {
+//     font-size: 14px;
+//     font-weight: 500;
+//     line-height: 1.5;
+// }
+
+// .text-login {
+//     font-size: 15px;
+//     font-weight: 600;
+// }
+
+// .method {
+//     cursor: pointer;
+//     font-weight: 500;
+//     opacity: 0.7;
+//     font-size: 13px;
+//     text-decoration: underline;
+// }
+
+// .country {
+//     width: 96px;
+//     border-right: 1px solid #333;
+// }
+// .country select {
+//     border: 0;
+//     outline: none;
+// }
+// .country select:focus,
+// .country select:focus-visible {
+//     border: 0;
+//     outline: none;
+// }
+.wrapper-login {
+    background: url('/vender/images/welcome-hero/welcome-banner.jpg') no-repeat
+        center center fixed;
+    height: 100vh;
+    display: flex;
+}
+.wrapper-login::before {
+    content: '';
     position: absolute;
-    top: 16;
-    left: 16;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1;
 }
 
-.icon-warning {
-    margin-left: -32px;
+.wrapper-login > * {
+    position: relative;
+    z-index: 2;
 }
 
-.message-warning {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.5;
+// side
+.wrapper-side {
+    padding: 0 160px;
 }
-
-.text-login {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.method {
-    cursor: pointer;
-    font-weight: 500;
-    opacity: 0.7;
-    font-size: 13px;
-    text-decoration: underline;
-}
-
-.country {
-    width: 96px;
-    border-right: 1px solid #333;
-}
-.country select {
-    border: 0;
-    outline: none;
-}
-.country select:focus,
-.country select:focus-visible {
-    border: 0;
-    outline: none;
+.btn-social {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: $bs-gray-400;
+    border: 1px solid $bs-gray-400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & img {
+        width: 24px;
+        height: 24px;
+    }
 }
