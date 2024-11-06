@@ -31,7 +31,7 @@
 @media screen and (max-width:991px){
 	.welcome-hero-txt h2 {line-height: 1.6;}
 
-	.model-search-content .col-sm-12 {padding: 0 40px;}
+	.model-search-content .col-sm-12 {padding: 0 0;}
 	.single-model-search:last-child {margin-bottom: 30px;}
 	.welcome-btn.model-search-btn {margin: 0;}
 

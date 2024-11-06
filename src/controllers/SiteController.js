@@ -1,10 +1,8 @@
-
-
 class SiteController {
     // [GET] /
     index(req, res) {
-        res.send('Home Page');
+        res.send('Home Page')
     }
 }
 
-module.exports = new SiteController();
+module.exports = new SiteController()
