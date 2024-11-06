@@ -20,16 +20,15 @@
     "homepage": "https://github.com/22120255/car-services#readme",
     "description": "",
     "dependencies": {
+        "chance": "^1.1.12",
         "dotenv": "^16.4.5",
         "express": "^4.21.1",
         "express-handlebars": "^8.0.1",
-        "faker": "^6.6.6",
         "method-override": "^3.0.0",
         "mongoose": "^8.8.0",
         "prettier": "^3.3.3"
     },
     "devDependencies": {
-        "@faker-js/faker": "^9.2.0",
         "morgan": "^1.10.0",
         "node-sass": "^9.0.0",
         "nodemon": "^3.1.7"

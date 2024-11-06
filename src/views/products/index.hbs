@@ -20,16 +20,16 @@
                         <!-- Select Year -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Chọn năm</h2>
+                            <h2>Năm</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="year">
-                                <option value="">Năm</option>
+                                <option value="">Chọn năm</option>
+                                <option value="2023" {{#if (eq queries.year "2023")}}selected{{/if}}>2023</option>
+                                <option value="2022" {{#if (eq queries.year "2022")}}selected{{/if}}>2022</option>
+                                <option value="2021" {{#if (eq queries.year "2021")}}selected{{/if}}>2021</option>
                                 <option value="2020" {{#if (eq queries.year "2020")}}selected{{/if}}>2020</option>
                                 <option value="2019" {{#if (eq queries.year "2019")}}selected{{/if}}>2019</option>
                                 <option value="2018" {{#if (eq queries.year "2018")}}selected{{/if}}>2018</option>
-                                <option value="2017" {{#if (eq queries.year "2017")}}selected{{/if}}>2017</option>
-                                <option value="2016" {{#if (eq queries.year "2016")}}selected{{/if}}>2016</option>
-                                <option value="2015" {{#if (eq queries.year "2015")}}selected{{/if}}>2015</option>
                                 </select>
                             </div>
                             </div>
@@ -54,10 +54,16 @@
                             <div class="model-select-icon">
                                 <select class="form-control" name="brand">
                                 <option value="">Chọn hãng</option>
-                                <option value="toyota" {{#if (eq queries.brand "toyota")}}selected{{/if}}>Toyota</option>
-                                <option value="honda" {{#if (eq queries.brand "honda")}}selected{{/if}}>Honda</option>
+                                <option value="audi" {{#if (eq queries.brand "audi")}}selected{{/if}}>Audi</option>
+                                <option value="BMW" {{#if (eq queries.brand "BMW")}}selected{{/if}}>BMW</option>
                                 <option value="ford" {{#if (eq queries.brand "ford")}}selected{{/if}}>Ford</option>
-                                <option value="mercedes-benz" {{#if (eq queries.brand "mercedes-benz")}}selected{{/if}}>Mercedes</option>
+                                <option value="kia" {{#if (eq queries.brand "kia")}}selected{{/if}}>Kia</option>
+                                <option value="honda" {{#if (eq queries.brand "honda")}}selected{{/if}}>Honda</option>
+                                <option value="hyundai" {{#if (eq queries.brand "hyundai")}}selected{{/if}}>Hyundai</option>
+                                <option value="mitsubishi" {{#if (eq queries.brand "mitsubishi")}}selected{{/if}}>Mitsubishi</option>
+                                <option value="toyota" {{#if (eq queries.brand "toyota")}}selected{{/if}}>Toyota</option>
+                                <option value="vinfast" {{#if (eq queries.brand "vinfast")}}selected{{/if}}>Vinfast</option>
+                                
                                 </select>
                             </div>
                             </div>
@@ -77,13 +83,12 @@
                         <!-- Select Model -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Mẫu xe</h2>
+                            <h2>Hộp số</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="model">
-                                <option value="">Chọn mẫu</option>
-                                <option value="kia-rio" {{#if (eq queries.model "kia-rio")}}selected{{/if}}>Kia Rio</option>
-                                <option value="mitsubishi" {{#if (eq queries.model "mitsubishi")}}selected{{/if}}>Mitsubishi</option>
-                                <option value="ford-ecosport" {{#if (eq queries.model "ford-ecosport")}}selected{{/if}}>Ford Ecosport</option>
+                                <select class="form-control" name="transmission">
+                                <option value="">Chọn hộp số</option>
+                                <option value="manual" {{#if (eq queries.transmission "manual")}}selected{{/if}}>Manual</option>
+                                <option value="automatic" {{#if (eq queries.transmission "automatic")}}selected{{/if}}>Automatic</option>
                                 </select>
                             </div>
                             </div>
@@ -120,7 +125,7 @@
                             <div class='featured-img-box'>
                                 <a href='/product/detail/{{_id}}' class = "detail-link" data-id = "{{_id}}">
                                     <div class='featured-cars-img'>
-                                        <img src='{{image}}' alt='cars' />
+                                        <img class ="fixed-size-img zoom-out" src='{{images.image1}}' alt='cars' />
                                     </div>
                                     <div class='featured-model-info'>
                                         <p>
@@ -133,7 +138,7 @@
                                 </a>
                             </div>
                             <div class='featured-cars-txt'>
-                                <h2><a href='/product/detail/{{_id}}' class = "detail-link">{{brand}}<br>{{model}}</a></h2>
+                                <h2><a href='/product/detail/{{_id}}' class = "detail-link">{{brand}} {{model}}</a></h2>
                                 <h3>${{price}}</h3>
                                 <p>{{description}}</p>
                             </div>

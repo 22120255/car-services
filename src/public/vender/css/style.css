@@ -457,6 +457,11 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     height: 220px;
     border-bottom: 1px solid #dadfe9;
 }
+
+.fixed-size-img.zoom-out:hover {
+    transform: scale(1.2);
+    /* Scale down the image on hover */ }
+
 .featured-model-info{padding:12px 7px;}
 .featured-model-info p {
     font-size: 12px;

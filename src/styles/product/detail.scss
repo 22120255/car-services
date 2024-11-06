@@ -1,211 +1,257 @@
 @import '../variables';
 
 .header-area {
-    background-color: $bg-header;
+  background-color: $bg-header;
 }
 .product-details {
-    margin-top: 50px;
-    padding: 50px 0;
+  margin-top: 50px;
+  padding: 50px 0;
 }
 .product-details img {
-    max-width: 100%;
+  max-width: 100%;
 }
 .product-price {
-    font-size: 24px;
-    color: #ff6b6b;
-    margin-top: 20px;
+  font-size: 24px;
+  color: #ff6b6b;
+  margin-top: 20px;
 }
 .add-to-cart-btn {
-    background-color: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 20px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
 }
 .add-to-cart-btn:hover {
-    background-color: #ff4040;
+  background-color: #ff4040;
 }
 .specifications-table,
 .review-section {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 .related-products {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 
 /*****************globals*************/
 body {
-    font-family: 'open sans';
-    overflow-x: hidden; }
-  
-  img {
-    max-width: 100%; }
-  
-  .preview {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column; }
-    @media screen and (max-width: 996px) {
-      .preview {
-        margin-bottom: 20px; } }
-  
-  .preview-pic {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1; }
- 
-@media screen and (min-width: 997px) {
-  .wrapper {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;} }            
+  font-family: 'open sans';
+  overflow-x: hidden; }
 
-.preview-thumbnail.nav-tabs {
+img {
+  max-width: 100%; }
+
+.preview {
+  padding-left: 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+  @media screen and (max-width: 996px) {
+    .preview {
+      margin-bottom: 20px; } }
+
+.preview-pic {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
+
+      
+.preview-thumbnail.nav-tabs {
+  display: flex;                        /* Align thumbnails horizontally */
+  justify-content: center;              /* Center thumbnails */
+  border:none;                         /* No border around the container */
+  margin-top: 15px;                     /* Top margin for spacing */
+}
+
+.preview-thumbnail.nav-tabs li {
+  width: 18%;                           /* Set the width of each thumbnail */
+  margin-right: 2.5%;                   /* Add space between thumbnails */
+  list-style: none;                     /* Remove default list bullet */
+  display: flex;                        /* Use flex to center the image */
+  justify-content: center;              /* Center horizontally */
+  align-items: center;                  /* Center vertically */
+  aspect-ratio: 1 / 1;                  /* Make the thumbnail square */
+  overflow: hidden;                     /* Hide overflowing image content */
+}
+
+.preview-thumbnail.nav-tabs li a {
+  padding: 0;                           /* Remove padding */
+  margin: 0;                            /* Remove margin */
+  display: block;                       /* Make the link fill the li container */
+  height: 50%;                         /* Ensure the link fills the entire li */
+  width: 80%;                          /* Ensure the link fills the entire li */
+}
+
+.preview-thumbnail.nav-tabs li img {
+  width: 100%;                          /* Make image fill the width of the li */
+  height: 100%;                         /* Make image fill the height of the li */
+  object-fit: cover;                    /* Ensure image covers the square frame without distortion */
+  cursor: pointer;                     /* Change cursor on hover */
+  transition: transform 0.2s ease;      /* Add smooth hover effect */
+}
+
+.preview-thumbnail.nav-tabs li.active img {
+  border: 2px solid #ff9f1a;            /* Orange border for active image */
+  transform: scale(1.05);                /* Scale up the image slightly */
+}
+
+/* Remove the margin for the last li */
+.preview-thumbnail.nav-tabs li:last-child {
+  margin-right: 0;
+}
+         
+/* Style the tab content */
+
+.tab-content {
+  position: relative;          /* Ensures the container is positioned for absolute children */
+  width: 100%;                 /* Full width of the parent container */
+  padding-top: 60%;            /* Aspect ratio of 4:3, adjust as needed */
+  overflow: hidden;            /* Prevents images from spilling out */
+}
+
+.tab-content img {
+  position: absolute;         /* Absolutely position the images */
+  top: 0;                      /* Align to the top of the container */
+  left: 0;                     /* Align to the left of the container */
+  width: 100%;                 /* Stretch to fill the container */
+  height: 100%;                /* Ensure the image fills the container */
+  object-fit: cover;           /* Ensures the image covers the container without distortion */
+  -webkit-animation-name: opacity;
+  animation-name: opacity;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+}
+
+
+.card {
+  margin-top: 50px;
+  background: #eee;
+  padding: 3em;
+  line-height: 1.5em; }
+
+/* related */
+.fixed-size-img {
+  width: 100%;
+  height: 200px; /* Adjust the height as needed */
+  object-fit: cover; /* Ensures the image covers the entire area without distortion */
+  transition: transform 0.3s ease; /* Smooth transition for the zoom effect */
+}
+
+.fixed-size-img.zoom-out:hover {
+  transform: scale(0.9); /* Scale down the image on hover */
+}
+
+.image-related {
+  margin-bottom: 20px;
+}
+
+.details {
+  padding-top: 1.5em;
+  padding-left: 50px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+
+.colors {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
+
+.product-title, .price, .year, .colors {
+  text-transform: UPPERCASE;
+  font-weight: bold; }
+
+.checked, .price span {
+  color: #ff9f1a; }
+
+.product-title, .rating, .product-description, .price, .vote, .year {
+  margin-bottom: 15px; }
+
+.product-title {
+  margin-top: 0; }
+
+.size {
+  margin-right: 10px; }
+  .size:first-of-type {
+    margin-left: 40px; }
+
+.color {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 2em;
+  width: 2em;
+  border-radius: 2px; }
+  .color:first-of-type {
+    margin-left: 20px; }
+
+.add-to-cart, .like {
+  background: #ff9f1a;
+  padding: 1.2em 1.5em;
   border: none;
-  margin-top: 15px;
-}
-    .preview-thumbnail.nav-tabs li {
-      width: 18%;
-      margin-right: 2.5%; }
-      .preview-thumbnail.nav-tabs li img {
-        max-width: 100%;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-    }
-    .preview-thumbnail.nav-tabs li a {
-      padding: 0;
-      margin: 0;
-  }
-  .preview-thumbnail.nav-tabs li.active img {
-    border: 2px solid #ff9f1a;
-    transform: scale(1.05);
-}
-  
-  .tab-content {
-    overflow: hidden; }
-    .tab-content img {
-      width: 100%;
-      -webkit-animation-name: opacity;
-              animation-name: opacity;
-      -webkit-animation-duration: .3s;
-              animation-duration: .3s; }
-  
-  .card {
-    margin-top: 50px;
-    background: #eee;
-    padding: 3em;
-    line-height: 1.5em; }
-  
+  text-transform: UPPERCASE;
+  font-weight: bold;
+  color: #fff;
+  -webkit-transition: background .3s ease;
+          transition: background .3s ease; }
+  .add-to-cart:hover, .like:hover {
+    background: #b36800;
+    color: #fff; }
 
-  
-  .details {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-        -ms-flex-direction: column;
-            flex-direction: column; }
-  
-  .colors {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1; }
-  
-  .product-title, .price, .year, .colors {
-    text-transform: UPPERCASE;
-    font-weight: bold; }
-  
-  .checked, .price span {
-    color: #ff9f1a; }
-  
-  .product-title, .rating, .product-description, .price, .vote, .year {
-    margin-bottom: 15px; }
-  
-  .product-title {
-    margin-top: 0; }
-  
-  .size {
-    margin-right: 10px; }
-    .size:first-of-type {
-      margin-left: 40px; }
-  
-  .color {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
-    height: 2em;
-    width: 2em;
-    border-radius: 2px; }
-    .color:first-of-type {
-      margin-left: 20px; }
-  
-  .add-to-cart, .like {
-    background: #ff9f1a;
-    padding: 1.2em 1.5em;
-    border: none;
-    text-transform: UPPERCASE;
-    font-weight: bold;
-    color: #fff;
-    -webkit-transition: background .3s ease;
-            transition: background .3s ease; }
-    .add-to-cart:hover, .like:hover {
-      background: #b36800;
-      color: #fff; }
-  
-  .not-available {
-    text-align: center;
-    line-height: 2em; }
-    .not-available:before {
-      font-family: fontawesome;
-      content: "\f00d";
-      color: #fff; }
-  
-  .orange {
-    background: #ff9f1a; }
-  
-  .green {
-    background: #85ad00; }
-  
-  .blue {
-    background: #0076ad; }
-  
-  .tooltip-inner {
-    padding: 1.3em; }
-  
+.not-available {
+  text-align: center;
+  line-height: 2em; }
+  .not-available:before {
+    font-family: fontawesome;
+    content: "\f00d";
+    color: #fff; }
 
-  @-webkit-keyframes opacity {
-    0% {
-      opacity: 0;
-      -webkit-transform: scale(3);
-              transform: scale(3); }
-    100% {
-      opacity: 1;
-      -webkit-transform: scale(1);
-              transform: scale(1); } }
-  
-  @keyframes opacity {
-    0% {
-      opacity: 0;
-      -webkit-transform: scale(3);
-              transform: scale(3); }
-    100% {
-      opacity: 1;
-      -webkit-transform: scale(1);
-              transform: scale(1); } }
-  
-  /*# sourceMappingURL=style.css.map */
+.orange {
+  background: #ff9f1a; }
+
+.green {
+  background: #85ad00; }
+
+.blue {
+  background: #0076ad; }
+
+.tooltip-inner {
+  padding: 1.3em; }
+
+
+@-webkit-keyframes opacity {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(3);
+            transform: scale(3); }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
+
+@keyframes opacity {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(3);
+            transform: scale(3); }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1); } }
+
+/*# sourceMappingURL=style.css.map */

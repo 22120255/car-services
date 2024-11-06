@@ -1,26 +1,28 @@
-<div class="container">
+<div class="container-fluid">
 		<div class="card">
 				<div class="wrapper row">
 					<div class="preview col-md-6">
 						
 						<div class="preview-pic tab-content">
-						  <div class="tab-pane active" id="pic-1"><img src="{{product.image}}" /></div>
-						  <div class="tab-pane" id="pic-2"><img src="/vender/images/featured-cars/honda/fc1.png" /></div>
-						  <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252" /></div>
-						  <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252" /></div>
-						  <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252" /></div>
+						  <div class="tab-pane active" id="pic-1"><img src="{{product.images.image1}}" /></div>
+						  <div class="tab-pane" id="pic-2"><img src="{{product.images.image2}}" /></div>
+						  <div class="tab-pane" id="pic-3"><img src="{{product.images.image3}}" /></div>
+						  <div class="tab-pane" id="pic-4"><img src="{{product.images.image4}}" /></div>
+						  <div class="tab-pane" id="pic-5"><img src="{{product.images.image5}}" /></div>
 						</div>
 						<ul class="preview-thumbnail nav nav-tabs">
-						  <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="{{product.image}}" /></a></li>
-						  <li><a data-target="#pic-2" data-toggle="tab"><img src="/vender/images/featured-cars/honda/fc1.png" /></a></li>
-						  <li><a data-target="#pic-3" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-						  <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-						  <li><a data-target="#pic-5" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
+						  <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="{{product.images.image1}}" /></a></li>
+						  <li><a data-target="#pic-2" data-toggle="tab"><img src="{{product.images.image2}}" /></a></li>
+						  <li><a data-target="#pic-3" data-toggle="tab"><img src="{{product.images.image3}}" /></a></li>
+						  <li><a data-target="#pic-4" data-toggle="tab"><img src="{{product.images.image4}}" /></a></li>
+						  <li><a data-target="#pic-5" data-toggle="tab"><img src="{{product.images.image5}}" /></a></li>
 						</ul>
 						
 					</div>
 					<div class="details col-md-6">
-						<h3 class="product-title">{{product.brand}}<br>{{product.model}}</h3>
+						<h3 class="product-title">{{product.brand}} {{product.model}}</h3>
+						<h8 class="price">current price: <span>${{product.price}}</span></h8>
+
 						<div class="rating">
 							<div class="stars">
 								<span class="fa fa-star checked"></span>
@@ -32,25 +34,24 @@
 							<span class="review-no">41 reviews</span>
 						</div>
 						<p class="product-description">{{product.description}}</p>
-            <p>
-              <span>
-                <strong>Model:</strong> {{product.year}}
-              </span>
-              -
-              <span>
-                <strong>Mileage:</strong> {{product.mileage}} mi
-              </span>
-               -
-              <span>
-                <strong>Horsepower:</strong> {{product.horsepower}}HP
-              </span>
-               -
-              <span>
-                <strong>Transmission:</strong> {{product.transmission}}
-              </span>
-            </p>
-						<h4 class="price">current price: <span>${{product.price}}</span></h4>
-						<p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
+						<p >
+						<span>
+							<strong>Model:</strong> {{product.year}}
+						</span>
+						-
+						<span>
+							<strong>Mileage:</strong> {{product.mileage}} mi
+						</span>
+						-
+						<span>
+							<strong>Horsepower:</strong> {{product.horsepower}}HP
+						</span>
+						-
+						<span>
+							<strong>Transmission:</strong> {{product.transmission}}
+						</span>
+						</p>
+						<h5 class="colors" style = "margin: 7px 0 7px 0;"> TYPE: {{product.category}}</h5>
 						<h5 class="colors">colors:
 							<span class="color orange not-available" data-toggle="tooltip" title="Not In store"></span>
 							<span class="color green"></span>
@@ -60,33 +61,38 @@
 							<button class="add-to-cart btn btn-default" type="button">add to cart</button>
 							<button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
 						</div>
+												<p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
+
 					</div>
 			</div>
 
       <!-- Related Products -->
       <div class="row related-products">
         <div class="col-md-12">
-          <h4>Related Products</h4>
+          <h4 class="text-center">Related Products</h4>
           <div class="row">
             {{#each relatedProducts}}
             <div class="col-md-4">
-               <div class='featured-img-box'>
-              <div class="card">
-                <img
-                  class="card-img-top"
-                  src="{{this.image}}"
-                  alt="Related Product"
-                />
-                <div class="card-body">
+              <div class="image-related card">
+                <a href="/product/detail/{{this._id}}">
+					<img
+					class="card-img-top fixed-size-img zoom-out"
+					src="{{this.images.image1}}"
+					alt="Related Product"
+					/>
+				</a>
+				
+                <div class="card-body" style="margin-top:20px;">
                   <h5 class="card-title">{{this.brand}} {{this.model}}</h5>
-                  <p class="card-text">{{this.price}}</p>
+                  <p class="card-text">${{this.price}}</p>
                 </div>
               </div>
-               </div>
             </div>
+            {{else}}
+            <p class="text-center">No related products found</p>
             {{/each}}
+          </div>
         </div>
       </div>
-    </div>
   </div>
 </div>

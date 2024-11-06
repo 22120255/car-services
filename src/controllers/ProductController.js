@@ -19,8 +19,8 @@ class ProductController {
             if (req.query.brand) {
                 query.brand = req.query.brand;
             }
-            if (req.query.model) {
-                query.model = req.query.model;
+            if (req.query.transmission) {
+                query.transmission = req.query.transmission;
             }
             if (req.query.category) {
                 query.category = req.query.category;
@@ -56,9 +56,11 @@ class ProductController {
         try {
             const product = await ProductService.findOneService(req.params.id);
             const query = { 
-                brand: product.brand,
-                _id: { $ne: product._id },
-
+                $or: [ { 
+                    brand: product.brand }, 
+                    { year: product.year }, 
+                    ],
+                 _id: { $ne: product._id },
             };
             const relatedProducts = await ProductService.findService(query);
 

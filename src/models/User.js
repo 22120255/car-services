@@ -6,8 +6,6 @@ const UserSchema = new mongoose.Schema({
     password_hash: { type: String, required: true },
     role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
     is_active: { type: Boolean, default: true },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now },
-})
+}, {timestamps: true})
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema, 'users')
