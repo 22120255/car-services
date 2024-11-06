@@ -88,15 +88,20 @@
 </div>
 <div class='clearfix'></div>
 <script>
-    document.addEventListener("DOMContentLoaded", () => { 
+    document.addEventListener("DOMContentLoaded",function () { 
         const links = document.querySelectorAll(".navbar-nav li a"); 
         links.forEach(link => {
-    link.classList.toggle("active", link.getAttribute("href") === window.location.pathname); 
+            link.classList.toggle("active", link.getAttribute("href") === window.location.pathname); 
+        });
     });
-     });
-    document.addEventListener("DOMContentLoaded", () => { const header =
-    document.querySelector(".header-area"); window.addEventListener("scroll", () => { 
-        if (window.scrollY > 100) { header.classList.add("scrolled"); 
-        } else {
-    header.classList.remove("scrolled"); } }); });
+    document.addEventListener("DOMContentLoaded", function() { 
+        const header = document.querySelector(".header-area"); 
+        window.addEventListener("scroll", function()  { 
+            if (window.scrollY > 100) { 
+                header.classList.add("scrolled"); 
+            } else {
+                header.classList.remove("scrolled"); 
+            } 
+        }); 
+    });
 </script>
