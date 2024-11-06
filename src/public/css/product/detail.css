@@ -1,0 +1,32 @@
+/* custom */
+.header-area {
+  background-color: #666; }
+
+.product-details {
+  margin-top: 50px;
+  padding: 50px 0; }
+
+.product-details img {
+  max-width: 100%; }
+
+.product-price {
+  font-size: 24px;
+  color: #ff6b6b;
+  margin-top: 20px; }
+
+.add-to-cart-btn {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px; }
+
+.add-to-cart-btn:hover {
+  background-color: #ff4040; }
+
+.specifications-table,
+.review-section {
+  margin-top: 30px; }
+
+.related-products {
+  margin-top: 50px; }

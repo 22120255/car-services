@@ -3,7 +3,7 @@
 class SiteController {
     // [GET] /
     index(req, res) {
-        res.render('site/home', { title: 'Trang chủ' });
+        res.send('Home Page');
     }
 }
 
