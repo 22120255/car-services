@@ -37,7 +37,6 @@ class AuthService {
                 text: `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`
             });
 
-            await user.save();
             return user;
         } catch (err) {
             throw new Error("Có lỗi khi lưu thông tin người dùng.");

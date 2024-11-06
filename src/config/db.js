@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const createMockProducts = require('../data/mockProducts');
 const Product = require('../models/Product');
-
+var MongoDBStore = require("connect-mongodb-session");
 
 
 const connectDB = async () => {
@@ -22,6 +22,26 @@ const connectDB = async () => {
         process.exit(1);
     }
 };
+function createSessionStore(session) {
+    const mongoStore = MongoDBStore(session);
+    const store = new mongoStore(
+        {
+            uri: process.env.MONGO_URI,
+            collection: "sessions",
+        },
+        function (error) {
+            if (error) {
+                console.log(error);
+            }
+        }
+    );
 
-module.exports = { connectDB };
+    store.on("error", function (error) {
+        console.log("Session store error:", error);
+    });
+
+    return store;
+}
+
+module.exports = { connectDB, createSessionStore };
 

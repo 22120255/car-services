@@ -4,16 +4,16 @@ const AuthService = require('../services/AuthService');
 class AuthController {
     //[GET] /login
     login(req, res) {
-        res.render('auth/login', {
-            layout: 'auth',
-        })
+        res.render("auth/login", {
+            layout: "auth",
+        });
     }
 
     //[GET] /register
     register(req, res) {
-        res.render('auth/register', {
-            layout: 'auth',
-        })
+        res.render("auth/register", {
+            layout: "auth",
+        });
     }
 
     //[GET] /check-email
@@ -33,6 +33,15 @@ class AuthController {
 
         try {
             const user = await AuthService.storeUserWithEmail(email, fullName, password);
+
+            req.session.user = {
+                fullName: fullName,
+                email: email,
+                avatar: user.avatar || null,
+                role: user.role || "customer",
+            };
+            await req.session.save();
+
             res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
         } catch (err) {
             res.status(400).json({ error: err.message });
@@ -51,12 +60,21 @@ class AuthController {
         }
     }
 
-    //[GET] /auth/register/facebook/store
+    //[GET] /auth/register/google/store
     async registerWithGoogle(req, res) {
         const { email, fullName, avatar } = req.body;
 
         try {
             const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
+
+            req.session.user = {
+                fullName: fullName,
+                email: email,
+                avatar: avatar,
+                role: user.role || "customer",
+            };
+            await req.session.save();
+
             res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
         } catch (error) {
             res.status(500).json({ message: "Lỗi server" });
@@ -69,6 +87,15 @@ class AuthController {
 
         try {
             const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
+
+            req.session.user = {
+                fullName: fullName,
+                email: email,
+                avatar: avatar,
+                role: user.role || "customer",
+            };
+            await req.session.save();
+
             res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
         } catch (error) {
             res.status(500).json({ message: "Lỗi server" });
@@ -76,9 +103,9 @@ class AuthController {
     }
 
     forgotPassword(req, res) {
-        res.render('auth/forgot-password', {
-            layout: 'auth',
-        })
+        res.render("auth/forgot-password", {
+            layout: "auth",
+        });
     }
 }
 
