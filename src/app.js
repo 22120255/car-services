@@ -34,6 +34,7 @@ app.engine(
 );
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
+app.use('/css', express.static('public/css'));
 
 // Route init
 route(app);
