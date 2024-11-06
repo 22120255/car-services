@@ -1,67 +1,94 @@
-<div class='top-area'>
-    <div class='header-area'>
-        <nav
-            class='navbar navbar-default bootsnav navbar-sticky navbar-scrollspy'
-            data-minus-value-desktop='70'
-            data-minus-value-mobile='55'
-            data-speed='1000'
-        >
-            <div class='container'>
-                <div class='navbar-header'>
-                    <button
-                        type='button'
-                        class='navbar-toggle'
-                        data-toggle='collapse'
-                        data-target='#navbar-menu'
-                    >
-                        <i class='fa fa-bars'></i>
-                    </button>
-                    <a class='navbar-brand' href='#'><span>3N</span></a>
-                </div>
-                <div
-                    class='collapse navbar-collapse menu-ui-design flex'
-                    id='navbar-menu'
-                >
-                    <ul
-                        class='nav navbar-nav navbar-right'
-                        data-in='fadeInDown'
-                        data-out='fadeOutUp'
-                    >
-                        <li>
-                            <a href='/dashboard'>Home</a>
-                        </li>
-                        <li>
-                            <a href='/product'>Product</a>
-                        </li>
-                        <li>
-                            <a href='/dashboard/about'>About</a>
-                        </li>
-                        <li>
-                            <a href='/dashboard/contact'>Contact</a>
-                        </li>
-                        <li>
-                            <a
-                                role='button'
-                                href='/auth/login'
-                            >Login</a>
-                        </li>
-                    </ul>
-                </div>
+{{! <div class='top-area'> }}
+<div class='header-area'>
+    <nav class='navbar navbar-expand-lg  px-5'>
+        <div class='container-fluid'>
+            <a class='navbar-brand' href='#'>3N</a>
+            <button
+                class='navbar-toggler'
+                type='button'
+                data-bs-toggle='collapse'
+                data-bs-target='#navbarSupportedContent'
+                aria-controls='navbarSupportedContent'
+                aria-expanded='false'
+                aria-label='Toggle navigation'
+            >
+                <span class='navbar-toggler-icon'></span>
+            </button>
+            <div
+                class='collapse navbar-collapse justify-content-end'
+                id='navbarSupportedContent'
+            >
+                <ul class='navbar-nav mx-0 mb-2 mb-lg-0'>
+                    <li class='nav-item'>
+                        <a
+                            class='nav-link text-white'
+                            aria-current='page'
+                            href='/dashboard'
+                        >Home</a>
+                    </li>
+                    <li class='nav-item'>
+                        <a
+                            class='nav-link text-white'
+                            href='/product'
+                        >Product</a>
+                    </li>
+                    <li class='nav-item'>
+                        <a
+                            class='nav-link text-white'
+                            href='/dashboard/about'
+                        >About</a>
+                    </li>
+                    <li class='nav-item'>
+                        <a
+                            class='nav-link text-white'
+                            href='/dashboard/contact'
+                        >Contact</a>
+                    </li>
+                    <li class='nav-item'>
+                        <button onclick="window.location.href='/auth/register'" title="Register" type="button" class="btn btn-outline-primary btn-register">
+                            Register
+                        </button>
+                    </li>
+                    <li class='nav-item mx-2'>
+                        <button onclick="window.location.href='/auth/login'" title="Login" type="button" class="btn btn-success btn-login">
+                            Login
+                        </button>
+                    </li>
+                    {{! <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li> }}
+                </ul>
             </div>
-        </nav>
-    </div>
-    <div class='clearfix'></div>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        </div>
+    </nav>
+</div>
+<div class='clearfix'></div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
         const links = document.querySelectorAll(".navbar-nav li a");
 
         links.forEach(link => {
-            if (link.getAttribute("href") === window.location.pathname) {
-                link.parentElement.classList.add("active");
+            link.classList.toggle("active", link.getAttribute("href") === window.location.pathname);
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const header = document.querySelector(".header-area");
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 100) { 
+                header.classList.add("scrolled");
             } else {
-                link.parentElement.classList.remove("active");
+                header.classList.remove("scrolled");
             }
         });
     });
-    </script>
-</div>
+</script>

@@ -1,1 +1,98 @@
-<div>register</div>
+<div class='container'>
+    <div class='login-container'>
+        <h1>Đăng kí</h1>
+        <div class='w-100'>
+            <form>
+                <div class='form-group'>
+                    <label for='email'>Email</label>
+                    <input
+                        type='email'
+                        class='form-control'
+                        id='email'
+                        name='email'
+                        placeholder='Nhập email của bạn'
+                    />
+                    <span class='fs-075' id='email-availability-message'></span>
+                </div>
+
+                <div class='form-group'>
+                    <label for='fullName'>Tên đầy đủ</label>
+                    <input
+                        type='text'
+                        class='form-control'
+                        id='fullName'
+                        name='fullName'
+                        placeholder='Nhập tên của bạn'
+                    />
+                </div>
+
+                <div class='form-group position-relative'>
+                    <label for='password'>Nhập mật khẩu</label>
+                    <input
+                        type='password'
+                        class='form-control'
+                        id='password'
+                        name='password'
+                        placeholder='Nhập mật khẩu của bạn'
+                    />
+                    <button
+                        type='button'
+                        class='position-absolute end-0 top-50 me-2 p-1'
+                        id='show-password'
+                    >
+                        <i class='fa fa-eye'></i>
+                    </button>
+                </div>
+
+                <div class='form-group position-relative'>
+                    <label for='re-password'>Nhập lại mật khẩu</label>
+                    <input
+                        type='password'
+                        class='form-control'
+                        id='re-password'
+                        name='re-password'
+                        placeholder='Nhập lại mật khẩu của bạn'
+                    />
+                    <button
+                        type='button'
+                        class='position-absolute end-0 top-50 me-2 p-1'
+                        id='show-re-password'
+                    >
+                        <i class='fa fa-eye'></i>
+                    </button>
+                </div>
+                <span class='text-danger' id='message-error'></span>
+
+                <button type='button' class='btn login-btn'>Đăng kí</button>
+
+                <div class='forgot-password'>
+                    <span class='fs-075'>Bạn đã có tài khoản?
+                        <a class='fs-075' href='/auth/login'>Đăng nhập</a></span>
+                    <a class='fs-075' href='/auth/forgot-password'>Quên mật khẩu</a>
+                </div>
+            </form>
+        </div>
+        <div class='group-social d-flex justify-content-around'>
+            <button
+                type='button'
+                class='btn btn-outline-secondary btn-register btn-register-google'
+            >
+                <img
+                    class='_icon_1fnot_21'
+                    src="data:image/svg+xml,%3csvg%20width='18'%20height='18'%20viewBox='0%200%2018%2018'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20transform=''%3e%3cg%20fill-rule='evenodd'%3e%3cpath%20d='m17.64%209.2a10.341%2010.341%200%200%200%20-.164-1.841h-8.476v3.481h4.844a4.14%204.14%200%200%201%20-1.8%202.716v2.264h2.909a8.777%208.777%200%200%200%202.687-6.62z'%20fill='%234285f4'/%3e%3cpath%20d='m9%2018a8.592%208.592%200%200%200%205.956-2.18l-2.909-2.258a5.43%205.43%200%200%201%20-8.083-2.852h-3.007v2.332a9%209%200%200%200%208.043%204.958z'%20fill='%2334a853'/%3e%3cpath%20d='m3.964%2010.71a5.321%205.321%200%200%201%200-3.42v-2.332h-3.007a9.011%209.011%200%200%200%200%208.084z'%20fill='%23fbbc05'/%3e%3cpath%20d='m9%203.58a4.862%204.862%200%200%201%203.44%201.346l2.581-2.581a8.649%208.649%200%200%200%20-6.021-2.345%209%209%200%200%200%20-8.043%204.958l3.007%202.332a5.364%205.364%200%200%201%205.036-3.71z'%20fill='%23ea4335'/%3e%3c/g%3e%3cpath%20d='m0%200h18v18h-18z'%20fill='none'/%3e%3c/g%3e%3c/svg%3e"
+                />
+            </button>
+            <button
+                type='button'
+                class='btn btn-outline-secondary btn-register btn-register-facebook'
+            >
+                <img
+                    class='_icon_1fnot_21'
+                    src="data:image/svg+xml,%3csvg%20width='18'%20height='18'%20viewBox='0%200%2018%2018'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='m17.007%200h-16.014a.993.993%200%200%200%20-.993.993v16.014a.993.993%200%200%200%20.993.993h8.628v-6.961h-2.343v-2.725h2.343v-2a3.274%203.274%200%200%201%203.494-3.591%2019.925%2019.925%200%200%201%202.092.106v2.43h-1.428c-1.13%200-1.35.534-1.35%201.322v1.73h2.7l-.351%202.725h-2.364v6.964h4.593a.993.993%200%200%200%20.993-.993v-16.014a.993.993%200%200%200%20-.993-.993z'%20fill='%234267b2'%20/%3e%3cpath%20d='m28.586%2024.041v-6.961h2.349l.351-2.725h-2.7v-1.734c0-.788.22-1.322%201.35-1.322h1.443v-2.434a19.924%2019.924%200%200%200%20-2.095-.106%203.27%203.27%200%200%200%20-3.491%203.591v2h-2.343v2.73h2.343v6.961z'%20fill='%23fff'%20transform='translate(-16.172%20-6.041)'%20/%3e%3c/svg%3e"
+                />
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src='/js/auth/register.js'></script>

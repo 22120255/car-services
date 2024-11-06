@@ -1,0 +1,83 @@
+/* custom */
+.container {
+  background: url("/assets/images/welcome-hero/welcome-banner.jpg") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%; }
+
+.login-container {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 8px 8px 0 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; }
+  .login-container .group-social {
+    position: absolute;
+    right: 0;
+    bottom: -52px;
+    width: 32%;
+    height: 52px;
+    background-color: #fff;
+    z-index: 1;
+    border-radius: 0 0 8px 8px; }
+
+.btn-register {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ced4da;
+  border: 1px solid #ced4da;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .btn-register img {
+    width: 24px;
+    height: 24px; }
+
+.form-group {
+  margin-bottom: 15px; }
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold; }
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem; }
+  .form-group input:focus {
+    border-color: #1b4b72;
+    outline: none; }
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #1b4b72;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-top: 10px; }
+
+.login-button:hover {
+  background-color: #14508a; }
+
+.forgot-password {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px; }
+
+.forgot-password a {
+  color: #1b4b72;
+  text-decoration: none; }
+  .forgot-password a:hover {
+    text-decoration: underline; }

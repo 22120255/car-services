@@ -1,3 +1,15 @@
 /* custom */
 .header-area {
   height: 58px; }
+
+.navbar-nav .nav-link.active {
+  color: #0d6efd !important; }
+
+.header-area.scrolled {
+  background-color: #666; }
+
+.btn-login,
+.btn-register {
+  min-width: 92px;
+  border-radius: 16px;
+  color: #fff; }

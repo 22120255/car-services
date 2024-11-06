@@ -1,7 +1,7 @@
 class SiteController {
     // [GET] /
     index(req, res) {
-        res.send('Home Page')
+        res.redirect("/dashboard")
     }
 }
 

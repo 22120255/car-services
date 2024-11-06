@@ -55,17 +55,17 @@ a,a:hover,a:active,a:focus {
 	display:inline-block;
 	text-decoration:none;
 	color: #444a57;
-	font-size:20px;
+	font-size:1rem;
 	padding:0;
     font-weight: 500;
-    text-transform: capitalize;
+    
 }
 h1,h2,h3,h4,h5,h6 { 
 	margin: 0;
 	color:#444a57;
     font-size: 20px;
     font-weight: 500;
-    text-transform: capitalize;
+    
 }
 p {
 	margin: 0;
@@ -86,7 +86,7 @@ ul li {
 	
 }
 select,input,textarea,button,.form-control{box-shadow:none;outline:0!important;}
-button {background: transparent;border: 0;font-size: 16px;text-transform: capitalize;}
+button {background: transparent;border: 0;font-size: 16px;}
 
 html,body{height: 100%;}
 
@@ -120,7 +120,7 @@ html,body{height: 100%;}
     margin-left: -42px;
     background: #4e4ffa;
 }
-.section-header p{color: #444a57;text-transform: capitalize;margin-bottom:10px;}
+.section-header p{color: #444a57;margin-bottom:10px;}
 .section-header h2 span,.section-header p span{text-transform: lowercase;}
 
 /* section-header */
@@ -223,7 +223,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     height: 100%;
     background: rgba(42,45,84,.60);
 }
-.header-area{position: absolute;top:0;left:0;width: 100%;z-index: 99;}
+.header-area{position: fixed;top:0;left:0;width: 100%;z-index: 99;}
 
 /*.welcome-hero-txt*/
 .welcome-hero-txt{text-align: center;padding:290px 0 372px;}
@@ -282,7 +282,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .single-model-search h2 {
     font-size: 16px;
     font-weight: 400;
-    text-transform: capitalize;
+    
     margin-bottom: 20px;
 }
 /* model-price */
@@ -320,7 +320,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .model-select-icon select {
     font-size: 16px;
     color: #888f9d;
-    text-transform: capitalize;
+    
 }
 .model-select-icon:after{
     position: absolute;
@@ -466,7 +466,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .featured-model-info p {
     font-size: 12px;
     color: #8c92a0;
-    text-transform: capitalize;
+    
 }
 .featured-mi-span{display: inline-block;margin:0 10px;}
 .featured-hp-span{display: inline-block;margin-right: 10px;}
@@ -681,7 +681,7 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     color: #a8a9bf;
     font-size: 14px;
     font-weight: 400;
-    text-transform: capitalize;
+    
 }
 .footer-social{text-align: right;}
 .footer-social a i {

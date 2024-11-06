@@ -18,8 +18,8 @@ app.use(express.json());
 app.use(methodOverride('_method')); 
 
 // Static file
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, "public")));
+app.use('/css', express.static('public/css'));
 // HTTP logger
 app.use(morgan('dev'));
 
@@ -29,18 +29,23 @@ app.use(morgan('dev'));
 app.engine(
     'hbs',
     engine({
-        extname: '.hbs',
-        defaultLayout: 'main',
-        partialsDir: [path.join(__dirname, 'views/partials/main')],
-        helpers: {
+        extname: ".hbs",
+        defaultLayout: "main",
+        partialsDir: [
+            path.join(__dirname, "views/partials/main"),
+            path.join(__dirname, "views/partials/auth"),
+            path.join(__dirname, "views/partials"),
+        ],
+           helpers: {
             eq: function (a, b) {
               return a === b;
             },
           },
     }),
 );
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "views"));
+app.use('/css', express.static('public/css'));
 
 // Route init
 route(app);

@@ -1,14 +1,78 @@
+// controllers/AuthController.js
+const AuthService = require('../services/AuthService');
+
 class AuthController {
+    //[GET] /login
     login(req, res) {
         res.render('auth/login', {
             layout: 'auth',
         })
     }
 
+    //[GET] /register
     register(req, res) {
         res.render('auth/register', {
             layout: 'auth',
         })
+    }
+
+    //[GET] /check-email
+    async checkEmail(req, res) {
+        try {
+            const { email } = req.query;
+            const isAvailable = await AuthService.checkEmailAvailability(email);
+            res.status(200).json({ isAvailable });
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    }
+
+    //[POST] /register/email/store
+    async storeEmail(req, res) {
+        const { email, fullName, password } = req.body;
+
+        try {
+            const user = await AuthService.storeUserWithEmail(email, fullName, password);
+            res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    }
+
+    //[GET] /activate
+    async activateAccount(req, res) {
+        const { token } = req.query;
+
+        try {
+            const user = await AuthService.activateAccountByToken(token);
+            res.status(200).json({ message: "Tài khoản của bạn đã được kích hoạt thành công!" });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
+    //[GET] /auth/register/facebook/store
+    async registerWithGoogle(req, res) {
+        const { email, fullName, avatar } = req.body;
+
+        try {
+            const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
+            res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi server" });
+        }
+    }
+
+    //[GET] /auth/register/facebook/store
+    async registerWithFacebook(req, res) {
+        const { email, fullName, avatar } = req.body;
+
+        try {
+            const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
+            res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi server" });
+        }
     }
 
     forgotPassword(req, res) {
@@ -18,4 +82,4 @@ class AuthController {
     }
 }
 
-module.exports = new AuthController()
+module.exports = new AuthController();
