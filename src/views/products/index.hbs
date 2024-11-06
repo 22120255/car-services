@@ -11,575 +11,183 @@
                 Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.
             </p>
         </div>
-        <div class='featured-cars-content'>
-            <div class='row'>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/1'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc1.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
+        <div class="featured-cars-filter" id = "filter-form">
+            <form id="filterForm" method="GET" action="product">
+                <div class="row">
+                    <div class="col-md-12">
+                    <div class="model-search-content">
+                        <div class="row">
+                        <!-- Select Year -->
+                        <div class="col-md-offset-1 col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                            <h2>Năm</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="year">
+                                <option value="">Chọn năm</option>
+                                <option value="2023" {{#if (eq queries.year "2023")}}selected{{/if}}>2023</option>
+                                <option value="2022" {{#if (eq queries.year "2022")}}selected{{/if}}>2022</option>
+                                <option value="2021" {{#if (eq queries.year "2021")}}selected{{/if}}>2021</option>
+                                <option value="2020" {{#if (eq queries.year "2020")}}selected{{/if}}>2020</option>
+                                <option value="2019" {{#if (eq queries.year "2019")}}selected{{/if}}>2019</option>
+                                <option value="2018" {{#if (eq queries.year "2018")}}selected{{/if}}>2018</option>
+                                </select>
+                            </div>
+                            </div>
+                            <!-- Select Category -->
+                            <div class="single-model-search">
+                            <h2>Kiểu dáng</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="category">
+                                <option value="">Chọn kiểu dáng</option>
+                                <option value="sedan" {{#if (eq queries.category "sedan")}}selected{{/if}}>Sedan</option>
+                                <option value="suv" {{#if (eq queries.category "suv")}}selected{{/if}}>SUV</option>
+                                <option value="truck" {{#if (eq queries.category "truck")}}selected{{/if}}>Truck</option>
+                                <option value="roadster" {{#if (eq queries.category "roadster")}}selected{{/if}}>Roadster</option>
+                                </select>
+                            </div>
+                            </div>
                         </div>
-                        <div class='featured-cars-txt'>
-                            <h2><a href='#'>BMW 6-series gran coupe</a></h2>
-                            <h3>$89,395</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
+                        <!-- Select Make -->
+                        <div class="col-md-offset-1 col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                            <h2>Hãng xe</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="brand">
+                                <option value="">Chọn hãng</option>
+                                <option value="audi" {{#if (eq queries.brand "audi")}}selected{{/if}}>Audi</option>
+                                <option value="BMW" {{#if (eq queries.brand "BMW")}}selected{{/if}}>BMW</option>
+                                <option value="ford" {{#if (eq queries.brand "ford")}}selected{{/if}}>Ford</option>
+                                <option value="kia" {{#if (eq queries.brand "kia")}}selected{{/if}}>Kia</option>
+                                <option value="honda" {{#if (eq queries.brand "honda")}}selected{{/if}}>Honda</option>
+                                <option value="hyundai" {{#if (eq queries.brand "hyundai")}}selected{{/if}}>Hyundai</option>
+                                <option value="mitsubishi" {{#if (eq queries.brand "mitsubishi")}}selected{{/if}}>Mitsubishi</option>
+                                <option value="toyota" {{#if (eq queries.brand "toyota")}}selected{{/if}}>Toyota</option>
+                                <option value="vinfast" {{#if (eq queries.brand "vinfast")}}selected{{/if}}>Vinfast</option>
+                                
+                                </select>
+                            </div>
+                            </div>
+                            <!-- Select Condition -->
+                            <div class="single-model-search">
+                            <h2>Tình trạng</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="status">
+                                <option value="">Chọn tình trạng</option>
+                                <option value="new" {{#if (eq queries.status "new")}}selected{{/if}}>Xe mới</option>
+                                <option value="used" {{#if (eq queries.status "used")}}selected{{/if}}>Đã qua sử dụng</option>
+                                <option value="sold" {{#if (eq queries.status "sold")}}selected{{/if}}>Xe bảo hành</option>
+                                </select>
+                            </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc2.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
+                        <!-- Select Model -->
+                        <div class="col-md-offset-1 col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                            <h2>Hộp số</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="transmission">
+                                <option value="">Chọn hộp số</option>
+                                <option value="manual" {{#if (eq queries.transmission "manual")}}selected{{/if}}>Manual</option>
+                                <option value="automatic" {{#if (eq queries.transmission "automatic")}}selected{{/if}}>Automatic</option>
+                                </select>
+                            </div>
+                            </div>
+                            <!-- Select Price -->
+                            <div class="single-model-search">
+                            <h2>Nhập mức giá ($)</h2>
+                            <div id="model-price" class="price-range">
+                                <input type="number" class="form-control price-input" name="price_min" placeholder="$Từ" min="0" value="{{queries.price_min}}">
+                                <span>-</span>
+                                <input type="number" class="form-control price-input" name="price_max" placeholder="$Đến" min="0" value="{{queries.price_max}}">
+                            </div>
+                            <div class="text-center">
+                                <span id="price-error" class="text-danger"></span>
+                            </div>
+                            </div>
                         </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>chevrolet camaro
-                                    <span>wmv20</span></a>
-                            </h2>
-                            <h3>$66,575</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
+                        <!-- Search Button -->
+                        <div class="col-md-2 col-sm-12">
+                            <div class="single-model-search text-center">
+                            <button class="welcome-btn model-search-btn" onclick="checkPriceRange(event)">Tìm kiếm</button>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/3/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc3.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>lamborghini <span>v520</span></a>
-                            </h2>
-                            <h3>$125,250</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
                         </div>
                     </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/1/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc4.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>audi <span> a3</span> sedan</a>
-                            </h2>
-                            <h3>$95,500</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class='row'>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc4.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>infiniti <span>z5</span></a>
-                            </h2>
-                            <h3>$36,850</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
+            </form>
+        </div>
+        <div class='container'>
+            <div class='row featured-cars-content' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
+                {{#each products}}
+                    <div class='col-lg-3 col-md-4 col-sm-6'>
+                        <div class='single-featured-cars'>
+                            <div class='featured-img-box'>
+                                <a href='/product/detail/{{_id}}' class = "detail-link" data-id = "{{_id}}">
+                                    <div class='featured-cars-img'>
+                                        <img class ="fixed-size-img zoom-out" src='{{images.image1}}' alt='cars' />
+                                    </div>
+                                    <div class='featured-model-info'>
+                                        <p>
+                                            model: {{year}}
+                                            <span class='featured-mi-span'>{{mileage}} mi</span>
+                                            <span class='featured-hp-span'>{{horsepower}}HP</span>
+                                            {{transmission}}
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class='featured-cars-txt'>
+                                <h2><a href='/product/detail/{{_id}}' class = "detail-link">{{brand}} {{model}}</a></h2>
+                                <h3>${{price}}</h3>
+                                <p>{{description}}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/3/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc5.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>porsche <span>718</span> cayman</a>
-                            </h2>
-                            <h3>$48,500</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
+                {{else}}
+                <div class='col-lg-12'>
+                    <div class='find-nothing text-center' >
+                            <h2 style = "font-size: large; color: #978e8e">Không tìm thấy sản phẩm</h2>
                     </div>
                 </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/1/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc7.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'><span>bmw 8-</span>series coupe</a>
-                            </h2>
-                            <h3>$56,000</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc8.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>BMW <span> x</span>series-6</a>
-                            </h2>
-                            <h3>$75,800</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class='row'>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc4.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>infiniti <span>z5</span></a>
-                            </h2>
-                            <h3>$36,850</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/3/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc5.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>porsche <span>718</span> cayman</a>
-                            </h2>
-                            <h3>$48,500</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/1/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc7.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'><span>bmw 8-</span>series coupe</a>
-                            </h2>
-                            <h3>$56,000</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc8.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>BMW <span> x</span>series-6</a>
-                            </h2>
-                            <h3>$75,800</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class='row'>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc4.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>infiniti <span>z5</span></a>
-                            </h2>
-                            <h3>$36,850</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/3/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc5.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>porsche <span>718</span> cayman</a>
-                            </h2>
-                            <h3>$48,500</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/1/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc7.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'><span>bmw 8-</span>series coupe</a>
-                            </h2>
-                            <h3>$56,000</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                    <div class='single-featured-cars'>
-                        <div class='featured-img-box'>
-                            <a href='/product/detail/2/index.html'>
-                                <div class='featured-cars-img'>
-                                    <img
-                                        src='/vender/images/featured-cars/fc8.png'
-                                        alt='cars'
-                                    />
-                                </div>
-                                <div class='featured-model-info'>
-                                    <p>
-                                        model: 2017
-                                        <span class='featured-mi-span'>
-                                            3100 mi</span>
-                                        <span class='featured-hp-span'>
-                                            240HP</span>
-                                        automatic
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class='featured-cars-txt'>
-                            <h2>
-                                <a href='#'>BMW <span> x</span>series-6</a>
-                            </h2>
-                            <h3>$75,800</h3>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia
-                                dolor sit amet, consectetur, adipisci velit, sed
-                                quia non.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                {{/each}}
             </div>
         </div>
-    </div>
+    <div id="price-error" style="color: red;"></div> <!-- Thêm div cho thông báo lỗi giá -->
+</div>
     <!--/.container-->
 </section>
+
+<form name = "detail-form" method="GET" ></form>
+
+<script>
+  function checkPriceRange(event) {
+    event.preventDefault(); // Ngăn chặn hành động gửi form mặc định
+
+    var priceMin = document.getElementsByName("price_min")[0].value;
+    var priceMax = document.getElementsByName("price_max")[0].value;
+
+    if (parseFloat(priceMin) > parseFloat(priceMax)) {
+      document.getElementById("price-error").innerHTML = "Hãy nhập khoảng phù hợp";
+    } else {
+      document.getElementById("price-error").innerHTML = "";
+      document.getElementById("filterForm").submit();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var productID;
+    var detailLink = $(".detail-link");
+    var detailForm = document.forms["detail-form"];
+
+    // jQuery code here to get productID from data-bs-id attribute 
+    detailLink.click(function() {
+      productID = $(this).attr("data-id");
+      document.detailForm.action = "/product/detail/" + productID;
+      document.detailForm.submit();
+    });
+
+  });
+
+
+</script>

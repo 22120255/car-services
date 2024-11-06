@@ -4,16 +4,16 @@ const AuthService = require('../services/AuthService');
 class AuthController {
     //[GET] /login
     login(req, res) {
-        res.render("auth/login", {
-            layout: "auth",
-        });
+        res.render('auth/login', {
+            layout: 'auth',
+        })
     }
 
     //[GET] /register
     register(req, res) {
-        res.render("auth/register", {
-            layout: "auth",
-        });
+        res.render('auth/register', {
+            layout: 'auth',
+        })
     }
 
     //[GET] /check-email
@@ -76,9 +76,9 @@ class AuthController {
     }
 
     forgotPassword(req, res) {
-        res.render("auth/forgot-password", {
-            layout: "auth",
-        });
+        res.render('auth/forgot-password', {
+            layout: 'auth',
+        })
     }
 }
 

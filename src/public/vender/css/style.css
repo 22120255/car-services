@@ -32,6 +32,8 @@ font-family: 'Rufina', serif;
     margin: 0;
 }
 
+
+
 *{
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
@@ -264,13 +266,13 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 --------------------------------------*/
 .model-search-content .col-sm-12 {padding: 0;}
 .model-search-content {
-    padding: 40px 0;
+    padding: 30px 0;
     background: #fff;
     box-shadow:0 10px 40px 0px rgba(38,40,64,.2);
-    position: absolute;
+    position: relative;
     bottom: -150px;
     width: 100%;
-    border-radius: 3px;
+    border-radius: 20px;
 }
 
 /*.single-model-search*/
@@ -283,10 +285,31 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     
     margin-bottom: 20px;
 }
+/* model-price */
+.model-price {
+    position: relative;
+}
+
+.price-range {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.price-input {
+    width: 100%;
+}
+
+.price-separator {
+    font-weight: bold;
+    margin: 0 5px;
+}
+
 /*model-select-icon*/
 .model-select-icon{
     position:relative;
 }
+
 .model-select-icon .form-control {
     outline: 0!important;
     box-shadow: none;
@@ -319,6 +342,12 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     width: 160px;
     margin-top: 80px;
     margin-left: 53px;
+}
+
+/* apply-button */
+#apply-button {
+    margin-top: 7px;
+    background: #4e4ffa;
 }
 
 /*.single-model-search*/
@@ -413,11 +442,12 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 .featured-cars{
     padding:112px 0 120px;
 }
-.featured-cars-content{padding-top:96px;}
+.featured-cars-content{padding-top:200px;}
 
 /*.single-featured-cars*/
 .featured-img-box {
-    border: 1px solid #dadfe9;
+    border: 1px solid #dadfe9f5;
+    border-radius: 5%;
 }
 .featured-cars-img {
     display: flex;
@@ -427,6 +457,11 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     height: 220px;
     border-bottom: 1px solid #dadfe9;
 }
+
+.fixed-size-img.zoom-out:hover {
+    transform: scale(1.2);
+    /* Scale down the image on hover */ }
+
 .featured-model-info{padding:12px 7px;}
 .featured-model-info p {
     font-size: 12px;
@@ -662,6 +697,11 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
 }
 .footer-social i:hover{opacity: .70;}
 /*.footer-copyright */
+
+/*.find-nothing*/
+.find-nothing {
+    font-style: italic;
+}
 
 /*===============================
     Scroll Top
