@@ -46,9 +46,9 @@ const categories = [
 
 // Hàm tạo dữ liệu sản phẩm giả
 async function generateMockProducts(num = 10) {
+    const products = [];
 
     for (let i = 0; i < num; i++) {
-        const randomCategoryId = chance.pickone(categoryIds); // Random category_id từ mảng
         const randomBrand = chance.pickone(brands); // Random brand from predefined brands
         const randomStatus = chance.pickone(statuses); // Random status
         const randomTransmission = chance.pickone(transmissions); // Random transmission
@@ -60,19 +60,19 @@ async function generateMockProducts(num = 10) {
             description: chance.sentence({ words: 30 }), // Random sentence for description
             horsepower: chance.integer({ min: 100, max: 500 }), // Random horsepower
             images: {
-                image1: "",
-                image2: "",
-                image3: "",
-                image4: "",
-                image5: "",
+                image1: "https://th.bing.com/th/id/OIP.laEUfx2v3Vk1jCnGMoFC6wHaFj?w=234&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                image2: "https://th.bing.com/th/id/OIP.laEUfx2v3Vk1jCnGMoFC6wHaFj?w=234&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                image3: "https://th.bing.com/th/id/OIP.laEUfx2v3Vk1jCnGMoFC6wHaFj?w=234&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                image4: "https://th.bing.com/th/id/OIP.laEUfx2v3Vk1jCnGMoFC6wHaFj?w=234&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+                image5: "https://th.bing.com/th/id/OIP.laEUfx2v3Vk1jCnGMoFC6wHaFj?w=234&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
             },
             mileage: chance.integer({ min: 0, max: 500 }), // Random mileage
             model: chance.word(), // Random model name
             price: chance.integer({ min: 20000, max: 200000 }), // Random price
             transmission: randomTransmission.name, // Random transmission type
-            category: randomCategoryId, // Random category_id
             status: randomStatus.name, // Random status
             year: (randomYear.name), // Convert year to a number
+            category: randomCategory.name
         });
     }
 

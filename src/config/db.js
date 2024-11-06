@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const createMockProducts = require('../data/mockProducts');
 const Product = require('../models/Product');
 
 
-dotenv.config();
 
 const connectDB = async () => {
     try {
