@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Static file
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use('/css', express.static('public/css'));
 // HTTP logger
 app.use(morgan("dev"));
 
