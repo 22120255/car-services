@@ -1,4 +1,4 @@
-module.exports = function login(req, res, next) {
+module.exports = (req, res, next) => {
     res.locals.user = null;
 
     if (req.session.user) {

@@ -19,18 +19,10 @@
   position: relative;
   z-index: 2; }
 
-.wrapper-side {
-  padding: 0 160px; }
-
-.btn-social {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #ced4da;
-  border: 1px solid #ced4da;
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-  .btn-social img {
-    width: 24px;
-    height: 24px; }
+.btn-back {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  color: #fff; }
+  .btn-back:hover {
+    opacity: 0.8; }

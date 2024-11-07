@@ -1,15 +1,17 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
-const route = require('./routes');
 const methodOverride = require('method-override');
 const { engine } = require('express-handlebars');
-const db = require('./config/db');
-const login = require("./middleware/authMiddleware");
 const session = require("express-session");
 
+const route = require('./routes');
+const db = require('./config/db');
+const login = require("./middleware/authMiddleware");
+const refreshSession = require("./middleware/refreshSession");
+
+const app = express();
 const store = db.createSessionStore(session);
 // Session
 app.use(
@@ -39,6 +41,7 @@ app.use(morgan('dev'));
 
 // Custom middleware
 app.use(login);
+app.use(refreshSession);
 
 // Register the eq helper
 
@@ -53,14 +56,7 @@ app.engine(
             path.join(__dirname, "views/partials/auth"),
             path.join(__dirname, "views/partials"),
         ],
-        helpers: {
-            eq: function (a, b) {
-                return a === b;
-            },
-            hasUser: function (user) {
-                return user && user.email;
-            },
-        },
+        helpers: require("./utils/handlebars"),
     }),
 );
 app.set("view engine", "hbs");
