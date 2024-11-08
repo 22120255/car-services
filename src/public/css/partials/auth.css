@@ -15,6 +15,20 @@
   backdrop-filter: blur(5px);
   z-index: 1; }
 
+#icon-loading {
+  position: absolute;
+  font-size: 3rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spinner 0.8s linear infinite; }
+
+@keyframes spinner {
+  from {
+    transform: translateX(-50%) rotate(0deg); }
+  to {
+    transform: translateX(-50%) rotate(360deg); } }
+
 .wrapper-login > * {
   position: relative;
   z-index: 2; }

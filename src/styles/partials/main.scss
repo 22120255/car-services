@@ -32,6 +32,17 @@
     height: 32px;
     border-radius: 50%;
 }
+#tippy-content {
+    left: -100px;
+    width: max-content;
+    padding: 8px;
+}
+.username {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    width: 150px;
+}
 // Body
 #container {
     // margin-top: $height-header;

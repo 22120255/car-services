@@ -1,7 +1,20 @@
 //logic chung cho cả login và register sẽ được viét ở đây 
 import { signInWithFacebook, signInWithGoogle } from "./firebase/index.js";
 
-
+document.addEventListener('DOMContentLoaded', function () {
+    $("#show-password").on('click', function () {
+        const passwordInput = $('#password');
+        const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+        passwordInput.attr('type', type);
+        $(this).children().toggleClass('fa-eye-slash').toggleClass('fa-eye');
+    });
+    $("#show-re-password").on('click', function () {
+        const passwordInput = $('#re-password');
+        const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+        passwordInput.attr('type', type);
+        $(this).children().toggleClass('fa-eye-slash').toggleClass('fa-eye');
+    });
+})
 // Handle event when user click on register button with Google
 document.addEventListener("DOMContentLoaded", function () {
     $(".btn-register-google").on("click", async function () {

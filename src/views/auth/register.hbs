@@ -1,7 +1,7 @@
 <div class='container'>
     <div class='login-container'>
         <h1>Đăng kí</h1>
-        <div class='w-100'>
+        <div class='w-100 position-relative'>
             <form>
                 <div class='form-group'>
                     <label for='email'>Email</label>
@@ -61,9 +61,9 @@
                         <i class='fa fa-eye'></i>
                     </button>
                 </div>
-                <span class='text-danger' id='message-error'></span>
+                <span class='fs-075 text-danger' id='message-error'></span>
 
-                <button type='button' class='btn login-btn'>Đăng kí</button>
+                <button type='button' class='btn login-btn'>Đăng kí</button> 
 
                 <div class='forgot-password'>
                     <span class='fs-075'>Bạn đã có tài khoản?
@@ -71,6 +71,7 @@
                     <a class='fs-075' href='/auth/forgot-password'>Quên mật khẩu</a>
                 </div>
             </form>
+            <i class='fa fa-spinner d-none' id="icon-loading"></i>
         </div>
         <div class='group-social d-flex justify-content-around'>
             <button
@@ -95,4 +96,4 @@
     </div>
 </div>
 
-<script type="module" src='/js/auth/register.js'></script>
+<script type='module' src='/js/auth/register.js'></script>

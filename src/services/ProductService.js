@@ -3,7 +3,6 @@ const { multipleMongooseToObject } = require('../utils/mongoose');
 
 class ProductService {
     // [GET] /products/filter
-
     findService = async (query) => {
         try {
             const products = await Product.find(query);

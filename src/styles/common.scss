@@ -1,5 +1,12 @@
 @import 'variables';
 
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
 html {
     font-size: 16px;
 }
@@ -73,7 +80,10 @@ h3,
         font-size: 1.75rem;
     }
 }
-
+a,
+a:hover {
+    padding: 8px !important;
+}
 h4,
 .h4 {
     font-size: calc(1.275rem + 0.3vw);

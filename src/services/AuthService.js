@@ -6,6 +6,43 @@ const nodemailer = require('nodemailer');
 const saltRounds = 10;
 
 class AuthService {
+    async verifyEmail(email, password) {
+        try {
+            const user = await User
+                .findOne({ email })
+                .select('+passwordHashed');
+
+            if (!user) {
+                const error = new Error("Email chưa được đăng kí");
+                error.statusCode = 401;
+                throw error;
+            }
+
+            const isPasswordMatched = await bcrypt.compare(password, user.passwordHashed);
+
+            if (!isPasswordMatched) {
+                const error = new Error("Mật khẩu không chính xác");
+                error.statusCode = 401;
+                throw error;
+            }
+
+            if (!user.isActivated) {
+                const error = new Error("Tài khoản chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt tài khoản");
+                error.statusCode = 403;
+                throw error;
+            }
+
+            return user;
+        } catch (err) {
+            if (!err.statusCode) {
+                err.statusCode = 500; // Internal Server Error for unknown errors
+                err.message = "Có lỗi khi xác thực email";
+            }
+            throw err;
+        }
+    }
+
+
     async checkEmailAvailability(email) {
         try {
             const userExists = await User.findOne({ email });
