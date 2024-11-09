@@ -27,6 +27,24 @@
     border-radius: 16px;
     color: #fff;
 }
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+#tippy-content.show {
+    display: flex;
+    flex-direction: column;
+    left: -100px;
+    width: max-content;
+    padding: 8px;
+}
+.username {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    width: 150px;
+}
 // Body
 #container {
     // margin-top: $height-header;

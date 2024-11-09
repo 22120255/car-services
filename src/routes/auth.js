@@ -1,9 +1,10 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const authController = require("../controllers/AuthController");
+const authController = require('../controllers/AuthController')
 
 router.get("/login", authController.login);
+router.post("/login/email/verify", authController.verifyEmail);
 //Function register
 router.get("/register", authController.register);
 router.get("/check-email", authController.checkEmail);
@@ -13,5 +14,7 @@ router.post("/register/google/store", authController.registerWithGoogle);
 router.post("/register/facebook/store", authController.registerWithFacebook);
 //Function forgot password
 router.get("/forgot-password", authController.forgotPassword);
+//Function logout password
+router.get("/logout", authController.logout);
 
-module.exports = router;
+module.exports = router

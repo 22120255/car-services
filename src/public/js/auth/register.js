@@ -1,45 +1,44 @@
-import { signInWithFacebook, signInWithGoogle } from "./firebase/index.js";
+import { isStrongPassword, isEmailValid } from '../helpers.js'
 
-function isStrongPassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[a-zA-Z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
-}
-async function checkEmailAvailability(email) {
-    return $.ajax({
-        url: '/auth/check-email',
-        type: 'GET',
-        data: { email },
-        dataType: 'json'
-    });
-}
-document.addEventListener('DOMContentLoaded', function () {
-    $("#show-password").on('click', function () {
-        const passwordInput = $('#password');
-        const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-        passwordInput.attr('type', type);
-        $(this).children().toggleClass('fa-eye-slash').toggleClass('fa-eye');
-    });
-    $("#show-re-password").on('click', function () {
-        const passwordInput = $('#re-password');
-        const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-        passwordInput.attr('type', type);
-        $(this).children().toggleClass('fa-eye-slash').toggleClass('fa-eye');
-    });
-})
 // Handle event when user click on register button
 document.addEventListener('DOMContentLoaded', function () {
+    let debounceTimeout;
     $('#email').on('input', function () {
         const email = $(this).val();
         if (email) {
-            checkEmailAvailability(email).done(function (result) {
-                if (result.isAvailable) {
-                    $('#email-availability-message').text("Email khả dụng").css("color", "green");
-                } else {
-                    $('#email-availability-message').text("Email đã được sử dụng").css("color", "red");
-                }
-            }).fail(function () {
+            if (!isEmailValid(email)) {
+                $('#email-availability-message').text("Email không hợp lệ").css("color", "red");
+                $('#login-btn').prop('disabled', true);
+                return;
+            }
+
+            try {
+                // Only call API when user stop typing after 500ms
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(async function () {
+                    try {
+                        const resp = await $.ajax({
+                            url: '/auth/check-email',
+                            type: 'GET',
+                            data: { email },
+                            dataType: 'json'
+                        });
+
+                        if (resp.isAvailable) {
+                            $('#email-availability-message').text("Email khả dụng").css("color", "green");
+                        } else {
+                            $('#email-availability-message').text("Email đã được sử dụng").css("color", "red");
+                        }
+                        $('#login-btn').prop('disabled', !resp.isAvailable);
+
+                    } catch (error) {
+                        $('#email-availability-message').text("Có lỗi khi kiểm tra email");
+                    }
+                }, 500);
+
+            } catch (error) {
                 $('#email-availability-message').text("Có lỗi khi kiểm tra email");
-            });
+            }
         }
     });
 
@@ -68,82 +67,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const result = await checkEmailAvailability(email);
-            if (!result.isAvailable) {
-                messageEle.text("Email này đã được sử dụng. Vui lòng chọn email khác");
-                return;
-            }
-
-            const response = await $.ajax({
+            $("#icon-loading").removeClass("d-none");
+            await $.ajax({
                 url: '/auth/register/email/store',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ email, password, fullName }),
-                dataType: 'json'
-            });
+                dataType: 'json',
+                statusCode: {
+                    200() {
+                        $('#successModal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
 
-            $('#successModal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
-
-            $('#successModal').on('hidden.bs.modal', function () {
-                window.location.href = "/dashboard";
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/dashboard";
+                        });
+                    },
+                    400(resp) {
+                        console.log(resp.responseJSON);
+                        messageEle.text("Đăng ký không thành công, vui lòng thử lại.");
+                    }
+                }
             });
         } catch (error) {
+            if (error.status === 400) return;
+
             const result = error.responseJSON || {};
             console.error(error);
-            // alert(result.error || "Đăng ký không thành công, vui lòng thử lại.");
-
+            alert(result.error || "Đăng ký không thành công, vui lòng thử lại.");
+        } finally {
+            $("#icon-loading").addClass("d-none");
         }
     });
 })
 
-// Handle event when user click on register button with Google
-document.addEventListener("DOMContentLoaded", function () {
-    $(".btn-register-google").on("click", async function () {
-        try {
-            const user = await signInWithGoogle();
-
-            const response = await $.ajax({
-                url: "/auth/register/google/store",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    uid: user.uid,
-                    email: user.email,
-                    fullName: user.displayName,
-                    avatar: user.photoURL,
-                }),
-            });
-
-            window.location.href = "/dashboard"
-            console.log(response)
-        } catch (error) {
-            console.log(error);
-        }
-    });
-});
-
-// Handle event when user click on register button with Facebook
-document.addEventListener("DOMContentLoaded", function () {
-    $(".btn-register-facebook").on("click", async function () {
-        try {
-            const user = await signInWithFacebook();
-            console.log("user ", user)
-            const response = await $.ajax({
-                url: "/auth/register/facebook/store",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    uid: user.uid,
-                    email: user.email,
-                    fullName: user.displayName,
-                    avatar: user.photoURL,
-                }),
-            });
-
-            alert("Đăng ký thành công!");
-            console.log(response)
-        } catch (error) {
-            console.log(error);
-        }
-    });
-});

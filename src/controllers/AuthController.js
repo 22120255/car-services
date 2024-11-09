@@ -1,8 +1,5 @@
-const User = require("../models/User");
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-const saltRounds = 10;
+// controllers/AuthController.js
+const AuthService = require('../services/AuthService');
 
 class AuthController {
     //[GET] /login
@@ -10,6 +7,26 @@ class AuthController {
         res.render("auth/login", {
             layout: "auth",
         });
+    }
+
+    //[POST] /login/email/verify]
+    async verifyEmail(req, res) {
+        const { email, password } = req.body;
+        try {
+            const user = await AuthService.verifyEmail(email, password);
+
+            req.session.user = {
+                fullName: user.fullName,
+                email: user.email,
+                avatar: user.avatar || null,
+                role: user.role || "customer",
+            };
+            await req.session.save();
+
+            res.status(200).json({ message: "Đăng nhập thành công" });
+        } catch (error) {
+            res.status(error.statusCode).json({ error: error.message });
+        }
     }
 
     //[GET] /register
@@ -23,9 +40,8 @@ class AuthController {
     async checkEmail(req, res) {
         try {
             const { email } = req.query;
-
-            const userExists = await User.findOne({ email });
-            res.status(200).json({ isAvailable: !userExists });
+            const isAvailable = await AuthService.checkEmailAvailability(email);
+            res.status(200).json({ isAvailable });
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
@@ -36,27 +52,15 @@ class AuthController {
         const { email, fullName, password } = req.body;
 
         try {
-            const activationToken = crypto.randomBytes(20).toString('hex');
-            const passwordHashed = await bcrypt.hash(password, saltRounds);
-            const user = new User({ email, fullName, activationToken, passwordHashed });
+            const user = await AuthService.storeUserWithEmail(email, fullName, password);
 
-            const transporter = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.PASSWORD
-                }
-            });
-
-            const activationLink = `${process.env.DOMAIN_URL}/auth/activate?token=${activationToken}`;
-            await transporter.sendMail({
-                from: 'no-reply@car-service.com',
-                to: email,
-                subject: 'Kích hoạt tài khoản',
-                text: `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`
-            });
-
-            await user.save();
+            req.session.user = {
+                fullName: fullName,
+                email: email,
+                avatar: user.avatar || null,
+                role: user.role || "customer",
+            };
+            await req.session.save();
 
             res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
         } catch (err) {
@@ -69,44 +73,31 @@ class AuthController {
         const { token } = req.query;
 
         try {
-            const user = await User.findOne({ activationToken: token });
-
-            if (!user) {
-                return res.status(400).json({ error: "Token không hợp lệ." });
-            }
-
-            user.isActivated = true;
-            user.activationToken = undefined;
-            await user.save();
-
+            const user = await AuthService.activateAccountByToken(token);
             res.status(200).json({ message: "Tài khoản của bạn đã được kích hoạt thành công!" });
         } catch (err) {
-            res.status(500).json({ error: "Có lỗi xảy ra, vui lòng thử lại." });
+            res.status(500).json({ error: err.message });
         }
-    };
+    }
 
-    //[GET] /auth/register/facebook/store
+    //[GET] /auth/register/google/store
     async registerWithGoogle(req, res) {
         const { email, fullName, avatar } = req.body;
 
         try {
-            let user = await User.findOne({ email });
+            const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
 
-            if (!user) {
-                user = new User({
-                    email,
-                    fullName,
-                    avatar,
-                    isActivated: true
-                });
-                await user.save();
-                return res.status(201).json({ message: "User registered successfully", user });
-            }
+            req.session.user = {
+                fullName: fullName,
+                email: email,
+                avatar: avatar,
+                role: user.role || "customer",
+            };
+            await req.session.save();
 
-            res.status(200).json({ message: "User already exists", user });
+            res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
         } catch (error) {
-            console.error("Error registering user:", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Lỗi server" });
         }
     }
 
@@ -115,23 +106,19 @@ class AuthController {
         const { email, fullName, avatar } = req.body;
 
         try {
-            let user = await User.findOne({ email });
+            const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
 
-            if (!user) {
-                user = new User({
-                    email,
-                    fullName,
-                    avatar,
-                    isActivated: true
-                });
-                await user.save();
-                return res.status(201).json({ message: "User registered successfully", user });
-            }
+            req.session.user = {
+                fullName: fullName,
+                email: email,
+                avatar: avatar,
+                role: user.role || "customer",
+            };
+            await req.session.save();
 
-            res.status(200).json({ message: "User already exists", user });
+            res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
         } catch (error) {
-            console.error("Error registering user:", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Lỗi server" });
         }
     }
 
@@ -139,6 +126,16 @@ class AuthController {
         res.render("auth/forgot-password", {
             layout: "auth",
         });
+    }
+
+    // [GET] /auth/logout
+    logout(req, res, next) {
+        try {
+            req.session.destroy()
+            res.redirect("/dashboard");
+        } catch (error) {
+            next(error);
+        }
     }
 }
 
