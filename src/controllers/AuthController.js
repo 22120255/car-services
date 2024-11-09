@@ -1,32 +1,23 @@
 // controllers/AuthController.js
 const AuthService = require('../services/AuthService');
+const passport = require('passport');
 
 class AuthController {
     //[GET] /login
     login(req, res) {
         res.render("auth/login", {
             layout: "auth",
+            message: req.flash("error") || "",
         });
     }
 
     //[POST] /login/email/verify]
-    async verifyEmail(req, res) {
-        const { email, password } = req.body;
-        try {
-            const user = await AuthService.verifyEmail(email, password);
-
-            req.session.user = {
-                fullName: user.fullName,
-                email: user.email,
-                avatar: user.avatar || null,
-                role: user.role || "customer",
-            };
-            await req.session.save();
-
-            res.status(200).json({ message: "Đăng nhập thành công" });
-        } catch (error) {
-            res.status(error.statusCode).json({ error: error.message });
-        }
+    async verifyEmail(req, res, next) {
+        passport.authenticate('local', {
+            successReturnToOrRedirect: '/dashboard',
+            failureRedirect: '/auth/login',
+            failureFlash: true
+        })(req, res, next);
     }
 
     //[GET] /register
@@ -130,12 +121,10 @@ class AuthController {
 
     // [GET] /auth/logout
     logout(req, res, next) {
-        try {
-            req.session.destroy()
-            res.redirect("/dashboard");
-        } catch (error) {
-            next(error);
-        }
+        req.logout(function (err) {
+            if (err) { return next(err); }
+            res.redirect('/dashboard');
+        });
     }
 }
 
