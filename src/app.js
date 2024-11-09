@@ -8,8 +8,10 @@ const session = require("express-session");
 
 const route = require('./routes');
 const db = require('./config/db');
+const passport = require('./config/passport');
 const login = require("./middleware/authMiddleware");
 const refreshSession = require("./middleware/refreshSession");
+
 
 const app = express();
 const store = db.createSessionStore(session);
@@ -26,13 +28,13 @@ app.use(
 );
 // Connect to DB
 db.connectDB();
-
 // Body parser
 app.use(express.json());
-
 // Ghi đè phương thức HTTP
 app.use(methodOverride('_method'));
-
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 // Static file
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/css', express.static('public/css'));

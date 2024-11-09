@@ -18,7 +18,7 @@ class AuthService {
                 throw error;
             }
 
-            const isPasswordMatched = await bcrypt.compare(password, user.passwordHashed);
+            const isPasswordMatched = await bcrypt.compare(password, user.password);
 
             if (!isPasswordMatched) {
                 const error = new Error("Mật khẩu không chính xác");
@@ -55,8 +55,7 @@ class AuthService {
     async storeUserWithEmail(email, fullName, password) {
         try {
             const activationToken = crypto.randomBytes(20).toString('hex');
-            const passwordHashed = await bcrypt.hash(password, saltRounds);
-            const user = new User({ email, fullName, activationToken, passwordHashed });
+            const user = new User({ email, fullName, activationToken, password });
 
             const transporter = nodemailer.createTransport({
                 service: 'Gmail',
