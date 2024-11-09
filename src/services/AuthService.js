@@ -3,14 +3,13 @@ const User = require("../models/User");
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const saltRounds = 10;
 
 class AuthService {
     async verifyEmail(email, password) {
         try {
             const user = await User
                 .findOne({ email })
-                .select('+passwordHashed');
+                .select('+password');
 
             if (!user) {
                 const error = new Error("Email chưa được đăng kí");

@@ -51,13 +51,12 @@
                                 href='#'
                                 id='navbarDropdown'
                                 role='button'
-                                data-toggle='dropdown'
-                                aria-haspopup='true'
+                                data-bs-toggle='dropdown'
                                 aria-expanded='false'
                             >
                                 {{#if user.avatar}}
                                     <img
-                                        src='{{user.avatar}}'
+                                        src="{{user.avatar}}"
                                         alt='avatar'
                                         class='avatar'
                                     />
@@ -70,7 +69,7 @@
                                 {{/if}}
                             </a>
                             <ul
-                                class='dropdown-menu show d-flex flex-column'
+                                class='dropdown-menu'
                                 id="tippy-content"
                                 aria-labelledby='navbarDropdown'
                             >
