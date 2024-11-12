@@ -53,7 +53,7 @@
                                 <select class="form-control" name="brand">
                                     <option value="">Chọn hãng</option>
                                     {{#each brands}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.brand this.name)}}selected{{/if}}>
+                                        <option value="{{this.value}}" {{#if (eq ../queries.brand this.value)}}selected{{/if}}>
                                             {{this.name}}
                                         </option>
                                     {{/each}}                  
@@ -106,7 +106,7 @@
                         <!-- Search Button -->
                         <div class="col-md-2 col-sm-12">
                             <div class="single-model-search text-center">
-                            <button class="welcome-btn model-search-btn" onclick="checkPriceRange">Tìm kiếm</button>
+                            <button class="welcome-btn model-search-btn">Tìm kiếm</button>
                             </div>
                         </div>
                         </div>
