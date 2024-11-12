@@ -1,3 +1,4 @@
+const { years, categories, brands, transmissions, statuses } = require("../data/mockProducts");
 const ProductService = require("../services/ProductService");
 const { mongooseToObject } = require("../utils/mongoose");
 const { multipleMongooseToObject, mongooseToObjects } = require("../utils/mongoose");
@@ -12,6 +13,8 @@ class ProductController {
     }
 
     getFilteredProducts = async (req, res, next) => {
+        // Xem xét tạo bảng riêng cho brands 
+
         try {
             const query = {};
 
@@ -44,8 +47,14 @@ class ProductController {
             res.render('products/index', {
                 products: multipleMongooseToObject(products),
                 queries: query,
+                years,
+                categories,
+                brands,
+                transmissions,
+                statuses
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
@@ -53,24 +62,33 @@ class ProductController {
     getDetail = async (req, res, next) => {
         try {
             const product = await ProductService.getDetail(req.params.id);
-            const query = {
-                $or: [{
-                    brand: product.brand
-                },
-                { year: product.year },
-                ],
+            // Tạm thời hard code delta = 10000
+            const delta = 10000;
+            const sameBrandProducts = await ProductService.getFilteredProducts({
+                brand: product.brand,
                 _id: { $ne: product._id },
-            };
-            const relatedProducts = await ProductService.getFilteredProducts(query);
+            });
+            const sameYearProducts = await ProductService.getFilteredProducts({
+                year: product.year,
+                _id: { $ne: product._id },
+            });
+            const similarPriceProducts = await ProductService.getFilteredProducts({
+                price: { $gte: product.price - delta, $lte: product.price + delta },
+                _id: { $ne: product._id },
+            });
 
             res.render('products/detail', {
                 product: mongooseToObject(product),
-                relatedProducts: multipleMongooseToObject(relatedProducts),
+                sameBrandProducts: multipleMongooseToObject(sameBrandProducts),
+                sameYearProducts: multipleMongooseToObject(sameYearProducts),
+                similarPriceProducts: multipleMongooseToObject(similarPriceProducts),
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     };
+
 }
 
-module.exports = new ProductController()
+module.exports = new ProductController();

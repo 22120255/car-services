@@ -44,6 +44,19 @@
                             href='/dashboard/contact'
                         >Contact</a>
                     </li>
+                    <li class='nav-item mx-3'>
+                        <a
+                            class='nav-link text-white position-relative btn-cart'
+                            href='/dashboard/shops'
+                        >
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger btn-cart__badge">
+                                99+
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </a>
+                      
+                    </li>
                     {{#if (hasUser user)}}
                         <li class='nav-item dropdown'>
                             <a
@@ -92,7 +105,7 @@
                                             />
                                         {{/if}}
                                         <div class='d-flex flex-column'>
-                                            <span>Chào,</span>
+                                            <span>Hello,</span>
                                             <span
                                                 class='username'
                                             >{{user.fullName}}</span>
@@ -104,7 +117,7 @@
                                     <a
                                         class='dropdown-item'
                                         href='/profile/{{user.email}}'
-                                    >Trang cá nhân</a>
+                                    >My profile</a>
                                 </li>
                                 <li>
                                     <div class='dropdown-divider'></div>
@@ -113,13 +126,13 @@
                                     <a
                                         class='dropdown-item'
                                         href='/settings'
-                                    >Cài đặt</a>
+                                    >Settings</a>
                                 </li>
                                 <li>
                                     <a
                                         class='dropdown-item'
                                         href='/auth/logout'
-                                    >Đăng xuất</a>
+                                    >Logout</a>
                                 </li>
                             </ul>
                         </li>

@@ -5,6 +5,7 @@ const Product = require('../models/Product'); // Assuming you have a Product mod
 
 // Predefined options
 const years = [
+    { value: '2024', name: '2024' },
     { value: '2023', name: '2023' },
     { value: '2022', name: '2022' },
     { value: '2021', name: '2021' },
@@ -14,34 +15,34 @@ const years = [
 ];
 
 const brands = [
-    { name: 'audi' },
+    { name: 'Audi' },
     { name: 'BMW' },
-    { name: 'ford' },
-    { name: 'kia' },
-    { name: 'honda' },
-    { name: 'hyundai' },
-    { name: 'mitsubishi' },
-    { name: 'toyota' },
-    { name: 'vinfast' }
+    { name: 'Ford' },
+    { name: 'Kia' },
+    { name: 'Honda' },
+    { name: 'Hyundai' },
+    { name: 'Mitsubishi' },
+    { name: 'Toyota' },
+    { name: 'Vinfast' }
 ];
 
 const statuses = [
-    { name: 'new', description: 'Xe mới' },
-    { name: 'used', description: 'Đã qua sử dụng' },
-    { name: 'sold', description: 'Xe bảo hành' }
+    { name: 'new', label: 'Xe mới' },
+    { name: 'used', label: 'Đã qua sử dụng' },
+    { name: 'sold', label: 'Xe bảo hành' }
 ];
 
 const transmissions = [
-    { name: 'manual' },
-    { name: 'automatic' }
+    { name: 'manual', label: 'Manual' },
+    { name: 'automatic', label: 'Automatic' },
 ];
 
 // Hàm lấy tất cả các category_id từ database
 const categories = [
-    { name: 'sedan' },
-    { name: 'suv' },
-    { name: 'truck' },
-    { name: 'roadster' },
+    { name: 'sedan', label: 'Sedan' },
+    { name: 'suv', label: 'SUV' },
+    { name: 'truck', label: 'Truck' },
+    { name: 'roadster', label: 'Roadster' },
 ];
 
 // Hàm tạo dữ liệu sản phẩm giả
@@ -79,4 +80,4 @@ async function generateMockProducts(num = 10) {
     return products;
 }
 
-module.exports = generateMockProducts;
+module.exports = { generateMockProducts, brands, statuses, transmissions, years, categories };
