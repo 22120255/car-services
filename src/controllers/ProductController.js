@@ -38,7 +38,7 @@ class ProductController {
                 query.status = req.query.status;
             }
 
-            const products = await ProductService.findService(query);
+            const products = await ProductService.getFilteredProducts(query);
 
             // Render trang nếu không phải là AJAX
             res.render('products/index', {
@@ -52,7 +52,7 @@ class ProductController {
 
     getDetail = async (req, res, next) => {
         try {
-            const product = await ProductService.findOneService(req.params.id);
+            const product = await ProductService.getDetail(req.params.id);
             const query = {
                 $or: [{
                     brand: product.brand
@@ -61,7 +61,7 @@ class ProductController {
                 ],
                 _id: { $ne: product._id },
             };
-            const relatedProducts = await ProductService.findService(query);
+            const relatedProducts = await ProductService.getFilteredProducts(query);
 
             res.render('products/detail', {
                 product: mongooseToObject(product),

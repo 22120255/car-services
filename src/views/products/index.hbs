@@ -123,7 +123,7 @@
                     <div class='col-lg-3 col-md-4 col-sm-6'>
                         <div class='single-featured-cars'>
                             <div class='featured-img-box'>
-                                <a href='/product/detail/{{_id}}' class = "detail-link" data-id = "{{_id}}">
+                                <a href='/products/{{_id}}' class = "detail-link" data-id = "{{_id}}">
                                     <div class='featured-cars-img'>
                                         <img class ="fixed-size-img zoom-out" src='{{images.image1}}' alt='cars' />
                                     </div>
@@ -138,7 +138,7 @@
                                 </a>
                             </div>
                             <div class='featured-cars-txt'>
-                                <h2><a href='/product/detail/{{_id}}' class = "detail-link">{{brand}} {{model}}</a></h2>
+                                <h2><a href='/products/{{_id}}' class = "detail-link">{{brand}} {{model}}</a></h2>
                                 <h3>${{price}}</h3>
                                 <p>{{description}}</p>
                             </div>
@@ -183,7 +183,7 @@
     // jQuery code here to get productID from data-bs-id attribute 
     detailLink.click(function() {
       productID = $(this).attr("data-id");
-      document.detailForm.action = "/product/detail/" + productID;
+      document.detailForm.action = "/products/" + productID;
       document.detailForm.submit();
     });
 
