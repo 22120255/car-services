@@ -34,6 +34,7 @@ class AuthService {
                 subject: 'Kích hoạt tài khoản',
                 text: `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`
             });
+            user.save();
 
             return user;
         } catch (err) {

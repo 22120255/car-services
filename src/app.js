@@ -56,6 +56,10 @@ app.use(refreshSession);
 app.engine(
     'hbs',
     engine({
+        runtimeOptions: {
+            allowProtoPropertiesByDefault: true,
+            allowProtoMethodsByDefault: true,
+        },
         extname: ".hbs",
         defaultLayout: "main",
         partialsDir: [
