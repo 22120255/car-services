@@ -17,4 +17,7 @@ module.exports = {
     dec(value) {
         return value - 1
     },
+    json(context) {
+        return JSON.stringify(context);
+    },
 }
