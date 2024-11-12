@@ -43,15 +43,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('.login-btn').on('click', async function () {
-        const email = $('#email').val();
-        const password = $('#password').val();
-        const rePassword = $('#re-password').val();
-        const fullName = $('#fullName').val();
+        const email = $('#email').val().trim();
+        const password = $('#password').val().trim();
+        const confirmPassword = $('#confirm-password').val().trim();
+        const fullName = $('#fullName').val().trim();
         const messageEle = $('#message-error');
 
         messageEle.text('');
 
-        if (!email || !password || !rePassword || !fullName) {
+        if (!email || !password || !confirmPassword || !fullName) {
             messageEle.text("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (password !== rePassword) {
+        if (password !== confirmPassword) {
             messageEle.text("Mật khẩu nhập lại không khớp");
             return;
         }
@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     200() {
-                        $('#successModal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
+                        $('#success-modal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
 
-                        $('#successModal').on('hidden.bs.modal', function () {
+                        $('#success-modal').on('hidden.bs.modal', function () {
                             window.location.href = "/dashboard";
                         });
                     },
