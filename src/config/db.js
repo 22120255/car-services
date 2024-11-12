@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const createMockProducts = require('../data/mockProducts');
+const { generateMockProducts } = require('../data/mockProducts');
 const Product = require('../models/Product');
 var MongoDBStore = require("connect-mongodb-session");
 
@@ -11,7 +11,7 @@ const connectDB = async () => {
         // Kiểm tra nếu chưa có products thì tạo mới
         const products = await Product.find();
         if (products.length === 0) {
-            const mockProducts = await createMockProducts();  // Tạo dữ liệu mock products
+            const mockProducts = await generateMockProducts(100);  // Tạo dữ liệu mock products
             await Product.insertMany(mockProducts); // Chèn products vào DB
             console.log('Mock products inserted!');
         }

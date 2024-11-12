@@ -1,98 +1,218 @@
-<div class="container-fluid">
-		<div class="card">
-				<div class="wrapper row">
-					<div class="preview col-md-6">
-						
-						<div class="preview-pic tab-content">
-						  <div class="tab-pane active" id="pic-1"><img src="{{product.images.image1}}" /></div>
-						  <div class="tab-pane" id="pic-2"><img src="{{product.images.image2}}" /></div>
-						  <div class="tab-pane" id="pic-3"><img src="{{product.images.image3}}" /></div>
-						  <div class="tab-pane" id="pic-4"><img src="{{product.images.image4}}" /></div>
-						  <div class="tab-pane" id="pic-5"><img src="{{product.images.image5}}" /></div>
-						</div>
-						<ul class="preview-thumbnail nav nav-tabs">
-						  <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="{{product.images.image1}}" /></a></li>
-						  <li><a data-target="#pic-2" data-toggle="tab"><img src="{{product.images.image2}}" /></a></li>
-						  <li><a data-target="#pic-3" data-toggle="tab"><img src="{{product.images.image3}}" /></a></li>
-						  <li><a data-target="#pic-4" data-toggle="tab"><img src="{{product.images.image4}}" /></a></li>
-						  <li><a data-target="#pic-5" data-toggle="tab"><img src="{{product.images.image5}}" /></a></li>
-						</ul>
-						
-					</div>
-					<div class="details col-md-6">
-						<h3 class="product-title">{{product.brand}} {{product.model}}</h3>
-						<h8 class="price">current price: <span>${{product.price}}</span></h8>
-
-						<div class="rating">
-							<div class="stars">
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star"></span>
-								<span class="fa fa-star"></span>
-							</div>
-							<span class="review-no">41 reviews</span>
-						</div>
-						<p class="product-description">{{product.description}}</p>
-						<p >
-						<span>
-							<strong>Model:</strong> {{product.year}}
-						</span>
-						-
-						<span>
-							<strong>Mileage:</strong> {{product.mileage}} mi
-						</span>
-						-
-						<span>
-							<strong>Horsepower:</strong> {{product.horsepower}}HP
-						</span>
-						-
-						<span>
-							<strong>Transmission:</strong> {{product.transmission}}
-						</span>
-						</p>
-						<h5 class="colors" style = "margin: 7px 0 7px 0;"> TYPE: {{product.category}}</h5>
-						<h5 class="colors">colors:
-							<span class="color orange not-available" data-toggle="tooltip" title="Not In store"></span>
-							<span class="color green"></span>
-							<span class="color blue"></span>
-						</h5>
-						<div class="action">
-							<button class="add-to-cart btn btn-default" type="button">add to cart</button>
-							<button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
-						</div>
-												<p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
-
-					</div>
-			</div>
-
-      <!-- Related Products -->
-      <div class="row related-products">
-        <div class="col-md-12">
-          <h4 class="text-center">Related Products</h4>
-          <div class="row">
-            {{#each relatedProducts}}
-            <div class="col-md-4">
-              <div class="image-related card">
-                <a href="/product/detail/{{this._id}}">
-					<img
-					class="card-img-top fixed-size-img zoom-out"
-					src="{{this.images.image1}}"
-					alt="Related Product"
-					/>
-				</a>
-				
-                <div class="card-body" style="margin-top:20px;">
-                  <h5 class="card-title">{{this.brand}} {{this.model}}</h5>
-                  <p class="card-text">${{this.price}}</p>
+<div class="detail-product__wrapper">
+        <section class='card'>
+            <div class='wrapper row'>
+                <div class='preview col-md-6'>
+    				<div class='preview-pic tab-content'>
+    					<div class='tab-pane active' id='pic-1'>
+    						<img src='{{product.images.image1}}' />
+    					</div>
+    					<div class='tab-pane' id='pic-2'>
+    						<img src='{{product.images.image2}}' />
+    					</div>
+    					<div class='tab-pane' id='pic-3'>
+    						<img src='{{product.images.image3}}' />
+    					</div>
+    					<div class='tab-pane' id='pic-4'>
+    						<img src='{{product.images.image4}}' />
+    					</div>
+    					<div class='tab-pane' id='pic-5'>
+    						<img src='{{product.images.image5}}' />
+    					</div>
+    				</div>
+    
+                    <ul class='preview-thumbnail nav nav-tabs'>
+    					<li class='nav-item'>
+    						<a class='nav-link active' id='pic-1-tab' data-bs-toggle='tab' href='#pic-1'>
+    							<img src='{{product.images.image1}}' />
+    						</a>
+    					</li>
+    					<li class='nav-item'>
+    						<a class='nav-link' id='pic-2-tab' data-bs-toggle='tab' href='#pic-2'>
+    							<img src='{{product.images.image2}}' />
+    						</a>
+    					</li>
+    					<li class='nav-item'>
+    						<a class='nav-link' id='pic-3-tab' data-bs-toggle='tab' href='#pic-3'>
+    							<img src='{{product.images.image3}}' />
+    						</a>
+    					</li>
+    					<li class='nav-item'>
+    						<a class='nav-link' id='pic-4-tab' data-bs-toggle='tab' href='#pic-4'>
+    							<img src='{{product.images.image4}}' />
+    						</a>
+    					</li>
+    					<li class='nav-item'>
+    						<a class='nav-link' id='pic-5-tab' data-bs-toggle='tab' href='#pic-5'>
+    							<img src='{{product.images.image5}}' />
+    						</a>
+    					</li>
+    				</ul>
+    
+    
                 </div>
-              </div>
+                <div class='details col-md-6'>
+                    <h3 class='product-title'>{{product.brand}}
+                        {{product.model}}</h3>
+                    <h8 class='price'>current price: 
+                        <span>${{product.price}}</span></h8>
+    
+                    <div class='rating'>
+                        <div class='stars'>
+                            <span class='fa fa-star checked'></span>
+                            <span class='fa fa-star checked'></span>
+                            <span class='fa fa-star checked'></span>
+                            <span class='fa fa-star'></span>
+                            <span class='fa fa-star'></span>
+                        </div>
+                        <span class='review-no'>41 reviews</span>
+                    </div>
+                    <p class='product-description'>{{product.description}}</p>
+                    <p>
+                        <span>
+                            <strong>Model:</strong>
+                            {{product.year}}
+                        </span>
+                        -
+                        <span>
+                            <strong>Mileage:</strong>
+                            {{product.mileage}}
+                            mi
+                        </span>
+                        -
+                        <span>
+                            <strong>Horsepower:</strong>
+                            {{product.horsepower}}HP
+                        </span>
+                        -
+                        <span>
+                            <strong>Transmission:</strong>
+                            {{product.transmission}}
+                        </span>
+                    </p>
+                    <h5 class='colors' style='margin: 7px 0 7px 0;'>
+                        TYPE:
+                        {{product.category}}</h5>
+                    <h5 class='colors'>colors:
+                        <span
+                            class='color orange not-available'
+                            data-toggle='tooltip'
+                            title='Not In store'
+                        ></span>
+                        <span class='color green'></span>
+                        <span class='color blue'></span>
+                    </h5>
+                    <div class='action'>
+                        <button
+                            class='add-to-cart btn btn-default'
+                            type='button'
+                        >add to cart</button>
+                        <button class='like btn btn-default' type='button'><span
+                                class='fa fa-heart'
+                            ></span></button>
+                    </div>
+                    <p class='vote'><strong>91%</strong>
+                        of buyers enjoyed this product!
+                        <strong>(87 votes)</strong></p>
+    
+                </div>
             </div>
-            {{else}}
-            <p class="text-center">No related products found</p>
-            {{/each}}
-          </div>
-        </div>
-      </div>
-  </div>
+        </section>
+        <section class='card gap-2'>
+    		<h2 class="detail-product__title">
+    			Related products
+    		</h2>
+            <div class='col-md-12'>
+                <!-- Tab Navigation -->
+                <ul class='nav nav-tabs' id='relatedProductsTabs' role='tablist'>
+                    <li class='nav-item' role='presentation'>
+                        <a
+                            class='nav-link active'
+                            id='related-by-brand-tab'
+    						data-bs-toggle='tab'
+    						href="#related-by-brand"
+                            role='tab'
+                            aria-controls='related-by-brand'
+                        >Brand</a>
+                    </li>
+                    <li class='nav-item' role='presentation'>
+                        <a
+                            class='nav-link'
+                            id='related-by-year-tab'
+    						data-bs-toggle="tab"
+    						href="#related-by-year"
+                            role='tab'
+                            aria-controls='related-by-year'
+                        >Model Year</a>
+                    </li>
+                    <li class='nav-item' role='presentation'>
+                        <a
+                            class='nav-link'
+                            id='related-by-price-tab'
+    						data-bs-toggle="tab"
+    						href="#related-by-price"
+                            role='tab'
+                            aria-controls='related-by-price'
+                        >Price Range ($10000)</a>
+                    </li>
+                </ul>
+    
+                <!-- Tab Content -->
+                <div class="tab-content mt-2" id="relatedProductsContent">
+                    <!-- Related by Brand -->
+                    <div
+                        class='tab-pane active'
+                        id='related-by-brand'
+                        role='tabpanel'
+                        aria-labelledby='brand-tab'
+                    >
+                        <div class="container-fuild related-product__container">
+                            <div class='row g-3'>
+                                {{#each sameBrandProducts}}
+                                    <div class='col-lg-2 col-md-4 col-sm-6'>
+                                        {{> CardProduct product=this}}
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Related by year -->
+                    <div
+                        class='tab-pane '
+                        id='related-by-year'
+                        role='tabpanel'
+                        aria-labelledby='year-tab'
+                    >
+                        <div class='container-fuild related-product__container'>
+                            <div class='row g-3'>
+                                {{#each sameYearProducts}}
+                                    <div class='col-lg-2 col-md-4 col-sm-6'>
+                                        {{> CardProduct product=this}}
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Related by Price -->
+                    <div
+                        class='tab-pane '
+                        id='related-by-price'
+                        role='tabpanel'
+                        aria-labelledby='price-tab'
+                    >
+                        <div class='container-fuild related-product__container'>
+                            <div class='row g-3'>
+                                {{#each similarPriceProducts}}
+                                    <div class='col-lg-2 col-md-4 col-sm-6'>
+                                        {{> CardProduct product=this}}
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 </div>
+<script src="/js/products/detail.js"></script>

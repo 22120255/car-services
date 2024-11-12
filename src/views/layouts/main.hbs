@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="/css/home.css">
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,7 +17,7 @@
     <link
       rel="shortcut icon"
       type="image/icon"
-      href="/vender/logo/favicon.png"
+      href="https://th.bing.com/th/id/OIP.SYq1khSGoX8u_8eSDjSFmgHaE_?rs=1&pid=ImgDetMain"
     />
     <link rel="stylesheet" href="/vender/css/linearicons.css" />
     <link rel="stylesheet" href="/vender/css/flaticon.css" />
@@ -29,7 +28,7 @@
     <link rel="stylesheet" href="/vender/css/bootsnav.css" />
     <link rel="stylesheet" href="/vender/css/style.css" />
     <link rel="stylesheet" href="/vender/css/responsive.css" />
-    <link rel="stylesheet" href="/vender/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/common.css" />
     <link rel="stylesheet" href="/css/partials/main.css" />
     <script>
@@ -46,7 +45,7 @@
                 case "contact":
                     customCss.href = "/css/dashboard/contact.css";
                     break;
-                case "product":
+                case "products":
                     customCss.href = "/css/product/index.css";
                     break;
                 case "dashboard":
@@ -64,20 +63,18 @@
 <body>
 
     <header>
-    {{!-- <header id="home" > --}}
         {{> header user=user}}
     </header>
     <main>
         {{{body}}}
     </main>
     {{> footer}}
-
+    
     <script src="/vender/js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-    <script src="/vender/js/bootstrap.min.js"></script>
-    <script src="/vender/js/bootsnav.js"></script>
     <script src="/vender/js/owl.carousel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="/vender/js/bootstrap.js"></script>
     <script src="/vender/js/custom.js"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 <div class='container'>
     <div class='login-container'>
-        <h1>Login</h1>
-        <div class='w-100'>
-            <form>
+        <h1>Đăng nhập</h1>
+        <div class='w-100 position-relative'>
+            <form id="login-form" action="/auth/login/email/verify" method="POST">
                 <div class='form-group'>
                     <label for='email'>Email</label>
                     <input
@@ -11,40 +11,43 @@
                         id='email'
                         name='email'
                         placeholder='Nhập email của bạn'
-                        required
+                        value="duynhanngonguyen@gmail.com"
                     />
+                    <span class='fs-075' id='email-availability-message'></span>
                 </div>
 
                 <div class='form-group position-relative'>
-                    <label for='password'>Password</label>
+                    <label for='password'>Nhập mật khẩu</label>
                     <input
                         type='password'
                         class='form-control'
                         id='password'
                         name='password'
                         placeholder='Nhập mật khẩu của bạn'
-                        required
+                        value="Duynhan101220@4"
                     />
-                    <button type="button" class="position-absolute end-0 top-50 me-2 p-1">
-                        {{!-- <i class="fa fa-eye"></i> --}}
-                        <i class="fa fa-eye-slash"></i>
+                    <button
+                        type='button'
+                        class='position-absolute end-0 top-50 me-2 p-1'
+                        id='show-password'
+                    >
+                        <i class='fa fa-eye'></i>
                     </button>
                 </div>
+                <span class='fs-075 text-danger' id='message-error'>{{message}}</span>
 
-                <button type='submit' class='btn login-button'>Submit</button>
+                <button type='submit' class='btn login-btn'>Đăng nhập</button>
 
                 <div class='forgot-password'>
-                    <span class='fs-075'>No account yet?
-                        <a
-                            class='fs-075'
-                            href='/auth/register'
-                        >Register</a></span>
-                    <a class='fs-075' href='/auth/forgot-password'>Forgot
-                        password?</a>
+                    <span class='fs-075'>Bạn chưa có tài khoản?
+                        <a class='fs-075' href='/auth/register'>Đăng kí</a></span>
+                    <a class='fs-075' href='/auth/forgot-password'>Quên mật
+                        khẩu?</a>
                 </div>
             </form>
+            <i class='fa fa-spinner d-none' id="icon-loading"></i>
         </div>
-        <div class="group-social d-flex justify-content-around">
+        <div class='group-social d-flex justify-content-around'>
             <button
                 type='button'
                 class='btn btn-outline-secondary btn-register btn-register-google'
@@ -65,5 +68,5 @@
             </button>
         </div>
     </div>
-    <script src="/js/auth/login.js"></script>
+    <script type='module' src='/js/auth/login.js'></script>
 </div>

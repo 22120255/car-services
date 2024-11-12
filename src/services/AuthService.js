@@ -3,7 +3,6 @@ const User = require("../models/User");
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const saltRounds = 10;
 
 class AuthService {
     async checkEmailAvailability(email) {
@@ -18,8 +17,7 @@ class AuthService {
     async storeUserWithEmail(email, fullName, password) {
         try {
             const activationToken = crypto.randomBytes(20).toString('hex');
-            const passwordHashed = await bcrypt.hash(password, saltRounds);
-            const user = new User({ email, fullName, activationToken, passwordHashed });
+            const user = new User({ email, fullName, activationToken, password });
 
             const transporter = nodemailer.createTransport({
                 service: 'Gmail',
@@ -36,6 +34,7 @@ class AuthService {
                 subject: 'Kích hoạt tài khoản',
                 text: `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`
             });
+            user.save();
 
             return user;
         } catch (err) {

@@ -1,73 +1,6 @@
 @import '../variables';
 // File CSS for auth layout
-// .logo {
-//     width: 32px;
-//     height: 32px;
-// }
 
-// .note-message {
-//     text-align: center;
-// }
-
-// .term {
-//     font-size: 12px;
-// }
-
-// .btn-login,
-// .btn-register {
-//     width: 360px;
-//     margin-top: 8px;
-//     border-radius: 32px;
-// }
-
-// .form-register {
-//     width: 360px;
-//     margin-top: 8px;
-//     border-radius: 32px;
-// }
-
-// .btn-back {
-//     position: absolute;
-//     top: 16;
-//     left: 16;
-// }
-
-// .icon-warning {
-//     margin-left: -32px;
-// }
-
-// .message-warning {
-//     font-size: 14px;
-//     font-weight: 500;
-//     line-height: 1.5;
-// }
-
-// .text-login {
-//     font-size: 15px;
-//     font-weight: 600;
-// }
-
-// .method {
-//     cursor: pointer;
-//     font-weight: 500;
-//     opacity: 0.7;
-//     font-size: 13px;
-//     text-decoration: underline;
-// }
-
-// .country {
-//     width: 96px;
-//     border-right: 1px solid #333;
-// }
-// .country select {
-//     border: 0;
-//     outline: none;
-// }
-// .country select:focus,
-// .country select:focus-visible {
-//     border: 0;
-//     outline: none;
-// }
 .wrapper-login {
     background: url('/vender/images/welcome-hero/welcome-banner.jpg') no-repeat
         center center fixed;
@@ -86,26 +19,34 @@
     z-index: 1;
 }
 
+// Icon loading for button login
+#icon-loading {
+    position: absolute;
+    font-size: 3rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: spinner 0.8s linear infinite;
+}
+@keyframes spinner {
+    from {
+        transform: translateX(-50%) rotate(0deg);
+    }
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
+}
 .wrapper-login > * {
     position: relative;
     z-index: 2;
 }
+.btn-back {
+    position: absolute;
+    top: 24px;
+    left: 28px;
+    color: $bs-white;
 
-// side
-.wrapper-side {
-    padding: 0 160px;
-}
-.btn-social {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: $bs-gray-400;
-    border: 1px solid $bs-gray-400;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    & img {
-        width: 24px;
-        height: 24px;
+    &:hover {
+        opacity: 0.8;
     }
 }

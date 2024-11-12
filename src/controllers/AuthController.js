@@ -1,12 +1,23 @@
 // controllers/AuthController.js
 const AuthService = require('../services/AuthService');
+const passport = require('passport');
 
 class AuthController {
     //[GET] /login
     login(req, res) {
         res.render("auth/login", {
             layout: "auth",
+            message: req.flash("error") || "",
         });
+    }
+
+    //[POST] /login/email/verify]
+    async verifyEmail(req, res, next) {
+        passport.authenticate('local', {
+            successReturnToOrRedirect: '/dashboard',
+            failureRedirect: '/auth/login',
+            failureFlash: true
+        })(req, res, next);
     }
 
     //[GET] /register
@@ -34,15 +45,12 @@ class AuthController {
         try {
             const user = await AuthService.storeUserWithEmail(email, fullName, password);
 
-            req.session.user = {
-                fullName: fullName,
-                email: email,
-                avatar: user.avatar || null,
-                role: user.role || "customer",
-            };
-            await req.session.save();
-
-            res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
+            req.login(user, (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Đăng nhập tự động thất bại.' });
+                }
+                res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
+            });
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
@@ -105,6 +113,14 @@ class AuthController {
     forgotPassword(req, res) {
         res.render("auth/forgot-password", {
             layout: "auth",
+        });
+    }
+
+    // [GET] /auth/logout
+    logout(req, res, next) {
+        req.logout(function (err) {
+            if (err) { return next(err); }
+            res.redirect('/dashboard');
         });
     }
 }

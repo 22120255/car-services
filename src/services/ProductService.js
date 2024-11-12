@@ -1,28 +1,26 @@
 const Product = require('../models/Product');
-const { multipleMongooseToObject } = require('../util/mongoose');
+const { multipleMongooseToObject } = require('../utils/mongoose');
 
 class ProductService {
     // [GET] /products/filter
-    
-    findService = async (query) => {
+    getFilteredProducts = async (query) => {
         try {
             const products = await Product.find(query);
             return products;
         }
         catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
     }
-    findOneService = async (query) => {
+    getDetail = async (query) => {
         try {
             const product = await Product.findById(query);
-            console.log(product);
             return product;
         }
         catch (error) {
-            console.log(error);
+            throw new Error(error);
         }
-    }   
+    }
 }
 
 module.exports = new ProductService();
