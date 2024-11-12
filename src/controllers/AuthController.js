@@ -75,15 +75,12 @@ class AuthController {
         try {
             const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
 
-            req.session.user = {
-                fullName: fullName,
-                email: email,
-                avatar: avatar,
-                role: user.role || "customer",
-            };
-            await req.session.save();
-
-            res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
+            req.login(user, (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Đăng nhập tự động thất bại.' });
+                }
+                res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
+            });
         } catch (error) {
             res.status(500).json({ message: "Lỗi server" });
         }
@@ -96,15 +93,12 @@ class AuthController {
         try {
             const user = await AuthService.registerWithSocialAccount(email, fullName, avatar);
 
-            req.session.user = {
-                fullName: fullName,
-                email: email,
-                avatar: avatar,
-                role: user.role || "customer",
-            };
-            await req.session.save();
-
-            res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
+            req.login(user, (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Đăng nhập tự động thất bại.' });
+                }
+                res.status(200).json({ message: user ? "Tài khoản đã tồn tại" : "Đăng kí thành công", user });
+            });
         } catch (error) {
             res.status(500).json({ message: "Lỗi server" });
         }
