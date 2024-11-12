@@ -3,6 +3,7 @@ const User = require("../models/User");
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { sendEmail } = require("../utils/sendEmail");
 
 class AuthService {
     async checkEmailAvailability(email) {
@@ -16,25 +17,12 @@ class AuthService {
 
     async storeUserWithEmail(email, fullName, password) {
         try {
-            const activationToken = crypto.randomBytes(20).toString('hex');
-            const user = new User({ email, fullName, activationToken, password });
+            const verificationCode = crypto.randomBytes(20).toString('hex');
+            const user = new User({ email, fullName, verificationCode, password });
+            const activationLink = `${process.env.DOMAIN_URL}/auth/activate?token=${verificationCode}`;
 
-            const transporter = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.PASSWORD
-                }
-            });
-
-            const activationLink = `${process.env.DOMAIN_URL}/auth/activate?token=${activationToken}`;
-            await transporter.sendMail({
-                from: 'no-reply@car-service.com',
-                to: email,
-                subject: 'Kích hoạt tài khoản',
-                text: `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`
-            });
-            user.save();
+            await sendEmail(email, "Kích hoạt tài khoản", `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`);
+            await user.save();
 
             return user;
         } catch (err) {
@@ -44,14 +32,14 @@ class AuthService {
 
     async activateAccountByToken(token) {
         try {
-            const user = await User.findOne({ activationToken: token });
+            const user = await User.findOne({ verificationCode: token });
 
             if (!user) {
                 throw new Error("Token không hợp lệ.");
             }
 
             user.isActivated = true;
-            user.activationToken = undefined;
+            user.verificationCode = undefined;
             await user.save();
 
             return user;
@@ -78,6 +66,46 @@ class AuthService {
             return user; // Nếu người dùng đã tồn tại
         } catch (error) {
             throw new Error("Lỗi khi đăng ký với tài khoản mạng xã hội.");
+        }
+    }
+
+    async sendVerificationCode(email) {
+        try {
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new Error("Email chưa đăng kí tài khoản");
+            }
+
+            const verificationCode = Math.floor(100000 + Math.random() * 900000);
+            user.verificationCode = verificationCode;
+            await user.save();
+
+            await sendEmail(email, "Mã xác thực", `Mã xác thực của bạn là: ${verificationCode}`);
+        }
+        catch (err) {
+            throw new Error(err.message);
+        }
+    }
+
+    async resetPassword(email, verificationCode, password) {
+        try {
+            const user = await User.findOne({ email });
+            if (!user) {
+                throw new Error("Email chưa đăng kí tài khoản");
+            }
+
+            if (user.verificationCode !== verificationCode) {
+                throw new Error("Mã xác thực không đúng");
+            }
+
+            user.password = password;
+            user.verificationCode = undefined;
+            await user.save();
+
+            await sendEmail(email, "Thay đổi mật khẩu", `Mật khẩu của bạn đã được thay đổi.`);
+        }
+        catch (err) {
+            throw new Error(err.message);
         }
     }
 }
