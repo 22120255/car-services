@@ -55,20 +55,19 @@
   border-radius: 5px;
   font-size: 1rem; }
   .form-group input:focus {
-    border-color: #1b4b72;
+    border-color: #1976d2;
     outline: none; }
 
 .login-btn {
   width: 100%;
   padding: 10px;
-  background-color: #1b4b72;
+  background-color: #1976d2;
   color: white;
   font-weight: bold;
   border-radius: 5px;
   margin-top: 10px; }
-
-.login-btn:hover {
-  background-color: #14508a; }
+  .login-btn:hover {
+    background-color: #1565c0; }
 
 .forgot-password {
   display: flex;
@@ -76,7 +75,7 @@
   margin-top: 10px; }
 
 .forgot-password a {
-  color: #1b4b72;
+  color: #1976d2;
   text-decoration: none; }
   .forgot-password a:hover {
     text-decoration: underline; }

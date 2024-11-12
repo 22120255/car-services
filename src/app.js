@@ -5,11 +5,12 @@ const morgan = require('morgan');
 const methodOverride = require('method-override');
 const { engine } = require('express-handlebars');
 const session = require("express-session");
+const flash = require('connect-flash');
 
 const route = require('./routes');
 const db = require('./config/db');
 const passport = require('./config/passport');
-const login = require("./middleware/authMiddleware");
+const { navigateUser } = require("./middleware/authMiddleware");
 const refreshSession = require("./middleware/refreshSession");
 
 
@@ -26,15 +27,19 @@ app.use(
         cookie: { maxAge: 10000 * 60 * 60 },
     })
 );
+
 // Connect to DB
 db.connectDB();
 // Body parser
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Ghi đè phương thức HTTP
 app.use(methodOverride('_method'));
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+// Flash
+app.use(flash());
 // Static file
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/css', express.static('public/css'));
@@ -42,7 +47,7 @@ app.use('/css', express.static('public/css'));
 app.use(morgan('dev'));
 
 // Custom middleware
-app.use(login);
+app.use(navigateUser);
 app.use(refreshSession);
 
 // Register the eq helper
@@ -51,6 +56,10 @@ app.use(refreshSession);
 app.engine(
     'hbs',
     engine({
+        runtimeOptions: {
+            allowProtoPropertiesByDefault: true,
+            allowProtoMethodsByDefault: true,
+        },
         extname: ".hbs",
         defaultLayout: "main",
         partialsDir: [

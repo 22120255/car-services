@@ -2,7 +2,7 @@
     <div class='login-container'>
         <h1>Đăng nhập</h1>
         <div class='w-100 position-relative'>
-            <form>
+            <form id="login-form" action="/auth/login/email/verify" method="POST">
                 <div class='form-group'>
                     <label for='email'>Email</label>
                     <input
@@ -34,9 +34,9 @@
                         <i class='fa fa-eye'></i>
                     </button>
                 </div>
-                <span class='fs-075 text-danger' id='message-error'></span>
+                <span class='fs-075 text-danger' id='message-error'>{{message}}</span>
 
-                <button type='button' class='btn login-btn'>Đăng nhập</button>
+                <button type='submit' class='btn login-btn'>Đăng nhập</button>
 
                 <div class='forgot-password'>
                     <span class='fs-075'>Bạn chưa có tài khoản?
