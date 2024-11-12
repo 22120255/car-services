@@ -2,9 +2,7 @@
     <div class='container'>
         <div class='section-header'>
             <p class='sub-title'>
-                Hãy khám phá
-                <span>những</span>
-                sản phẩm nổi bật của chúng tôi
+                Hãy khám phá những sản phẩm nổi bật của chúng tôi
             </p>
             <h2 class='main-title'>Sản phẩm của chúng tôi</h2>
             <p class='section-description'>
@@ -12,7 +10,7 @@
             </p>
         </div>
         <div class="featured-cars-filter" id = "filter-form">
-            <form id="filterForm" method="GET" action="product">
+            <form id="filterForm" method="GET" action="/products">
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
@@ -23,13 +21,12 @@
                             <h2>Năm</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="year">
-                                <option value="">Chọn năm</option>
-                                <option value="2023" {{#if (eq queries.year "2023")}}selected{{/if}}>2023</option>
-                                <option value="2022" {{#if (eq queries.year "2022")}}selected{{/if}}>2022</option>
-                                <option value="2021" {{#if (eq queries.year "2021")}}selected{{/if}}>2021</option>
-                                <option value="2020" {{#if (eq queries.year "2020")}}selected{{/if}}>2020</option>
-                                <option value="2019" {{#if (eq queries.year "2019")}}selected{{/if}}>2019</option>
-                                <option value="2018" {{#if (eq queries.year "2018")}}selected{{/if}}>2018</option>
+                                    <option value="">Chọn năm</option>
+                                    {{#each years}}
+                                        <option value="{{this.value}}" {{#if (eq ../queries.year this.value)}}selected{{/if}}>
+                                            {{this.name}}
+                                        </option>
+                                    {{/each}} 
                                 </select>
                             </div>
                             </div>
@@ -38,11 +35,12 @@
                             <h2>Kiểu dáng</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="category">
-                                <option value="">Chọn kiểu dáng</option>
-                                <option value="sedan" {{#if (eq queries.category "sedan")}}selected{{/if}}>Sedan</option>
-                                <option value="suv" {{#if (eq queries.category "suv")}}selected{{/if}}>SUV</option>
-                                <option value="truck" {{#if (eq queries.category "truck")}}selected{{/if}}>Truck</option>
-                                <option value="roadster" {{#if (eq queries.category "roadster")}}selected{{/if}}>Roadster</option>
+                                    <option value="">Chọn kiểu dáng</option>
+                                    {{#each categories}}
+                                        <option value="{{this.name}}" {{#if (eq ../queries.category this.name)}}selected{{/if}}>
+                                            {{this.label}}
+                                        </option>
+                                    {{/each}} 
                                 </select>
                             </div>
                             </div>
@@ -53,17 +51,12 @@
                             <h2>Hãng xe</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="brand">
-                                <option value="">Chọn hãng</option>
-                                <option value="audi" {{#if (eq queries.brand "audi")}}selected{{/if}}>Audi</option>
-                                <option value="BMW" {{#if (eq queries.brand "BMW")}}selected{{/if}}>BMW</option>
-                                <option value="ford" {{#if (eq queries.brand "ford")}}selected{{/if}}>Ford</option>
-                                <option value="kia" {{#if (eq queries.brand "kia")}}selected{{/if}}>Kia</option>
-                                <option value="honda" {{#if (eq queries.brand "honda")}}selected{{/if}}>Honda</option>
-                                <option value="hyundai" {{#if (eq queries.brand "hyundai")}}selected{{/if}}>Hyundai</option>
-                                <option value="mitsubishi" {{#if (eq queries.brand "mitsubishi")}}selected{{/if}}>Mitsubishi</option>
-                                <option value="toyota" {{#if (eq queries.brand "toyota")}}selected{{/if}}>Toyota</option>
-                                <option value="vinfast" {{#if (eq queries.brand "vinfast")}}selected{{/if}}>Vinfast</option>
-                                
+                                    <option value="">Chọn hãng</option>
+                                    {{#each brands}}
+                                        <option value="{{this.name}}" {{#if (eq ../queries.brand this.name)}}selected{{/if}}>
+                                            {{this.name}}
+                                        </option>
+                                    {{/each}}                  
                                 </select>
                             </div>
                             </div>
@@ -72,10 +65,12 @@
                             <h2>Tình trạng</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="status">
-                                <option value="">Chọn tình trạng</option>
-                                <option value="new" {{#if (eq queries.status "new")}}selected{{/if}}>Xe mới</option>
-                                <option value="used" {{#if (eq queries.status "used")}}selected{{/if}}>Đã qua sử dụng</option>
-                                <option value="sold" {{#if (eq queries.status "sold")}}selected{{/if}}>Xe bảo hành</option>
+                                    <option value="">Chọn tình trạng</option>
+                                    {{#each statuses}}
+                                        <option value="{{this.name}}" {{#if (eq ../queries.status this.name)}}selected{{/if}}>
+                                            {{this.label}}
+                                        </option>
+                                    {{/each}}      
                                 </select>
                             </div>
                             </div>
@@ -86,9 +81,12 @@
                             <h2>Hộp số</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="transmission">
-                                <option value="">Chọn hộp số</option>
-                                <option value="manual" {{#if (eq queries.transmission "manual")}}selected{{/if}}>Manual</option>
-                                <option value="automatic" {{#if (eq queries.transmission "automatic")}}selected{{/if}}>Automatic</option>
+                                    <option value="">Chọn hộp số</option>
+                                {{#each transmissions}}
+                                        <option value="{{this.name}}" {{#if (eq ../queries.transmission this.name)}}selected{{/if}}>
+                                            {{this.label}}
+                                        </option>
+                                    {{/each}}   
                                 </select>
                             </div>
                             </div>
@@ -108,7 +106,7 @@
                         <!-- Search Button -->
                         <div class="col-md-2 col-sm-12">
                             <div class="single-model-search text-center">
-                            <button class="welcome-btn model-search-btn" onclick="checkPriceRange(event)">Tìm kiếm</button>
+                            <button class="welcome-btn model-search-btn" onclick="checkPriceRange">Tìm kiếm</button>
                             </div>
                         </div>
                         </div>
@@ -118,31 +116,10 @@
             </form>
         </div>
         <div class='container'>
-            <div class='row featured-cars-content' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
+            <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
                 {{#each products}}
                     <div class='col-lg-3 col-md-4 col-sm-6'>
-                        <div class='single-featured-cars'>
-                            <div class='featured-img-box'>
-                                <a href='/products/{{_id}}' class = "detail-link" data-id = "{{_id}}">
-                                    <div class='featured-cars-img'>
-                                        <img class ="fixed-size-img zoom-out" src='{{images.image1}}' alt='cars' />
-                                    </div>
-                                    <div class='featured-model-info'>
-                                        <p>
-                                            model: {{year}}
-                                            <span class='featured-mi-span'>{{mileage}} mi</span>
-                                            <span class='featured-hp-span'>{{horsepower}}HP</span>
-                                            {{transmission}}
-                                        </p>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class='featured-cars-txt'>
-                                <h2><a href='/products/{{_id}}' class = "detail-link">{{brand}} {{model}}</a></h2>
-                                <h3>${{price}}</h3>
-                                <p>{{description}}</p>
-                            </div>
-                        </div>
+                        {{> CardProduct product=this}}
                     </div>
                 {{else}}
                 <div class='col-lg-12'>
@@ -160,34 +137,4 @@
 
 <form name = "detail-form" method="GET" ></form>
 
-<script>
-  function checkPriceRange(event) {
-    event.preventDefault(); // Ngăn chặn hành động gửi form mặc định
-
-    var priceMin = document.getElementsByName("price_min")[0].value;
-    var priceMax = document.getElementsByName("price_max")[0].value;
-
-    if (parseFloat(priceMin) > parseFloat(priceMax)) {
-      document.getElementById("price-error").innerHTML = "Hãy nhập khoảng phù hợp";
-    } else {
-      document.getElementById("price-error").innerHTML = "";
-      document.getElementById("filterForm").submit();
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var productID;
-    var detailLink = $(".detail-link");
-    var detailForm = document.forms["detail-form"];
-
-    // jQuery code here to get productID from data-bs-id attribute 
-    detailLink.click(function() {
-      productID = $(this).attr("data-id");
-      document.detailForm.action = "/products/" + productID;
-      document.detailForm.submit();
-    });
-
-  });
-
-
-</script>
+<script src="/js/products/index.js"></script>

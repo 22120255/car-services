@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* custom */
 .header-area {
   height: 58px; }
@@ -31,3 +32,36 @@
   overflow-x: hidden;
   white-space: nowrap;
   width: 150px; }
+
+.btn-cart__badge {
+  top: 7px; }
+
+.card-product__container {
+  border: 1px solid #ccc;
+  border-radius: 8px; }
+
+.card-product__header img {
+  object-fit: cover; }
+  .card-product__header img:hover {
+    transform: scale(0.9);
+    transition: transform 0.5s; }
+
+.card-product__body {
+  padding: 8px; }
+  .card-product__body a {
+    padding: 0 !important; }
+  .card-product__body .card-product__brand {
+    font-size: 1.5rem; }
+  .card-product__body .card-product__price {
+    font-size: 1.2rem; }
+  .card-product__body .card-product__desc {
+    height: 92px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* Số dòng tối đa */
+    -webkit-box-orient: vertical; }
+
+.card-product__footer {
+  border-top: 1px solid #ccc;
+  padding: 8px; }
