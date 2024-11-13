@@ -103,45 +103,39 @@ class ProductController {
         const page = parseInt(req.query.page) || 1
         const perPage = 8
 
-        const filters = {
-            year: req.query.year || '',
-            category: req.query.category || '',
-            brand: req.query.brand || '',
-            status: req.query.status || '',
-            transmission: req.query.transmission || '',
-            price_min: req.query.price_min || '',
-            price_max: req.query.price_max || '',
+        const query = {}
+
+        if (req.query.year) query.year = req.query.year;
+        if (req.query.category) query.category = req.query.category;
+        if (req.query.brand) query.brand = req.query.brand;
+        if (req.query.status) query.status = req.query.status;
+        if (req.query.transmission) query.transmission = req.query.transmission;
+
+        if (req.query.price_min || req.query.price_max) {
+            query.price = {};
+            if (req.query.price_min) query.price.$gte = req.query.price_min;
+            if (req.query.price_max) query.price.$lte = req.query.price_max;
         }
 
-        const query = {}
-        if (filters.year) query.year = filters.year
-        if (filters.category) query.category = filters.category
-        if (filters.brand) query.brand = filters.brand
-        if (filters.status) query.status = filters.status
-        if (filters.transmission) query.transmission = filters.transmission
-        if (filters.price_min) query.price = { $gte: filters.price_min }
-        if (filters.price_max)
-            query.price = { ...query.price, $lte: filters.price_max }
-
         try {
-            const products = await ProductService.getPaginatedProducts(
+            const { products, total, totalPages, pagesArray } = await ProductService.getPaginatedProducts(
                 query,
                 page,
                 perPage
             )
 
             res.render('products/index', {
-                products: multipleMongooseToObject(products.products),
+                products: multipleMongooseToObject(products),
                 queries: query,
-                years: years,
-                categories: categories,
-                brands: brands,
-                transmissions: transmissions,
-                statuses: statuses,
-                total: products.total,
-                pages: products.totalPages,
-                current: products.currentPage,
-                pagesArray: products.pagesArray,
+                years,
+                categories,
+                brands,
+                transmissions,
+                statuses,
+                total,
+                pages: totalPages,
+                current: page,
+                pagesArray: pagesArray,
             })
         } catch (error) {
             console.log(error)
