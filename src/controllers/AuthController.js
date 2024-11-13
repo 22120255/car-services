@@ -133,11 +133,15 @@ class AuthController {
     }
 
     // [GET] /auth/logout
-    logout(req, res, next) {
-        req.logout(function (err) {
-            if (err) { return next(err); }
+    async logout(req, res, next) {
+        try {
+            await User.findByIdAndUpdate(req.user._id, { lastLogin: Date.now() });
+            await req.logout();
+        } catch (err) {
+            console.log(err);
+        } finally {
             res.redirect('/dashboard');
-        });
+        }
     }
 }
 
