@@ -65,3 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+document.addEventListener('DOMContentLoaded', function () {
+    if (document.referrer && !document.referrer.includes('/auth/')) {
+        sessionStorage.setItem('previousPage', document.referrer);
+    }
+
+    $('#btn-back').on('click', function (e) {
+        e.preventDefault();
+        const previousPage = sessionStorage.getItem('previousPage');
+
+        if (previousPage && !previousPage.includes('/auth/')) {
+            window.location.href = previousPage;
+        } else {
+            window.location.href = '/dashboard';
+        }
+    });
+});
