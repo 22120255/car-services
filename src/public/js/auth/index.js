@@ -46,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
     $(".btn-register-facebook").on("click", async function () {
         try {
             const user = await signInWithFacebook();
-            console.log("user ", user)
             const response = await $.ajax({
                 url: "/auth/register/facebook/store",
                 type: "POST",
@@ -59,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }),
             });
 
-            alert("Đăng ký thành công!");
+            window.location.href = "/dashboard"
             console.log(response)
         } catch (error) {
             console.log(error);
