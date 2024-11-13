@@ -20,4 +20,18 @@ module.exports = {
     json(context) {
         return JSON.stringify(context);
     },
+    formatDate(date) {
+        if (!date) return '';
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        return new Date(date).toLocaleDateString('vi-VN', options);
+    },
+    checkAdmin(user) {
+        return user.role === 'admin';
+    }
 }

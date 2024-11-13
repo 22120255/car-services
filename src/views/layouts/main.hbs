@@ -34,6 +34,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const currentPage = window.location.pathname.split("/").pop();
+            const currentPath = window.location.pathname;
 
             let customCss = document.createElement("link");
             customCss.rel = "stylesheet";
@@ -52,7 +53,11 @@
                     customCss.href = "/css/dashboard/home.css";
                     break;
                 default:
-                    customCss.href = "/css/product/detail.css";
+                    if (currentPath.startsWith("/profile/")) {
+                        customCss.href = "/css/site/profile.css"; 
+                    } else {
+                        customCss.href = "/css/product/detail.css";
+                    }
                     break;
             }
 
