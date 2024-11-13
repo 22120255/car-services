@@ -133,43 +133,36 @@
         <div class="d-flex">
             {{#if pages}}
                 <nav class="mx-auto">
-                    <ul class="pagination" style="margin-top: 2rem;">
+                    <ul class="pagination pagination-lg justify-content-center" style="margin-top: 2rem;">
                         <!-- Previous Button -->
                         {{#if (gt current 1)}}
                             <li class="page-item" id="btn-previous">
                                 <a 
-                                    class="page-link"
+                                    class="page-link rounded-start shadow-sm border-0"
                                     href="/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                         {{else}}
                             <li class="page-item disabled" id="btn-previous">
-                                <a class="page-link" href="#">
+                                <a class="page-link rounded-start shadow-sm border-0" href="#">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                         {{/if}}
-                        
-                        <!-- Page Numbers -->
-                        {{!-- {{#each pagesArray}}
-                            <li class="page-item  {{#if (eq this ../current)}}active{{/if}}">
-                                <a class="page-link" href="/products?page={{this}}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">{{this}}</a>
-                            </li>
-                        {{/each}} --}}
-
+        
                         <!-- Next Button -->
                         {{#if (lt current pages)}}
                             <li class="page-item">
                                 <a 
-                                    class="page-link" 
+                                    class="page-link rounded-end shadow-sm border-0" 
                                     href="/products?page={{inc current}}&year={{../queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}"> 
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         {{else}}
                             <li class="page-item disabled">
-                                <a class="page-link" href="#"> 
+                                <a class="page-link rounded-end shadow-sm border-0" href="#"> 
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
@@ -187,13 +180,14 @@
                                     if (text === '...') {
                                         paginationItems.push(`
                                             <li class="page-item disabled">
-                                                <span class="page-link h-100 bg-white">${text}</span>
+                                                <span class="page-link h-100 bg-white shadow-sm border-0">${text}</span>
                                             </li>
                                         `);
                                     } else {
                                         paginationItems.push(`
                                             <li class="page-item ${page === currentPage ? 'active' : ''}">
-                                                <a class="page-link" href="/products?page=${page}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">${text}</a>
+                                                <a class="page-link shadow-sm border-0 ${page === currentPage ? 'bg-primary text-white' : ''}" 
+                                                   href="/products?page=${page}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">${text}</a>
                                             </li>
                                         `);
                                     }
@@ -220,7 +214,6 @@
 
                                     addPageItem(totalPages);
                                 }
-                                console.log(paginationItems);
                                 $('#btn-previous').after(paginationItems.join(''));
                             }
                             generatePagination(currentPage, totalPages);
