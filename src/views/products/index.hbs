@@ -11,6 +11,14 @@
         </div>
         <div class="featured-cars-filter" id = "filter-form">
             <form id="filterForm" method="GET" action="/products">
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
+                            <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
@@ -92,23 +100,24 @@
                             </div>
                             <!-- Select Price -->
                             <div class="single-model-search">
-                            <h2>Nhập mức giá ($)</h2>
-                            <div id="model-price" class="price-range">
-                                <input type="number" class="form-control price-input" name="price_min" placeholder="$Từ" min="0" value="{{queries.price_min}}">
-                                <span>-</span>
-                                <input type="number" class="form-control price-input" name="price_max" placeholder="$Đến" min="0" value="{{queries.price_max}}">
-                            </div>
-                            <div class="text-center">
-                                <span id="price-error" class="text-danger"></span>
+                            <h2>Mức giá ($)</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="price">
+                                    <option value="">Chọn mức giá</option>
+                                    {{#each price}}
+                                        <option 
+                                            value="{{this.priceMin}}-{{this.priceMax}}"
+                                            data_price_min="{{this.priceMin}}" 
+                                            data_price_max="{{this.priceMax}}"
+                                            {{#if (gt 1 1) }}selected{{/if}}> <!-- 1 1 là true -->
+                                            ${{this.priceMin}} - ${{this.priceMax}}
+                                        </option>
+                                    {{/each}}
+                                </select>
                             </div>
                             </div>
                         </div>
-                        <!-- Search Button -->
-                        <div class="col-md-2 col-sm-12">
-                            <div class="single-model-search text-center">
-                            <button class="welcome-btn model-search-btn">Tìm kiếm</button>
-                            </div>
-                        </div>
+                       
                         </div>
                     </div>
                     </div>
@@ -130,46 +139,53 @@
                 {{/each}}
             </div>
         </div>
-        <div class="d-flex">
+        <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
             {{#if pages}}
-                <nav class="mx-auto">
-                    <ul class="pagination" style="margin-top: 2rem;">
+                <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
+                <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
+                    <ul class="pagination" style="margin: 0;">
                         <!-- Previous Button -->
-                        {{#if (gt current 1)}}
-                            <li class="page-item">
-                                <a class="page-link"href="/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">Previous</a>
-                            </li>
-                        {{else}}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">Previous</a>
-                            </li>
-                        {{/if}}
+                        <li class="page-item {{#unless (gt current 1)}}disabled{{/unless}}">
+                            <a class="page-link" href="{{#if (gt current 1)}}/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}{{else}}#{{/if}}&perPage={{queries.perPage}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
                         
                         <!-- Page Numbers -->
                         {{#each pagesArray}}
-                            <li class="page-item  {{#if (eq this ../current)}}active{{/if}}">
-                                <a class="page-link" href="/products?page={{this}}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">{{this}}</a>
-                            </li>
+                            {{#if (eq this ../current)}}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{this}}</span>
+                                </li>
+                            {{else}}
+                                <li class="page-item">
+                                    <a class="page-link" href="/products?page={{this}}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}&perPage={{../queries.perPage}}">{{this}}</a>
+                                </li>
+                            {{/if}}
                         {{/each}}
 
                         <!-- Next Button -->
-                        {{#if (lt current pages)}}
-                            <li class="page-item">
-                                <a class="page-link" href="/products?page={{inc current}}&year={{../queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">Next</a>
-                            </li>
-                        {{else}}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        {{/if}}
+                        <li class="page-item {{#unless (lt current pages)}}disabled{{/unless}}">
+                            <a class="page-link" href="{{#if (lt current pages)}}/products?page={{inc current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}{{else}}#{{/if}}&perPage={{queries.perPage}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             {{/if}}
+            
+            <!-- Items per page select -->
+            <form id="filterForm" method="GET" action="/products">
+                <select class="form-select" aria-label="Items per page" style="width: auto;" name = "perPage" >
+                    {{#each perPage}}
+                        <option value="{{this.value}}" {{#if (eq ../queries.perPage this.value)}}selected{{/if}}>{{this.value}} / trang</option>
+                    {{/each}}
+                </select>
+            </form>
         </div>
-</div>
-    <!--/.container-->
+    </div>
 </section>
 
-<form name = "detail-form" method="GET" ></form>
 
 <script src="/js/products/index.js"></script>
+

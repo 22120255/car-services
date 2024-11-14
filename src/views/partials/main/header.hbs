@@ -29,7 +29,8 @@
                     <li class='nav-item'>
                         <a
                             class='nav-link text-white'
-                            href='/products'
+                            href='/products/'
+                            id='clearQuery'
                         >Product</a>
                     </li>
                     <li class='nav-item'>
@@ -49,13 +50,15 @@
                             class='nav-link text-white position-relative btn-cart'
                             href='/dashboard/shops'
                         >
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger btn-cart__badge">
+                            <i class='fa-solid fa-cart-shopping'></i>
+                            <span
+                                class='position-absolute start-100 translate-middle badge rounded-pill bg-danger btn-cart__badge'
+                            >
                                 99+
-                                <span class="visually-hidden">unread messages</span>
+                                <span class='visually-hidden'>unread messages</span>
                             </span>
                         </a>
-                      
+
                     </li>
                     {{#if (hasUser user)}}
                         <li class='nav-item dropdown'>
@@ -69,7 +72,7 @@
                             >
                                 {{#if user.avatar}}
                                     <img
-                                        src="{{user.avatar}}"
+                                        src='{{user.avatar}}'
                                         alt='avatar'
                                         class='avatar'
                                     />
@@ -83,7 +86,7 @@
                             </a>
                             <ul
                                 class='dropdown-menu'
-                                id="tippy-content"
+                                id='tippy-content'
                                 aria-labelledby='navbarDropdown'
                             >
                                 <li>

@@ -9,6 +9,8 @@ const {
     brands,
     transmissions,
     statuses,
+    price,
+    perPage,
 } = require('../data/mockProducts')
 
 class ProductController {
@@ -101,7 +103,6 @@ class ProductController {
     }
     pagination = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1
-        const perPage = 8
 
         const filters = {
             year: req.query.year || '',
@@ -109,8 +110,9 @@ class ProductController {
             brand: req.query.brand || '',
             status: req.query.status || '',
             transmission: req.query.transmission || '',
-            price_min: req.query.price_min || '',
-            price_max: req.query.price_max || '',
+            price_min: Number(req.query.priceMin) || '',
+            price_max: Number(req.query.priceMax) || '',
+            perPage: Number(req.query.perPage) || 8,
         }
 
         const query = {}
@@ -119,17 +121,19 @@ class ProductController {
         if (filters.brand) query.brand = filters.brand
         if (filters.status) query.status = filters.status
         if (filters.transmission) query.transmission = filters.transmission
-        if (filters.price_min) query.price = { $gte: filters.price_min }
-        if (filters.price_max)
+        if (filters.price_min) {
+            query.price = { $gte: filters.price_min }
+        }
+        if (filters.price_max) {
             query.price = { ...query.price, $lte: filters.price_max }
-
+        }
         try {
             const products = await ProductService.getPaginatedProducts(
                 query,
                 page,
-                perPage
+                filters.perPage
             )
-
+            query.perPage = filters.perPage
             res.render('products/index', {
                 products: multipleMongooseToObject(products.products),
                 queries: query,
@@ -142,6 +146,8 @@ class ProductController {
                 pages: products.totalPages,
                 current: products.currentPage,
                 pagesArray: products.pagesArray,
+                price: price,
+                perPage: perPage,
             })
         } catch (error) {
             console.log(error)
