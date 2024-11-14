@@ -1,6 +1,7 @@
 // controllers/AuthController.js
 const AuthService = require('../services/AuthService');
 const passport = require('passport');
+const User = require('../models/User')
 
 class AuthController {
     //[GET] /login
@@ -136,10 +137,15 @@ class AuthController {
     async logout(req, res, next) {
         try {
             await User.findByIdAndUpdate(req.user._id, { lastLogin: Date.now() });
-            await req.logout();
+            req.logout(function (err) {
+                if (err) {
+                    return next(err);
+                    res.redirect('/dashboard');
+                }
+                res.redirect('/dashboard');
+            });
         } catch (err) {
             console.log(err);
-        } finally {
             res.redirect('/dashboard');
         }
     }

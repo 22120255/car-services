@@ -2,7 +2,12 @@
   <div class="profile-header">
     <div class="header-content">
       <div class="avatar-wrapper">
-        <img src="{{user.avatar}}" alt="{{user.fullName}}'s avatar" class="profile-avatar">
+         <button id="avatar-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-html="true" data-bs-container=".avatar-wrapper" 
+            title='<span id="change-avatar-btn">Change avatar</span>'>
+          <img src="{{user.avatar}}" alt="{{user.fullName}}'s avatar" class="profile-avatar">
+        </button>
+        <input type="file" id="avatar-input" accept="image/*" style="display: none"/>
         {{#if (checkAdmin user)}}
         <span class="admin-badge"><i class="fas fa-crown"></i> Admin</span>
         {{/if}}
@@ -171,7 +176,7 @@
           <div class="no-cars">
             <i class="fas fa-car-side empty-icon"></i>
             <p>You haven't purchased any cars yet</p>
-            <a href="/" class="btn btn-primary">Browse Cars</a>
+            <a href="/product" class="btn btn-primary">Browse Cars</a>
           </div>
           {{/if}}
         </div>
@@ -237,4 +242,7 @@
     </div>
   </div>
 </div>
+<script>
+  const user = {{{json user}}};  
+</script>
 <script type="module" src="/js/site/profile.js"></script>

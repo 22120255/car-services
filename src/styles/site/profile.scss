@@ -61,6 +61,47 @@ $background-color: #f5f5f5;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .tooltip {
+            &.bs-tooltip-end {
+                .tooltip-inner {
+                    background: linear-gradient(135deg, #2980b9, #3498db);
+                    border-radius: 8px;
+                    padding: 10px 16px;
+                    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+
+                    #change-avatar-btn {
+                        display: inline-block;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 500;
+                        padding: 6px 12px;
+                        transition: all 0.3s ease;
+                        font-family: 'Font Awesome 5 Free', sans-serif;
+                        border-radius: 4px;
+                        background: rgba(255, 255, 255, 0.1);
+
+                        &:hover {
+                            background: rgba(255, 255, 255, 0.2);
+                            transform: translateY(-1px);
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                        }
+
+                        &::before {
+                            content: '\f030';
+                            font-family: 'Font Awesome 5 Free';
+                            font-weight: 900;
+                            margin-right: 8px;
+                        }
+                    }
+                }
+            }
+
+            .tooltip-arrow::before {
+                border-right-color: #333;
+            }
+        }
+
         .admin-badge {
             position: absolute;
             bottom: 10px;
@@ -382,7 +423,7 @@ $background-color: #f5f5f5;
             justify-content: center;
             background-color: rgba($primary-color, 0.1);
             border-radius: 50%;
-            
+
             i {
                 color: $primary-color;
                 font-size: 18px;
@@ -540,4 +581,34 @@ $background-color: #f5f5f5;
     .stats-grid {
         grid-template-columns: 1fr;
     }
+}
+
+#change-avatar-btn {
+    display: inline-block;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: #e6e6e6;
+        text-decoration: underline;
+    }
+
+    // Tùy chọn: Thêm icon
+    &::before {
+        content: '\f030'; // Camera icon từ Font Awesome
+        font-family: 'Font Awesome 5 Free';
+        margin-right: 6px;
+    }
+}
+
+// Style cho tooltip container
+.tooltip-inner {
+    background-color: #333;
+    border-radius: 4px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }

@@ -108,3 +108,11 @@ h4,
 #notify-toast.toast-error .toast-body {
   background-color: #f8d7da;
   color: #721c24; }
+
+#notify-toast.toast-success .toast-header {
+  background-color: #28a745;
+  color: #155724; }
+
+#notify-toast.toast-success .toast-body {
+  background-color: #d4edda;
+  color: #155724; }
