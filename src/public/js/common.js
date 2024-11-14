@@ -27,6 +27,14 @@ function showToast(type, message) {
     const toast = new bootstrap.Toast($("#notify-toast"));
     toast.show();
 }
+// callback will be done when modal hidden
+function showModal(title, content, callback = () => { }) {
+    const modal = $("#notify-modal")
+    modal.find('.modal-title').text(title)
+    modal.find('.modal-body').text(content)
+    modal.modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
+    modal.on('hidden.bs.modal', callback);
+}
 
 
-export { showToast };
+export { showToast, showModal };
