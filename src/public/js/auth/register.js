@@ -1,3 +1,4 @@
+import { showModal } from '../common.js';
 import { isStrongPassword, isEmailValid } from '../helpers.js'
 
 // Handle event when user click on register button
@@ -76,11 +77,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     200() {
-                        $('#success-modal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
-
-                        $('#success-modal').on('hidden.bs.modal', function () {
-                            window.location.href = "/dashboard";
-                        });
+                        showModal("Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công, vui lòng kiểm tra hộp thư để kích hoạt tài khoản!",
+                            function () {
+                                window.location.href = "/dashboard";
+                            }
+                        )
                     },
                     400(resp) {
                         console.log(resp.responseJSON);
