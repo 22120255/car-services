@@ -3,15 +3,14 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
 
-const storageImage = new CloudinaryStorage({
+const storage = new CloudinaryStorage({
     cloudinary,
     params: {
-        folder: "image-cars-services",
-        format: async () => "jpg"
+        folder: 'avatars',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'],
+        transformation: [{ width: 400, height: 400, crop: 'fill' }]
     }
 });
-
-const uploadImage = multer({ storage: storageImage });
-
+const uploadImage = multer({ storage });
 
 module.exports = { uploadImage };

@@ -7,6 +7,9 @@ function showToast(type, message) {
         case "Warning":
             $("#notify-toast").addClass("toast-warning");
             break;
+        case "Success":
+            $("#notify-toast").addClass("toast-success");
+            break;
         case "Info":
             $("#notify-toast").addClass("toast-info");
             break;
@@ -24,5 +27,6 @@ function showToast(type, message) {
     const toast = new bootstrap.Toast($("#notify-toast"));
     toast.show();
 }
+
 
 export { showToast };

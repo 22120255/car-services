@@ -127,4 +127,14 @@ h4,
             color: #721c24;
         }
     }
+    &.toast-success {
+        .toast-header {
+            background-color: #28a745;
+            color: #155724;
+        }
+        .toast-body {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    }
 }
