@@ -17,26 +17,4 @@ module.exports = {
     dec(value) {
         return value - 1
     },
-
-    and(a, b) {
-        return a && b
-    },
-
-    json(context) {
-        return JSON.stringify(context);
-    },
-    formatDate(date) {
-        if (!date) return '';
-        const options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        };
-        return new Date(date).toLocaleDateString('vi-VN', options);
-    },
-    checkAdmin(user) {
-        return user.role === 'admin';
-    }
 }

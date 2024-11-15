@@ -9,8 +9,6 @@ const {
     brands,
     transmissions,
     statuses,
-    price,
-    perPage,
 } = require('../data/mockProducts')
 
 class ProductController {
@@ -38,10 +36,10 @@ class ProductController {
     //         if (req.query.category) {
     //             query.category = req.query.category
     //         }
-    //         if (req.query.priceMin && req.query.priceMax) {
+    //         if (req.query.price_min && req.query.price_max) {
     //             query.price = {
-    //                 $gte: req.query.priceMin,
-    //                 $lte: req.query.priceMax,
+    //                 $gte: req.query.price_min,
+    //                 $lte: req.query.price_max,
     //             }
     //         }
     //         if (req.query.year) {
@@ -103,40 +101,47 @@ class ProductController {
     }
     pagination = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1
-        const reqPerPage = parseInt(req.query.perPage) || 8
-        const query = {}
-        if (req.query.year) query.year = req.query.year
-        if (req.query.category) query.category = req.query.category
-        if (req.query.brand) query.brand = req.query.brand
-        if (req.query.status) query.status = req.query.status
-        if (req.query.transmission) query.transmission = req.query.transmission
+        const perPage = 8
 
-        if (req.query.price_min || req.query.price_max) {
-            query.price = {}
-            if (req.query.price_min) query.price.$gte = req.query.price_min
-            if (req.query.price_max) query.price.$lte = req.query.price_max
+        const filters = {
+            year: req.query.year || '',
+            category: req.query.category || '',
+            brand: req.query.brand || '',
+            status: req.query.status || '',
+            transmission: req.query.transmission || '',
+            price_min: req.query.price_min || '',
+            price_max: req.query.price_max || '',
         }
+
+        const query = {}
+        if (filters.year) query.year = filters.year
+        if (filters.category) query.category = filters.category
+        if (filters.brand) query.brand = filters.brand
+        if (filters.status) query.status = filters.status
+        if (filters.transmission) query.transmission = filters.transmission
+        if (filters.price_min) query.price = { $gte: filters.price_min }
+        if (filters.price_max)
+            query.price = { ...query.price, $lte: filters.price_max }
+
         try {
             const products = await ProductService.getPaginatedProducts(
                 query,
                 page,
-                reqPerPage
+                perPage
             )
-            query.perPage = reqPerPage
+
             res.render('products/index', {
                 products: multipleMongooseToObject(products.products),
                 queries: query,
-                years,
-                categories,
-                brands,
-                transmissions,
-                statuses,
+                years: years,
+                categories: categories,
+                brands: brands,
+                transmissions: transmissions,
+                statuses: statuses,
                 total: products.total,
                 pages: products.totalPages,
                 current: products.currentPage,
                 pagesArray: products.pagesArray,
-                price,
-                perPage,
             })
         } catch (error) {
             console.log(error)

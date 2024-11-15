@@ -1,112 +1,35 @@
-const filterForm = $('#filterForm')
-const filterInputs = $('#filterForm select')
-const clearQuery = $('#clearQuery')
-const pageLink = $('.pagination .page-link')
+const btnSearch = document.querySelector('.model-search-btn')
+btnSearch.addEventListener('click', function (event) {
+    event.preventDefault() // Ngăn chặn hành động gửi form mặc định
 
-function handleFilterChange(pageValue = '1') {
-    const priceValue = $('select[name="price"]').val()
-    const [priceMin, priceMax] = priceValue ? priceValue.split('-') : ['', '']
-    const year = $('select[name="year"]').val()
-    const category = $('select[name="category"]').val()
-    const brand = $('select[name="brand"]').val()
-    const status = $('select[name="status"]').val()
-    const transmission = $('select[name="transmission"]').val()
-    const perPage = $('select[name="perPage"]').val()
-    const currentPage = pageValue
+    var priceMin = document.querySelector('input[name="price_min"]').value
+    var priceMax = document.querySelector('input[name="price_max"]').value
 
     localStorage.setItem('priceMin', priceMin)
     localStorage.setItem('priceMax', priceMax)
-    localStorage.setItem('year', year)
-    localStorage.setItem('category', category)
-    localStorage.setItem('brand', brand)
-    localStorage.setItem('status', status)
-    localStorage.setItem('transmission', transmission)
-    localStorage.setItem('perPage', perPage)
 
-    const url = new URL(window.location.origin + '/products')
-    if (priceMin && priceMax) {
-        url.searchParams.append('priceMin', priceMin)
-        url.searchParams.append('priceMax', priceMax)
+    if (
+        isNaN(priceMin) ||
+        isNaN(priceMax) ||
+        parseFloat(priceMin) > parseFloat(priceMax)
+    ) {
+        document.getElementById('price-error').innerHTML =
+            'Hãy nhập khoảng phù hợp'
+    } else {
+        document.getElementById('price-error').innerHTML = ''
+        document.getElementById('filterForm').submit()
+        console.log('Form submitted')
     }
-    if (year) {
-        url.searchParams.append('year', year)
-    }
-    if (category) {
-        url.searchParams.append('category', category)
-    }
-    if (brand) {
-        url.searchParams.append('brand', brand)
-    }
-    if (status) {
-        url.searchParams.append('status', status)
-    }
-    if (transmission) {
-        url.searchParams.append('transmission', transmission)
-    }
-    if (perPage) {
-        url.searchParams.append('perPage', perPage)
-    }
-    if (currentPage) {
-        url.searchParams.append('page', currentPage)
-    }
-
-    window.location.href = url.toString()
-}
-
-filterInputs.on('change', function (e) {
-    e.preventDefault()
-    const page = '1'
-    handleFilterChange(page)
 })
 
-pageLink.on('click', function (e) {
-    e.preventDefault()
-    const page = $(this).attr('value')
-    handleFilterChange(page)
-})
-
-$(document).ready(function () {
+window.onload = function () {
     const priceMin = localStorage.getItem('priceMin')
     const priceMax = localStorage.getItem('priceMax')
-    const year = localStorage.getItem('year')
-    const category = localStorage.getItem('category')
-    const brand = localStorage.getItem('brand')
-    const status = localStorage.getItem('status')
-    const transmission = localStorage.getItem('transmission')
-    const perPage = localStorage.getItem('perPage')
 
-    if (priceMin && priceMax) {
-        $('select[name="price"]').val(`${priceMin}-${priceMax}`)
+    if (priceMin) {
+        document.querySelector('input[name="price_min"]').value = priceMin
     }
-    if (year) {
-        $('select[name="year"]').val(year)
+    if (priceMax) {
+        document.querySelector('input[name="price_max"]').value = priceMax
     }
-    if (category) {
-        $('select[name="category"]').val(category)
-    }
-    if (brand) {
-        $('select[name="brand"]').val(brand)
-    }
-    if (status) {
-        $('select[name="status"]').val(status)
-    }
-    if (transmission) {
-        $('select[name="transmission"]').val(transmission)
-    }
-    if (perPage) {
-        $('select[name="perPage"]').val(perPage)
-    }
-})
-
-clearQuery.on('click', function (event) {
-    event.preventDefault()
-    localStorage.removeItem('year')
-    localStorage.removeItem('category')
-    localStorage.removeItem('brand')
-    localStorage.removeItem('status')
-    localStorage.removeItem('transmission')
-    localStorage.removeItem('priceMin')
-    localStorage.removeItem('priceMax')
-    localStorage.removeItem('perPage')
-    window.location.href = '/products'
-})
+}
