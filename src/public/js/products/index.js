@@ -1,24 +1,19 @@
-// Lắng nghe sự thay đổi trên tất cả các phần tử trong form (select, input)
-const filterForm = document.getElementById('filterForm')
-const filterInputs = document.querySelectorAll(
-    '#filterForm select, #filterForm input'
-)
-const clearQuery = document.getElementById('clearQuery')
+const filterForm = $('#filterForm')
+const filterInputs = $('#filterForm select')
+const clearQuery = $('#clearQuery')
+const pageLink = $('.pagination .page-link')
 
-// Hàm xử lý khi có sự thay đổi giá trị trong form
-function handleFilterChange() {
-    const priceValue = document.querySelector('select[name="price"]').value
+function handleFilterChange(pageValue = '1') {
+    const priceValue = $('select[name="price"]').val()
     const [priceMin, priceMax] = priceValue ? priceValue.split('-') : ['', '']
-    const year = document.querySelector('select[name="year"]').value
-    const category = document.querySelector('select[name="category"]').value
-    const brand = document.querySelector('select[name="brand"]').value
-    const status = document.querySelector('select[name="status"]').value
-    const transmission = document.querySelector(
-        'select[name="transmission"]'
-    ).value
-    const perPage = document.querySelector('select[name="perPage"]').value
+    const year = $('select[name="year"]').val()
+    const category = $('select[name="category"]').val()
+    const brand = $('select[name="brand"]').val()
+    const status = $('select[name="status"]').val()
+    const transmission = $('select[name="transmission"]').val()
+    const perPage = $('select[name="perPage"]').val()
+    const currentPage = pageValue
 
-    // Lưu giá trị của các trường vào LocalStorage
     localStorage.setItem('priceMin', priceMin)
     localStorage.setItem('priceMax', priceMax)
     localStorage.setItem('year', year)
@@ -51,18 +46,26 @@ function handleFilterChange() {
     if (perPage) {
         url.searchParams.append('perPage', perPage)
     }
+    if (currentPage) {
+        url.searchParams.append('page', currentPage)
+    }
 
-    // Chuyển hướng đến URL đã tối giản
     window.location.href = url.toString()
 }
 
-// Lắng nghe sự kiện 'change' cho tất cả các phần tử trong form (select và input)
-filterInputs.forEach((input) =>
-    input.addEventListener('change', handleFilterChange)
-)
+filterInputs.on('change', function (e) {
+    e.preventDefault()
+    const page = '1'
+    handleFilterChange(page)
+})
 
-// Khi tải trang, tự động điền các giá trị từ LocalStorage vào form (nếu có)
-window.onload = function () {
+pageLink.on('click', function (e) {
+    e.preventDefault()
+    const page = $(this).attr('value')
+    handleFilterChange(page)
+})
+
+$(document).ready(function () {
     const priceMin = localStorage.getItem('priceMin')
     const priceMax = localStorage.getItem('priceMax')
     const year = localStorage.getItem('year')
@@ -72,35 +75,31 @@ window.onload = function () {
     const transmission = localStorage.getItem('transmission')
     const perPage = localStorage.getItem('perPage')
 
-    // Điền lại giá trị vào các trường input
     if (priceMin && priceMax) {
-        document.querySelector('select[name="price"]').value =
-            `${priceMin}-${priceMax}`
+        $('select[name="price"]').val(`${priceMin}-${priceMax}`)
     }
     if (year) {
-        document.querySelector('select[name="year"]').value = year
+        $('select[name="year"]').val(year)
     }
     if (category) {
-        document.querySelector('select[name="category"]').value = category
+        $('select[name="category"]').val(category)
     }
     if (brand) {
-        document.querySelector('select[name="brand"]').value = brand
+        $('select[name="brand"]').val(brand)
     }
     if (status) {
-        document.querySelector('select[name="status"]').value = status
+        $('select[name="status"]').val(status)
     }
     if (transmission) {
-        document.querySelector('select[name="transmission"]').value =
-            transmission
+        $('select[name="transmission"]').val(transmission)
     }
     if (perPage) {
-        document.querySelector('select[name="perPage"]').value = perPage
+        $('select[name="perPage"]').val(perPage)
     }
-}
+})
 
-clearQuery.addEventListener('click', function (event) {
+clearQuery.on('click', function (event) {
     event.preventDefault()
-    // Xóa dữ liệu bộ lọc trong localStorage
     localStorage.removeItem('year')
     localStorage.removeItem('category')
     localStorage.removeItem('brand')
@@ -109,6 +108,5 @@ clearQuery.addEventListener('click', function (event) {
     localStorage.removeItem('priceMin')
     localStorage.removeItem('priceMax')
     localStorage.removeItem('perPage')
-    // Điều hướng đến trang sản phẩm mà không có query parameters
     window.location.href = '/products'
 })

@@ -38,10 +38,10 @@ class ProductController {
     //         if (req.query.category) {
     //             query.category = req.query.category
     //         }
-    //         if (req.query.price_min && req.query.price_max) {
+    //         if (req.query.priceMin && req.query.priceMax) {
     //             query.price = {
-    //                 $gte: req.query.price_min,
-    //                 $lte: req.query.price_max,
+    //                 $gte: req.query.priceMin,
+    //                 $lte: req.query.priceMax,
     //             }
     //         }
     //         if (req.query.year) {
@@ -110,8 +110,8 @@ class ProductController {
             brand: req.query.brand || '',
             status: req.query.status || '',
             transmission: req.query.transmission || '',
-            price_min: Number(req.query.priceMin) || '',
-            price_max: Number(req.query.priceMax) || '',
+            priceMin: Number(req.query.priceMin) || '',
+            priceMax: Number(req.query.priceMax) || '',
             perPage: Number(req.query.perPage) || 8,
         }
 
@@ -121,11 +121,11 @@ class ProductController {
         if (filters.brand) query.brand = filters.brand
         if (filters.status) query.status = filters.status
         if (filters.transmission) query.transmission = filters.transmission
-        if (filters.price_min) {
-            query.price = { $gte: filters.price_min }
+        if (filters.priceMin) {
+            query.price = { $gte: filters.priceMin }
         }
-        if (filters.price_max) {
-            query.price = { ...query.price, $lte: filters.price_max }
+        if (filters.priceMax) {
+            query.price = { ...query.price, $lte: filters.priceMax }
         }
         try {
             const products = await ProductService.getPaginatedProducts(
@@ -137,17 +137,17 @@ class ProductController {
             res.render('products/index', {
                 products: multipleMongooseToObject(products.products),
                 queries: query,
-                years: years,
-                categories: categories,
-                brands: brands,
-                transmissions: transmissions,
-                statuses: statuses,
+                years,
+                categories,
+                brands,
+                transmissions,
+                statuses,
                 total: products.total,
                 pages: products.totalPages,
                 current: products.currentPage,
                 pagesArray: products.pagesArray,
-                price: price,
-                perPage: perPage,
+                price,
+                perPage,
             })
         } catch (error) {
             console.log(error)

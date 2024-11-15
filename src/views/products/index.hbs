@@ -11,17 +11,17 @@
         </div>
         <div class="featured-cars-filter" id = "filter-form">
             <form id="filterForm" method="GET" action="/products">
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
-                            <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
+                        <div class="row mb-3">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
+                                <button class="btn btn-outline-secondary" id = "btn-search">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="row justify-content-around mx-0">
                         <!-- Select Year -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
@@ -146,27 +146,21 @@
                     <ul class="pagination" style="margin: 0;">
                         <!-- Previous Button -->
                         <li class="page-item {{#unless (gt current 1)}}disabled{{/unless}}">
-                            <a class="page-link" href="{{#if (gt current 1)}}/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}{{else}}#{{/if}}&perPage={{queries.perPage}}" aria-label="Previous">
+                            <a class="page-link" name = "previous-page" value = "{{dec current}}" href="" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                         
                         <!-- Page Numbers -->
                         {{#each pagesArray}}
-                            {{#if (eq this ../current)}}
-                                <li class="page-item active" aria-current="page">
-                                    <span class="page-link">{{this}}</span>
-                                </li>
-                            {{else}}
-                                <li class="page-item">
-                                    <a class="page-link" href="/products?page={{this}}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}&perPage={{../queries.perPage}}">{{this}}</a>
-                                </li>
-                            {{/if}}
+                            <li class="page-item {{#if (eq this ../current)}}active{{/if}}">
+                                <a class="page-link" name="current" value="{{this}}" href="">{{this}}</a>
+                            </li>
                         {{/each}}
 
                         <!-- Next Button -->
                         <li class="page-item {{#unless (lt current pages)}}disabled{{/unless}}">
-                            <a class="page-link" href="{{#if (lt current pages)}}/products?page={{inc current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}{{else}}#{{/if}}&perPage={{queries.perPage}}" aria-label="Next">
+                            <a class="page-link" name = "next-page" value = "{{inc current}}" href="" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -185,7 +179,6 @@
         </div>
     </div>
 </section>
-
-
+<script src="/vender/js/jquery.js"></script>
 <script src="/js/products/index.js"></script>
 
