@@ -1,4 +1,3 @@
-import { showModal } from '../common.js';
 import { isStrongPassword, isEmailValid } from '../helpers.js'
 
 // Handle event when user click on register button
@@ -44,15 +43,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('.login-btn').on('click', async function () {
-        const email = $('#email').val().trim();
-        const password = $('#password').val().trim();
-        const confirmPassword = $('#confirm-password').val().trim();
-        const fullName = $('#fullName').val().trim();
+        const email = $('#email').val();
+        const password = $('#password').val();
+        const rePassword = $('#re-password').val();
+        const fullName = $('#fullName').val();
         const messageEle = $('#message-error');
 
         messageEle.text('');
 
-        if (!email || !password || !confirmPassword || !fullName) {
+        if (!email || !password || !rePassword || !fullName) {
             messageEle.text("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -62,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (password !== confirmPassword) {
+        if (password !== rePassword) {
             messageEle.text("Mật khẩu nhập lại không khớp");
             return;
         }
@@ -77,11 +76,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     200() {
-                        showModal("Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công, vui lòng kiểm tra hộp thư để kích hoạt tài khoản!",
-                            function () {
-                                window.location.href = "/dashboard";
-                            }
-                        )
+                        $('#successModal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
+
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = "/dashboard";
+                        });
                     },
                     400(resp) {
                         console.log(resp.responseJSON);
