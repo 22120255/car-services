@@ -1,7 +1,10 @@
 const filterForm = $('#filterForm')
-const filterInputs = $('#filterForm select')
+const filterInputs = $('#filterForm select, filterForm input')
 const clearQuery = $('#clearQuery')
 const pageLink = $('.pagination .page-link')
+const btnSearch = $('#btn-search')
+const inputSearch = $('input[name="search"]')
+const searchInform = $('#search-inform')
 
 function handleFilterChange(pageValue = '1') {
     const priceValue = $('select[name="price"]').val()
@@ -13,6 +16,7 @@ function handleFilterChange(pageValue = '1') {
     const transmission = $('select[name="transmission"]').val()
     const perPage = $('select[name="perPage"]').val()
     const currentPage = pageValue
+    const search = $('input[name="search"]').val()
 
     localStorage.setItem('priceMin', priceMin)
     localStorage.setItem('priceMax', priceMax)
@@ -22,6 +26,7 @@ function handleFilterChange(pageValue = '1') {
     localStorage.setItem('status', status)
     localStorage.setItem('transmission', transmission)
     localStorage.setItem('perPage', perPage)
+    localStorage.setItem('search', search)
 
     const url = new URL(window.location.origin + '/products')
     if (priceMin && priceMax) {
@@ -49,9 +54,14 @@ function handleFilterChange(pageValue = '1') {
     if (currentPage) {
         url.searchParams.append('page', currentPage)
     }
+    if (search) {
+        url.searchParams.append('search', search)
+    }
 
     window.location.href = url.toString()
 }
+
+// Xử lí các sự kiện
 
 filterInputs.on('change', function (e) {
     e.preventDefault()
@@ -67,6 +77,17 @@ $(document).on('click', '.pagination .page-link', function (e) {
     }
 })
 
+inputSearch.on('keypress', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault()
+    }
+})
+
+btnSearch.on('click', function (e) {
+    e.preventDefault()
+    handleFilterChange()
+})
+
 $(document).ready(function () {
     const priceMin = localStorage.getItem('priceMin')
     const priceMax = localStorage.getItem('priceMax')
@@ -76,6 +97,7 @@ $(document).ready(function () {
     const status = localStorage.getItem('status')
     const transmission = localStorage.getItem('transmission')
     const perPage = localStorage.getItem('perPage')
+    const search = localStorage.getItem('search')
 
     if (priceMin && priceMax) {
         $('select[name="price"]').val(`${priceMin}-${priceMax}`)
@@ -98,6 +120,9 @@ $(document).ready(function () {
     if (perPage) {
         $('select[name="perPage"]').val(perPage)
     }
+    if (search) {
+        $('input[name="search"]').val(search)
+    }
 })
 
 clearQuery.on('click', function (event) {
@@ -110,5 +135,6 @@ clearQuery.on('click', function (event) {
     localStorage.removeItem('priceMin')
     localStorage.removeItem('priceMax')
     localStorage.removeItem('perPage')
+    localStorage.removeItem('search')
     window.location.href = '/products'
 })

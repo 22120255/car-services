@@ -105,6 +105,8 @@ class ProductController {
         const page = parseInt(req.query.page) || 1
         const reqPerPage = parseInt(req.query.perPage) || 8
         const query = {}
+        const search = req.query.search
+        console.log(search)
         if (req.query.year) query.year = req.query.year
         if (req.query.category) query.category = req.query.category
         if (req.query.brand) query.brand = req.query.brand
@@ -116,6 +118,20 @@ class ProductController {
             if (req.query.price_min) query.price.$gte = req.query.price_min
             if (req.query.price_max) query.price.$lte = req.query.price_max
         }
+
+        if (search) {
+            const keywords = search.split(' ')
+
+            const conditions = keywords.map((key) => ({
+                $or: [
+                    { brand: { $regex: key, $options: 'i' } },
+                    { model: { $regex: key, $options: 'i' } },
+                    { description: { $regex: key, $options: 'i' } },
+                ],
+            }))
+            query.$and = conditions
+        }
+
         try {
             const products = await ProductService.getPaginatedProducts(
                 query,

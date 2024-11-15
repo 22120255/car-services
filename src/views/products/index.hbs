@@ -17,7 +17,7 @@
                         <div class="row mb-3">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
-                                <button class="btn btn-outline-secondary" id = "btn-search">
+                                <button class="btn btn-outline-secondary" id="btn-search">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -126,6 +126,7 @@
         </div>
         <div class='container'>
             <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
+                <h2 id="search-inform"></h2>
                 {{#each products}}
                     <div class='col-lg-3 col-md-4 col-sm-6'>
                         {{> CardProduct product=this}}
