@@ -17,6 +17,11 @@ module.exports = {
     dec(value) {
         return value - 1
     },
+
+    and(a, b) {
+        return a && b
+    },
+
     json(context) {
         return JSON.stringify(context);
     },
