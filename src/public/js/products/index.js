@@ -59,10 +59,12 @@ filterInputs.on('change', function (e) {
     handleFilterChange(page)
 })
 
-pageLink.on('click', function (e) {
+$(document).on('click', '.pagination .page-link', function (e) {
     e.preventDefault()
     const page = $(this).attr('value')
-    handleFilterChange(page)
+    if (page) {
+        handleFilterChange(page)
+    }
 })
 
 $(document).ready(function () {

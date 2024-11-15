@@ -103,37 +103,26 @@ class ProductController {
     }
     pagination = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1
-
-        const filters = {
-            year: req.query.year || '',
-            category: req.query.category || '',
-            brand: req.query.brand || '',
-            status: req.query.status || '',
-            transmission: req.query.transmission || '',
-            priceMin: Number(req.query.priceMin) || '',
-            priceMax: Number(req.query.priceMax) || '',
-            perPage: Number(req.query.perPage) || 8,
-        }
-
+        const reqPerPage = parseInt(req.query.perPage) || 8
         const query = {}
-        if (filters.year) query.year = filters.year
-        if (filters.category) query.category = filters.category
-        if (filters.brand) query.brand = filters.brand
-        if (filters.status) query.status = filters.status
-        if (filters.transmission) query.transmission = filters.transmission
-        if (filters.priceMin) {
-            query.price = { $gte: filters.priceMin }
-        }
-        if (filters.priceMax) {
-            query.price = { ...query.price, $lte: filters.priceMax }
+        if (req.query.year) query.year = req.query.year
+        if (req.query.category) query.category = req.query.category
+        if (req.query.brand) query.brand = req.query.brand
+        if (req.query.status) query.status = req.query.status
+        if (req.query.transmission) query.transmission = req.query.transmission
+
+        if (req.query.price_min || req.query.price_max) {
+            query.price = {}
+            if (req.query.price_min) query.price.$gte = req.query.price_min
+            if (req.query.price_max) query.price.$lte = req.query.price_max
         }
         try {
             const products = await ProductService.getPaginatedProducts(
                 query,
                 page,
-                filters.perPage
+                reqPerPage
             )
-            query.perPage = filters.perPage
+            query.perPage = reqPerPage
             res.render('products/index', {
                 products: multipleMongooseToObject(products.products),
                 queries: query,
