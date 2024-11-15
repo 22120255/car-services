@@ -141,30 +141,93 @@
         </div>
         <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
             {{#if pages}}
-                <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
-                <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
-                    <ul class="pagination" style="margin: 0;">
+                <nav class="mx-auto">
+                    <ul class="pagination pagination-lg justify-content-center" style="margin-top: 2rem;">
                         <!-- Previous Button -->
-                        <li class="page-item {{#unless (gt current 1)}}disabled{{/unless}}">
-                            <a class="page-link" name = "previous-page" value = "{{dec current}}" href="" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        
-                        <!-- Page Numbers -->
-                        {{#each pagesArray}}
-                            <li class="page-item {{#if (eq this ../current)}}active{{/if}}">
-                                <a class="page-link" name="current" value="{{this}}" href="">{{this}}</a>
+                        {{#if (gt current 1)}}
+                            <li class="page-item" id="btn-previous">
+                                <a 
+                                    class="page-link rounded-start shadow-sm border-0"
+                                    href="/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
                             </li>
-                        {{/each}}
-
+                        {{else}}
+                            <li class="page-item disabled" id="btn-previous">
+                                <a class="page-link rounded-start shadow-sm border-0" href="#">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {{/if}}
+        
                         <!-- Next Button -->
-                        <li class="page-item {{#unless (lt current pages)}}disabled{{/unless}}">
-                            <a class="page-link" name = "next-page" value = "{{inc current}}" href="" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
+                        {{#if (lt current pages)}}
+                            <li class="page-item">
+                                <a 
+                                    class="page-link rounded-end shadow-sm border-0" 
+                                    href="/products?page={{inc current}}&year={{../queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}"> 
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {{else}}
+                            <li class="page-item disabled">
+                                <a class="page-link rounded-end shadow-sm border-0" href="#"> 
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {{/if}}
                     </ul>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const currentPage = {{current}};
+                            const totalPages = {{pages}};
+
+                            function generatePagination(currentPage, totalPages) {
+                                const paginationItems = [];
+
+                                function addPageItem(page, text = page) {
+                                    if (text === '...') {
+                                        paginationItems.push(`
+                                            <li class="page-item disabled">
+                                                <span class="page-link h-100 bg-white shadow-sm border-0">${text}</span>
+                                            </li>
+                                        `);
+                                    } else {
+                                        paginationItems.push(`
+                                            <li class="page-item ${page === currentPage ? 'active' : ''}">
+                                                <a class="page-link shadow-sm border-0 ${page === currentPage ? 'bg-primary text-white' : ''}" 
+                                                   href="/products?page=${page}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">${text}</a>
+                                            </li>
+                                        `);
+                                    }
+                                }
+
+                                 if (totalPages <= 5) {
+                                    for (let i = 1; i <= totalPages; i++) {
+                                        addPageItem(i);
+                                    }
+                                } else {
+                                    addPageItem(1);
+
+                                    if (currentPage > 3) {
+                                        addPageItem(2, '...');
+                                    }
+
+                                    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                                        addPageItem(i);
+                                    }
+
+                                    if (currentPage < totalPages - 2) {
+                                        addPageItem(totalPages - 1, '...');
+                                    }
+
+                                    addPageItem(totalPages);
+                                }
+                                $('#btn-previous').after(paginationItems.join(''));
+                            }
+                            generatePagination(currentPage, totalPages);
+                        })
+                    </script>
                 </nav>
             {{/if}}
             

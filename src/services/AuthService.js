@@ -38,7 +38,7 @@ class AuthService {
                 throw new Error("Token không hợp lệ.");
             }
 
-            user.isActivated = true;
+            user.status = "active";
             user.verificationCode = undefined;
             await user.save();
 
@@ -57,7 +57,7 @@ class AuthService {
                     email,
                     fullName,
                     avatar,
-                    isActivated: true
+                    status: "active"
                 });
                 await user.save();
                 return user;
