@@ -142,8 +142,9 @@
         </div>
         <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
             {{#if pages}}
-                <nav class="mx-auto">
-                    <ul class="pagination pagination-lg justify-content-center" style="margin-top: 2rem;">
+                <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
+                <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
+                    <ul class="pagination" style="margin: 0;">
                         <!-- Previous Button -->
                         <li class="page-item btn-previous {{#unless (gt current 1)}}disabled{{/unless}}">
                             <a class="page-link" name = "previous-page" value = "{{dec current}}" href="" aria-label="Previous">
@@ -181,6 +182,7 @@
                                             </li>
                                         `);
                                     } else {
+                                        
                                         paginationItems.push(`
                                             <li class="page-item ${page === currentPage ? 'active' : ''}">
                                                 <a class="page-link" name="current" value="${text}" href="">${text}</a>
@@ -189,7 +191,7 @@
                                     }
                                 }
 
-                                if (totalPages <= 5) {
+                                  if (totalPages <= 5) {
                                     for (let i = 1; i <= totalPages; i++) {
                                         addPageItem(i);
                                     }

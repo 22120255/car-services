@@ -59,16 +59,15 @@
 </head>
 <body>
     <main class="container-fuild wrapper-login position-relative">
-      <button type="button" title="Quay lại" class="btn-back" id="btn-back">
+      <a href="/dashboard" role="button" title="Quay lại" class="btn-back">
         <i class="fa fa-chevron-left"></i>
         <span>Quay lại</span>
-      </button>
+      </a>
 
         {{{body}}}
 
     </main>
-    {{> ModalNotify}}
-    
+    {{> ModalStatus id="successModal" title="Đăng ký thành công" content="Tài khoản của bạn đã được tạo thành công. Vui lòng kiểm tra hộp thư để kích hoạt tài khoản!" confirmButtonText="OK"}}
     <script src="/vender/js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     <script src="/vender/js/bootstrap.js"></script>

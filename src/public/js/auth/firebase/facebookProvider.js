@@ -3,8 +3,7 @@ import { auth } from "./config.js";
 
 const provider = new FacebookAuthProvider();
 
-provider.addScope('public_profile');
-provider.addScope('email');
+
 // auth.languageCode = 'it';
 auth.useDeviceLanguage();
 
