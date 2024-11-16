@@ -14,6 +14,14 @@
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
+                        <div class="row mb-3">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
+                                <button class="btn btn-outline-secondary" id="btn-search">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="row justify-content-around mx-0">
                         <!-- Select Year -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
@@ -92,23 +100,24 @@
                             </div>
                             <!-- Select Price -->
                             <div class="single-model-search">
-                            <h2>Nhập mức giá ($)</h2>
-                            <div id="model-price" class="price-range">
-                                <input type="number" class="form-control price-input" name="price_min" placeholder="$Từ" min="0" value="{{queries.price_min}}">
-                                <span>-</span>
-                                <input type="number" class="form-control price-input" name="price_max" placeholder="$Đến" min="0" value="{{queries.price_max}}">
-                            </div>
-                            <div class="text-center">
-                                <span id="price-error" class="text-danger"></span>
+                            <h2>Mức giá ($)</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control" name="price">
+                                    <option value="">Chọn mức giá</option>
+                                    {{#each price}}
+                                        <option 
+                                            value="{{this.priceMin}}-{{this.priceMax}}"
+                                            data_price_min="{{this.priceMin}}" 
+                                            data_price_max="{{this.priceMax}}"
+                                            {{#if (gt 1 1) }}selected{{/if}}> <!-- 1 1 là true -->
+                                            ${{this.priceMin}} - ${{this.priceMax}}
+                                        </option>
+                                    {{/each}}
+                                </select>
                             </div>
                             </div>
                         </div>
-                        <!-- Search Button -->
-                        <div class="col-md-2 col-sm-12">
-                            <div class="single-model-search text-center">
-                            <button class="welcome-btn model-search-btn">Tìm kiếm</button>
-                            </div>
-                        </div>
+                       
                         </div>
                     </div>
                     </div>
@@ -117,6 +126,7 @@
         </div>
         <div class='container'>
             <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
+                <h2 id="search-inform"></h2>
                 {{#each products}}
                     <div class='col-lg-3 col-md-4 col-sm-6'>
                         {{> CardProduct product=this}}
@@ -130,46 +140,97 @@
                 {{/each}}
             </div>
         </div>
-        <div class="d-flex">
+        <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
             {{#if pages}}
-                <nav class="mx-auto">
-                    <ul class="pagination" style="margin-top: 2rem;">
+                <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
+                <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
+                    <ul class="pagination" style="margin: 0;">
                         <!-- Previous Button -->
-                        {{#if (gt current 1)}}
-                            <li class="page-item">
-                                <a class="page-link"href="/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">Previous</a>
-                            </li>
-                        {{else}}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">Previous</a>
-                            </li>
-                        {{/if}}
+                        <li class="page-item btn-previous {{#unless (gt current 1)}}disabled{{/unless}}">
+                            <a class="page-link" name = "previous-page" value = "{{dec current}}" href="" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
                         
                         <!-- Page Numbers -->
-                        {{#each pagesArray}}
-                            <li class="page-item  {{#if (eq this ../current)}}active{{/if}}">
-                                <a class="page-link" href="/products?page={{this}}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">{{this}}</a>
+                        {{!-- {{#each pagesArray}}
+                            <li class="page-item {{#if (eq this ../current)}}active{{/if}}">
+                                <a class="page-link" name="current" value="{{this}}" href="">{{this}}</a>
                             </li>
-                        {{/each}}
+                        {{/each}} --}}
 
                         <!-- Next Button -->
-                        {{#if (lt current pages)}}
-                            <li class="page-item">
-                                <a class="page-link" href="/products?page={{inc current}}&year={{../queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">Next</a>
-                            </li>
-                        {{else}}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        {{/if}}
+                        <li class="page-item btn-next {{#unless (lt current pages)}}disabled{{/unless}}">
+                            <a class="page-link" name = "next-page" value = "{{inc current}}" href="" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
                     </ul>
+                     <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const currentPage = {{current}};
+                            const totalPages = {{pages}};
+
+                            function generatePagination(currentPage, totalPages) {
+                                const paginationItems = [];
+
+                                function addPageItem(page, text = page) {
+                                    if (text === '...') {
+                                        paginationItems.push(`
+                                            <li class="page-item disabled">
+                                                <span class="page-link h-100 bg-white shadow-sm border-0">${text}</span>
+                                            </li>
+                                        `);
+                                    } else {
+                                        
+                                        paginationItems.push(`
+                                            <li class="page-item ${page === currentPage ? 'active' : ''}">
+                                                <a class="page-link" name="current" value="${text}" href="">${text}</a>
+                                            </li>
+                                        `);
+                                    }
+                                }
+
+                                  if (totalPages <= 5) {
+                                    for (let i = 1; i <= totalPages; i++) {
+                                        addPageItem(i);
+                                    }
+                                } else {
+                                    addPageItem(1);
+
+                                    if (currentPage > 3) {
+                                        addPageItem(2, '...');
+                                    }
+
+                                    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+                                        addPageItem(i);
+                                    }
+
+                                    if (currentPage < totalPages - 2) {
+                                        addPageItem(totalPages - 1, '...');
+                                    }
+
+                                    addPageItem(totalPages);
+                                }
+                                $('.btn-previous').after(paginationItems.join(''));
+                            }
+                            generatePagination(currentPage, totalPages);
+                        })
+                    </script>
                 </nav>
             {{/if}}
+            
+            <!-- Items per page select -->
+            <form id="filterForm" method="GET" action="/products">
+                <select class="form-select" aria-label="Items per page" style="width: auto;" name = "perPage" >
+                    {{#each perPage}}
+                        <option value="{{this.value}}" {{#if (eq ../queries.perPage this.value)}}selected{{/if}}>{{this.value}} / trang</option>
+                    {{/each}}
+                </select>
+            </form>
         </div>
-</div>
-    <!--/.container-->
+    </div>
 </section>
-
-<form name = "detail-form" method="GET" ></form>
-
+<script src="/vender/js/jquery.js"></script>
 <script src="/js/products/index.js"></script>
+
