@@ -2,7 +2,6 @@ const Product = require('../models/Product')
 const { multipleMongooseToObject } = require('../utils/mongoose')
 
 class ProductService {
-    // [GET] /products/filter
     getFilteredProducts = async (query) => {
         try {
             const products = await Product.find(query)

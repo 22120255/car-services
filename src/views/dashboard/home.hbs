@@ -107,51 +107,28 @@
             <h2>Sản phẩm bán chạy nhất</h2>
         </div>
         <div class='row'>
-            <div class='col-md-4 col-sm-6'>
-                <div class='featured-product-item'>
-                    <div class='product-image'>
-                        <img
-                            src='https://bmw.binhduong.vn/wp-content/uploads/2023/07/bmw-3-series-330i-msport-1-450x253.jpg'
-                            alt='Sedan Luxury X1'
-                        />
-                        <div class='product-overlay'>
-                            <a href='#' class='btn btn-primary'>Xem chi tiết</a>
+            {{#each products}}
+                <div class='col-md-4 col-sm-6'>
+                    <div class='featured-product-item'>
+                        <div class='product-image'>
+                            <img
+                                src='{{this.images.image1}}'
+                                alt='Sedan Luxury X1'
+                            />
+                            <div class='product-overlay'>
+                                <a
+                                    href='products/{{this.id}}'
+                                    class='btn btn-primary'
+                                >Xem chi tiết</a>
+                            </div>
                         </div>
+                        <h3 class='text-uppercase'>{{this.category}}
+                            {{this.brand}}
+                            {{this.model}}</h3>
+                        <p class='price'>${{this.price}}</p>
                     </div>
-                    <h3>Sedan Luxury X1</h3>
-                    <p class='price'>800 triệu VND</p>
                 </div>
-            </div>
-            <div class='col-md-4 col-sm-6'>
-                <div class='featured-product-item'>
-                    <div class='product-image'>
-                        <img
-                            src='https://bmw.binhduong.vn/wp-content/uploads/2023/05/x3-bmw-color-0423_0012_Layer-1-1-450x253.jpg'
-                            alt='SUV Explorer Pro'
-                        />
-                        <div class='product-overlay'>
-                            <a href='#' class='btn btn-primary'>Xem chi tiết</a>
-                        </div>
-                    </div>
-                    <h3>SUV Explorer Pro</h3>
-                    <p class='price'>1.2 tỷ VND</p>
-                </div>
-            </div>
-            <div class='col-md-4 col-sm-6'>
-                <div class='featured-product-item'>
-                    <div class='product-image'>
-                        <img
-                            src='https://bmw.binhduong.vn/wp-content/uploads/2023/11/bmw-x5-100423_0007_Layer-6-450x253.jpg'
-                            alt='Hatchback Eco Plus'
-                        />
-                        <div class='product-overlay'>
-                            <a href='#' class='btn btn-primary'>Xem chi tiết</a>
-                        </div>
-                    </div>
-                    <h3>Hatchback Eco Plus</h3>
-                    <p class='price'>500 triệu VND</p>
-                </div>
-            </div>
+            {{/each}}
         </div>
     </div>
 </section>
