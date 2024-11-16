@@ -1,0 +1,248 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="header-content">
+      <div class="avatar-wrapper">
+         <button id="avatar-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="right"
+            data-bs-html="true" data-bs-container=".avatar-wrapper" 
+            title='<span id="change-avatar-btn">Change avatar</span>'>
+          <img src="{{user.avatar}}" alt="{{user.fullName}}'s avatar" class="profile-avatar">
+        </button>
+        <input type="file" id="avatar-input" accept="image/*" style="display: none"/>
+        {{#if (checkAdmin user)}}
+        <span class="admin-badge"><i class="fas fa-crown"></i> Admin</span>
+        {{/if}}
+      </div>
+      <div class="user-info">
+        <h1 class="profile-name">{{user.fullName}}</h1>
+        <p class="profile-email"><i class="fas fa-envelope"></i> {{user.email}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-grid">
+      <section class="profile-info card">
+        <div class="card-header">
+          <h2><i class="fas fa-user"></i> Personal Information</h2>
+        </div>
+        <div class="card-body">
+          <div class="info-grid">
+            <div class="info-column">
+              <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <span><strong>Phone:</strong> {{user.metadata.phone}}</span>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span><strong>Address:</strong> {{user.metadata.address}}</span>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span><strong>Member since:</strong> {{formatDate user.createdAt}}</span>
+              </div>
+            </div>
+            <div class="info-column">
+              <div class="info-item">
+                <i class="fas fa-car"></i>
+                <span><strong>Cars Owned:</strong> {{user.metadata.purchasedCars.length}}</span>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-star"></i>
+                <span><strong>Member Status:</strong> {{user.status}}</span>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <span><strong>Last Active:</strong> {{formatDate user.lastLogin}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-primary btn-edit-profile">
+              <i class="fas fa-edit"></i> Edit Profile
+            </button>
+            <button class="btn btn-secondary btn-change-password">
+              <i class="fas fa-key"></i> Change Password
+            </button>
+            <button class="btn btn-warning btn-account-settings">
+              <i class="fas fa-cog"></i> Account Settings
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="account-overview card">
+        <div class="card-header">
+          <h2><i class="fas fa-chart-bar"></i> Account Overview</h2>
+        </div>
+        <div class="card-body">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <i class="fas fa-eye"></i>
+              <div class="stat-content">
+                <h4>Profile Views</h4>
+                <p>{{user.profileViews}}</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-heart"></i>
+              <div class="stat-content">
+                <h4>Favorite Cars</h4>
+                <p>{{user.favorites.length}}</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-comments"></i>
+              <div class="stat-content">
+                <h4>Messages</h4>
+                <p>{{user.unreadMessages}}</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-bell"></i>
+              <div class="stat-content">
+                <h4>Notifications</h4>
+                <p>{{user.notifications.length}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {{#if (checkAdmin user)}}
+      <section class="admin-dashboard card">
+        <div class="card-header">
+          <h2><i class="fas fa-chart-line"></i> Car Sales Overview</h2>
+        </div>
+        <div class="card-body">
+          <div class="admin-stats">
+            <div class="stat-card">
+              <i class="fas fa-car"></i>
+              <div class="stat-content">
+                <h3>Available Cars</h3>
+                <p class="stat-number">{{adminStats.totalCars}}</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-shopping-cart"></i>
+              <div class="stat-content">
+                <h3>Cars Sold</h3>
+                <p class="stat-number">{{adminStats.soldCars}}</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <i class="fas fa-dollar-sign"></i>
+              <div class="stat-content">
+                <h3>Monthly Revenue</h3>
+                <p class="stat-number">${{adminStats.monthlyRevenue}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-actions card">
+        <div class="card-header">
+          <h2><i class="fas fa-bolt"></i> Car Management</h2>
+        </div>
+        <div class="card-body">
+          <div class="action-grid">
+            <button class="action-btn"><i class="fas fa-plus-circle"></i>Add New Car</button>
+            <button class="action-btn"><i class="fas fa-edit"></i>Edit Listings</button>
+            <button class="action-btn"><i class="fas fa-chart-bar"></i>Sales Reports</button>
+            <button class="action-btn"><i class="fas fa-tags"></i>Manage Prices</button>
+          </div>
+        </div>
+      </section>
+      {{else}}
+      <section class="my-cars card">
+        <div class="card-header">
+          <h2><i class="fas fa-car"></i> My Cars</h2>
+        </div>
+        <div class="card-body">
+          {{#if user.metadata.purchasedCars}}
+          <div class="car-list">
+            {{#each user.metadata.purchasedCars}}
+            <div class="car-item">
+              <img src="{{this.image}}" alt="{{this.model}}" class="car-thumbnail">
+              <div class="car-details">
+                <h3>{{this.brand}} {{this.model}}</h3>
+                <p class="car-info"><i class="fas fa-calendar"></i> {{this.year}}</p>
+                <p class="car-info"><i class="fas fa-tachometer-alt"></i> {{this.mileage}} km</p>
+                <button class="btn btn-sm btn-primary">View Details</button>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+          {{else}}
+          <div class="no-cars">
+            <i class="fas fa-car-side empty-icon"></i>
+            <p>You haven't purchased any cars yet</p>
+            <a href="/product" class="btn btn-primary">Browse Cars</a>
+          </div>
+          {{/if}}
+        </div>
+      </section>
+      {{/if}}
+
+      <section class="user-activity card">
+        <div class="card-header">
+          <h2><i class="fas fa-history"></i> Recent Activity</h2>
+        </div>
+        <div class="card-body">
+          {{#if user.metadata.recentActivity}}
+          <ul class="activity-list">
+            {{#each user.metadata.recentActivity}}
+            <li class="activity-item">
+              <div class="activity-icon">
+                {{#if this.type}}
+                  {{#eq this.type "purchase"}}
+                  <i class="fas fa-shopping-cart"></i>
+                  {{else}}
+                  <i class="fas fa-search"></i>
+                  {{/eq}}
+                {{else}}
+                <i class="fas fa-circle"></i>
+                {{/if}}
+              </div>
+              <div class="activity-content">
+                <span class="activity-date">{{formatDate this.date}}</span>
+                <span class="activity-description">{{this.description}}</span>
+              </div>
+            </li>
+            {{/each}}
+          </ul>
+          {{else}}
+          <p class="no-activity">No recent activity to display</p>
+          {{/if}}
+        </div>
+      </section>
+
+      {{#if (checkAdmin user)}}
+      <section class="performance-metrics card">
+        <div class="card-header">
+          <h2><i class="fas fa-chart-pie"></i> Sales Performance</h2>
+        </div>
+        <div class="card-body">
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <span class="metric-label">Most Popular Brand</span>
+              <span class="metric-value">{{adminStats.popularBrand}}</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Average Sale Price</span>
+              <span class="metric-value">${{adminStats.avgSalePrice}}</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Customer Satisfaction</span>
+              <span class="metric-value success">{{adminStats.satisfaction}}%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      {{/if}}
+    </div>
+  </div>
+</div>
+<script>
+  const user = {{{json user}}};  
+</script>
+<script type="module" src="/js/site/profile.js"></script>
