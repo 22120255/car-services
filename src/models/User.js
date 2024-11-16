@@ -8,9 +8,8 @@ const UserSchema = new mongoose.Schema({
     avatar: { type: String },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     isActivated: { type: Boolean, default: false },
-    verificationCode: { type: String },
+    activationToken: { type: String },
 }, { timestamps: true });
-
 UserSchema.pre('save', async function (next) {
     try {
         const user = this;

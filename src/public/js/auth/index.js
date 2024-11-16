@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordInput.attr('type', type);
         $(this).children().toggleClass('fa-eye-slash').toggleClass('fa-eye');
     });
-    $("#show-confirm-password").on('click', function () {
-        const passwordInput = $('#confirm-password');
+    $("#show-re-password").on('click', function () {
+        const passwordInput = $('#re-password');
         const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
         passwordInput.attr('type', type);
         $(this).children().toggleClass('fa-eye-slash').toggleClass('fa-eye');

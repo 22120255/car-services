@@ -28,10 +28,18 @@ function handleFilterChange(pageValue = '1') {
     localStorage.setItem('perPage', perPage)
     localStorage.setItem('search', search)
 
-    const url = new URL(window.location.origin + '/products')
-    if (priceMin && priceMax) {
-        url.searchParams.append('priceMin', priceMin)
-        url.searchParams.append('priceMax', priceMax)
+
+    if (
+        isNaN(priceMin) ||
+        isNaN(priceMax) ||
+        parseFloat(priceMin) > parseFloat(priceMax)
+    ) {
+        document.getElementById('price-error').innerHTML =
+            'Hãy nhập khoảng phù hợp'
+    } else {
+        document.getElementById('price-error').innerHTML = ''
+        document.getElementById('filterForm').submit()
+        console.log('Form submitted')
     }
     if (year) {
         url.searchParams.append('year', year)
@@ -98,24 +106,11 @@ $(document).ready(function () {
     const transmission = localStorage.getItem('transmission')
     const perPage = localStorage.getItem('perPage')
     const search = localStorage.getItem('search')
-
-    if (priceMin && priceMax) {
-        $('select[name="price"]').val(`${priceMin}-${priceMax}`)
+    if (priceMin) {
+        document.querySelector('input[name="price_min"]').value = priceMin
     }
-    if (year) {
-        $('select[name="year"]').val(year)
-    }
-    if (category) {
-        $('select[name="category"]').val(category)
-    }
-    if (brand) {
-        $('select[name="brand"]').val(brand)
-    }
-    if (status) {
-        $('select[name="status"]').val(status)
-    }
-    if (transmission) {
-        $('select[name="transmission"]').val(transmission)
+    if (priceMax) {
+        document.querySelector('input[name="price_max"]').value = priceMax
     }
     if (perPage) {
         $('select[name="perPage"]').val(perPage)
@@ -138,3 +133,4 @@ clearQuery.on('click', function (event) {
     localStorage.removeItem('search')
     window.location.href = '/products'
 })
+

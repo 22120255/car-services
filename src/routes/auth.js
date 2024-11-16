@@ -15,8 +15,6 @@ router.post("/register/google/store", authController.registerWithGoogle);
 router.post("/register/facebook/store", authController.registerWithFacebook);
 //Function forgot password
 router.get("/forgot-password", authController.forgotPassword);
-router.post("/forgot-password/send-code", authController.sendVerificationCode);
-router.post("/reset-password", authController.resetPassword);
 //Function logout password
 router.get("/logout", authController.logout);
 

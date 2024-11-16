@@ -9,8 +9,6 @@ const {
     brands,
     transmissions,
     statuses,
-    price,
-    perPage,
 } = require('../data/mockProducts')
 
 class ProductController {
@@ -38,10 +36,10 @@ class ProductController {
     //         if (req.query.category) {
     //             query.category = req.query.category
     //         }
-    //         if (req.query.priceMin && req.query.priceMax) {
+    //         if (req.query.price_min && req.query.price_max) {
     //             query.price = {
-    //                 $gte: req.query.priceMin,
-    //                 $lte: req.query.priceMax,
+    //                 $gte: req.query.price_min,
+    //                 $lte: req.query.price_max,
     //             }
     //         }
     //         if (req.query.year) {
@@ -142,17 +140,15 @@ class ProductController {
             res.render('products/index', {
                 products: multipleMongooseToObject(products.products),
                 queries: query,
-                years,
-                categories,
-                brands,
-                transmissions,
-                statuses,
+                years: years,
+                categories: categories,
+                brands: brands,
+                transmissions: transmissions,
+                statuses: statuses,
                 total: products.total,
                 pages: products.totalPages,
                 current: products.currentPage,
                 pagesArray: products.pagesArray,
-                price,
-                perPage,
             })
         } catch (error) {
             console.log(error)
