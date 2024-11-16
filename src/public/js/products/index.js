@@ -117,9 +117,6 @@ $(document).ready(function () {
     if (transmission) {
         $('select[name="transmission"]').val(transmission)
     }
-    if (perPage) {
-        $('select[name="perPage"]').val(perPage)
-    }
     if (search) {
         $('input[name="search"]').val(search)
     }
