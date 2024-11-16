@@ -62,10 +62,18 @@ class AuthController {
         const { token } = req.query;
 
         try {
-            const user = await AuthService.activateAccountByToken(token);
-            res.status(200).json({ message: "Tài khoản của bạn đã được kích hoạt thành công!" });
+            // const user = await AuthService.activateAccountByToken(token);
+            res.render('auth/activate-account', {
+                layout: 'auth',
+                error: false,
+                message: "Tài khoản của bạn đã được kích hoạt thành công!"
+            });
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            res.render('auth/activate-account', {
+                layout: 'auth',
+                error: true,
+                message: "Không thể kích hoạt tài khoản. Token không hợp lệ hoặc đã hết hạn."
+            });
         }
     }
 
@@ -139,7 +147,6 @@ class AuthController {
             await User.findByIdAndUpdate(req.user._id, { lastLogin: Date.now() });
             req.logout(function (err) {
                 if (err) {
-                    return next(err);
                     res.redirect('/dashboard');
                 }
                 res.redirect('/dashboard');

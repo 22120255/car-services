@@ -18,7 +18,7 @@ class AuthService {
     async storeUserWithEmail(email, fullName, password) {
         try {
             const verificationCode = crypto.randomBytes(20).toString('hex');
-            const user = new User({ email, fullName, verificationCode, password });
+            const user = new User({ email, fullName, verificationCode, password, avatar: "/images/avatar-default.jpg" });
             const activationLink = `${process.env.DOMAIN_URL}/auth/activate?token=${verificationCode}`;
 
             await sendEmail(email, "Kích hoạt tài khoản", `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`);
