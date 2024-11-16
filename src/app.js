@@ -43,8 +43,9 @@ app.use(flash())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static('public/css'))
 // HTTP logger
-app.use(morgan('dev'))
-
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'))
+}
 // Custom middleware
 app.use(navigateUser)
 app.use(refreshSession)

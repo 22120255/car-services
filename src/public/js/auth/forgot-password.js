@@ -1,3 +1,4 @@
+import { showModal } from '../common.js';
 import { isEmailValid, isStrongPassword } from '../helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             statusCode: {
                 200() {
                     $('.send-code-button').text("Gửi mã").prop('disabled', false);
-                    $('#success-send-code-modal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
+                    showModal("Gửi mã thành công", "Mã đã được gửi về email của bạn, vui lòng kiểm tra hộp thư lấy mã!")
                     $('#email-availability-message').text('');
                 },
                 404(resp) {
@@ -64,11 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
             data: JSON.stringify({ email, verificationCode, password }),
             statusCode: {
                 200() {
-                    $('#success-change-password-modal').modal('show').css("background-color", "rgba(0, 0, 0, 0.4)");
-
-                    $('#success-change-password-modal').on('hidden.bs.modal', function () {
+                    showModal("Đặt lại mật khẩu", "Mật khẩu đã thay đổi thành công, vui lòng đăng nhập lại!", function () {
                         window.location.href = "/auth/login";
-                    });
+                    })
                 },
                 400(resp) {
                     console.log(resp.responseJSON);
