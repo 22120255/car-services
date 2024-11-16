@@ -17,7 +17,7 @@
                         <div class="row mb-3">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
-                                <button class="btn btn-outline-secondary" id = "btn-search">
+                                <button class="btn btn-outline-secondary" id="btn-search">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -126,6 +126,7 @@
         </div>
         <div class='container'>
             <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
+                <h2 id="search-inform"></h2>
                 {{#each products}}
                     <div class='col-lg-3 col-md-4 col-sm-6'>
                         {{> CardProduct product=this}}
@@ -144,40 +145,27 @@
                 <nav class="mx-auto">
                     <ul class="pagination pagination-lg justify-content-center" style="margin-top: 2rem;">
                         <!-- Previous Button -->
-                        {{#if (gt current 1)}}
-                            <li class="page-item" id="btn-previous">
-                                <a 
-                                    class="page-link rounded-start shadow-sm border-0"
-                                    href="/products?page={{dec current}}&year={{queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
+                        <li class="page-item btn-previous {{#unless (gt current 1)}}disabled{{/unless}}">
+                            <a class="page-link" name = "previous-page" value = "{{dec current}}" href="" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        
+                        <!-- Page Numbers -->
+                        {{!-- {{#each pagesArray}}
+                            <li class="page-item {{#if (eq this ../current)}}active{{/if}}">
+                                <a class="page-link" name="current" value="{{this}}" href="">{{this}}</a>
                             </li>
-                        {{else}}
-                            <li class="page-item disabled" id="btn-previous">
-                                <a class="page-link rounded-start shadow-sm border-0" href="#">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        {{/if}}
-        
+                        {{/each}} --}}
+
                         <!-- Next Button -->
-                        {{#if (lt current pages)}}
-                            <li class="page-item">
-                                <a 
-                                    class="page-link rounded-end shadow-sm border-0" 
-                                    href="/products?page={{inc current}}&year={{../queries.year}}&category={{queries.category}}&brand={{queries.brand}}&status={{queries.status}}&transmission={{queries.transmission}}&price_min={{queries.price_min}}&price_max={{queries.price_max}}"> 
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {{else}}
-                            <li class="page-item disabled">
-                                <a class="page-link rounded-end shadow-sm border-0" href="#"> 
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {{/if}}
+                        <li class="page-item btn-next {{#unless (lt current pages)}}disabled{{/unless}}">
+                            <a class="page-link" name = "next-page" value = "{{inc current}}" href="" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
                     </ul>
-                    <script>
+                     <script>
                         document.addEventListener("DOMContentLoaded", function() {
                             const currentPage = {{current}};
                             const totalPages = {{pages}};
@@ -195,14 +183,13 @@
                                     } else {
                                         paginationItems.push(`
                                             <li class="page-item ${page === currentPage ? 'active' : ''}">
-                                                <a class="page-link shadow-sm border-0 ${page === currentPage ? 'bg-primary text-white' : ''}" 
-                                                   href="/products?page=${page}&year={{../queries.year}}&category={{../queries.category}}&brand={{../queries.brand}}&status={{../queries.status}}&transmission={{../queries.transmission}}&price_min={{../queries.price_min}}&price_max={{../queries.price_max}}">${text}</a>
+                                                <a class="page-link" name="current" value="${text}" href="">${text}</a>
                                             </li>
                                         `);
                                     }
                                 }
 
-                                 if (totalPages <= 5) {
+                                if (totalPages <= 5) {
                                     for (let i = 1; i <= totalPages; i++) {
                                         addPageItem(i);
                                     }
@@ -223,7 +210,7 @@
 
                                     addPageItem(totalPages);
                                 }
-                                $('#btn-previous').after(paginationItems.join(''));
+                                $('.btn-previous').after(paginationItems.join(''));
                             }
                             generatePagination(currentPage, totalPages);
                         })
