@@ -7,7 +7,6 @@ class DashboardController {
         try {
             const mostBoughtProducts =
                 await DashboardService.getMostBoughtProducts({})
-            console.log(mostBoughtProducts)
             res.render('dashboard/home', {
                 products: mostBoughtProducts,
             })
