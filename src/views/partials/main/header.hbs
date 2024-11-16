@@ -29,8 +29,7 @@
                     <li class='nav-item'>
                         <a
                             class='nav-link text-white'
-                            href='/products/'
-                            id='clearQuery'
+                            href='/products'
                         >Product</a>
                     </li>
                     <li class='nav-item'>
@@ -48,17 +47,21 @@
                     <li class='nav-item mx-3'>
                         <a
                             class='nav-link text-white position-relative btn-cart'
-                            href='/dashboard/shops'
+                            {{!-- href='/dashboard/shops' --}}
+                            role="button"
                         >
-                            <i class='fa-solid fa-cart-shopping'></i>
-                            <span
-                                class='position-absolute start-100 translate-middle badge rounded-pill bg-danger btn-cart__badge'
-                            >
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger btn-cart__badge">
                                 99+
-                                <span class='visually-hidden'>unread messages</span>
+                                <span class="visually-hidden">unread messages</span>
                             </span>
                         </a>
-
+                        <script type="module">
+                            import {showToast} from '/js/common.js';
+                            $(".btn-cart").click(function() {
+                                showToast("Info", "This feature is not available yet!");
+                            });
+                        </script>
                     </li>
                     {{#if (hasUser user)}}
                         <li class='nav-item dropdown'>
@@ -72,9 +75,10 @@
                             >
                                 {{#if user.avatar}}
                                     <img
-                                        src='{{user.avatar}}'
+                                        src="{{user.avatar}}"
                                         alt='avatar'
                                         class='avatar'
+                                        {{!-- crossOrigin="anonymous" --}}
                                     />
                                 {{else}}
                                     <img
@@ -86,12 +90,12 @@
                             </a>
                             <ul
                                 class='dropdown-menu'
-                                id='tippy-content'
+                                id="tippy-content"
                                 aria-labelledby='navbarDropdown'
                             >
                                 <li>
                                     <a
-                                        href='/profile/{{user.email}}'
+                                        {{!-- href='/profile/{{user._id}}' --}}
                                         class='d-flex align-items-center gap-1 text-decoration-none dropdown-item'
                                     >
                                         {{#if user.avatar}}
@@ -119,7 +123,7 @@
                                 <li>
                                     <a
                                         class='dropdown-item'
-                                        href='/profile/{{user.email}}'
+                                        href='/profile/{{user._id}}'
                                     >My profile</a>
                                 </li>
                                 <li>
