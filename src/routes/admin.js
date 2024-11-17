@@ -8,5 +8,6 @@ router.get('/users/accounts', checkRole(['admin', 'sadmin']), adminController.ac
 router.patch('/users/update-role', checkRole(['admin', 'sadmin']), adminController.updateRole)
 router.patch('/users/update-status', checkRole(['admin', 'sadmin']), adminController.updateStatus)
 router.delete('/users/:id', checkRole(['admin', 'sadmin']), adminController.deleteUser)
+router.get('/users/:id/details', checkRole(['admin', 'sadmin']), adminController.getUserDetails)
 
 module.exports = router

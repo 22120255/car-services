@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Role = require('../models/Role');
+const logger = require('../config/logger');
 class AdminController {
     // [GET] /admin/users/accounts
     async accounts(req, res) {
@@ -18,7 +19,8 @@ class AdminController {
                 layout: 'admin'
             });
         } catch (error) {
-            res.status(500).json({ success: false, error: error.message });
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau" });
         }
     }
 
@@ -26,17 +28,20 @@ class AdminController {
     async updateRole(req, res) {
         try {
             const { userId, role } = req.body;
+            const targetUser = await User.findById(userId);
 
-            if (req.user.role.permissions.includes('manage_admins')) {
-                await User.findByIdAndUpdate(userId, { role });
-                return res.status(200).json({ message: 'Cập nhật vai trò thành công' });
-            } else {
-                return res.status(403).json({
-                    error: 'Không có quyền cập nhật vai trò'
-                });
+            if (targetUser.role === 'sadmin') {
+                return res.status(403).json({ error: 'Không thể cập nhật vai trò của super admin' });
             }
+
+            if (targetUser.role === 'admin' && !req.user.role.permissions.includes('manage_admins')) {
+                return res.status(403).json({ error: 'Admin không thể cập nhật vai trò của admin khác' });
+            }
+
+            await User.findByIdAndUpdate(userId, { role });
+            return res.status(200).json({ message: 'Cập nhật vai trò thành công' });
         } catch (error) {
-            console.log("error: ", error)
+            logger.error(error.message);
             res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau" });
         }
     }
@@ -59,7 +64,7 @@ class AdminController {
             await User.findByIdAndUpdate(userId, { status });
             return res.status(200).json({ message: 'Cập nhật trạng thái thành công' });
         } catch (error) {
-            console.log("error: ", error)
+            logger.error(error.message);
             res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
         }
     }
@@ -82,7 +87,7 @@ class AdminController {
             // await User.findByIdAndDelete(id);
             res.status(200).json({ message: 'Xóa tài khoản thành công' });
         } catch (error) {
-            console.log("error: ", error)
+            logger.error(error.message);
             res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
         }
     }
@@ -90,10 +95,15 @@ class AdminController {
     // [GET] /admin/users/:id/details
     async getUserDetails(req, res) {
         try {
-            const user = await User.findById(req.params.id);
-            res.render('admin/partials/user-details', { user, layout: false });
+            const user = await User.findById(req.params.id).populate({
+                path: 'metadata.purchasedProducts',
+                model: 'Product'
+            });
+
+            res.render('admin/users/detail', { user, layout: false });
         } catch (error) {
-            res.status(500).json({ success: false, error: error.message });
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
         }
     }
 }

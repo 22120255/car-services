@@ -8,6 +8,7 @@
         "start": "NODE_ENV=production node src/app.js && node src/data/seed/role.js",
         "watch": "node-sass --watch src/styles/ --output src/public/css/",
         "seed:roles": "NODE_ENV=development node src/data/seed/role.js",
+        "seed:users": "NODE_ENV=development node src/data/seed/user.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -41,7 +42,8 @@
         "nodemailer": "^6.9.16",
         "passport": "^0.7.0",
         "passport-local": "^1.0.0",
-        "prettier": "^3.3.3"
+        "prettier": "^3.3.3",
+        "winston": "^3.17.0"
     },
     "devDependencies": {
         "morgan": "^1.10.0",

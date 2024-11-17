@@ -41,6 +41,11 @@
             switch (currentPage) {
                 case "accounts":
                     customCss.href = "/css/admin/users/accounts.css";
+                    let cssChild = document.createElement("link");
+                    cssChild.rel = "stylesheet";
+                    cssChild.href = "/css/admin/users/detail.css";
+                    document.head.appendChild(cssChild);
+
                     break;
                 default:
                     customCss.href = "/css/product/detail.css";

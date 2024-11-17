@@ -3,32 +3,68 @@
 .wrapper {
     margin-top: $height-header;
 }
+
 .header-area {
     background-color: $bg-header;
 }
+
 .accounts-management {
     padding: 20px;
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+
+        .filters {
+            width: 100%;
+
+            .row {
+                margin-bottom: 1rem;
+
+                .col {
+                    padding: 0 0.5rem;
+                }
+            }
+        }
+    }
+
+    .table {
+        margin-top: 1rem;
+
+        th {
+            white-space: nowrap;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .btn-group {
+            .btn {
+                padding: 0.25rem 0.5rem;
+            }
+        }
+    }
+
+    .form-select, .form-control {
+        width: 100%;
+    }
+
+    .pagination {
+        margin-bottom: 0;
+    }
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.filters {
-    display: flex;
-    gap: 10px;
-}
-
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.form-select, .form-control {
-    max-width: 200px;
+#userDetailsModal {
+    .modal-dialog {
+        max-width: 800px;
+    }
 }

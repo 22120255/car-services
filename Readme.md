@@ -7,6 +7,8 @@
     -   npm run watch
 -   Seed roles
     -   npm run seed:roles
+-   Seed users
+    -   npm run seed:users
 
 2. Các permission
     - manage_users: quản lí, thực hiện các thao tác đối với tài khoản của user

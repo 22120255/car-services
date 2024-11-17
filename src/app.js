@@ -1,5 +1,7 @@
-const dotenv = require('dotenv');
 const path = require('path')
+require('dotenv').config({
+    path: path.resolve(process.cwd(), process.env.NODE_ENV === 'production' ? '.env' : '.env.dev')
+});
 const express = require('express')
 const morgan = require('morgan')
 const methodOverride = require('method-override')
@@ -15,9 +17,6 @@ const refreshSession = require('./middleware/refreshSession')
 
 const app = express()
 const store = db.createSessionStore(session)
-
-const envPath = process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
-dotenv.config({ path: envPath })
 
 // Session
 app.use(

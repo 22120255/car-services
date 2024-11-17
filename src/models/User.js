@@ -19,12 +19,9 @@ const UserSchema = new mongoose.Schema({
     metadata: {
         phone: { type: String },
         address: { type: String },
-        purchasedCars: [{
-            brand: String,
-            model: String,
-            year: Number,
-            mileage: Number,
-            image: String
+        purchasedProducts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
         }],
         recentActivity: [{
             type: { type: String, enum: ['purchase', 'search'] },
