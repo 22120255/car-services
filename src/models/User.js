@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Role = require('./Role');
 
 const UserSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, select: false },
     avatar: { type: String },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    role: {
+        type: String,
+        ref: 'Role',
+        default: 'user'
+    },
     status: { type: String, enum: ['active', 'inactive', 'suspended'], default: 'inactive' },
     verificationCode: { type: String },
     lastLogin: { type: Date },
@@ -14,12 +19,9 @@ const UserSchema = new mongoose.Schema({
     metadata: {
         phone: { type: String },
         address: { type: String },
-        purchasedCars: [{
-            brand: String,
-            model: String,
-            year: Number,
-            mileage: Number,
-            image: String
+        purchasedProducts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
         }],
         recentActivity: [{
             type: { type: String, enum: ['purchase', 'search'] },
@@ -50,4 +52,5 @@ UserSchema.pre('save', async function (next) {
         return next(error);
     }
 });
+
 module.exports = mongoose.model('User', UserSchema, 'users')
