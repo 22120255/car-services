@@ -8,9 +8,9 @@
           <img src="{{user.avatar}}" alt="{{user.fullName}}'s avatar" class="profile-avatar">
         </button>
         <input type="file" id="avatar-input" accept="image/*" style="display: none"/>
-        {{#if (checkAdmin user)}}
+        {{#unless (isUser user.role.name)}}
         <span class="admin-badge"><i class="fas fa-crown"></i> Admin</span>
-        {{/if}}
+        {{/unless}}
       </div>
       <div class="user-info">
         <h1 class="profile-name">{{user.fullName}}</h1>
@@ -107,7 +107,7 @@
         </div>
       </section>
 
-      {{#if (checkAdmin user)}}
+      {{#unless (isUser user.role.name)}}
       <section class="admin-dashboard card">
         <div class="card-header">
           <h2><i class="fas fa-chart-line"></i> Car Sales Overview</h2>
@@ -181,7 +181,7 @@
           {{/if}}
         </div>
       </section>
-      {{/if}}
+      {{/unless}}
 
       <section class="user-activity card">
         <div class="card-header">
@@ -216,7 +216,7 @@
         </div>
       </section>
 
-      {{#if (checkAdmin user)}}
+      {{#unless (isUser user.role.name)}}
       <section class="performance-metrics card">
         <div class="card-header">
           <h2><i class="fas fa-chart-pie"></i> Sales Performance</h2>
@@ -238,7 +238,7 @@
           </div>
         </div>
       </section>
-      {{/if}}
+      {{/unless}}
     </div>
   </div>
 </div>

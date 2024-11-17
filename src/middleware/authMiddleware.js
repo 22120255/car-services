@@ -1,3 +1,5 @@
+const Role = require('../models/Role');
+
 const navigateUser = (req, res, next) => {
     res.locals.user = req.user || null;
 
@@ -9,11 +11,12 @@ const isAuthenticated = (req, res, next) => {
     }
     res.redirect('/auth/login');
 }
-const checkRole = (role) => {
-    return (req, res, next) => {
-        if (req.user.role === role) {
+const checkRole = (nameRoles) => {
+    return async (req, res, next) => {
+        if (nameRoles.some(name => req.user.role.name === name)) {
             return next();
         }
+
         res.redirect('/auth/login');
     }
 }

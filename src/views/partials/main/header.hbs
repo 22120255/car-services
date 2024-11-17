@@ -126,6 +126,14 @@
                                         href='/profile/{{user._id}}'
                                     >My profile</a>
                                 </li>
+                                {{#unless (isUser user.role.name)}}
+                                    <li>
+                                        <a
+                                            class='dropdown-item'
+                                            href='/admin/users/accounts'
+                                        >Manage accounts</a>
+                                    </li>
+                                {{/unless}}
                                 <li>
                                     <div class='dropdown-divider'></div>
                                 </li>

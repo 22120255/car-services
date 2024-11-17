@@ -9,7 +9,12 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async (id, done) => {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate({
+        path: 'role',
+        model: 'Role',
+        localField: 'role',
+        foreignField: 'name'
+    });
     done(null, user);
 });
 
