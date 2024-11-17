@@ -14,19 +14,15 @@
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
-                        <div class="row justify-content-center mb-4">
-                            <div class="col-md-8 col-lg-6">
-                                <div class="input-group input-group-lg">
-                                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button" id="btn-search">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="input-group input-group-sm search-input">
+                                <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
+                                <button class="btn btn-outline-secondary" id="btn-search">
+                                    <i class="fas fa-search"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="row justify-content-around mx-0">
+                        <div class="row justify-content-between mx-0">
                         <!-- Select Year -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
@@ -155,13 +151,6 @@
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        
-                        <!-- Page Numbers -->
-                        {{!-- {{#each pagesArray}}
-                            <li class="page-item {{#if (eq this ../current)}}active{{/if}}">
-                                <a class="page-link" name="current" value="{{this}}" href="">{{this}}</a>
-                            </li>
-                        {{/each}} --}}
 
                         <!-- Next Button -->
                         <li class="page-item btn-next {{#unless (lt current pages)}}disabled{{/unless}}">
@@ -235,6 +224,5 @@
         </div>
     </div>
 </section>
-<script src="/vender/js/jquery.js"></script>
 <script src="/js/products/index.js"></script>
 

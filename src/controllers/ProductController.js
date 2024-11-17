@@ -106,7 +106,7 @@ class ProductController {
         const reqPerPage = parseInt(req.query.perPage) || 8
         const query = {}
         const search = req.query.search
-        console.log(search)
+
         if (req.query.year) query.year = req.query.year
         if (req.query.category) query.category = req.query.category
         if (req.query.brand) query.brand = req.query.brand
@@ -137,25 +137,24 @@ class ProductController {
         }
 
         try {
-            const products = await ProductService.getPaginatedProducts(
+            const { products, total, totalPages, currentPage } = await ProductService.getPaginatedProducts(
                 query,
                 page,
                 reqPerPage
             )
             query.perPage = reqPerPage
             res.render('products/index', {
-                products: multipleMongooseToObject(products.products),
+                products: multipleMongooseToObject(products),
                 queries: query,
                 years,
                 categories,
                 brands,
                 transmissions,
                 statuses,
-                total: products.total,
-                pages: products.totalPages,
-                current: products.currentPage,
-                pagesArray: products.pagesArray,
+                total,
                 price,
+                pages: totalPages,
+                current: currentPage,
                 perPage,
             })
         } catch (error) {

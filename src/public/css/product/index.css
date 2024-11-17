@@ -75,3 +75,12 @@
         transform: translateY(0);
     }
 }
+
+.search-input input {
+    font-size: 1rem !important;
+    padding: 12px 20px !important;
+}
+
+.search-input button {
+    padding: 12px 20px !important;
+}
