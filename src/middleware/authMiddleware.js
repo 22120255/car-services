@@ -1,3 +1,5 @@
+const Role = require('../models/Role');
+
 const navigateUser = (req, res, next) => {
     res.locals.user = req.user || null;
 
@@ -9,11 +11,18 @@ const isAuthenticated = (req, res, next) => {
     }
     res.redirect('/auth/login');
 }
-const checkRole = (role) => {
-    return (req, res, next) => {
-        if (req.user.role === role) {
+const checkRole = (nameRoles) => {
+    return async (req, res, next) => {
+        const roles = await Promise.all(
+            nameRoles.map(name => Role.findOne({ name }))
+        );
+
+        const hasRole = roles.some(role => req.user.role === role._id);
+
+        if (hasRole) {
             return next();
         }
+
         res.redirect('/auth/login');
     }
 }

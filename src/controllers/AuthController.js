@@ -12,7 +12,7 @@ class AuthController {
         });
     }
 
-    //[POST] /login/email/verify]
+    //[POST] /login/email/verify
     async verifyEmail(req, res, next) {
         passport.authenticate('local', {
             successReturnToOrRedirect: '/dashboard',

@@ -3,3 +3,5 @@
 -   Run
     -   npm start
     -   npm run watch
+-   Seed roles
+    -   npm run seed:roles

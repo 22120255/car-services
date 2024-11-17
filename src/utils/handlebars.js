@@ -31,7 +31,13 @@ module.exports = {
         };
         return new Date(date).toLocaleDateString('vi-VN', options);
     },
-    checkAdmin(user) {
+    isUser(user) {
+        return user.role === 'user';
+    },
+    isAdmin(user) {
         return user.role === 'admin';
+    },
+    isSuperAdmin(user) {
+        return user.role === 'sadmin';
     }
 }

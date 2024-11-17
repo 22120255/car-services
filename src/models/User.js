@@ -1,12 +1,21 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const Role = require('./Role');
 
 const UserSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, select: false },
     avatar: { type: String },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    role: {
+        type: Number,
+        ref: 'Role',
+        required: true,
+        default: async function () {
+            const userRole = await Role.findOne({ name: 'user' });
+            return userRole._id;
+        }
+    },
     status: { type: String, enum: ['active', 'inactive', 'suspended'], default: 'inactive' },
     verificationCode: { type: String },
     lastLogin: { type: Date },
@@ -50,4 +59,5 @@ UserSchema.pre('save', async function (next) {
         return next(error);
     }
 });
+
 module.exports = mongoose.model('User', UserSchema, 'users')
