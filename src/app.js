@@ -1,4 +1,4 @@
-require('dotenv').config()
+const dotenv = require('dotenv');
 const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
@@ -15,6 +15,10 @@ const refreshSession = require('./middleware/refreshSession')
 
 const app = express()
 const store = db.createSessionStore(session)
+
+const envPath = process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
+dotenv.config({ path: envPath })
+
 // Session
 app.use(
     session({

@@ -8,11 +8,7 @@ class SiteController {
 
     // [GET] /profile/:id
     async profile(req, res) {
-        const user = await User.findById(req.params.id)
-        console.log("user", user)
-        res.render("site/profile", {
-            user
-        })
+        res.render("site/profile")
     }
 
     // [POST] /user/avatar/store

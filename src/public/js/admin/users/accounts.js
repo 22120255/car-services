@@ -1,23 +1,29 @@
+import { showModal, showToast } from '../../common.js';
+
 document.addEventListener('DOMContentLoaded', function () {
     // Xử lý thay đổi role
     $('.role-select').change(function () {
         const userId = $(this).closest('tr').data('user-id');
         const newRole = $(this).val();
+        const $select = $(this);
 
         $.ajax({
             url: '/admin/users/update-role',
             method: 'PATCH',
             data: { userId, role: newRole },
-            success: function (response) {
-                if (response.success) {
-                    showToast('Success', 'Cập nhật vai trò thành công');
+            statusCode: {
+                200: function (response) {
+                    showToast('Success', response.message);
+                },
+                403: function (response) {
+                    showToast('Error', response.error);
+                },
+                500: function (response) {
+                    showToast('Error', response.error);
+                    // Reset về giá trị cũ
+                    $select.val($select.find('option:selected').val());
                 }
             },
-            error: function () {
-                showToast('Error', 'Không thể cập nhật vai trò');
-                // Reset về giá trị cũ
-                $(this).prop('selectedIndex', 0);
-            }
         });
     });
 
@@ -30,46 +36,52 @@ document.addEventListener('DOMContentLoaded', function () {
             url: '/admin/users/update-status',
             method: 'PATCH',
             data: { userId, status: newStatus },
-            success: function (response) {
-                if (response.success) {
-                    showToast('Success', 'Cập nhật trạng thái thành công');
+            statusCode: {
+                200: function (response) {
+                    showToast('Success', response.message);
+                },
+                403: function (response) {
+                    showToast('Error', response.error);
+                },
+                500: function (response) {
+                    showToast('Error', response.error);
+                    $(this).prop('selectedIndex', 0);
                 }
             },
-            error: function () {
-                showToast('Error', 'Không thể cập nhật trạng thái');
-                $(this).prop('selectedIndex', 0);
-            }
         });
     });
 
     // Xử lý xem chi tiết
-    $('.view-details').click(function () {
-        const userId = $(this).closest('tr').data('user-id');
+    // $('.view-details').click(function () {
+    //     const userId = $(this).closest('tr').data('user-id');
 
-        $.get(`/admin/users/${userId}/details`, function (data) {
-            $('#userDetailsModal .modal-body').html(data);
-        });
-    });
+    //     $.get(`/admin/users/${userId}/details`, function (data) {
+    //         $('#userDetailsModal .modal-body').html(data);
+    //     });
+    // });
 
     // Xử lý xóa user
     $('.delete-user').click(function () {
         const userId = $(this).closest('tr').data('user-id');
 
-        if (confirm('Bạn có chắc muốn xóa tài khoản này?')) {
+        showModal("Xoá tài khoản", "Bạn có chắc chắn muốn xóa tài khoản này không?", function () {
             $.ajax({
                 url: `/admin/users/${userId}`,
                 method: 'DELETE',
-                success: function (response) {
-                    if (response.success) {
-                        $(`tr[data-user-id="${userId}"]`).remove();
-                        showToast('Success', 'Xóa tài khoản thành công');
+                statusCode: {
+                    200: function (response) {
+                        showToast('Success', response.message);
+                        $(`tr[data-user-id=${userId}]`).remove();
+                    },
+                    403: function (response) {
+                        showToast('Error', response.error);
+                    },
+                    500: function (response) {
+                        showToast('Error', response.error);
                     }
-                },
-                error: function () {
-                    showToast('Error', 'Không thể xóa tài khoản');
                 }
             });
-        }
+        });
     });
 
     // Xử lý tìm kiếm

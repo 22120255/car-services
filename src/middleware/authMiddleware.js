@@ -13,13 +13,7 @@ const isAuthenticated = (req, res, next) => {
 }
 const checkRole = (nameRoles) => {
     return async (req, res, next) => {
-        const roles = await Promise.all(
-            nameRoles.map(name => Role.findOne({ name }))
-        );
-
-        const hasRole = roles.some(role => req.user.role === role._id);
-
-        if (hasRole) {
+        if (nameRoles.some(name => req.user.role.name === name)) {
             return next();
         }
 

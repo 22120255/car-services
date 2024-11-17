@@ -8,13 +8,9 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, select: false },
     avatar: { type: String },
     role: {
-        type: Number,
+        type: String,
         ref: 'Role',
-        required: true,
-        default: async function () {
-            const userRole = await Role.findOne({ name: 'user' });
-            return userRole._id;
-        }
+        default: 'user'
     },
     status: { type: String, enum: ['active', 'inactive', 'suspended'], default: 'inactive' },
     verificationCode: { type: String },

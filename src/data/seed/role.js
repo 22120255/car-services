@@ -1,50 +1,32 @@
 const mongoose = require('mongoose');
-const Role = require('../../models/Roles');
-require('dotenv').config();
+const Role = require('../../models/Role');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: process.env.NODE_ENV === 'development' ? `.env.dev` : '.env' });
 
 const roles = [
     {
-        _id: 1,
         name: 'sadmin',
         description: 'Super Administrator - Có toàn quyền quản lý hệ thống',
         permissions: [
-            'view_users',
-            'edit_users',
-            'delete_users',
-            'disable_users',
+            'manage_users',
             'manage_admins',
-            'manage_cars',
-            'view_stats',
-            'manage_system',
-            'view_own_profile',
-            'edit_own_profile'
+            'manage_system'
         ],
         isActive: true
     },
     {
-        _id: 2,
         name: 'admin',
         description: 'Administrator - Quản lý người dùng và nội dung',
         permissions: [
-            'view_users',
-            'edit_users',
-            'disable_users',
-            'manage_cars',
-            'view_stats',
-            'manage_system',
-            'view_own_profile',
-            'edit_own_profile'
+            'manage_users',
+            'manage_system'
         ],
         isActive: true
     },
     {
-        _id: 3,
         name: 'user',
         description: 'Người dùng thông thường',
-        permissions: [
-            'view_own_profile',
-            'edit_own_profile'
-        ],
         isActive: true
     }
 ];

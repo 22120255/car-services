@@ -1,12 +1,15 @@
 const User = require('../models/User');
-
+const Role = require('../models/Role');
 class AdminController {
     // [GET] /admin/users/accounts
     async accounts(req, res) {
         try {
-            const users = await User.find({}).select('+password');
+            const users = await User.find({})
+                .select('+password')
+
             const usersWithFlags = users.map(user => ({
                 ...user.toObject(),
+                role: user.role,
                 isCurrentUser: user._id.toString() === req.user._id.toString()
             }));
 
@@ -24,17 +27,17 @@ class AdminController {
         try {
             const { userId, role } = req.body;
 
-            if (userId === req.user._id.toString()) {
+            if (req.user.role.permissions.includes('manage_admins')) {
+                await User.findByIdAndUpdate(userId, { role });
+                return res.status(200).json({ message: 'Cập nhật vai trò thành công' });
+            } else {
                 return res.status(403).json({
-                    success: false,
-                    error: 'Cannot change your own role'
+                    error: 'Không có quyền cập nhật vai trò'
                 });
             }
-
-            await User.findByIdAndUpdate(userId, { role });
-            res.json({ success: true });
         } catch (error) {
-            res.status(500).json({ success: false, error: error.message });
+            console.log("error: ", error)
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau" });
         }
     }
 
@@ -42,18 +45,22 @@ class AdminController {
     async updateStatus(req, res) {
         try {
             const { userId, status } = req.body;
+            const targetUser = await User.findById(userId);
 
-            if (userId === req.user._id.toString()) {
-                return res.status(403).json({
-                    success: false,
-                    error: 'Cannot change your own status'
-                });
+            // Kiểm tra quyền thay đổi status
+            if (targetUser.role === 'sadmin') {
+                return res.status(403).json({ error: 'Không thể thay đổi trạng thái của super admin' });
+            }
+
+            if (targetUser.role === 'admin' && !req.user.role.permissions.includes('manage_admins')) {
+                return res.status(403).json({ error: 'Admin không thể thay đổi trạng thái của admin khác' });
             }
 
             await User.findByIdAndUpdate(userId, { status });
-            res.json({ success: true });
+            return res.status(200).json({ message: 'Cập nhật trạng thái thành công' });
         } catch (error) {
-            res.status(500).json({ success: false, error: error.message });
+            console.log("error: ", error)
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
         }
     }
 
@@ -61,18 +68,22 @@ class AdminController {
     async deleteUser(req, res) {
         try {
             const { id } = req.params;
+            const targetUser = await User.findById(id);
 
-            if (id === req.user._id.toString()) {
-                return res.status(403).json({
-                    success: false,
-                    error: 'Cannot delete your own account'
-                });
+            // Kiểm tra quyền xóa
+            if (targetUser.role === 'sadmin') {
+                return res.status(403).json({ error: 'Không thể xoá tài khoản super admin' });
             }
 
-            await User.findByIdAndDelete(id);
-            res.json({ success: true });
+            if (targetUser.role === 'admin' && !req.user.role.permissions.includes('manage_admins')) {
+                return res.status(403).json({ error: 'Admin không thể xoá tài khoản của admin khác' });
+            }
+
+            // await User.findByIdAndDelete(id);
+            res.status(200).json({ message: 'Xóa tài khoản thành công' });
         } catch (error) {
-            res.status(500).json({ success: false, error: error.message });
+            console.log("error: ", error)
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
         }
     }
 
