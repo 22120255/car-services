@@ -122,14 +122,18 @@ class ProductController {
         if (search) {
             const keywords = search.split(' ')
 
-            const conditions = keywords.map((key) => ({
+            const brandAndModel = keywords.map((key) => ({
                 $or: [
                     { brand: { $regex: key, $options: 'i' } },
                     { model: { $regex: key, $options: 'i' } },
-                    { description: { $regex: key, $options: 'i' } },
                 ],
             }))
-            query.$and = conditions
+
+            const descriptionSearch = keywords.map((key) => ({
+                description: { $regex: key, $options: 'i' },
+            }))
+
+            query.$or = [...brandAndModel, ...descriptionSearch]
         }
 
         try {

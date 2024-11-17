@@ -1,11 +1,3 @@
-// const filterForm = $('#filterForm')
-// const filterInputs = $('#filterForm select, filterForm input')
-// const clearQuery = $('#clearQuery')
-// const pageLink = $('.pagination .page-link')
-// const btnSearch = $('#btn-search')
-// const inputSearch = $('input[name="search"]')
-// const searchInform = $('#search-inform')
-
 function handleFilterChange(pageValue = '1') {
     const priceValue = $('select[name="price"]').val()
     const [priceMin, priceMax] = priceValue ? priceValue.split('-') : ['', '']
@@ -118,6 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (transmission) {
         $('select[name="transmission"]').val(transmission)
     }
+    if (perPage) {
+        $('select[name="perPage"]').val(perPage)
+    }
     if (search) {
         $('input[name="search"]').val(search)
     }
@@ -135,4 +130,3 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = '/products'
     })
 })
-
