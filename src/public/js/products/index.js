@@ -1,6 +1,5 @@
 const filterForm = $('#filterForm')
 const filterInputs = $('#filterForm select, filterForm input')
-const clearQuery = $('#clearQuery')
 const pageLink = $('.pagination .page-link')
 const btnSearch = $('#btn-search')
 const inputSearch = $('input[name="search"]')
@@ -123,18 +122,4 @@ $(document).ready(function () {
     if (search) {
         $('input[name="search"]').val(search)
     }
-})
-
-clearQuery.on('click', function (event) {
-    event.preventDefault()
-    localStorage.removeItem('year')
-    localStorage.removeItem('category')
-    localStorage.removeItem('brand')
-    localStorage.removeItem('status')
-    localStorage.removeItem('transmission')
-    localStorage.removeItem('priceMin')
-    localStorage.removeItem('priceMax')
-    localStorage.removeItem('perPage')
-    localStorage.removeItem('search')
-    window.location.href = '/products'
 })
