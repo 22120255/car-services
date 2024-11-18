@@ -1,0 +1,25 @@
+<div class="activate-account">
+    <div class="activate-content">
+        <div class="activate-icon {{#if error}}error{{else}}success{{/if}}">
+            <i class="fas {{#if error}}fa-times{{else}}fa-check{{/if}}"></i>
+        </div>
+        <h2 class="activate-title">{{#if error}}Kích hoạt thất bại{{else}}Kích hoạt thành công{{/if}}</h2>
+        <p class="activate-message">{{message}}</p>
+        <p class="activate-note">Trang sẽ tự động chuyển hướng sau <span id="countdown">5</span> giây</p>
+    </div>
+</div>
+
+<script>
+    let timeLeft = 5;
+    const countdownElement = document.getElementById('countdown');
+    
+    const countdown = setInterval(() => {
+        timeLeft--;
+        countdownElement.textContent = timeLeft;
+        
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            window.location.href = '/dashboard'; 
+        }
+    }, 1000);
+</script>

@@ -1,5 +1,6 @@
 const User = require("../models/User")
-const cloudinary = require('../config/cloudinary')
+const cloudinary = require('../config/cloudinary');
+const logger = require("../config/logger");
 class SiteController {
     // [GET] /
     index(req, res) {
@@ -8,13 +9,10 @@ class SiteController {
 
     // [GET] /profile/:id
     async profile(req, res) {
-        const user = await User.findById(req.params.id)
-        res.render("site/profile", {
-            user
-        })
+        res.render("site/profile")
     }
 
-    // [POST] /user/avatar/store
+    // [PATCH] /user/avatar/store
     async updateAvatar(req, res) {
         try {
             const pathFile = req.file.path;
@@ -25,14 +23,12 @@ class SiteController {
             });
 
             res.status(200).json({
-                success: true,
                 avatarUrl: pathFile
             });
 
         } catch (error) {
-            console.error('Error updating avatar:', error);
+            logger.error(error.message);
             res.status(500).json({
-                success: false,
                 error: 'Failed to update avatar'
             });
         }

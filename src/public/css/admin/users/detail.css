@@ -1,0 +1,43 @@
+.container {
+  padding: 2rem 0; }
+  .container .rounded-circle {
+    border: 3px solid #eee;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+  .container h4 {
+    margin: 1rem 0 0.5rem; }
+  .container .text-muted {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem; }
+  .container .badge {
+    font-size: 0.8rem;
+    padding: 0.5em 1em; }
+  .container .card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem; }
+    .container .card .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0; }
+    .container .card hr {
+      margin: 1rem 0; }
+    .container .card .row {
+      align-items: center; }
+    .container .card strong {
+      color: #666; }
+  .container .table {
+    margin-bottom: 0; }
+    .container .table th {
+      border-top: none;
+      font-weight: 600;
+      color: #666; }
+    .container .table td {
+      vertical-align: middle; }
+  .container .list-group-item {
+    border-left: none;
+    border-right: none; }
+    .container .list-group-item:first-child {
+      border-top: none; }
+    .container .list-group-item:last-child {
+      border-bottom: none; }
+    .container .list-group-item .text-muted {
+      font-size: 0.85rem; }

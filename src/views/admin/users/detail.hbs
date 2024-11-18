@@ -1,0 +1,111 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 text-center mb-4">
+            <img src="{{user.avatar}}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
+            <h4>{{user.fullName}}</h4>
+            <p class="text-muted">{{user.role}}</p>
+            <span class="badge {{#if (eq user.status 'active')}}bg-success{{else if (eq user.status 'inactive')}}bg-warning{{else}}bg-danger{{/if}}">
+                {{user.status}}
+            </span>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Thông tin cá nhân</h5>
+                    <hr>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{user.email}}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong>Số điện thoại:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{user.metadata.phone}}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong>Địa chỉ:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{user.metadata.address}}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong>Đăng nhập lần cuối:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {{#if user.lastLogin}}
+                                {{formatDate user.lastLogin}}
+                            {{else}}
+                                Chưa đăng nhập
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{#if user.metadata.purchasedProducts.length}}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Xe đã mua</h5>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Hãng xe</th>
+                                    <th>Model</th>
+                                    <th>Năm SX</th>
+                                    <th>Số KM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each user.metadata.purchasedProducts}}
+                                <tr>
+                                    <td>{{this.brand}}</td>
+                                    <td>{{this.model}}</td>
+                                    <td>{{this.year}}</td>
+                                    <td>{{this.mileage}} km</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#if user.metadata.recentActivity.length}}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Hoạt động gần đây</h5>
+                    <hr>
+                    <ul class="list-group">
+                        {{#each user.metadata.recentActivity}}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>{{this.description}}</span>
+                                <small class="text-muted">{{formatDate this.date}}</small>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
