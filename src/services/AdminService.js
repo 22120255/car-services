@@ -2,8 +2,34 @@ const User = require('../models/User');
 const logger = require('../config/logger');
 
 class AdminService {
-    async getUsers() {
-        return await User.find({}).select('+password');
+    async getUsers({ limit, offset, key, direction, search, status, role }) {
+        try {
+            let filter = {};
+            if (search) {
+                filter.$or = [
+                    { fullName: { $regex: search, $options: 'i' } },
+                    { email: { $regex: search, $options: 'i' } }
+                ];
+            }
+            if (status) {
+                filter.status = status;
+            }
+            if (role) {
+                filter.role = role;
+            }
+            let sort = {};
+            if (key) {
+                direction ||= 'asc';
+                const sortDirection = direction === 'asc' ? 1 : -1;
+                sort[key] = sortDirection;
+            }
+            const users = await User.find(filter).skip(offset * limit).limit(limit).sort(sort);
+            const total = await User.countDocuments(filter);
+
+            return { users, total };
+        } catch (error) {
+            throw error;
+        }
     }
 
     async updateUserRole(userId, role, currentUser) {
