@@ -4,13 +4,16 @@
       <div class="avatar-wrapper">
          <button id="avatar-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-html="true" data-bs-container=".avatar-wrapper" 
-            title='<span id="change-avatar-btn">Change avatar</span>'>
+            title='<span id="change-avatar-btn"><i class="fa-solid fa-camera me-2"></i>Change avatar</span>'>
           <img src="{{user.avatar}}" alt="{{user.fullName}}'s avatar" class="profile-avatar">
         </button>
         <input type="file" id="avatar-input" accept="image/*" style="display: none"/>
-        {{#unless (isUser user.role.name)}}
-        <span class="admin-badge"><i class="fas fa-crown"></i> Admin</span>
-        {{/unless}}
+        {{#if (isAdmin user.role.name)}}
+          <span class="admin-badge"><i class="fas fa-crown"></i> Admin</span>
+        {{/if}}
+        {{#if (isSuperAdmin user.role.name)}}
+          <span class="admin-badge"><i class="fas fa-crown"></i>Super Admin</span>
+        {{/if}}
       </div>
       <div class="user-info">
         <h1 class="profile-name">{{user.fullName}}</h1>
