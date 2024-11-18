@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="/vender/css/bootsnav.css" />
     <link rel="stylesheet" href="/vender/css/style.css" />
     <link rel="stylesheet" href="/vender/css/responsive.css" />
-    <link rel="stylesheet" href="/vender/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/common.css" />
     <link rel="stylesheet" href="/css/partials/main.css" />
     <script>
@@ -40,7 +40,12 @@
 
             switch (currentPage) {
                 case "accounts":
-                    customCss.href = "/css/admin/accounts.css";
+                    customCss.href = "/css/admin/users/accounts.css";
+                    let cssChild = document.createElement("link");
+                    cssChild.rel = "stylesheet";
+                    cssChild.href = "/css/admin/users/detail.css";
+                    document.head.appendChild(cssChild);
+
                     break;
                 default:
                     customCss.href = "/css/product/detail.css";
@@ -59,18 +64,14 @@
     <main>
         {{{body}}}
     </main>
-    {{> footer}}
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{> Toast}}
+    {{> ModalNotify}}
+    {{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script src="/vender/js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     <script src="/vender/js/owl.carousel.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeo5FhTA5Eqa1vXdxMq1mOMzWj36JS+d6NdqhK9K9GUVgQ6Q"
-        crossorigin="anonymous"
-    ></script>
+    <script src="/vender/js/bootstrap.js"></script>
     <script src="/vender/js/custom.js"></script>
 </body>
 </html>

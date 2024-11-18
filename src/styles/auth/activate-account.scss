@@ -1,0 +1,63 @@
+.activate-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    width: 100%;
+
+    .activate-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .activate-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        
+        &.success {
+            background-color: #d4edda;
+            color: #28a745;
+        }
+        
+        &.error {
+            background-color: #f8d7da;
+            color: #dc3545;
+        }
+
+        i {
+            font-size: 40px;
+        }
+    }
+
+    .activate-title {
+        font-size: 24px;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .activate-message {
+        color: #666;
+        margin-bottom: 1rem;
+    }
+
+    .activate-note {
+        color: #888;
+        font-size: 14px;
+        
+        #countdown {
+            font-weight: bold;
+            color: #666;
+        }
+    }
+}  

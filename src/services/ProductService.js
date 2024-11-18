@@ -2,7 +2,6 @@ const Product = require('../models/Product')
 const { multipleMongooseToObject } = require('../utils/mongoose')
 
 class ProductService {
-    // [GET] /products/filter
     getFilteredProducts = async (query) => {
         try {
             const products = await Product.find(query)
@@ -34,10 +33,10 @@ class ProductService {
                 total: count,
                 totalPages: Math.ceil(count / perPage),
                 currentPage: page,
-                pagesArray: Array.from(
-                    { length: Math.ceil(count / perPage) },
-                    (_, i) => i + 1
-                ),
+                // pagesArray: Array.from(
+                //     { length: Math.ceil(count / perPage) },
+                //     (_, i) => i + 1
+                // ),
             }
         } catch (error) {
             throw new Error(error)

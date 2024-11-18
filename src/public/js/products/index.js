@@ -1,11 +1,3 @@
-const filterForm = $('#filterForm')
-const filterInputs = $('#filterForm select, filterForm input')
-const clearQuery = $('#clearQuery')
-const pageLink = $('.pagination .page-link')
-const btnSearch = $('#btn-search')
-const inputSearch = $('input[name="search"]')
-const searchInform = $('#search-inform')
-
 function handleFilterChange(pageValue = '1') {
     const priceValue = $('select[name="price"]').val()
     const [priceMin, priceMax] = priceValue ? priceValue.split('-') : ['', '']
@@ -62,33 +54,34 @@ function handleFilterChange(pageValue = '1') {
 }
 
 // Xử lí các sự kiện
-
-filterInputs.on('change', function (e) {
-    e.preventDefault()
-    const page = '1'
-    handleFilterChange(page)
-})
-
-$(document).on('click', '.pagination .page-link', function (e) {
-    e.preventDefault()
-    const page = $(this).attr('value')
-    if (page) {
-        handleFilterChange(page)
-    }
-})
-
-inputSearch.on('keypress', function (e) {
-    if (e.key === 'Enter') {
+document.addEventListener("DOMContentLoaded", function () {
+    $('#filterForm select, filterForm input').on('change', function (e) {
         e.preventDefault()
-    }
+        const page = '1'
+        handleFilterChange(page)
+    })
+
+    $(document).on('click', '.pagination .page-link', function (e) {
+        e.preventDefault()
+        const page = $(this).attr('value')
+        if (page) {
+            handleFilterChange(page)
+        }
+    })
+
+    $('input[name="search"]').on('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+        }
+    })
+
+    $('#btn-search').on('click', function (e) {
+        e.preventDefault()
+        handleFilterChange()
+    })
 })
 
-btnSearch.on('click', function (e) {
-    e.preventDefault()
-    handleFilterChange()
-})
-
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     const priceMin = localStorage.getItem('priceMin')
     const priceMax = localStorage.getItem('priceMax')
     const year = localStorage.getItem('year')
@@ -123,18 +116,17 @@ $(document).ready(function () {
     if (search) {
         $('input[name="search"]').val(search)
     }
-})
-
-clearQuery.on('click', function (event) {
-    event.preventDefault()
-    localStorage.removeItem('year')
-    localStorage.removeItem('category')
-    localStorage.removeItem('brand')
-    localStorage.removeItem('status')
-    localStorage.removeItem('transmission')
-    localStorage.removeItem('priceMin')
-    localStorage.removeItem('priceMax')
-    localStorage.removeItem('perPage')
-    localStorage.removeItem('search')
-    window.location.href = '/products'
+    $('#clearQuery').on('click', function (event) {
+        event.preventDefault()
+        localStorage.removeItem('year')
+        localStorage.removeItem('category')
+        localStorage.removeItem('brand')
+        localStorage.removeItem('status')
+        localStorage.removeItem('transmission')
+        localStorage.removeItem('priceMin')
+        localStorage.removeItem('priceMax')
+        localStorage.removeItem('perPage')
+        localStorage.removeItem('search')
+        window.location.href = '/products'
+    })
 })

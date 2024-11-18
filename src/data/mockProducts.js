@@ -47,6 +47,21 @@ const categories = [
     { name: 'roadster', label: 'Roadster' },
 ]
 
+const price = [
+    { priceMin: 0, priceMax: 50000, label: '0 - 50000' },
+    { priceMin: 50000, priceMax: 100000, label: '50000 - 100000' },
+    { priceMin: 100000, priceMax: 150000, label: '100000 - 200000' },
+    { priceMin: 200000, priceMax: 5000000, label: '200000+' },
+]
+
+const perPage = [
+    { value: 4, label: '4' },
+    { value: 8, label: '8' },
+    { value: 12, label: '12' },
+    { value: 16, label: '16' },
+    { value: 20, label: '20' },
+]
+
 // Hàm tạo dữ liệu sản phẩm giả
 async function generateMockProducts(num = 10) {
     const products = []
@@ -89,4 +104,6 @@ module.exports = {
     transmissions,
     years,
     categories,
+    price,
+    perPage,
 }
