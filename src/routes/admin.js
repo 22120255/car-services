@@ -4,6 +4,7 @@ const router = express.Router()
 const adminController = require('../controllers/AdminController')
 const { checkRole } = require('../middleware/authMiddleware')
 
+router.get('/users', checkRole(['admin', 'sadmin']), adminController.getUser)
 router.get('/users/accounts', checkRole(['admin', 'sadmin']), adminController.accounts)
 router.patch('/users/update-role', checkRole(['admin', 'sadmin']), adminController.updateRole)
 router.patch('/users/update-status', checkRole(['admin', 'sadmin']), adminController.updateStatus)

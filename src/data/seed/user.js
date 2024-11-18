@@ -36,59 +36,42 @@ const users = [
             satisfaction: 4.8
         }
     },
-    {
-        fullName: 'Admin User',
-        email: 'admin@example.com',
-        password: 'admin123',
-        role: 'admin',
-        status: 'active',
-        avatar: '/images/avatar-default.jpg',
-        verificationCode: null,
-        lastLogin: new Date(),
-        metadata: {
-            phone: '0987654321',
-            address: 'Hồ Chí Minh',
-            purchasedProducts: null,
-            recentActivity: [
-                {
-                    type: 'search',
-                    date: new Date(),
-                    description: 'Searched for Honda cars'
-                }
-            ]
-        },
-        adminStats: {
-            totalCars: 8,
-            soldCars: 3,
-            monthlyRevenue: 300000000,
-            popularBrand: 'Honda',
-            avgSalePrice: 90000000,
-            satisfaction: 4.5
-        }
-    },
-    {
-        fullName: 'Normal User',
-        email: 'user@example.com',
+    ...Array.from({ length: 29 }, (_, i) => ({
+        fullName: `User ${i + 1}`,
+        email: `user${i + 1}@example.com`,
         password: 'user123',
-        role: 'user',
-        status: 'active',
+        role: i % 3 === 0 ? 'sadmin' : i % 3 === 1 ? 'admin' : 'user',
+        status: i % 2 === 0 ? 'active' : 'inactive',
         avatar: '/images/avatar-default.jpg',
-        verificationCode: null,
+        verificationCode: i % 2 === 0 ? null : `code${i}`,
         lastLogin: new Date(),
-        metadata: {
-            phone: '0369852147',
-            address: 'Đà Nẵng',
-            purchasedProducts: null,
-            recentActivity: [
-                {
-                    type: 'search',
-                    date: new Date(),
-                    description: 'Browsed car listings'
-                }
-            ]
-        },
-        adminStats: null
-    }
+        metadata: i % 2 === 0
+            ? {
+                phone: `090${Math.floor(Math.random() * 9000000) + 1000000}`,
+                address: `City ${i + 1}`,
+                purchasedProducts: null,
+                recentActivity: [
+                    {
+                        type: i % 3 === 0 ? 'purchase' : 'search',
+                        date: new Date(),
+                        description: i % 3 === 0
+                            ? `Purchased car ${i}`
+                            : `Browsed listings for item ${i}`
+                    }
+                ]
+            }
+            : null,
+        adminStats: i % 3 === 0
+            ? {
+                totalCars: Math.floor(Math.random() * 20) + 1,
+                soldCars: Math.floor(Math.random() * 10) + 1,
+                monthlyRevenue: Math.floor(Math.random() * 100000000) + 10000000,
+                popularBrand: i % 2 === 0 ? 'Toyota' : 'Honda',
+                avgSalePrice: Math.floor(Math.random() * 50000000) + 10000000,
+                satisfaction: (Math.random() * 2 + 3).toFixed(1)
+            }
+            : null
+    }))
 ];
 
 const seedUsers = async () => {
