@@ -1,13 +1,9 @@
 <section id='featured-cars' class='featured-cars'>
     <div class='container'>
-        <div class='section-header'>
-            <p class='sub-title'>
-                Hãy khám phá những sản phẩm nổi bật của chúng tôi
-            </p>
-            <h2 class='main-title'>Sản phẩm của chúng tôi</h2>
-            <p class='section-description'>
-                Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.
-            </p>
+        <div class="section-header">
+            <p class="sub-title">Hãy khám phá những sản phẩm nổi bật của chúng tôi</p>
+            <h2 class="main-title">Sản phẩm của chúng tôi</h2>
+            <p class="section-description">Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.</p>
         </div>
         <div class="featured-cars-filter" id = "filter-form">
             <form id="filterForm" method="GET" action="/products">
@@ -31,7 +27,7 @@
                                 <select class="form-control" name="year">
                                     <option value="">Chọn năm</option>
                                     {{#each years}}
-                                        <option value="{{this.value}}" {{#if (eq ../queries.year this.value)}}selected{{/if}}>
+                                        <option value="{{this.value}}" {{#if (eq year this.value)}}selected{{/if}}>
                                             {{this.name}}
                                         </option>
                                     {{/each}} 
@@ -45,7 +41,7 @@
                                 <select class="form-control" name="category">
                                     <option value="">Chọn kiểu dáng</option>
                                     {{#each categories}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.category this.name)}}selected{{/if}}>
+                                        <option value="{{this.name}}" {{#if (eq category this.name)}}selected{{/if}}>
                                             {{this.label}}
                                         </option>
                                     {{/each}} 
@@ -61,7 +57,7 @@
                                 <select class="form-control" name="brand">
                                     <option value="">Chọn hãng</option>
                                     {{#each brands}}
-                                        <option value="{{this.value}}" {{#if (eq ../queries.brand this.value)}}selected{{/if}}>
+                                        <option value="{{this.value}}" {{#if (eq brand this.value)}}selected{{/if}}>
                                             {{this.name}}
                                         </option>
                                     {{/each}}                  
@@ -75,7 +71,7 @@
                                 <select class="form-control" name="status">
                                     <option value="">Chọn tình trạng</option>
                                     {{#each statuses}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.status this.name)}}selected{{/if}}>
+                                        <option value="{{this.name}}" {{#if (eq status this.name)}}selected{{/if}}>
                                             {{this.label}}
                                         </option>
                                     {{/each}}      
@@ -91,7 +87,7 @@
                                 <select class="form-control" name="transmission">
                                     <option value="">Chọn hộp số</option>
                                 {{#each transmissions}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.transmission this.name)}}selected{{/if}}>
+                                        <option value="{{this.name}}" {{#if (eq transmission this.name)}}selected{{/if}}>
                                             {{this.label}}
                                         </option>
                                     {{/each}}   
@@ -107,9 +103,7 @@
                                     {{#each price}}
                                         <option 
                                             value="{{this.priceMin}}-{{this.priceMax}}"
-                                            data_price_min="{{this.priceMin}}" 
-                                            data_price_max="{{this.priceMax}}"
-                                            {{#if (gt 1 1) }}selected{{/if}}> <!-- 1 1 là true -->
+                                            {{#if (and (gt this.price this.priceMin) (lt this.price this.priceMax)) }}selected{{/if}}> <!-- 1 1 là true -->
                                             ${{this.priceMin}} - ${{this.priceMax}}
                                         </option>
                                     {{/each}}
@@ -215,12 +209,13 @@
             
             <!-- Items per page select -->
             <form id="filterForm" method="GET" action="/products">
-                <select class="form-select" aria-label="Items per page" style="width: auto;" name = "perPage" >
+                <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
                     {{#each perPage}}
-                        <option value="{{this.value}}" {{#if (eq ../queries.perPage this.value)}}selected{{/if}}>{{this.value}} / trang</option>
+                        <option value="{{this.value}}" {{#if (eq limit this.value)}}selected{{else if (eq this.value 8)}}selected{{/if}}>{{this.value}} / trang</option>
                     {{/each}}
                 </select>
             </form>
+
         </div>
     </div>
 </section>

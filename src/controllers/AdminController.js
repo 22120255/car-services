@@ -1,24 +1,28 @@
 const AdminService = require('../services/AdminService');
 const logger = require('../config/logger');
-
+const { errorLog } = require('../utils/customLog')
 class AdminController {
     // [GET] /admin/users/accounts
-    async accounts(req, res) {
+    accounts(req, res) {
         try {
-            const users = await AdminService.getUsers();
-            const usersWithFlags = users.map(user => ({
-                ...user.toObject(),
-                role: user.role,
-                isCurrentUser: user._id.toString() === req.user._id.toString()
-            }));
-
             res.render('admin/users/accounts', {
-                users: usersWithFlags,
                 layout: 'admin'
             });
         } catch (error) {
             logger.error(error.message);
             res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau" });
+        }
+    }
+
+    // [GET] /admin/users
+    async getUser(req, res) {
+        const { limit, offset, key, direction, search, status, role } = req.query;
+        try {
+            const { users, total } = await AdminService.getUsers({ limit: limit || 10, offset: offset || 0, key, direction, search, status, role });
+            return res.status(200).json({ data: users, total });
+        } catch (error) {
+            errorLog("AdminController", 24, error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau" })
         }
     }
 
@@ -29,7 +33,7 @@ class AdminController {
             await AdminService.updateUserRole(userId, role, req.user);
             return res.status(200).json({ message: 'Cập nhật vai trò thành công' });
         } catch (error) {
-            logger.error(error.message);
+            errorLog("AdminController", 36, error.message);
             return res.status(403).json({ error: error.message });
         }
     }
