@@ -8,7 +8,7 @@ class CartController {
     
     async addToCart(req, res) {
         try {
-            if (!req.user) {
+            if (!req.isAuthenticated()) {
                 return res.redirect('/login');
             }
             else {
