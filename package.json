@@ -4,11 +4,11 @@
     "main": "src/app.js",
     "scripts": {
         "beautiful": "prettier --write --single-quote --trailing-comma all \"src/**/*.js\"",
-        "dev": "NODE_ENV=development nodemon src/app.js",
-        "start": "NODE_ENV=production node src/app.js && node src/data/seed/role.js",
+        "dev": "cross-env NODE_ENV=development nodemon src/app.js",
+        "start": "cross-env NODE_ENV=production node src/app.js && node src/data/seed/role.js",
         "watch": "node-sass --watch src/styles/ --output src/public/css/",
-        "seed:roles": "NODE_ENV=development node src/data/seed/role.js",
-        "seed:users": "NODE_ENV=development node src/data/seed/user.js",
+        "seed:roles": "cross-env NODE_ENV=development node src/data/seed/role.js",
+        "seed:users": "cross-env NODE_ENV=development node src/data/seed/user.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -46,6 +46,7 @@
         "winston": "^3.17.0"
     },
     "devDependencies": {
+        "cross-env": "^7.0.3",
         "morgan": "^1.10.0",
         "node-sass": "^9.0.0",
         "nodemon": "^3.1.7"
