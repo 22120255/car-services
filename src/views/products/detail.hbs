@@ -105,6 +105,7 @@
                         <button
                             class='add-to-cart btn btn-default'
                             type='button'
+                            data-id = "{{product._id}}"
                         >add to cart</button>
                         <button class='like btn btn-default' type='button'><span
                                 class='fa fa-heart'
@@ -168,7 +169,7 @@
                         <div class="container-fuild related-product__container">
                             <div class='row g-3'>
                                 {{#each sameBrandProducts}}
-                                    <div class='col-lg-2 col-md-4 col-sm-6'>
+                                    <div class='col-lg-3 col-md-6 col-sm-12'>
                                         {{> CardProduct product=this}}
                                     </div>
                                 {{/each}}
@@ -186,7 +187,7 @@
                         <div class='container-fuild related-product__container'>
                             <div class='row g-3'>
                                 {{#each sameYearProducts}}
-                                    <div class='col-lg-2 col-md-4 col-sm-6'>
+                                    <div class='col-lg-3 col-md-6 col-sm-12'>
                                         {{> CardProduct product=this}}
                                     </div>
                                 {{/each}}
@@ -204,7 +205,7 @@
                         <div class='container-fuild related-product__container'>
                             <div class='row g-3'>
                                 {{#each similarPriceProducts}}
-                                    <div class='col-lg-2 col-md-4 col-sm-6'>
+                                    <div class='col-lg-3 col-md-6 col-sm-12'>
                                         {{> CardProduct product=this}}
                                     </div>
                                 {{/each}}
