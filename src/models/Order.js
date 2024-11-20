@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
 const OrderSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-    total_amount: { type: Number, required: true },
-    shipping_details: { type: String, required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    totalAmount: { type: Number, required: true },
+    shippingDetails: { type: String, required: true },
     status: {
         type: String,
         enum: ['pending', 'completed', 'canceled'],
