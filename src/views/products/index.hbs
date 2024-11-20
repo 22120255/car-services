@@ -12,7 +12,7 @@
                     <div class="model-search-content">
                         <div class="row mb-3">
                             <div class="input-group input-group-sm search-input">
-                                <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
+                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="{{queries.search}}">
                                 <button class="btn btn-outline-secondary" id="btn-search">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -22,10 +22,10 @@
                         <!-- Select Year -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Năm</h2>
+                            <h2>Year</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="year">
-                                    <option value="">Chọn năm</option>
+                                    <option value="">Select year</option>
                                     {{#each years}}
                                         <option value="{{this.value}}" {{#if (eq year this.value)}}selected{{/if}}>
                                             {{this.name}}
@@ -36,10 +36,10 @@
                             </div>
                             <!-- Select Category -->
                             <div class="single-model-search">
-                            <h2>Kiểu dáng</h2>
+                            <h2>Style</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="category">
-                                    <option value="">Chọn kiểu dáng</option>
+                                    <option value="">Select style</option>
                                     {{#each categories}}
                                         <option value="{{this.name}}" {{#if (eq category this.name)}}selected{{/if}}>
                                             {{this.label}}
@@ -52,10 +52,10 @@
                         <!-- Select Make -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Hãng xe</h2>
+                            <h2>Brand</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="brand">
-                                    <option value="">Chọn hãng</option>
+                                    <option value="">Select brand</option>
                                     {{#each brands}}
                                         <option value="{{this.value}}" {{#if (eq brand this.value)}}selected{{/if}}>
                                             {{this.name}}
@@ -66,10 +66,10 @@
                             </div>
                             <!-- Select Condition -->
                             <div class="single-model-search">
-                            <h2>Tình trạng</h2>
+                            <h2>Status</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="status">
-                                    <option value="">Chọn tình trạng</option>
+                                    <option value="">Select status</option>
                                     {{#each statuses}}
                                         <option value="{{this.name}}" {{#if (eq status this.name)}}selected{{/if}}>
                                             {{this.label}}
@@ -82,10 +82,10 @@
                         <!-- Select Model -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Hộp số</h2>
+                            <h2>Transmission</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="transmission">
-                                    <option value="">Chọn hộp số</option>
+                                    <option value="">Select transmission</option>
                                 {{#each transmissions}}
                                         <option value="{{this.name}}" {{#if (eq transmission this.name)}}selected{{/if}}>
                                             {{this.label}}
@@ -96,10 +96,10 @@
                             </div>
                             <!-- Select Price -->
                             <div class="single-model-search">
-                            <h2>Mức giá ($)</h2>
+                            <h2>Price Range ($)</h2>
                             <div class="model-select-icon">
                                 <select class="form-control" name="price">
-                                    <option value="">Chọn mức giá</option>
+                                    <option value="">Select price range</option>
                                     {{#each price}}
                                         <option 
                                             value="{{this.priceMin}}-{{this.priceMax}}"
@@ -128,7 +128,7 @@
                 {{else}}
                 <div class='col-lg-12'>
                     <div class='find-nothing text-center' >
-                            <h2 style = "font-size: large; color: #978e8e">Không tìm thấy sản phẩm</h2>
+                            <h2 style = "font-size: large; color: #978e8e">Find nothing!</h2>
                     </div>
                 </div>
                 {{/each}}
