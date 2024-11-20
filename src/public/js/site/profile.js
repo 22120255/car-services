@@ -29,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     $(".admin-dashboard .stat-card").on('click', function () {
         showToast("Warning", "Admin dashboard feature is in progress.");
     });
-
-    $(".quick-actions .action-btn").on('click', function () {
-        showToast("Warning", "Quick actions are not enabled yet.");
-    });
 });
 // Display button when click on avatar
 document.addEventListener("DOMContentLoaded", function () {
