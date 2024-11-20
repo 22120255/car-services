@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Role = require('./Role');
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, select: false },
@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-userSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next) {
     try {
         const user = this;
         if (!user.isModified('password')) next();
@@ -53,4 +53,4 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-module.exports = mongoose.model('User', userSchema, 'users')
+module.exports = mongoose.model('User', UserSchema, 'users')
