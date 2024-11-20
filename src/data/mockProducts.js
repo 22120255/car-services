@@ -29,9 +29,9 @@ const brands = [
 ]
 
 const statuses = [
-    { name: 'new', label: 'Xe mới' },
-    { name: 'used', label: 'Đã qua sử dụng' },
-    { name: 'sold', label: 'Xe đã bán' },
+    { name: 'new', label: 'new' },
+    { name: 'used', label: 'used' },
+    { name: 'sold', label: 'sold' },
 ]
 
 const transmissions = [
