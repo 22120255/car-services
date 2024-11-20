@@ -8,10 +8,6 @@ class CartController {
     
     async addToCart(req, res) {
         try {
-            if (!req.isAuthenticated()) {
-                return res.redirect('/login');
-            }
-            else {
                 const user = req.user._id;
                 const { product_id } = req.params;
                 const quantity = parseInt(req.body.quantity);
@@ -46,8 +42,7 @@ class CartController {
                 await cart.save();
                 console.log(cart);
                 req.flash('success', 'Added to cart');
-                res.redirect('back');
-            }
+                res.redirect('back')
         }
         catch (error) {
             console.log(error);
