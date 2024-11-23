@@ -11,8 +11,7 @@ const isAuthenticated = (req, res, next) => {
 }
 const checkRole = (nameRoles) => {
     return async (req, res, next) => {
-        console.log("req.user", req.user)
-        if (nameRoles.some(name => req.user.role.name === name)) {
+        if (nameRoles.some(name => req.user.role === name)) {
             return next();
         }
 

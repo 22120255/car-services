@@ -30,7 +30,8 @@
     <link rel="stylesheet" href="/vender/css/responsive.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/common.css" />
-    <link rel="stylesheet" href="/css/partials/main.css" />
+    <link rel="stylesheet" href="/css/partials/admin.css" />
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const currentPage = window.location.pathname.split("/").pop();
@@ -57,15 +58,15 @@
     </script>
 </head>
 <body>
-    <div class="admin-layout d-flex flex-row">
-        <aside class="wrapper-sidebar">
-            {{> sidebar user=user}}
-        </aside>
-        <div class="flex-1 d-flex flex-column">
-            <header>
-                {{> header user=user}}
-            </header>
-            <main class="flex-1">
+    <div class="admin-layout d-flex flex-column h-100">
+        <header>
+            {{> header user=user}}
+        </header>
+        <div class="flex-1 d-flex flex-row content-admin">
+            <aside >
+                {{> sidebar user=user}}
+            </aside>
+            <main class="flex-1 h-100">
                 {{{body}}}
             </main>
         </div>

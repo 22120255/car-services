@@ -1,7 +1,4 @@
 /* custom */
-.wrapper {
-  margin-top: 58px; }
-
 .header-area {
   background-color: #666; }
 
@@ -30,7 +27,8 @@
       object-fit: cover; }
     .accounts-management .table .btn-group .btn {
       padding: 0.25rem 0.5rem; }
-  .accounts-management .form-select, .accounts-management .form-control {
+  .accounts-management .form-select,
+  .accounts-management .form-control {
     width: 100%; }
   .accounts-management .pagination {
     margin-bottom: 0; }

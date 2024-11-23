@@ -76,6 +76,58 @@ class AdminController {
             res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
         }
     }
+
+    // [GET] /admin/products
+    async products(req, res) {
+        try {
+            res.render('admin/products', {
+                layout: 'admin',
+                title: 'Quản lý sản phẩm'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/orders  
+    async orders(req, res) {
+        try {
+            res.render('admin/orders', {
+                layout: 'admin',
+                title: 'Quản lý đơn hàng'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/reports
+    async reports(req, res) {
+        try {
+            res.render('admin/reports', {
+                layout: 'admin',
+                title: 'Báo cáo thống kê'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/settings
+    async settings(req, res) {
+        try {
+            res.render('admin/settings', {
+                layout: 'admin',
+                title: 'Cài đặt hệ thống'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
 }
 
 module.exports = new AdminController();

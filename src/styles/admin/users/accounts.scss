@@ -1,9 +1,5 @@
 @import '../../variables';
 
-.wrapper {
-    margin-top: $height-header;
-}
-
 .header-area {
     background-color: $bg-header;
 }
@@ -54,7 +50,8 @@
         }
     }
 
-    .form-select, .form-control {
+    .form-select,
+    .form-control {
         width: 100%;
     }
 
