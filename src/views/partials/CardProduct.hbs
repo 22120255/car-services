@@ -1,25 +1,33 @@
-<div class='card-product__container d-flex flex-column'>
+<div class='card-product__container'>
     <div class='card-product__header'>
         <a href='/products/{{_id}}'>
             <img src='{{images.image1}}' alt='car' />
+            {{#if (eq status 'new')}}<div class='new-arrival-badge'>New Arrival</div>
+            {{else}}
+            {{/if}}
         </a>
     </div>
-    <div class='card-product__body d-flex flex-column flex-1'>
-        <div class='d-flex justify-content-between align-items-center'>
-            <a href='/products/{{_id}}'>
-                <h2 class='card-product__brand'>
-                    {{brand}}
-                </h2>
+    <div class='card-product__body'>
+        <div class='product-header'>
+            <a href='/products/{{_id}}' class='card-product__brand'>
+                {{brand}}
             </a>
             <h3 class='card-product__price'>${{price}}</h3>
         </div>
-        <p class='card-product__desc'>
-            {{description}}
-        </p>
+        <div class='star-rating'>
+            <span class='star'>★</span>
+            <span class='star'>★</span>
+            <span class='star'>★</span>
+            <span class='star'>★</span>
+            <span class='star star-empty'>★</span>
+            <span class='rating-text'>(4.0)</span>
+        </div>
     </div>
     <div class='card-product__footer'>
         <p>
-            <span class='car-spec-label'>Model: {{year}}</span>
+            <span class='car-spec-label'>Model: </span>
+            <span class='car-spec-value'>{{year}}</span>
         </p>
+        <a href='/products/{{_id}}' class='view-details-btn'>View Details</a>
     </div>
 </div>

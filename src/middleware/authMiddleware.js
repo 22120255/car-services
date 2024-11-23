@@ -1,5 +1,3 @@
-const Role = require('../models/Role');
-
 const navigateUser = (req, res, next) => {
     res.locals.user = req.user || null;
 

@@ -17,27 +17,30 @@ module.exports = {
     dec(value) {
         return value - 1
     },
+    and(a, b) {
+        return a & b
+    },
     json(context) {
-        return JSON.stringify(context);
+        return JSON.stringify(context)
     },
     formatDate(date) {
-        if (!date) return '';
+        if (!date) return ''
         const options = {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
-        };
-        return new Date(date).toLocaleDateString('vi-VN', options);
+            minute: '2-digit',
+        }
+        return new Date(date).toLocaleDateString('vi-VN', options)
     },
     isUser(role) {
-        return role === 'user';
+        return role === 'user'
     },
     isAdmin(role) {
-        return role === 'admin';
+        return role === 'admin'
     },
     isSuperAdmin(role) {
-        return role === 'sadmin';
-    }
+        return role === 'sadmin'
+    },
 }

@@ -94,7 +94,21 @@ h4,
 .fs-075 {
     font-size: 0.75rem;
 }
-#notify-toast {
+.toast-container {
+    z-index: 9999;
+    max-height: 60vh;
+}
+.toast-notify {
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+    &.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
     &.toast-warning {
         .toast-header {
             background-color: #ffc107;

@@ -103,7 +103,7 @@ class ProductController {
     }
     pagination = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1
-        const reqPerPage = parseInt(req.query.perPage) || 8
+        const limit = parseInt(req.query.limit) || 8
         const query = {}
         const search = req.query.search
 
@@ -113,35 +113,34 @@ class ProductController {
         if (req.query.status) query.status = req.query.status
         if (req.query.transmission) query.transmission = req.query.transmission
 
-        if (req.query.price_min || req.query.price_max) {
+        if (req.query.priceMin || req.query.priceMax) {
             query.price = {}
-            if (req.query.price_min) query.price.$gte = req.query.price_min
-            if (req.query.price_max) query.price.$lte = req.query.price_max
+            if (req.query.priceMin) query.price.$gte = req.query.priceMin
+            if (req.query.priceMax) query.price.$lte = req.query.priceMax
         }
 
         if (search) {
             const keywords = search.split(' ')
 
-            const conditions = keywords.map((key) => ({
+            const brandAndModel = keywords.map((key) => ({
                 $or: [
                     { brand: { $regex: key, $options: 'i' } },
                     { model: { $regex: key, $options: 'i' } },
-                    { description: { $regex: key, $options: 'i' } },
                 ],
             }))
-            query.$and = conditions
+
+            const descriptionSearch = keywords.map((key) => ({
+                description: { $regex: key, $options: 'i' },
+            }))
+
+            query.$or = [...brandAndModel, ...descriptionSearch]
         }
 
         try {
-            const { products, total, totalPages, currentPage } = await ProductService.getPaginatedProducts(
-                query,
-                page,
-                reqPerPage
-            )
-            query.perPage = reqPerPage
+            const { products, total, totalPages, currentPage } =
+                await ProductService.getPaginatedProducts(query, page, limit)
             res.render('products/index', {
                 products: multipleMongooseToObject(products),
-                queries: query,
                 years,
                 categories,
                 brands,
