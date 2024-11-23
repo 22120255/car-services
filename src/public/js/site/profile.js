@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         const formData = new FormData();
         formData.append('avatar', file);
-        formData.append('userId', user._id)
+        formData.append('userId', user.id)
 
         $.ajax({
             url: '/user/avatar/store',
