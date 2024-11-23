@@ -4,14 +4,15 @@ const { errorLog } = require('../utils/customLog')
 class AdminController {
     // [GET] /admin/dashboard
     index(req, res) {
-        res.render("admin/dashboard", { layout: "admin" })
+        res.render("admin/dashboard", { layout: "admin", title: "Dashboard" })
     }
 
     // [GET] /admin/users/accounts
     accounts(req, res) {
         try {
             res.render('admin/users/accounts', {
-                layout: 'admin'
+                layout: 'admin',
+                title: 'Quản lý tài khoản'
             });
         } catch (error) {
             logger.error(error.message);
