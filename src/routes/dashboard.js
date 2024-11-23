@@ -7,4 +7,4 @@ router.get('/contact', dashboardController.contact)
 router.get('/about', dashboardController.about)
 router.get('/', dashboardController.index)
 
-module.exports = router
+module.exports = router;

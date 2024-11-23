@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     $('#login-form').on('submit', async function (event) {
+        event.preventDefault();
+
         const email = $('#email').val();
         const password = $('#password').val();
         const messageEle = $('#message-error');
@@ -26,6 +28,32 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             messageEle.text("Vui lòng điền đầy đủ thông tin");
             return;
+        }
+        try {
+            await $.ajax({
+                url: '/auth/login/email/verify',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ email, password }),
+                dataType: 'json',
+                statusCode: {
+                    400: function (resp) {
+                        console.log(resp.responseJSON);
+                        messageEle.text(resp.responseJSON.message);
+                        return;
+                    },
+                    401: function (resp) {
+                        console.log(resp.responseJSON);
+                        messageEle.text(resp.responseJSON.message);
+                        return;
+                    },
+                    200: function () {
+                        window.location.href = "/dashboard";
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error during login:', error);
         }
     });
 })
