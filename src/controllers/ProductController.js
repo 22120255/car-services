@@ -15,11 +15,15 @@ const {
 
 class ProductController {
     index(req, res) {
-        res.render('products/index')
+        res.render('products/index', {
+            title: 'Sản phẩm'
+        })
     }
 
     detail(req, res) {
-        res.render('products/detail')
+        res.render('products/detail', {
+            title: 'Chi tiết sản phẩm'
+        })
     }
 
     // getFilteredProducts = async (req, res, next) => {
@@ -95,6 +99,7 @@ class ProductController {
                 sameYearProducts: multipleMongooseToObject(sameYearProducts),
                 similarPriceProducts:
                     multipleMongooseToObject(similarPriceProducts),
+                title: 'Chi tiết sản phẩm'
             })
         } catch (error) {
             console.log(error)
@@ -151,6 +156,7 @@ class ProductController {
                 pages: totalPages,
                 current: currentPage,
                 perPage,
+                title: 'Sản phẩm'
             })
         } catch (error) {
             console.log(error)

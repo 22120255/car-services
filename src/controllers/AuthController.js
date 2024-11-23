@@ -9,6 +9,7 @@ class AuthController {
         res.render('auth/login', {
             layout: 'auth',
             message: req.flash('error') || '',
+            title: 'Đăng nhập'
         })
     }
 
@@ -25,6 +26,7 @@ class AuthController {
     register(req, res) {
         res.render('auth/register', {
             layout: 'auth',
+            title: 'Đăng kí'
         })
     }
 
@@ -76,6 +78,7 @@ class AuthController {
                 layout: 'auth',
                 error: false,
                 message: 'Tài khoản của bạn đã được kích hoạt thành công!',
+                title: 'Kích hoạt tài khoản'
             })
         } catch (err) {
             res.render('auth/activate-account', {
@@ -83,6 +86,7 @@ class AuthController {
                 error: true,
                 message:
                     'Không thể kích hoạt tài khoản. Token không hợp lệ hoặc đã hết hạn.',
+                title: 'Kích hoạt tài khoản'
             })
         }
     }
@@ -148,6 +152,7 @@ class AuthController {
     forgotPassword(req, res) {
         res.render('auth/forgot-password', {
             layout: 'auth',
+            title: 'Quên mật khẩu'
         })
     }
 

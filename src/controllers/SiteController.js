@@ -11,7 +11,10 @@ class SiteController {
     async profile(req, res) {
         const userId = req.params.id;
         const user = await User.findById(userId);
-        res.render("site/profile", { _user: user })
+        res.render("site/profile", {
+            _user: user,
+            title: 'Thông tin cá nhân'
+        })
     }
 
     // [PATCH] /user/avatar/store
