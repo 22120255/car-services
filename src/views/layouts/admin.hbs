@@ -57,15 +57,22 @@
     </script>
 </head>
 <body>
-
-    <header>
-        {{> header user=user}}
-    </header>
-    <main>
-        {{{body}}}
-    </main>
+    <div class="admin-layout d-flex flex-row">
+        <aside class="wrapper-sidebar">
+            {{> sidebar user=user}}
+        </aside>
+        <div class="flex-1 d-flex flex-column">
+            <header>
+                {{> header user=user}}
+            </header>
+            <main class="flex-1">
+                {{{body}}}
+            </main>
+        </div>
+    </div>
     {{> Toast}}
     {{> ModalNotify}}
+    
     {{!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script src="/vender/js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>

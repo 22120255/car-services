@@ -2,6 +2,11 @@ const AdminService = require('../services/AdminService');
 const logger = require('../config/logger');
 const { errorLog } = require('../utils/customLog')
 class AdminController {
+    // [GET] /admin/dashboard
+    index(req, res) {
+        res.render("admin/dashboard", { layout: "admin" })
+    }
+
     // [GET] /admin/users/accounts
     accounts(req, res) {
         try {

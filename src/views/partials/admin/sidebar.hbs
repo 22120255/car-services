@@ -1,0 +1,72 @@
+<div class="admin-sidebar bg-dark text-white p-3 min-vh-100">
+    <!-- Logo -->
+    <div class="text-center py-4">
+        <h1 class="text-white fw-bold">3N</h1>
+        <p class="text-muted small">Car Services</p>
+    </div>
+
+    <!-- Admin Profile -->
+    <div class="text-center py-3 border-bottom">
+        <div class="avatar mb-3">
+            {{#if user.avatar}}
+                <img src="{{user.avatar}}" alt="Admin Avatar" class="rounded-circle" width="80" height="80">
+            {{else}}
+                <div class="default-avatar rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-user fa-2x"></i>
+                </div>
+            {{/if}}
+        </div>
+        <h6 class="mb-1">{{user.fullName}}</h6>
+        <span class="text-muted small">Administrator</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="mt-4">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="/admin/dashboard" class="nav-link text-white">
+                    <i class="fas fa-tachometer-alt me-2"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/admin/users/accounts" class="nav-link text-white">
+                    <i class="fas fa-users me-2"></i>
+                    User Management
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/admin/cars" class="nav-link text-white">
+                    <i class="fas fa-car me-2"></i>
+                    Car Inventory
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/admin/orders" class="nav-link text-white">
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    Orders
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/admin/reports" class="nav-link text-white">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Reports
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/admin/settings" class="nav-link text-white">
+                    <i class="fas fa-cog me-2"></i>
+                    Settings
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Footer -->
+    <div class="mt-auto text-center py-3" style="position: absolute; bottom: 0; left: 0; right: 0;">
+        <a href="/logout" class="btn btn-outline-light btn-sm">
+            <i class="fas fa-sign-out-alt me-2"></i>
+            Logout
+        </a>
+    </div>
+</div>
