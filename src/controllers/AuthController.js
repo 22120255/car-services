@@ -178,7 +178,7 @@ class AuthController {
     // [GET] /auth/logout
     async logout(req, res, next) {
         try {
-            await User.findByIdAndUpdate(req.user._id, {
+            await User.findByIdAndUpdate(req.user.id, {
                 lastLogin: Date.now(),
             })
             req.logout(function (err) {

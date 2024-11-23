@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add new data
         users.forEach((user) => {
             $('#accountsTable').append(`
-                <tr data-user-id="${user._id}">
+                <tr data-user-id="${user.id}">
                     <td>
                         <img src="${user.avatar}" alt="Avatar" class="user-avatar">
                     </td>
@@ -252,15 +252,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${
-                                !user.isCurrentUser
-                                    ? `
+                            ${!user.isCurrentUser
+                    ? `
                                 <button type="button" title="Xóa" class="btn btn-danger btn-sm delete-user">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             `
-                                    : ''
-                            }
+                    : ''
+                }
                         </div>
                     </td>
                 </tr>
