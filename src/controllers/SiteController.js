@@ -9,7 +9,12 @@ class SiteController {
 
     // [GET] /profile/:id
     async profile(req, res) {
-        res.render("site/profile")
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        res.render("site/profile", {
+            _user: user,
+            title: 'Thông tin cá nhân'
+        })
     }
 
     // [PATCH] /user/avatar/store
