@@ -128,7 +128,7 @@
                                         href='/profile/{{user.id}}'
                                     >My profile</a>
                                 </li>
-                                {{#unless (isUser user.role.name)}}
+                                {{#unless (isUser user.role)}}
                                     <li>
                                         <a
                                             class='dropdown-item'
