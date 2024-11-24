@@ -15,11 +15,30 @@ class AuthController {
 
     //[POST] /login/email/verify
     async verifyEmail(req, res, next) {
-        passport.authenticate('local', {
-            successReturnToOrRedirect: '/dashboard',
-            failureRedirect: '/auth/login',
-            failureFlash: true,
-        })(req, res, next)
+        passport.authenticate('local', async (err, user, info) => {
+            if (err) {
+                return next(err);
+            }
+
+            if (!user) {
+                return res.status(400).json({ message: 'Đăng nhập thất bại' });
+            }
+
+            // Check if the user's account is verified
+            if (user.verificationCode !== undefined) {
+                return res.status(401).json({ message: 'Tài khoản chưa được xác thực. Vui lòng kiểm tra email để tiến hành xác thực' });
+            }
+
+            // Explicitly log in the user
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err);
+                }
+
+                console.log('Tài khoản đăng nhập thành công:', user.email);
+                return res.status(200).json({ message: 'Đăng nhập thành công!' });
+            });
+        })(req, res, next);
     }
 
     //[GET] /register
@@ -73,7 +92,7 @@ class AuthController {
         const { token } = req.query
 
         try {
-            // const user = await AuthService.activateAccountByToken(token);
+            const user = await AuthService.activateAccountByToken(token);
             res.render('auth/activate-account', {
                 layout: 'auth',
                 error: false,

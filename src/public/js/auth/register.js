@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     200() {
                         showModal("Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công, vui lòng kiểm tra hộp thư để kích hoạt tài khoản!",
                             function () {
-                                window.location.href = "/dashboard";
+                                window.location.href = "/auth/login";
                             }
                         )
                     },
