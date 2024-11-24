@@ -1,54 +1,52 @@
 const Product = require('../models/Product');
 const Cart = require('../models/Cart');
+const { errorLog } = require('../utils/customLog');
 
 class CartController {
     getCart(req, res) {
-        res.render('cart');
+        res.render('cart', {
+            title: 'Giỏ hàng'
+        });
     }
-    
+
     async addToCart(req, res) {
         try {
-                const user = req.user._id;
-                const { product_id } = req.params;
-                const quantity = parseInt(req.body.quantity);
-                console.log("product_id: ", product_id);
-                console.log("quantity: ", typeof quantity);
+            const userId = req.user.id;
+            const { productId } = req.params;
+            const quantity = parseInt(req.body.quantity);
 
-                let cart = await Cart.findOne({ user_id: user });
-                if (!cart) {
-                    cart = new Cart({
-                        user_id: user,
-                        items: [],
-                        total: 0
-                    });
-                }
+            let cart = await Cart.findOne({ userId });
+            if (!cart) {
+                cart = new Cart({
+                    userId,
+                    items: [],
+                    total: 0
+                });
+            }
 
-                const existingItem = cart.items.find(item => item.product_id.toString() === product_id);
-                console.log("existingItem: ", typeof existingItem);
-                if (existingItem) {
-                    console.log("existingItem: ", typeof existingItem.quantity);
-                    existingItem.quantity += quantity;
-                    existingItem.price = existingItem.quantity * existingItem.price;
-                }
-                else {
-                    const product = await Product.findById(product_id);
+            const existingItem = cart.items.find(item => item.productId.toString() === productId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+                existingItem.price = existingItem.quantity * existingItem.price;
+            }
+            else {
+                const product = await Product.findById(productId);
 
-                    cart.items.push({
-                        product_id: product_id,
-                        quantity: quantity,
-                        price: product.price
-                    });
-                }
-                await cart.save();
-                console.log(cart);
-                req.flash('success', 'Added to cart');
-                res.redirect('back')
+                cart.items.push({
+                    productId,
+                    quantity: quantity,
+                    price: product.price
+                });
+            }
+            await cart.save();
+            req.flash('success', 'Added to cart');
+            res.redirect('back')
         }
         catch (error) {
-            console.log(error);
+            errorLog("CartController.js", 44, error.message);
         }
     }
-    
+
 }
 
 module.exports = new CartController();

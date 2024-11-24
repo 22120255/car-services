@@ -5,19 +5,19 @@
          <button id="avatar-btn" type="button" data-bs-toggle="tooltip" data-bs-placement="right"
             data-bs-html="true" data-bs-container=".avatar-wrapper" 
             title='<span id="change-avatar-btn"><i class="fa-solid fa-camera me-2"></i>Change avatar</span>'>
-          <img src="{{user.avatar}}" alt="{{user.fullName}}'s avatar" class="profile-avatar">
+          <img src="{{_user.avatar}}" alt="{{_user.fullName}}'s avatar" class="profile-avatar">
         </button>
         <input type="file" id="avatar-input" accept="image/*" style="display: none"/>
-        {{#if (isAdmin user.role.name)}}
+        {{#if (isAdmin _user.role.name)}}
           <span class="admin-badge"><i class="fas fa-crown"></i> Admin</span>
         {{/if}}
-        {{#if (isSuperAdmin user.role.name)}}
+        {{#if (isSuperAdmin _user.role.name)}}
           <span class="admin-badge"><i class="fas fa-crown"></i>Super Admin</span>
         {{/if}}
       </div>
       <div class="user-info">
-        <h1 class="profile-name">{{user.fullName}}</h1>
-        <p class="profile-email"><i class="fas fa-envelope"></i> {{user.email}}</p>
+        <h1 class="profile-name">{{_user.fullName}}</h1>
+        <p class="profile-email"><i class="fas fa-envelope"></i> {{_user.email}}</p>
       </div>
     </div>
   </div>
@@ -33,29 +33,29 @@
             <div class="info-column">
               <div class="info-item">
                 <i class="fas fa-phone"></i>
-                <span><strong>Phone:</strong> {{user.metadata.phone}}</span>
+                <span><strong>Phone:</strong> {{_user.metadata.phone}}</span>
               </div>
               <div class="info-item">
                 <i class="fas fa-map-marker-alt"></i>
-                <span><strong>Address:</strong> {{user.metadata.address}}</span>
+                <span><strong>Address:</strong> {{_user.metadata.address}}</span>
               </div>
               <div class="info-item">
                 <i class="fas fa-calendar-alt"></i>
-                <span><strong>Member since:</strong> {{formatDate user.createdAt}}</span>
+                <span><strong>Member since:</strong> {{formatDate _user.createdAt}}</span>
               </div>
             </div>
             <div class="info-column">
               <div class="info-item">
                 <i class="fas fa-car"></i>
-                <span><strong>Cars Owned:</strong> {{user.metadata.purchasedCars.length}}</span>
+                <span><strong>Cars Owned:</strong> {{_user.metadata.purchasedProducts.length}}</span>
               </div>
               <div class="info-item">
                 <i class="fas fa-star"></i>
-                <span><strong>Member Status:</strong> {{user.status}}</span>
+                <span><strong>Member Status:</strong> {{_user.status}}</span>
               </div>
               <div class="info-item">
                 <i class="fas fa-clock"></i>
-                <span><strong>Last Active:</strong> {{formatDate user.lastLogin}}</span>
+                <span><strong>Last Active:</strong> {{formatDate _user.lastLogin}}</span>
               </div>
             </div>
           </div>
@@ -82,35 +82,35 @@
               <i class="fas fa-eye"></i>
               <div class="stat-content">
                 <h4>Profile Views</h4>
-                <p>{{user.profileViews}}</p>
+                <p>{{_user.profileViews}}</p>
               </div>
             </div>
             <div class="stat-item">
               <i class="fas fa-heart"></i>
               <div class="stat-content">
                 <h4>Favorite Cars</h4>
-                <p>{{user.favorites.length}}</p>
+                <p>{{_user.favorites.length}}</p>
               </div>
             </div>
             <div class="stat-item">
               <i class="fas fa-comments"></i>
               <div class="stat-content">
                 <h4>Messages</h4>
-                <p>{{user.unreadMessages}}</p>
+                <p>{{_user.unreadMessages}}</p>
               </div>
             </div>
             <div class="stat-item">
               <i class="fas fa-bell"></i>
               <div class="stat-content">
                 <h4>Notifications</h4>
-                <p>{{user.notifications.length}}</p>
+                <p>{{_user.notifications.length}}</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {{#unless (isUser user.role.name)}}
+      {{#unless (isUser _user.role.name)}}
       <section class="admin-dashboard card">
         <div class="card-header">
           <h2><i class="fas fa-chart-line"></i> Car Sales Overview</h2>
@@ -121,21 +121,21 @@
               <i class="fas fa-car"></i>
               <div class="stat-content">
                 <h3>Available Cars</h3>
-                <p class="stat-number">{{adminStats.totalCars}}</p>
+                <p class="stat-number">{{_user.adminStats.totalCars}}</p>
               </div>
             </div>
             <div class="stat-card">
               <i class="fas fa-shopping-cart"></i>
               <div class="stat-content">
                 <h3>Cars Sold</h3>
-                <p class="stat-number">{{adminStats.soldCars}}</p>
+                <p class="stat-number">{{_user.adminStats.soldCars}}</p>
               </div>
             </div>
             <div class="stat-card">
               <i class="fas fa-dollar-sign"></i>
               <div class="stat-content">
                 <h3>Monthly Revenue</h3>
-                <p class="stat-number">${{adminStats.monthlyRevenue}}</p>
+                <p class="stat-number">${{_user.adminStats.monthlyRevenue}}</p>
               </div>
             </div>
           </div>
@@ -161,9 +161,9 @@
           <h2><i class="fas fa-car"></i> My Cars</h2>
         </div>
         <div class="card-body">
-          {{#if user.metadata.purchasedCars}}
+          {{#if _user.metadata.purchasedCars}}
           <div class="car-list">
-            {{#each user.metadata.purchasedCars}}
+            {{#each _user.metadata.purchasedCars}}
             <div class="car-item">
               <img src="{{this.image}}" alt="{{this.model}}" class="car-thumbnail">
               <div class="car-details">
@@ -191,9 +191,9 @@
           <h2><i class="fas fa-history"></i> Recent Activity</h2>
         </div>
         <div class="card-body">
-          {{#if user.metadata.recentActivity}}
+          {{#if _user.metadata.recentActivity}}
           <ul class="activity-list">
-            {{#each user.metadata.recentActivity}}
+            {{#each _user.metadata.recentActivity}}
             <li class="activity-item">
               <div class="activity-icon">
                 {{#if this.type}}
@@ -219,7 +219,7 @@
         </div>
       </section>
 
-      {{#unless (isUser user.role.name)}}
+      {{#unless (isUser _user.role.name)}}
       <section class="performance-metrics card">
         <div class="card-header">
           <h2><i class="fas fa-chart-pie"></i> Sales Performance</h2>
@@ -228,15 +228,15 @@
           <div class="metrics-grid">
             <div class="metric-item">
               <span class="metric-label">Most Popular Brand</span>
-              <span class="metric-value">{{adminStats.popularBrand}}</span>
+              <span class="metric-value">{{_user.adminStats.popularBrand}}</span>
             </div>
             <div class="metric-item">
               <span class="metric-label">Average Sale Price</span>
-              <span class="metric-value">${{adminStats.avgSalePrice}}</span>
+              <span class="metric-value">${{_user.adminStats.avgSalePrice}}</span>
             </div>
             <div class="metric-item">
               <span class="metric-label">Customer Satisfaction</span>
-              <span class="metric-value success">{{adminStats.satisfaction}}%</span>
+              <span class="metric-value success">{{_user.adminStats.satisfaction}}%</span>
             </div>
           </div>
         </div>
@@ -246,6 +246,6 @@
   </div>
 </div>
 <script>
-  const user = {{{json user}}};  
+  const user = {{{json _user}}};  
 </script>
 <script type="module" src="/js/site/profile.js"></script>

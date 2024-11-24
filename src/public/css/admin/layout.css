@@ -1,0 +1,13 @@
+/* custom */
+.admin-layout .content-admin {
+  margin-top: 58px; }
+
+.admin-layout aside {
+  width: 200px;
+  position: fixed;
+  top: 58px;
+  left: 0;
+  bottom: 0; }
+
+.admin-sidebar {
+  height: 100%; }
