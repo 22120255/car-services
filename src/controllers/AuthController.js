@@ -65,12 +65,7 @@ class AuthController {
         try {
             const user = await AuthService.storeUserWithEmail(email, fullName, password);
 
-            req.login(user, (err) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Đăng nhập tự động thất bại.' });
-                }
-                res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
-            });
+            res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
@@ -85,7 +80,7 @@ class AuthController {
             res.render('auth/activate-account', {
                 layout: 'auth',
                 error: false,
-                message: "Tài khoản của bạn đã được kích hoạt thành công!"
+                message: "Tài khoản của bạn đã được kích hoạt thành công! Vui lòng đăng nhập vào tài khoản để sử dụng."
             });
         } catch (err) {
             res.render('auth/activate-account', {
