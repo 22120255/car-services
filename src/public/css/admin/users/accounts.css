@@ -6,10 +6,17 @@
   padding: 20px; }
   .accounts-management .header {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 20px; }
+    flex-direction: column; }
     .accounts-management .header h2 {
       margin-bottom: 1rem; }
+    .accounts-management .header .search-box {
+      width: 576px; }
+      .accounts-management .header .search-box input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0; }
+      .accounts-management .header .search-box button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0; }
     .accounts-management .header .filters {
       width: 100%; }
       .accounts-management .header .filters .row {
