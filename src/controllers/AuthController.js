@@ -35,7 +35,6 @@ class AuthController {
                     return next(err);
                 }
 
-                console.log('Tài khoản đăng nhập thành công:', user.email);
                 return res.status(200).json({ message: 'Đăng nhập thành công!' });
             });
         })(req, res, next);
