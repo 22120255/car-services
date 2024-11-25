@@ -1,9 +1,5 @@
 @import '../../variables';
 
-.wrapper {
-    margin-top: $height-header;
-}
-
 .header-area {
     background-color: $bg-header;
 }
@@ -14,10 +10,20 @@
     .header {
         display: flex;
         flex-direction: column;
-        margin-bottom: 20px;
 
         h2 {
             margin-bottom: 1rem;
+        }
+        .search-box {
+            width: 576px;
+            input {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+            button {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
         }
 
         .filters {
@@ -54,7 +60,8 @@
         }
     }
 
-    .form-select, .form-control {
+    .form-select,
+    .form-control {
         width: 100%;
     }
 

@@ -97,7 +97,7 @@
                             >
                                 <li>
                                     <a
-                                        {{!-- href='/profile/{{user._id}}' --}}
+                                        {{!-- href='/profile/{{user.id}}' --}}
                                         class='d-flex align-items-center gap-1 text-decoration-none dropdown-item'
                                     >
                                         {{#if user.avatar}}
@@ -125,15 +125,15 @@
                                 <li>
                                     <a
                                         class='dropdown-item'
-                                        href='/profile/{{user._id}}'
+                                        href='/profile/{{user.id}}'
                                     >My profile</a>
                                 </li>
-                                {{#unless (isUser user.role.name)}}
+                                {{#unless (isUser user.role)}}
                                     <li>
                                         <a
                                             class='dropdown-item'
-                                            href='/admin/users/accounts'
-                                        >Manage accounts</a>
+                                            href='/admin/dashboard'
+                                        >Admin dashboard</a>
                                     </li>
                                 {{/unless}}
                                 <li>

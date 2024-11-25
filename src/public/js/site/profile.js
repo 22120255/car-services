@@ -29,10 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     $(".admin-dashboard .stat-card").on('click', function () {
         showToast("Warning", "Admin dashboard feature is in progress.");
     });
-
-    $(".quick-actions .action-btn").on('click', function () {
-        showToast("Warning", "Quick actions are not enabled yet.");
-    });
 });
 // Display button when click on avatar
 document.addEventListener("DOMContentLoaded", function () {
@@ -72,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         const formData = new FormData();
         formData.append('avatar', file);
-        formData.append('userId', user._id)
+        formData.append('userId', user.id)
 
         $.ajax({
             url: '/user/avatar/store',

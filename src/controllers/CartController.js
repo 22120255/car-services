@@ -4,12 +4,14 @@ const { errorLog } = require('../utils/customLog');
 
 class CartController {
     getCart(req, res) {
-        res.render('cart');
+        res.render('cart', {
+            title: 'Giỏ hàng'
+        });
     }
 
     async addToCart(req, res) {
         try {
-            const userId = req.user._id;
+            const userId = req.user.id;
             const { productId } = req.params;
             const quantity = parseInt(req.body.quantity);
 

@@ -55,7 +55,7 @@ a,a:hover,a:active,a:focus {
 	display:inline-block;
 	text-decoration:none;
 	color: #444a57;
-	font-size:1rem;
+	/* font-size:1rem; */
 	padding:0;
     font-weight: 500;
     

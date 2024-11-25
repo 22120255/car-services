@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sortOrder = urlParams.get('direction') || 'asc'
 
     // Set giá trị cho các input từ URL params
-    $('#searchInput').val(searchText)
+    $('#search-input').val(searchText)
     $('#statusFilter').val(statusFilter)
     $('#roleFilter').val(roleFilter)
     $('#sortBy').val(sortBy)
@@ -118,11 +118,15 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#itemsPerPage').val(limit)
 
     // Xử lý tìm kiếm
-    $('#searchInput').on('keydown', async function (event) {
+    $('#search-input').on('keydown', async function (event) {
         if (event.key === 'Enter' || event.keyCode === 13) {
             updateQueryParams('search', $(this).val().trim())
             refresh()
         }
+    })
+    $('.search-btn').on('click', async function () {
+        updateQueryParams('search', $('#search-input').val().trim())
+        refresh()
     })
     // Xử lý lọc theo status
     $('#statusFilter').change(async function () {
@@ -226,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add new data
         users.forEach((user) => {
             $('#accountsTable').append(`
-                <tr data-user-id="${user._id}">
+                <tr data-user-id="${user.id}">
                     <td>
                         <img src="${user.avatar}" alt="Avatar" class="user-avatar">
                     </td>
@@ -252,15 +256,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${
-                                !user.isCurrentUser
-                                    ? `
+                            ${!user.isCurrentUser
+                    ? `
                                 <button type="button" title="Xóa" class="btn btn-danger btn-sm delete-user">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             `
-                                    : ''
-                            }
+                    : ''
+                }
                         </div>
                     </td>
                 </tr>
