@@ -33,11 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     avatar: user.photoURL,
                 }),
                 statusCode: {
-                    200(message) {
-                        console.log(message);
-                        window.location.href = "/dashboard"
-                    },
                     500(message) {
+                        console.log("Error when login with Google: ", message);
                         showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
                     }
                 }
@@ -66,11 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     avatar: user.photoURL,
                 }),
                 statusCode: {
-                    200(message) {
-                        console.log(message);
-                        window.location.href = "/dashboard"
-                    },
                     500(message) {
+                        console.log("Error when login with Facebook: ", message);
                         showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
                     }
                 }

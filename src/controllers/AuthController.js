@@ -2,6 +2,8 @@
 const AuthService = require('../services/AuthService')
 const passport = require('passport')
 const User = require('../models/User')
+const redisClient = require('../config/redis')
+const { errorLog } = require('../utils/customLog')
 
 class AuthController {
     //[GET] /login
@@ -25,7 +27,7 @@ class AuthController {
             }
 
             // Check if the user's account is verified
-            if (user.verificationCode !== undefined) {
+            if (user.verificationCode) {
                 return res.status(401).json({ message: 'Tài khoản chưa được xác thực. Vui lòng kiểm tra email để tiến hành xác thực' });
             }
 
@@ -34,8 +36,16 @@ class AuthController {
                 if (err) {
                     return next(err);
                 }
+                // Clear cache before redirecting
+                redisClient.del('/dashboard', (err, response) => {
+                    if (err) {
+                        errorLog("AuthController.js", 41, err.message)
+                        console.error('Error clearing cache:', err)
+                    };
+                });
 
-                return res.status(200).json({ message: 'Đăng nhập thành công!' });
+                // Thay vì redirect, trả về một chỉ thị
+                res.status(200).json({ redirect: '/dashboard' });
             });
         })(req, res, next);
     }
@@ -115,12 +125,15 @@ class AuthController {
                         .status(500)
                         .json({ error: 'Đăng nhập tự động thất bại.' })
                 }
-                res.status(200).json({
-                    message: user
-                        ? 'Tài khoản đã tồn tại'
-                        : 'Đăng kí thành công',
-                    user,
-                })
+                // Clear cache before redirecting
+                redisClient.del('/dashboard', (err, response) => {
+                    if (err) {
+                        errorLog("AuthController.js", 41, err.message)
+                        console.error('Error clearing cache:', err)
+                    };
+                });
+
+                return res.redirect('/dashboard')
             })
         } catch (error) {
             res.status(500).json({ message: 'Lỗi server' })
@@ -144,12 +157,14 @@ class AuthController {
                         .status(500)
                         .json({ error: 'Đăng nhập tự động thất bại.' })
                 }
-                res.status(200).json({
-                    message: user
-                        ? 'Tài khoản đã tồn tại'
-                        : 'Đăng kí thành công',
-                    user,
-                })
+                // Clear cache before redirecting
+                redisClient.del('/dashboard', (err, response) => {
+                    if (err) {
+                        errorLog("AuthController.js", 41, err.message)
+                        console.error('Error clearing cache:', err)
+                    };
+                });
+                return res.redirect('/dashboard')
             })
         } catch (error) {
             res.status(500).json({ message: 'Lỗi server' })
@@ -197,6 +212,13 @@ class AuthController {
                 if (err) {
                     res.redirect('/dashboard')
                 }
+                // Clear cache before redirecting
+                redisClient.del('/dashboard', (err, response) => {
+                    if (err) {
+                        errorLog("AuthController.js", 41, err.message)
+                        console.error('Error clearing cache:', err)
+                    };
+                });
                 res.redirect('/dashboard')
             })
         } catch (err) {
