@@ -9,7 +9,7 @@ class AuthController {
         res.render('auth/login', {
             layout: 'auth',
             message: req.flash('error') || '',
-            title: 'Đăng nhập'
+            title: 'Đăng nhập',
         })
     }
 
@@ -17,35 +17,40 @@ class AuthController {
     async verifyEmail(req, res, next) {
         passport.authenticate('local', async (err, user, info) => {
             if (err) {
-                return next(err);
+                return next(err)
             }
 
             if (!user) {
-                return res.status(400).json({ message: 'Đăng nhập thất bại' });
+                return res.status(400).json({ message: 'Đăng nhập thất bại' })
             }
 
             // Check if the user's account is verified
-            if (user.verificationCode !== undefined) {
-                return res.status(401).json({ message: 'Tài khoản chưa được xác thực. Vui lòng kiểm tra email để tiến hành xác thực' });
+            if (user.verificationCode === undefined) {
+                return res.status(401).json({
+                    message:
+                        'Tài khoản chưa được xác thực. Vui lòng kiểm tra email để tiến hành xác thực',
+                })
             }
 
             // Explicitly log in the user
             req.logIn(user, (err) => {
                 if (err) {
-                    return next(err);
+                    return next(err)
                 }
 
-                console.log('Tài khoản đăng nhập thành công:', user.email);
-                return res.status(200).json({ message: 'Đăng nhập thành công!' });
-            });
-        })(req, res, next);
+                console.log('Tài khoản đăng nhập thành công:', user.email)
+                return res
+                    .status(200)
+                    .json({ message: 'Đăng nhập thành công!' })
+            })
+        })(req, res, next)
     }
 
     //[GET] /register
     register(req, res) {
         res.render('auth/register', {
             layout: 'auth',
-            title: 'Đăng kí'
+            title: 'Đăng kí',
         })
     }
 
@@ -70,7 +75,10 @@ class AuthController {
                 fullName,
                 password
             )
-            res.status(200).json({ message: "Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản." });
+            res.status(200).json({
+                message:
+                    'Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.',
+            })
         } catch (err) {
             res.status(400).json({ error: err.message })
         }
@@ -81,12 +89,13 @@ class AuthController {
         const { token } = req.query
 
         try {
-            const user = await AuthService.activateAccountByToken(token);
+            const user = await AuthService.activateAccountByToken(token)
             res.render('auth/activate-account', {
                 layout: 'auth',
                 error: false,
-                message: "Tài khoản của bạn đã được kích hoạt thành công! Vui lòng đăng nhập vào tài khoản để sử dụng.",
-                title: 'Kích hoạt tài khoản'
+                message:
+                    'Tài khoản của bạn đã được kích hoạt thành công! Vui lòng đăng nhập vào tài khoản để sử dụng.',
+                title: 'Kích hoạt tài khoản',
             })
         } catch (err) {
             res.render('auth/activate-account', {
@@ -94,7 +103,7 @@ class AuthController {
                 error: true,
                 message:
                     'Không thể kích hoạt tài khoản. Token không hợp lệ hoặc đã hết hạn.',
-                title: 'Kích hoạt tài khoản'
+                title: 'Kích hoạt tài khoản',
             })
         }
     }
@@ -160,7 +169,7 @@ class AuthController {
     forgotPassword(req, res) {
         res.render('auth/forgot-password', {
             layout: 'auth',
-            title: 'Quên mật khẩu'
+            title: 'Quên mật khẩu',
         })
     }
 

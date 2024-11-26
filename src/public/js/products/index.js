@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search)
 
     let products = null
-    let limit = urlParams.get('limit') || $('#limit').val()
+    let limit = urlParams.get('limit') || 8
     let offset = parseInt(urlParams.get('offset')) || 1
     let totalPages = null
     let totalItems = null
@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null
     let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null
-    let categoryFilter = parseInt(urlParams.get('category')) || null
-    let brandFilter = parseInt(urlParams.get('brand')) || null
-    let statusFilter = parseInt(urlParams.get('status')) || null
-    let transmissionFilter = parseInt(urlParams.get('transmission')) || null
+    let categoryFilter = urlParams.get('category') || null
+    let brandFilter = urlParams.get('brand') || null
+    let statusFilter = urlParams.get('status') || null
+    let transmissionFilter = urlParams.get('transmission') || null
     let searchText = urlParams.get('search') || ''
     let yearFilter = parseInt(urlParams.get('year')) || null
 
@@ -25,6 +25,36 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#transmissionFilter').val(transmissionFilter)
     $('#yearFilter').val(yearFilter)
     $('#price').val(`${priceMinFilter}-${priceMaxFilter}`)
+
+    function syncFiltersFromURL() {
+        const urlParams = new URLSearchParams(window.location.search)
+        limit = parseInt(urlParams.get('limit')) || 8
+        offset = parseInt(urlParams.get('offset')) || 1
+        priceMinFilter = parseFloat(urlParams.get('priceMin')) || null
+        priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null
+        categoryFilter = parseInt(urlParams.get('category')) || null
+        brandFilter = parseInt(urlParams.get('brand')) || null
+        statusFilter = parseInt(urlParams.get('status')) || null
+        transmissionFilter = parseInt(urlParams.get('transmission')) || null
+        searchText = urlParams.get('search') || ''
+        yearFilter = parseInt(urlParams.get('year')) || null
+
+        // Đồng bộ với giao diện
+        $('#searchInput').val(searchText)
+        $('#limit').val(limit)
+        $('#statusFilter').val(statusFilter)
+        $('#brandFilter').val(brandFilter)
+        $('#categoryFilter').val(categoryFilter)
+        $('#transmissionFilter').val(transmissionFilter)
+        $('#yearFilter').val(yearFilter)
+        $('#price').val(`${priceMinFilter}-${priceMaxFilter}`)
+    }
+
+    // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
+    window.addEventListener('popstate', async function () {
+        syncFiltersFromURL() // Đồng bộ lại bộ lọc từ URL
+        await refresh() // Tải lại dữ liệu
+    })
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
@@ -39,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupFilterHandlers('#categoryFilter', 'category')
     setupFilterHandlers('#transmissionFilter', 'transmission')
     setupFilterHandlers('#yearFilter', 'year')
+    setupFilterHandlers('#limit', 'limit')
 
     $('#searchInput').on('keydown', async function (event) {
         if (event.key === 'Enter' || event.keyCode === 13) {
@@ -56,30 +87,34 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePagination() {
         const $pagination = $('.pagination')
         $pagination.empty()
-        // Các nút điều hướng "First" và "Prev"
+
+        const visibleRange = 1 // Số trang liền kề cần hiển thị
+        const firstPage = 1
+        const lastPage = totalPages
+
+        // Nút "First" và "Prev"
         $pagination.append(`
-            <li class="page-item ${offset === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="firstPage">&laquo;&laquo;</a>
-            </li>
-            <li class="page-item ${offset === 1 ? 'disabled' : ''}">
+            <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="prevPage">&laquo;</a>
             </li>
         `)
 
-        // Hiển thị các trang, bao gồm trang đầu, trang cuối và các trang trung gian
-        for (let i = 1; i <= totalPages; i++) {
+        // Vòng lặp hiển thị trang
+        for (let i = firstPage; i <= lastPage; i++) {
             if (
-                i === 1 ||
-                i === totalPages ||
-                (i >= offset && i <= offset + 2) // Hiển thị trang gần với offset
+                i === firstPage || // Trang đầu
+                i === lastPage || // Trang cuối
+                (i >= offset - visibleRange && i <= offset + visibleRange) // Trang trong khoảng gần offset
             ) {
                 $pagination.append(`
                     <li class="page-item ${offset === i ? 'active' : ''}">
                         <a class="page-link" href="#" data-page="${i}">${i}</a>
                     </li>
                 `)
-            } else if (i === offset - 1 || i === offset + 1) {
-                // Thêm dấu "..."
+            } else if (
+                (i === offset - visibleRange - 1 && i > firstPage) || // Dấu "..." trước nhóm trang
+                (i === offset + visibleRange + 1 && i < lastPage) // Dấu "..." sau nhóm trang
+            ) {
                 $pagination.append(`
                     <li class="page-item disabled">
                         <span class="page-link">...</span>
@@ -88,21 +123,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Các nút điều hướng "Next" và "Last"
+        // Nút "Next" và "Last"
         $pagination.append(`
-            <li class="page-item ${offset === totalPages ? 'disabled' : ''}">
+            <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="nextPage">&raquo;</a>
-            </li>
-            <li class="page-item ${offset === totalPages ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="lastPage">&raquo;&raquo;</a>
             </li>
         `)
     }
 
     // LoadData
     async function loadData() {
-        console.log('Hàm loadData đã được gọi')
-
         const urlParams = new URLSearchParams(window.location.search)
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
@@ -134,6 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         renderProducts(products)
     }
+
+    // render products
     function renderProducts(products) {
         console.log(1)
         $('#product-list').empty()
@@ -288,9 +320,9 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#limit').change(async function () {
         limit = $(this).val()
         totalPages = Math.ceil(totalItems / limit)
-
+        offset = 1
         // updatePagination();
-        updateQueryParams({ limit: limit })
+        updateQueryParams({ limit: limit, offset: offset })
         await refresh()
     })
 
@@ -315,11 +347,6 @@ document.addEventListener('DOMContentLoaded', function () {
         await loadData()
         updatePagination()
     }
-
-    window.addEventListener('popstate', async function (e) {
-        // Gọi lại hàm loadData() khi người dùng quay lại
-        await refresh()
-    })
 
     refresh()
 })
