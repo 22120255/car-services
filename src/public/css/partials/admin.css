@@ -1,0 +1,52 @@
+/* custom */
+.admin-layout .content-admin {
+  margin-top: 58px; }
+
+.admin-layout aside {
+  width: 260px;
+  position: fixed;
+  top: 58px;
+  left: 0;
+  bottom: 0; }
+
+.admin-layout main {
+  margin-left: 260px; }
+
+.admin-sidebar {
+  height: 100%; }
+
+.header-area {
+  height: 58px; }
+
+.navbar-nav .nav-link.active {
+  color: #0d6efd !important; }
+
+.header-area.scrolled {
+  background-color: #666; }
+
+.btn-login,
+.btn-register {
+  min-width: 92px;
+  border-radius: 16px;
+  color: #fff; }
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; }
+
+#tippy-content.show {
+  display: flex;
+  flex-direction: column;
+  left: -100px;
+  width: max-content;
+  padding: 8px; }
+
+.username {
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  width: 150px; }
+
+.btn-cart__badge {
+  top: 7px; }
