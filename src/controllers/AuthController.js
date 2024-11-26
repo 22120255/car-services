@@ -4,7 +4,7 @@ const passport = require('passport')
 const User = require('../models/User')
 const redisClient = require('../config/redis')
 const { errorLog } = require('../utils/customLog')
-
+const { clearCache } = require('../utils/helperCache')
 class AuthController {
     //[GET] /login
     login(req, res) {
@@ -37,12 +37,7 @@ class AuthController {
                     return next(err);
                 }
                 // Clear cache before redirecting
-                redisClient.del('/dashboard', (err, response) => {
-                    if (err) {
-                        errorLog("AuthController.js", 41, err.message)
-                        console.error('Error clearing cache:', err)
-                    };
-                });
+                clearCache('/dashboard')
 
                 // Thay vì redirect, trả về một chỉ thị
                 res.status(200).json({ redirect: '/dashboard' });
@@ -126,12 +121,7 @@ class AuthController {
                         .json({ error: 'Đăng nhập tự động thất bại.' })
                 }
                 // Clear cache before redirecting
-                redisClient.del('/dashboard', (err, response) => {
-                    if (err) {
-                        errorLog("AuthController.js", 41, err.message)
-                        console.error('Error clearing cache:', err)
-                    };
-                });
+                clearCache('/dashboard')
 
                 return res.redirect('/dashboard')
             })
@@ -158,12 +148,7 @@ class AuthController {
                         .json({ error: 'Đăng nhập tự động thất bại.' })
                 }
                 // Clear cache before redirecting
-                redisClient.del('/dashboard', (err, response) => {
-                    if (err) {
-                        errorLog("AuthController.js", 41, err.message)
-                        console.error('Error clearing cache:', err)
-                    };
-                });
+                clearCache('/dashboard')
                 return res.redirect('/dashboard')
             })
         } catch (error) {
@@ -213,12 +198,7 @@ class AuthController {
                     res.redirect('/dashboard')
                 }
                 // Clear cache before redirecting
-                redisClient.del('/dashboard', (err, response) => {
-                    if (err) {
-                        errorLog("AuthController.js", 41, err.message)
-                        console.error('Error clearing cache:', err)
-                    };
-                });
+                clearCache('/dashboard')
                 res.redirect('/dashboard')
             })
         } catch (err) {
