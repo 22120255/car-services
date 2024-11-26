@@ -165,7 +165,7 @@ class ProductController {
     }
 
     productsAndGetProducts = async (req, res, next) => {
-        const page = parseInt(req.query.page) || 1
+        const page = parseInt(req.query.offset) || 1
         const limit = parseInt(req.query.limit) || 8
         const query = {}
         const search = req.query.search
@@ -204,7 +204,7 @@ class ProductController {
 
         try {
             // Lấy dữ liệu từ service
-            const { products, total, totalPages, currentPage } =
+            const { products, total } =
                 await ProductService.getPaginatedProducts(query, page, limit)
 
             // Kiểm tra header X-Requested-With để phân biệt yêu cầu Ajax
@@ -238,8 +238,6 @@ class ProductController {
                 perPages,
                 title: 'Sản phẩm',
                 total,
-                totalPages,
-                currentPage,
             })
         } catch (error) {
             console.error(error)

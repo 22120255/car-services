@@ -18,11 +18,11 @@ class ProductService {
             throw new Error(error)
         }
     }
-    getPaginatedProducts = async (query, page, perPage) => {
+    getPaginatedProducts = async (query, page, limit) => {
         try {
             const products = await Product.find(query)
-                .skip(perPage * page - perPage)
-                .limit(perPage)
+                .skip(limit * page - limit)
+                .limit(limit)
                 .exec()
 
             // Get the total count of products for pagination

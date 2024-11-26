@@ -56,28 +56,30 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePagination() {
         const $pagination = $('.pagination')
         $pagination.empty()
-
+        // Các nút điều hướng "First" và "Prev"
         $pagination.append(`
-            <li class="page-item ${offset === 0 ? 'disabled' : ''}">
+            <li class="page-item ${offset === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="firstPage">&laquo;&laquo;</a>
             </li>
-            <li class="page-item ${offset === 0 ? 'disabled' : ''}">
+            <li class="page-item ${offset === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="prevPage">&laquo;</a>
             </li>
         `)
 
+        // Hiển thị các trang, bao gồm trang đầu, trang cuối và các trang trung gian
         for (let i = 1; i <= totalPages; i++) {
             if (
                 i === 1 ||
                 i === totalPages ||
-                (i >= offset && i <= offset + 2)
+                (i >= offset && i <= offset + 2) // Hiển thị trang gần với offset
             ) {
                 $pagination.append(`
-                    <li class="page-item ${offset === i - 1 ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i - 1}">${i}</a>
+                    <li class="page-item ${offset === i ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
                     </li>
                 `)
-            } else if (i === offset - 1 || i === offset + 3) {
+            } else if (i === offset - 1 || i === offset + 1) {
+                // Thêm dấu "..."
                 $pagination.append(`
                     <li class="page-item disabled">
                         <span class="page-link">...</span>
@@ -86,15 +88,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // Các nút điều hướng "Next" và "Last"
         $pagination.append(`
-            <li class="page-item ${offset === totalPages - 1 ? 'disabled' : ''}">
+            <li class="page-item ${offset === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="nextPage">&raquo;</a>
             </li>
-            <li class="page-item ${offset === totalPages - 1 ? 'disabled' : ''}">
+            <li class="page-item ${offset === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="lastPage">&raquo;&raquo;</a>
             </li>
         `)
     }
+
     // LoadData
     async function loadData() {
         console.log('Hàm loadData đã được gọi')
@@ -102,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const urlParams = new URLSearchParams(window.location.search)
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
-
         await $.ajax({
             url: `/products?${apiQuery}`,
             type: 'GET',
@@ -258,33 +261,36 @@ document.addEventListener('DOMContentLoaded', function () {
         // Kiểm tra nếu nút bị disable thì không thực hiện gì
         if ($this.parent().hasClass('disabled')) return
 
-        // Xử lý điều hướng trang
-        if ($this.attr('id') === 'firstPage') {
-            offset = 0
-        } else if ($this.attr('id') === 'prevPage' && offset > 0) {
-            // Thêm kiểm tra offset > 0
-            offset--
-        } else if ($this.attr('id') === 'nextPage' && offset < totalPages - 1) {
-            // Thêm kiểm tra offset < totalPages - 1
-            offset++
-        } else if ($this.attr('id') === 'lastPage') {
-            offset = totalPages - 1
-        } else {
-            offset = parseInt($this.data('page'))
+        // Cập nhật giá trị của offset dựa trên nút bấm
+        switch ($this.attr('id')) {
+            case 'firstPage':
+                offset = 1 // Trang đầu tiên
+                break
+            case 'prevPage':
+                if (offset > 1) offset-- // Tránh giá trị < 1
+                break
+            case 'nextPage':
+                if (offset < totalPages) offset++ // Tránh giá trị > totalPages
+                break
+            case 'lastPage':
+                offset = totalPages // Trang cuối cùng
+                break
+            default:
+                offset = parseInt($this.data('page')) // Điều hướng theo trang cụ thể
         }
 
         // Cập nhật query params và tải lại dữ liệu
-        updateQueryParams('offset', offset)
+        updateQueryParams({ offset: offset })
         await refresh()
     })
 
     // Handle items per page change
     $('#limit').change(async function () {
-        limit = parseInt($(this).val())
+        limit = $(this).val()
         totalPages = Math.ceil(totalItems / limit)
 
         // updatePagination();
-        updateQueryParams('limit', limit)
+        updateQueryParams({ limit: limit })
         await refresh()
     })
 
@@ -309,5 +315,11 @@ document.addEventListener('DOMContentLoaded', function () {
         await loadData()
         updatePagination()
     }
+
+    window.addEventListener('popstate', async function (e) {
+        // Gọi lại hàm loadData() khi người dùng quay lại
+        await refresh()
+    })
+
     refresh()
 })

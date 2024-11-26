@@ -86,7 +86,7 @@
                             <div class="single-model-search">
                             <h2>Transmission</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" ="transmission" id="transmisstionFilter">
+                                <select class="form-control" name="transmission" id="transmissionFilter">
                                     <option value="">Select transmission</option>
                                 {{#each transmissions}}
                                         <option value="{{this.value}}">
@@ -133,7 +133,7 @@
         <!-- Items per page select -->
             <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
                 {{#each perPages}}
-                    <option value="{{this.value}}" {{#if (eq limit this.value)}}selected{{else if (eq this.value 8)}}selected{{/if}}>{{this.value}} / trang</option>
+                    <option value="{{this.value}}" >{{this.value}} / trang</option>
                 {{/each}}
             </select>
 

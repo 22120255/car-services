@@ -200,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const urlParams = new URLSearchParams(window.location.search)
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
-
         await $.ajax({
             url: `/admin/users?${apiQuery}`,
             type: 'GET',
