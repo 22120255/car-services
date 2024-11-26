@@ -16,28 +16,6 @@ class SiteController {
             title: 'Thông tin cá nhân'
         })
     }
-
-    // [PATCH] /user/avatar/store
-    async updateAvatar(req, res) {
-        try {
-            const pathFile = req.file.path;
-            const userId = req.body.userId;
-
-            await User.findByIdAndUpdate(userId, {
-                avatar: pathFile
-            });
-
-            res.status(200).json({
-                avatarUrl: pathFile
-            });
-
-        } catch (error) {
-            logger.error(error.message);
-            res.status(500).json({
-                error: 'Failed to update avatar'
-            });
-        }
-    }
 }
 
 module.exports = new SiteController()

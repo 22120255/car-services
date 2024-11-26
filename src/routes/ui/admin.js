@@ -1,15 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const adminController = require('../controllers/AdminController')
-const { checkRole } = require('../middleware/authMiddleware')
+const adminController = require('../../controllers/AdminController')
+const { checkRole } = require('../../middleware/authMiddleware')
 
 router.get("/dashboard", checkRole(['admin', 'sadmin']), adminController.index) // render view dashbaord
-router.get('/users', checkRole(['admin', 'sadmin']), adminController.getUser)
 router.get('/users/accounts', checkRole(['admin', 'sadmin']), adminController.accounts) // render view user management
-router.patch('/users/update-role', checkRole(['admin', 'sadmin']), adminController.updateRole)
-router.patch('/users/update-status', checkRole(['admin', 'sadmin']), adminController.updateStatus)
-router.delete('/users/:id', checkRole(['admin', 'sadmin']), adminController.deleteUser)
 router.get('/users/:id/details', checkRole(['admin', 'sadmin']), adminController.getUserDetails) // render view user detail
 router.get('/products', checkRole(['admin', 'sadmin']), adminController.products) // render view Inventory
 router.get('/orders', checkRole(['admin', 'sadmin']), adminController.orders) // render view Orders

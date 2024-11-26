@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             $("#icon-loading").removeClass("d-none");
             await $.ajax({
-                url: '/auth/login/email/verify',
+                url: '/api/auth/login/email/verify',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ email, password }),

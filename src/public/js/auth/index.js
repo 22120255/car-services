@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const user = await signInWithGoogle();
 
             await $.ajax({
-                url: "/auth/register/google/store",
+                url: "/api/auth/register/google/store",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const user = await signInWithFacebook();
             await $.ajax({
-                url: "/auth/register/facebook/store",
+                url: "/api/register/facebook/store",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
