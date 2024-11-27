@@ -167,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
             },
         })
-        offset = totalPages ? 1 : ''
         if (filters) {
             renderFilters(filters, params)
         }
@@ -352,7 +351,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function refresh() {
-        syncFiltersFromURL()
         await loadData()
         updatePagination()
     }
