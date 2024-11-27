@@ -132,7 +132,8 @@ class AuthController {
                 // Clear cache before redirecting
                 clearCache('/dashboard')
 
-                return res.redirect('/dashboard')
+                // Thay vì redirect, trả về một chỉ thị
+                res.status(200).json({ redirect: '/dashboard' });
             })
         } catch (error) {
             res.status(500).json({ message: 'Lỗi server' })
@@ -158,7 +159,9 @@ class AuthController {
                 }
                 // Clear cache before redirecting
                 clearCache('/dashboard')
-                return res.redirect('/dashboard')
+
+                // Thay vì redirect, trả về một chỉ thị
+                res.status(200).json({ redirect: '/dashboard' });
             })
         } catch (error) {
             res.status(500).json({ message: 'Lỗi server' })
