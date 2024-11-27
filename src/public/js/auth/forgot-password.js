@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         $(this).text("Đang gửi...").prop('disabled', true);
         $.ajax({
-            url: '/auth/forgot-password/send-code',
+            url: '/api/auth/forgot-password/send-code',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ email }),
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Call API to reset the password
         $.ajax({
-            url: '/auth/reset-password',
+            url: '/api/auth/reset-password',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ email, verificationCode, password }),

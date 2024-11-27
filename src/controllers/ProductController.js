@@ -9,20 +9,20 @@ const {
     brands,
     transmissions,
     statuses,
-    price,
-    perPage,
+    prices,
+    perPages,
 } = require('../data/mockProducts')
 
 class ProductController {
     index(req, res) {
         res.render('products/index', {
-            title: 'Sản phẩm'
+            title: 'Sản phẩm',
         })
     }
 
     detail(req, res) {
         res.render('products/detail', {
-            title: 'Chi tiết sản phẩm'
+            title: 'Chi tiết sản phẩm',
         })
     }
 
@@ -56,7 +56,7 @@ class ProductController {
     //         }
 
     //         const products = await ProductService.getFilteredProducts(query)
-    //         res.render('products/index', {
+    //         res.render('products/', {
     //             products: multipleMongooseToObject(products),
     //             queries: query,
     //             years: years,
@@ -99,31 +99,90 @@ class ProductController {
                 sameYearProducts: multipleMongooseToObject(sameYearProducts),
                 similarPriceProducts:
                     multipleMongooseToObject(similarPriceProducts),
-                title: 'Chi tiết sản phẩm'
+                title: 'Chi tiết sản phẩm',
             })
         } catch (error) {
             console.log(error)
             next(error)
         }
     }
-    pagination = async (req, res, next) => {
-        const page = parseInt(req.query.page) || 1
+    // pagination = async (req, res, next) => {
+    //     const page = parseInt(req.query.page) || 1
+    //     const limit = parseInt(req.query.limit) || 8
+    //     const query = {}
+    //     const search = req.query.search
+
+    //     if (req.query.year) query.year = req.query.year
+    //     if (req.query.category) query.category = req.query.category
+    //     if (req.query.brand) query.brand = req.query.brand
+    //     if (req.query.status) query.status = req.query.status
+    //     if (req.query.transmission) query.transmission = req.query.transmission
+
+    //     if (req.query.priceMin || req.query.priceMax) {
+    //         query.price = {}
+    //         if (req.query.priceMin) query.price.$gte = req.query.priceMin
+    //         if (req.query.priceMax) query.price.$lte = req.query.priceMax
+    //     }
+
+    //     if (search) {
+    //         const keywords = search.split(' ')
+
+    //         const brandAndModel = keywords.map((key) => ({
+    //             $or: [
+    //                 { brand: { $regex: key, $options: 'i' } },
+    //                 { model: { $regex: key, $options: 'i' } },
+    //             ],
+    //         }))
+
+    //         const descriptionSearch = keywords.map((key) => ({
+    //             description: { $regex: key, $options: 'i' },
+    //         }))
+
+    //         query.$or = [...brandAndModel, ...descriptionSearch]
+    //     }
+
+    //     try {
+    //         const { products, total, totalPages, currentPage } =
+    //             await ProductService.getPaginatedProducts(query, page, limit)
+    //         res.render('products/index', {
+    //             products: multipleMongooseToObject(products),
+    //             years,
+    //             categories,
+    //             brands,
+    //             transmissions,
+    //             statuses,
+    //             prices,
+    //             perPages,
+    //             total,
+    //             title: 'Sản phẩm',
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //         next(error)
+    //     }
+    // }
+
+    productsAndGetProducts = async (req, res, next) => {
+        const page = parseInt(req.query.offset) || 1
         const limit = parseInt(req.query.limit) || 8
         const query = {}
         const search = req.query.search
 
+        // Lọc theo các trường cụ thể
         if (req.query.year) query.year = req.query.year
         if (req.query.category) query.category = req.query.category
         if (req.query.brand) query.brand = req.query.brand
         if (req.query.status) query.status = req.query.status
         if (req.query.transmission) query.transmission = req.query.transmission
 
+        // Lọc theo giá
         if (req.query.priceMin || req.query.priceMax) {
             query.price = {}
             if (req.query.priceMin) query.price.$gte = req.query.priceMin
             if (req.query.priceMax) query.price.$lte = req.query.priceMax
         }
 
+        // Tìm kiếm theo từ khóa
         if (search) {
             const keywords = search.split(' ')
 
@@ -142,8 +201,32 @@ class ProductController {
         }
 
         try {
-            const { products, total, totalPages, currentPage } =
+            // Lấy dữ liệu từ service
+            const { products, total } =
                 await ProductService.getPaginatedProducts(query, page, limit)
+
+            const isAjax =
+                req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest'
+            // Kiểm tra header X-Requested-With để phân biệt yêu cầu Ajax
+            if (isAjax && req.headers.referer?.includes('/products')) {
+                // Trả về JSON cho yêu cầu Ajax
+                return res.status(200).json({
+                    products: multipleMongooseToObject(products),
+                    total,
+                    filters: {
+                        years,
+                        categories,
+                        brands,
+                        transmissions,
+                        statuses,
+                        prices,
+                        perPages,
+                    },
+                    title: 'Sản phẩm',
+                })
+            }
+
+            // Nếu không phải yêu cầu Ajax, trả về HTML
             res.render('products/index', {
                 products: multipleMongooseToObject(products),
                 years,
@@ -151,15 +234,13 @@ class ProductController {
                 brands,
                 transmissions,
                 statuses,
+                prices,
+                perPages,
+                title: 'Sản phẩm',
                 total,
-                price,
-                pages: totalPages,
-                current: currentPage,
-                perPage,
-                title: 'Sản phẩm'
             })
         } catch (error) {
-            console.log(error)
+            console.error(error)
             next(error)
         }
     }

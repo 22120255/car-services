@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const $select = $(this)
 
         $.ajax({
-            url: '/admin/users/update-role',
+            url: '/api/users/update-role',
             method: 'PATCH',
             data: { userId, role: newRole },
             statusCode: {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const $select = $(this)
 
         $.ajax({
-            url: '/admin/users/update-status',
+            url: '/api/users/update-status',
             method: 'PATCH',
             data: { userId, status: newStatus },
             statusCode: {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('click')
         const userId = $(this).closest('tr').data('user-id')
         console.log('userId ', userId)
-        $.get(`/admin/users/${userId}/details`, function (data) {
+        $.get(`/api/users/${userId}/details`, function (data) {
             $('#userDetailsModal .modal-body').html(data)
         })
     })
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'Bạn có chắc chắn muốn xóa tài khoản này không?',
             function () {
                 $.ajax({
-                    url: `/admin/users/${userId}`,
+                    url: `/api/users/${userId}`,
                     method: 'DELETE',
                     statusCode: {
                         200(resp) {
@@ -200,9 +200,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const urlParams = new URLSearchParams(window.location.search)
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
-
         await $.ajax({
-            url: `/admin/users?${apiQuery}`,
+            url: `/api/users?${apiQuery}`,
             type: 'GET',
             statusCode: {
                 200(resp) {

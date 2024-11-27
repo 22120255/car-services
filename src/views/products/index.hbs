@@ -1,3 +1,5 @@
+
+
 <section id='featured-cars' class='featured-cars'>
     <div class='container'>
         <div class="section-header">
@@ -6,13 +8,12 @@
             <p class="section-description">Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.</p>
         </div>
         <div class="featured-cars-filter" id = "filter-form">
-            <form id="filterForm" method="GET" action="/products">
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
                         <div class="row mb-3">
                             <div class="input-group input-group-sm search-input">
-                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="{{queries.search}}">
+                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="" id="searchInput">
                                 <button class="btn btn-outline-secondary" id="btn-search">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -24,10 +25,10 @@
                             <div class="single-model-search">
                             <h2>Year</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="year">
+                                <select class="form-control" name="year" id="yearFilter">
                                     <option value="">Select year</option>
                                     {{#each years}}
-                                        <option value="{{this.value}}" {{#if (eq year this.value)}}selected{{/if}}>
+                                        <option value="{{this.value}}">
                                             {{this.name}}
                                         </option>
                                     {{/each}} 
@@ -38,11 +39,11 @@
                             <div class="single-model-search">
                             <h2>Style</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="category">
+                                <select class="form-control" name="category" id="categoryFilter">
                                     <option value="">Select style</option>
                                     {{#each categories}}
-                                        <option value="{{this.name}}" {{#if (eq category this.name)}}selected{{/if}}>
-                                            {{this.label}}
+                                        <option value="{{this.value}}" >
+                                            {{this.name}}
                                         </option>
                                     {{/each}} 
                                 </select>
@@ -54,10 +55,10 @@
                             <div class="single-model-search">
                             <h2>Brand</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="brand">
+                                <select class="form-control" name="brand" id="brandFilter">
                                     <option value="">Select brand</option>
                                     {{#each brands}}
-                                        <option value="{{this.value}}" {{#if (eq brand this.value)}}selected{{/if}}>
+                                        <option value="{{this.value}}">
                                             {{this.name}}
                                         </option>
                                     {{/each}}                  
@@ -68,11 +69,11 @@
                             <div class="single-model-search">
                             <h2>Status</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="status">
+                                <select class="form-control" name="status" id="statusFilter">
                                     <option value="">Select status</option>
                                     {{#each statuses}}
-                                        <option value="{{this.name}}" {{#if (eq status this.name)}}selected{{/if}}>
-                                            {{this.label}}
+                                        <option value="{{this.value}}">
+                                            {{this.name}}
                                         </option>
                                     {{/each}}      
                                 </select>
@@ -84,11 +85,11 @@
                             <div class="single-model-search">
                             <h2>Transmission</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="transmission">
+                                <select class="form-control" name="transmission" id="transmissionFilter">
                                     <option value="">Select transmission</option>
                                 {{#each transmissions}}
-                                        <option value="{{this.name}}" {{#if (eq transmission this.name)}}selected{{/if}}>
-                                            {{this.label}}
+                                        <option value="{{this.value}}">
+                                            {{this.name}}
                                         </option>
                                     {{/each}}   
                                 </select>
@@ -98,12 +99,12 @@
                             <div class="single-model-search">
                             <h2>Price Range ($)</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="price">
+                                <select class="form-control" name="price" id = "priceFilter">
                                     <option value="">Select price range</option>
-                                    {{#each price}}
+                                    {{#each prices}}
                                         <option 
                                             value="{{this.priceMin}}-{{this.priceMax}}"
-                                            {{#if (and (gt this.price this.priceMin) (lt this.price this.priceMax)) }}selected{{/if}}> <!-- 1 1 là true -->
+                                           > <!-- 1 1 là true -->
                                             ${{this.priceMin}} - ${{this.priceMax}}
                                         </option>
                                     {{/each}}
@@ -116,105 +117,23 @@
                     </div>
                     </div>
                 </div>
-            </form>
         </div>
         <div class='container'>
             <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
-                <h2 id="search-inform"></h2>
-                {{#each products}}
-                    <div class='col-lg-3 col-md-4 col-sm-6'>
-                        {{> CardProduct product=this}}
-                    </div>
-                {{else}}
-                <div class='col-lg-12'>
-                    <div class='find-nothing text-center' >
-                            <h2 style = "font-size: large; color: #978e8e">Find nothing!</h2>
-                    </div>
-                </div>
-                {{/each}}
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
-            {{#if pages}}
-                <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
-                <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
-                    <ul class="pagination" style="margin: 0;">
-                        <!-- Previous Button -->
-                        <li class="page-item btn-previous {{#unless (gt current 1)}}disabled{{/unless}}">
-                            <a class="page-link" name = "previous-page" value = "{{dec current}}" href="" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-
-                        <!-- Next Button -->
-                        <li class="page-item btn-next {{#unless (lt current pages)}}disabled{{/unless}}">
-                            <a class="page-link" name = "next-page" value = "{{inc current}}" href="" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                     <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            const currentPage = {{current}};
-                            const totalPages = {{pages}};
-
-                            function generatePagination(currentPage, totalPages) {
-                                const paginationItems = [];
-
-                                function addPageItem(page, text = page) {
-                                    if (text === '...') {
-                                        paginationItems.push(`
-                                            <li class="page-item disabled">
-                                                <span class="page-link h-100 bg-white shadow-sm border-0">${text}</span>
-                                            </li>
-                                        `);
-                                    } else {
-                                        
-                                        paginationItems.push(`
-                                            <li class="page-item ${page === currentPage ? 'active' : ''}">
-                                                <a class="page-link" name="current" value="${text}" href="">${text}</a>
-                                            </li>
-                                        `);
-                                    }
-                                }
-
-                                  if (totalPages <= 5) {
-                                    for (let i = 1; i <= totalPages; i++) {
-                                        addPageItem(i);
-                                    }
-                                } else {
-                                    addPageItem(1);
-
-                                    if (currentPage > 3) {
-                                        addPageItem(2, '...');
-                                    }
-
-                                    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-                                        addPageItem(i);
-                                    }
-
-                                    if (currentPage < totalPages - 2) {
-                                        addPageItem(totalPages - 1, '...');
-                                    }
-
-                                    addPageItem(totalPages);
-                                }
-                                $('.btn-previous').after(paginationItems.join(''));
-                            }
-                            generatePagination(currentPage, totalPages);
-                        })
-                    </script>
-                </nav>
-            {{/if}}
-            
-            <!-- Items per page select -->
-            <form id="filterForm" method="GET" action="/products">
-                <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
-                    {{#each perPage}}
-                        <option value="{{this.value}}" {{#if (eq limit this.value)}}selected{{else if (eq this.value 8)}}selected{{/if}}>{{this.value}} / trang</option>
-                    {{/each}}
-                </select>
-            </form>
+            <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
+            <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
+                <ul class="pagination" style="margin: 0;">
+                    <!--pagination here-->
+                </ul>
+        <!-- Items per page select -->
+            <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
+                {{#each perPages}}
+                    <option value="{{this.value}}" >{{this.name}} / trang</option>
+                {{/each}}
+            </select>
 
         </div>
     </div>
