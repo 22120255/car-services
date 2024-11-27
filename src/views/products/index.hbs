@@ -8,13 +8,12 @@
             <p class="section-description">Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.</p>
         </div>
         <div class="featured-cars-filter" id = "filter-form">
-            <form id="filterForm" method="GET" action="/products">
                 <div class="row">
                     <div class="col-md-12">
                     <div class="model-search-content">
                         <div class="row mb-3">
                             <div class="input-group input-group-sm search-input">
-                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="{{queries.search}}" id="searchInput">
+                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="" id="searchInput">
                                 <button class="btn btn-outline-secondary" id="btn-search">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -118,7 +117,6 @@
                     </div>
                     </div>
                 </div>
-            </form>
         </div>
         <div class='container'>
             <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->

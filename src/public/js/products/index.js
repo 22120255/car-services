@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#categoryFilter').val(categoryFilter)
     $('#transmissionFilter').val(transmissionFilter)
     $('#yearFilter').val(yearFilter)
-    $('#price').val(`${priceMinFilter}-${priceMaxFilter}`)
+    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
 
     function syncFiltersFromURL() {
         const urlParams = new URLSearchParams(window.location.search)
@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
         offset = parseInt(urlParams.get('offset')) || 1
         priceMinFilter = parseFloat(urlParams.get('priceMin')) || null
         priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null
-        categoryFilter = parseInt(urlParams.get('category')) || null
-        brandFilter = parseInt(urlParams.get('brand')) || null
-        statusFilter = parseInt(urlParams.get('status')) || null
-        transmissionFilter = parseInt(urlParams.get('transmission')) || null
-        searchText = urlParams.get('search') || ''
+        categoryFilter = urlParams.get('category') || null
+        brandFilter = urlParams.get('brand') || null
+        statusFilter = urlParams.get('status') || null
+        transmissionFilter = urlParams.get('transmission') || null
+        searchText = urlParams.get('search') || null
         yearFilter = parseInt(urlParams.get('year')) || null
 
         // Đồng bộ với giao diện
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#categoryFilter').val(categoryFilter)
         $('#transmissionFilter').val(transmissionFilter)
         $('#yearFilter').val(yearFilter)
-        $('#price').val(`${priceMinFilter}-${priceMaxFilter}`)
+        $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
     }
 
     // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
@@ -71,13 +71,22 @@ document.addEventListener('DOMContentLoaded', function () {
     setupFilterHandlers('#yearFilter', 'year')
     setupFilterHandlers('#limit', 'limit')
 
-    $('#searchInput').on('keydown', async function (event) {
+    $('#searchInput').on('keyup', async function (event) {
         if (event.key === 'Enter' || event.keyCode === 13) {
-            updateQueryParams('search')
+            const search = $('#searchInput').val()
+            updateQueryParams({ search: search })
+            await refresh()
         }
     })
 
-    $('#price').on('change', async function () {
+    $('#btn-search').on('click', async function (event) {
+        event.preventDefault()
+        const search = $('#searchInput').val()
+        updateQueryParams({ search: search })
+        await refresh()
+    })
+
+    $('#priceFilter').on('change', async function () {
         const price = $(this).val()
         const [min, max] = price ? price.split('-') : ['', '']
         updateQueryParams({ priceMin: min, priceMax: max })
@@ -144,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             statusCode: {
                 200(resp) {
-                    console.log('Dữ liệu trả về từ API:', resp) // Kiểm tra xem dữ liệu có trả về không
                     products = resp.products
                     totalItems = resp.total
                     totalPages = Math.ceil(totalItems / limit)
@@ -155,9 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
             },
         })
-
-        console.log('Sản phẩm:', products)
-        console.log('Filters:', filters)
 
         if (filters) {
             renderFilters(filters, params)
@@ -220,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // render filters
     function renderFilters(filters, params) {
+        console.log(params)
         // Xử lý từng loại filter
         const renderSelectOptions = (
             element,
@@ -273,9 +279,8 @@ document.addEventListener('DOMContentLoaded', function () {
         priceFilter.empty().append('<option value="">Select price</option>')
         filters.prices.forEach((price) => {
             const isSelected =
-                params.price &&
-                parseInt(params.price.split('-')[0]) === price.priceMin &&
-                parseInt(params.price.split('-')[1]) === price.priceMax
+                parseFloat(params.priceMin) === price.priceMin &&
+                parseFloat(params.priceMax) === price.priceMax
 
             priceFilter.append(
                 `<option value="${price.priceMin}-${price.priceMax}" ${

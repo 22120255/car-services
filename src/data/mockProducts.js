@@ -50,7 +50,7 @@ const categories = [
 const prices = [
     { priceMin: 0, priceMax: 50000, label: '0 - 50000' },
     { priceMin: 50000, priceMax: 100000, label: '50000 - 100000' },
-    { priceMin: 100000, priceMax: 150000, label: '100000 - 200000' },
+    { priceMin: 100000, priceMax: 200000, label: '100000 - 200000' },
     { priceMin: 200000, priceMax: 5000000, label: '200000+' },
 ]
 
