@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
         }],
+        favoriteProducts: [{// When user click favorite product, it will added here
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        }],
         recentActivity: [{
             type: { type: String, enum: ['purchase', 'search'] },
             date: { type: Date, default: Date.now },

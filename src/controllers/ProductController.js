@@ -156,6 +156,7 @@ class ProductController {
                 total,
                 pages: totalPages,
                 current: currentPage,
+                perPage,
                 title: 'Sản phẩm',
             })
         } catch (error) {

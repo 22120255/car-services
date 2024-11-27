@@ -3,7 +3,48 @@ import { showToast } from '../common.js';
 document.addEventListener('DOMContentLoaded', () => {
     // Các nút chỉnh sửa thông tin cá nhân
     $(".btn-edit-profile").on('click', function () {
-        showToast("Error", "This feature is not available yet.");
+        $('.edit-profile-form').show();
+        $('.profile-info').hide();
+    });
+
+    $('#cancel-edit').on('click', function () {
+        $('.edit-profile-form').hide();
+        $('.profile-info').show();
+    });
+    // Handle save changes button edit profile
+    $('#edit-profile-form').on('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = $(this).serializeArray();
+        const data = {
+            id: user.id
+        };
+        $.each(formData, function (value, field) {
+            data[field.name] = field.value;
+        });
+
+        try {
+            await $.ajax({
+                url: '/api/users',
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                statusCode: {
+                    200(updatedUser) {
+                        $('.profile-name').text(updatedUser.fullName);
+                        $('.profile-email').text(updatedUser.email);
+                        $('#phone-user').text(updatedUser.metadata.phone);
+                        $('#address-user').text(updatedUser.metadata.address);
+                        $('.edit-profile-form').hide();
+                        $('.profile-info').show();
+                        showToast('Success', 'Profile updated successfully');
+                    }
+                }
+            });
+        } catch (error) {
+            console.log(error)
+            showToast('Error', 'Failed to update profile');
+        }
     });
 
     $(".btn-change-password").on('click', function () {
@@ -71,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('userId', user.id)
 
         $.ajax({
-            url: '/user/avatar/store',
+            url: '/api/users/avatar/store',
             type: 'PATCH',
             data: formData,
             processData: false,

@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const user = await signInWithGoogle();
 
             await $.ajax({
-                url: "/auth/register/google/store",
+                url: "/api/auth/register/google/store",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -33,11 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     avatar: user.photoURL,
                 }),
                 statusCode: {
-                    200(message) {
-                        console.log(message);
-                        window.location.href = "/dashboard"
-                    },
                     500(message) {
+                        console.log("Error when login with Google: ", message);
                         showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
                     }
                 }
@@ -56,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const user = await signInWithFacebook();
             await $.ajax({
-                url: "/auth/register/facebook/store",
+                url: "/api/register/facebook/store",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -66,11 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     avatar: user.photoURL,
                 }),
                 statusCode: {
-                    200(message) {
-                        console.log(message);
-                        window.location.href = "/dashboard"
-                    },
                     500(message) {
+                        console.log("Error when login with Facebook: ", message);
                         showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
                     }
                 }
