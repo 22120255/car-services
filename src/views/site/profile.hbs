@@ -52,12 +52,16 @@
                             <div class='info-item'>
                                 <i class='fas fa-phone'></i>
                                 <span><strong>Phone:</strong>
-                                    <span id="phone-user">{{_user.metadata.phone}}</span></span>
+                                    <span
+                                        id='phone-user'
+                                    >{{_user.metadata.phone}}</span></span>
                             </div>
                             <div class='info-item'>
                                 <i class='fas fa-map-marker-alt'></i>
                                 <span><strong>Address:</strong>
-                                    <span id="address-user">{{_user.metadata.address}}</span></span>
+                                    <span
+                                        id='address-user'
+                                    >{{_user.metadata.address}}</span></span>
                             </div>
                             <div class='info-item'>
                                 <i class='fas fa-calendar-alt'></i>
@@ -138,13 +142,14 @@
                             value='{{_user.metadata.address}}'
                         />
                     </div>
-                    <div class="d-flex justify-content-end">
-                      <button type='submit' class='btn btn-primary'>Save Changes</button>
-                      <button
-                          type='button'
-                          class='btn btn-secondary'
-                          id='cancel-edit'
-                      >Cancel</button>
+                    <div class='d-flex justify-content-end'>
+                        <button type='submit' class='btn btn-primary'>Save
+                            Changes</button>
+                        <button
+                            type='button'
+                            class='btn btn-secondary'
+                            id='cancel-edit'
+                        >Cancel</button>
                     </div>
                 </form>
             </section>

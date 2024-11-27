@@ -9,7 +9,6 @@ const userApiRouter = require('./api/user')
 const authApiRouter = require('./api/auth')
 const cartApiRouter = require('./api/cart')
 
-
 function route(app) {
     // API
     app.use('/api/users', userApiRouter)
