@@ -4,11 +4,11 @@
     "main": "src/app.js",
     "scripts": {
         "beautiful": "prettier --write --single-quote --trailing-comma all \"src/**/*.js\"",
-        "dev": "NODE_ENV=development nodemon src/app.js",
-        "start": "NODE_ENV=production node src/app.js && node src/data/seed/role.js",
+        "dev": "cross-env NODE_ENV=development nodemon src/app.js",
+        "start": "cross-env NODE_ENV=production node src/app.js && node src/data/seed/role.js",
         "watch": "node-sass --watch src/styles/ --output src/public/css/",
-        "seed:roles": "NODE_ENV=development node src/data/seed/role.js",
-        "seed:users": "NODE_ENV=development node src/data/seed/user.js",
+        "seed:roles": "cross-env NODE_ENV=development node src/data/seed/role.js",
+        "seed:users": "cross-env NODE_ENV=development node src/data/seed/user.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
@@ -28,6 +28,7 @@
         "cloudinary": "^1.21.0",
         "connect-flash": "^0.1.1",
         "connect-mongodb-session": "^5.0.0",
+        "cross-env": "^7.0.3",
         "dotenv": "^16.4.5",
         "express": "^4.21.1",
         "express-handlebars": "^8.0.1",
