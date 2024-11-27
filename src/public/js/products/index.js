@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
-            updateQueryParams({ [paramKey]: $(this).val() })
+            offset = 1
+            updateQueryParams({ [paramKey]: $(this).val(), offset: offset })
             await refresh()
         })
     }
@@ -74,7 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#searchInput').on('keyup', async function (event) {
         if (event.key === 'Enter' || event.keyCode === 13) {
             const search = $('#searchInput').val()
-            updateQueryParams({ search: search })
+            offset = 1
+            updateQueryParams({ search: search, offset: offset })
             await refresh()
         }
     })
@@ -82,14 +84,16 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#btn-search').on('click', async function (event) {
         event.preventDefault()
         const search = $('#searchInput').val()
-        updateQueryParams({ search: search })
+        offset = 1
+        updateQueryParams({ search: search, offset: offset })
         await refresh()
     })
 
     $('#priceFilter').on('change', async function () {
         const price = $(this).val()
         const [min, max] = price ? price.split('-') : ['', '']
-        updateQueryParams({ priceMin: min, priceMax: max })
+        offset = 1
+        updateQueryParams({ priceMin: min, priceMax: max, offset: offset })
         refresh()
     })
 
@@ -163,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
             },
         })
-
+        offset = totalPages ? 1 : ''
         if (filters) {
             renderFilters(filters, params)
         }
@@ -225,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // render filters
     function renderFilters(filters, params) {
-        console.log(params)
         // Xử lý từng loại filter
         const renderSelectOptions = (
             element,
@@ -349,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function refresh() {
+        syncFiltersFromURL()
         await loadData()
         updatePagination()
     }

@@ -1,1 +1,99 @@
-{{> PageBackup}}
+<section id='car-list' class='active-section'>
+    <div class='section-header'>
+        <h2>Car List</h2>
+        <div class='header-actions'>
+            <button class='btn btn-primary' id='add-car-btn'>
+                <i class='fas fa-plus'></i>
+                Add Car
+            </button>
+            <button class='btn btn-secondary' id='view-trash-btn'>
+                <i class='fas fa-trash'></i>
+                View Trash
+            </button>
+        </div>
+    </div>
+    <div class='filters'>
+        <input type='text' placeholder='Search by name or code' />
+        <select>
+            <option value=''>All Brands</option>
+            <option value='Toyota'>Toyota</option>
+            <option value='Honda'>Honda</option>
+            <option value='Ford'>Ford</option>
+        </select>
+        <select>
+            <option value=''>All Status</option>
+            <option value='available'>Available</option>
+            <option value='sold'>Sold</option>
+        </select>
+        <select>
+            <option value=''>Price Range</option>
+            <option value='0-20000'>$0 - $20,000</option>
+            <option value='20001-40000'>$20,001 - $40,000</option>
+            <option value='40001+'>$40,001+</option>
+        </select>
+    </div>
+    <div class='car-grid' id='car-grid'>
+        <div class='car-card'>
+            <img src='https://via.placeholder.com/200x150' alt='Toyota Camry' />
+            <h3>Toyota Camry</h3>
+            <p>Code: TC001</p>
+            <p>Brand: Toyota</p>
+            <p>Price: $25,000</p>
+            <p class='status available'>Available</p>
+            <div class='actions'>
+                <button class='edit'><i class='fas fa-edit'></i> Edit</button>
+                <button class='delete'><i class='fas fa-trash'></i>
+                    Delete</button>
+            </div>
+        </div>
+        <div class='car-card'>
+            <img src='https://via.placeholder.com/200x150' alt='Honda Civic' />
+            <h3>Honda Civic</h3>
+            <p>Code: HC001</p>
+            <p>Brand: Honda</p>
+            <p>Price: $22,000</p>
+            <p class='status sold'>Sold</p>
+            <div class='actions'>
+                <button class='edit'><i class='fas fa-edit'></i> Edit</button>
+                <button class='delete'><i class='fas fa-trash'></i>
+                    Delete</button>
+            </div>
+        </div>
+        <div class='car-card'>
+            <img src='https://via.placeholder.com/200x150' alt='Ford Mustang' />
+            <h3>Ford Mustang</h3>
+            <p>Code: FM001</p>
+            <p>Brand: Ford</p>
+            <p>Price: $35,000</p>
+            <p class='status available'>Available</p>
+            <div class='actions'>
+                <button class='edit'><i class='fas fa-edit'></i> Edit</button>
+                <button class='delete'><i class='fas fa-trash'></i>
+                    Delete</button>
+            </div>
+        </div>
+    </div>
+    <div id='trash-section' class='trash-section hidden'>
+        <h3>Trash</h3>
+        <div class='car-grid'>
+            <div class='car-card trash-item'>
+                <img
+                    src='https://via.placeholder.com/200x150'
+                    alt='Deleted Car'
+                />
+                <h3>Deleted Car</h3>
+                <p>Code: DC001</p>
+                <p>Brand: Example</p>
+                <p>Price: $20,000</p>
+                <div class='actions'>
+                    <button class='restore'><i class='fas fa-undo'></i>
+                        Restore</button>
+                    <button class='permanent-delete'><i
+                            class='fas fa-trash-alt'
+                        ></i>
+                        Permanent Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
