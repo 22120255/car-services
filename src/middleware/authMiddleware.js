@@ -1,13 +1,13 @@
 const navigateUser = (req, res, next) => {
-    res.locals.user = req.user || null;
+    res.locals.user = req.user || null
 
-    next();
-};
+    next()
+}
 const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
-        return next();
+        return next()
     }
-    res.redirect('/auth/login');
+    res.redirect('/auth/login')
 }
 const checkRole = (nameRoles) => {
     return async (req, res, next) => {
@@ -15,12 +15,12 @@ const checkRole = (nameRoles) => {
             return next();
         }
 
-        res.redirect('/auth/login');
+        res.redirect('/auth/login')
     }
 }
 
 module.exports = {
     navigateUser,
     isAuthenticated,
-    checkRole
+    checkRole,
 }

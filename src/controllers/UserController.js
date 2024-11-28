@@ -82,18 +82,49 @@ class UserController {
         }
     }
 
-    // [GET] /admin/products
+    // [GET] /admin/inventory/products
     async products(req, res) {
         try {
-            res.render('admin/products', {
+            res.render('admin/inventory/products', {
                 layout: 'admin',
                 title: 'Quản lý sản phẩm',
             })
         } catch (error) {
-            errorLog("UserController", 93, error.message)
+            logger.error(error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
+
+    // [GET] /admin/inventory/
+    async getProducts(req, res) {
+        const {
+            limit,
+            offset,
+            search,
+            status,
+            brand,
+            model,
+            priceMin,
+            priceMax,
+        } = req.query
+        try {
+            const { products, total } = await UserService.getProducts({
+                limit: limit || 10,
+                offset: offset || 1,
+                search,
+                status,
+                brand,
+                model,
+                priceMin,
+                priceMax,
+            })
+            return res.status(200).json({ products, total })
+        } catch (error) {
+            errorLog("UserController", 137, error.message)
+            res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' })
+        }
+    }
+
 
     // [GET] /admin/orders
     async orders(req, res) {
@@ -103,7 +134,7 @@ class UserController {
                 title: 'Quản lý đơn hàng',
             })
         } catch (error) {
-            errorLog("UserController", 106, error.message)
+            errorLog("UserController", 137, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -116,7 +147,7 @@ class UserController {
                 title: 'Báo cáo thống kê',
             })
         } catch (error) {
-            errorLog("UserController", 119, error.message)
+            errorLog("UserController", 150, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -129,7 +160,7 @@ class UserController {
                 title: 'Cài đặt hệ thống',
             })
         } catch (error) {
-            errorLog("UserController", 132, error.message)
+            errorLog("UserController", 163, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -144,7 +175,7 @@ class UserController {
                 layout: false
             })
         } catch (error) {
-            errorLog("UserController", 43, error.message);
+            errorLog("UserController", 178, error.message);
             res.status(404).json({ message: error.message });
         }
     }

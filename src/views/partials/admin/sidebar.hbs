@@ -1,17 +1,28 @@
-<div class="admin-sidebar bg-dark text-white p-3 min-vh-100">
-   <!-- Admin Profile -->
-    <div class="text-center py-3 border-bottom d-flex flex-column align-items-center">
-        <div class="mb-3">
+<div class='admin-sidebar bg-dark text-white p-3 min-vh-100'>
+    <!-- Admin Profile -->
+    <div
+        class='text-center py-3 border-bottom d-flex flex-column align-items-center'
+    >
+        <div class='mb-3'>
             {{#if user.avatar}}
-                <img src="{{user.avatar}}" alt="Admin Avatar" class="rounded-circle" width="80" height="80">
+                <img
+                    src='{{user.avatar}}'
+                    alt='Admin Avatar'
+                    class='rounded-circle'
+                    width='80'
+                    height='80'
+                />
             {{else}}
-                <div class="default-avatar rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                    <i class="fas fa-user fa-2x"></i>
+                <div
+                    class='default-avatar rounded-circle bg-secondary d-flex align-items-center justify-content-center'
+                    style='width: 80px; height: 80px;'
+                >
+                    <i class='fas fa-user fa-2x'></i>
                 </div>
             {{/if}}
         </div>
-        <h6 class="mb-1">{{user.fullName}}</h6>
-        <span class="small text-secondary">Administrator</span>
+        <h6 class='mb-1'>{{user.fullName}}</h6>
+        <span class='small text-secondary'>Administrator</span>
     </div>
 
     <!-- Navigation Menu -->
@@ -57,9 +68,12 @@
     </nav>
 
     <!-- Footer -->
-    <div class="mt-auto text-center py-3" style="position: absolute; bottom: 0; left: 0; right: 0;">
-        <a href="/dashboard" class="btn btn-outline-light btn-sm">
-            <i class="fas fa-sign-out-alt me-2"></i>
+    <div
+        class='mt-auto text-center py-3'
+        style='position: absolute; bottom: 0; left: 0; right: 0;'
+    >
+        <a href='/dashboard' class='btn btn-outline-light btn-sm'>
+            <i class='fas fa-sign-out-alt me-2'></i>
             Back
         </a>
     </div>
