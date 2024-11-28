@@ -106,8 +106,17 @@ class AdminController {
 
     // [GET] /admin/inventory/
     async getProducts(req, res) {
-        const { limit, offset, search, status, brand, priceMin, priceMax } =
-            req.query
+        console.log(req.query)
+        const {
+            limit,
+            offset,
+            search,
+            status,
+            brand,
+            model,
+            priceMin,
+            priceMax,
+        } = req.query
         try {
             const { products, total } = await AdminService.getProducts({
                 limit: limit || 10,
@@ -115,9 +124,11 @@ class AdminController {
                 search,
                 status,
                 brand,
+                model,
                 priceMin,
                 priceMax,
             })
+            console.log(products)
             return res.status(200).json({ products, total })
         } catch (error) {
             logger.error(error.message)

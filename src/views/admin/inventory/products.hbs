@@ -18,18 +18,18 @@
             placeholder='Search by name or code'
             id='searchInput'
         />
-        <select id='brandFilters'>
+        <select id='brandFilter'>
             <option value=''>All Brands</option>
             <option value='Toyota'>Toyota</option>
             <option value='Honda'>Honda</option>
             <option value='Ford'>Ford</option>
         </select>
-        <select id='statusFilters'>
+        <select id='statusFilter'>
             <option value=''>All Status</option>
             <option value='available'>Available</option>
             <option value='sold'>Sold</option>
         </select>
-        <select id='priceFilters'>
+        <select id='priceFilter'>
             <option value=''>Price Range</option>
             <option value='0-20000'>$0 - $20,000</option>
             <option value='20001-40000'>$20,001 - $40,000</option>
@@ -51,7 +51,7 @@
                     </thead>
                     <tbody id="inventoryTable">
                         
-                        <tr>
+                        {{!-- <tr>
                             <td>
                                 <img
                                     src='https://via.placeholder.com/200x150'
@@ -73,7 +73,7 @@
                                 <button class='delete'><i class='fas fa-trash'></i>
                                     Delete</button>
                             </td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -86,10 +86,6 @@
                 </ul>
         <!-- Items per page select -->
             <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
-                {{#each perPages}}
-                    <option value="{{this.value}}" >{{this.name}} / trang</option>
-                {{/each}}
-                <option value=""></option>
                 <option value="5">5 / trang</option>
                 <option value="10">10 / trang</option>
                 <option value="20">20 / trang</option>
@@ -98,4 +94,4 @@
         </div>
 
 </section>
-<script src='\js\admin\inventory\products.js'></script>
+<script type="module" src='\js\admin\inventory\products.js'></script>

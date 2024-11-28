@@ -1,4 +1,4 @@
-import { showModal, showToast, showProductModal } from '../../common.js'
+import { showModal, showToast } from '../../common.js'
 
 document.addEventListener('DOMContentLoaded', function () {
     $('#btnDetail').on('click', function () {
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         showModalProduct('Thêm sản phẩm mới', function (formData) {
             // Gửi thông tin sản phẩm đến server để lưu vào cơ sở dữ liệu
             $.ajax({
-                url: '/api/inventory/products', // API thêm sản phẩm mới
+                url: '/api/inventory/', // API thêm sản phẩm mới
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search)
 
     let products = null
-    let limit = urlParams.get('limit') || 8
+    let limit = urlParams.get('limit') || 10
     let offset = parseInt(urlParams.get('offset')) || 1
     let totalPages = null
     let totalItems = null
@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#searchInput').val(searchText)
     $('#limit').val(limit)
-    $('#statusFilters').val(statusFilter)
-    $('#brandFilters').val(brandFilter)
-    $('#priceFilters').val(`${priceMinFilter}-${priceMaxFilter}`)
+    $('#statusFilter').val(statusFilter)
+    $('#brandFilter').val(brandFilter)
+    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Gọi hàm cho các bộ lọc
-    setupFilterHandlers('#statusFilters', 'status')
-    setupFilterHandlers('#brandFilters', 'brand')
+    setupFilterHandlers('#statusFilter', 'status')
+    setupFilterHandlers('#brandFilter', 'brand')
     setupFilterHandlers('#limit', 'limit')
 
     $('#searchInput').on('keyup', async function (event) {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await refresh()
     })
 
-    $('#priceFilters').on('change', async function () {
+    $('#priceFilter').on('change', async function () {
         const price = $(this).val()
         const [min, max] = price ? price.split('-') : ['', '']
         offset = 1
