@@ -1,4 +1,4 @@
-import { showModal, showToast } from '../../common.js'
+import { showModal, showToast, showProductModal } from '../../common.js'
 
 document.addEventListener('DOMContentLoaded', function () {
     $('#btnDetail').on('click', function () {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#add-car-btn').on('click', function () {
         // Hiển thị modal để nhập thông tin sản phẩm
         console.log(aaa)
-        showModalProduct('Thêm sản phẩm mới', function (formData) {
+        showProductModal('Thêm sản phẩm mới', function (formData) {
             // Gửi thông tin sản phẩm đến server để lưu vào cơ sở dữ liệu
             $.ajax({
                 url: '/api/inventory/', // API thêm sản phẩm mới
@@ -74,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#limit').val(limit)
     $('#statusFilter').val(statusFilter)
     $('#brandFilter').val(brandFilter)
-    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
+    if (priceMinFilter && priceMaxFilter)
+        $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
@@ -199,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         products.forEach((product) => {
             const { images, status, brand, model, price, year } = product
+            const isSelected = status === 'used' || status === 'new'
             const imageSrc = images?.image1 || '/default-image.jpg' // Sử dụng ảnh mặc định nếu không có ảnh
             $('#inventoryTable').append(`
                 <tr>
@@ -212,7 +214,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${brand} ${model}</td>
                     <td>${year}</td>
                     <td>$${price}</td>
-                    <td><span class='status available'>${status}</span></td>
+                    <td><span class='status ${
+                        isSelected ? 'available' : 'sold'
+                    }'>${status}</span></td>
                     <td class='actions'>
                         <button class='detail' id='btnDetail'><i
                                 class='fa-solid fa-circle-info'
