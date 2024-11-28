@@ -1,8 +1,8 @@
-const passport = require('passport');
-const bcrypt = require('bcrypt');
+const passport = require('passport')
+const bcrypt = require('bcrypt')
 
-const User = require('../models/User');
-const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/User')
+const LocalStrategy = require('passport-local').Strategy
 
 passport.serializeUser(function (user, done) {
     done(null, user._id);
@@ -13,27 +13,34 @@ passport.deserializeUser(async (id, done) => {
     done(null, user.toJSON());
 });
 
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-},
-    async function (email, password, done) {
-        try {
-            const user = await User.findOne({ email }).select('+password');
+passport.use(
+    new LocalStrategy(
+        {
+            usernameField: 'email',
+            passwordField: 'password',
+        },
+        async function (email, password, done) {
+            try {
+                const user = await User.findOne({ email }).select('+password')
 
-            if (!user) {
-                return done(null, false, { message: 'Email chưa được đăng kí' });
-            }
-            const isPasswordMatched = await user.comparePassword(password);
+                if (!user) {
+                    return done(null, false, {
+                        message: 'Email not registered',
+                    })
+                }
+                const isPasswordMatched = await user.comparePassword(password)
 
-            if (!isPasswordMatched) {
-                return done(null, false, { message: 'Mật khẩu không đúng' });
+                if (!isPasswordMatched) {
+                    return done(null, false, { message: 'Incorrect password' })
+                }
+                return done(null, user)
+            } catch (error) {
+                return done(null, false, {
+                    message: 'An error occurred, please try again later.!',
+                })
             }
-            return done(null, user);
-        } catch (error) {
-            return done(null, false, { message: 'Có lỗi, vui lòng thử lại sau!' });
         }
-    }
-));
+    )
+)
 
-module.exports = passport;
+module.exports = passport

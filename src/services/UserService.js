@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const logger = require('../config/logger');
+const Product = require('../models/Product');
 
 class UserService {
     async getUsers({ limit, offset, key, direction, search, status, role }) {
@@ -120,6 +120,45 @@ class UserService {
         return {
             avatarUrl: pathFile
         };
+    }
+
+    async getProducts({
+        limit,
+        offset,
+        search,
+        status,
+        brand,
+        model,
+        priceMin,
+        priceMax,
+    }) {
+        try {
+            let filter = {}
+            if (search) {
+                filter.$or = [
+                    { brand: { $regex: search, $options: 'i' } }, // Không phân biệt hoa thường
+                    { model: { $regex: search, $options: 'i' } }, // Không phân biệt hoa thường
+                ]
+            }
+            if (status) {
+                filter.status = status
+            }
+            if (brand) {
+                filter.brand = { $regex: `^${brand}$`, $options: 'i' } // Tìm chính xác nhưng không phân biệt hoa thường
+            }
+            if (priceMin && priceMax) {
+                filter.price = { $gte: priceMin, $lte: priceMax }
+            }
+
+            const products = await Product.find(filter)
+                .skip(offset * limit - limit)
+                .limit(limit)
+            const total = await Product.countDocuments(filter)
+
+            return { products, total }
+        } catch (error) {
+            throw error
+        }
     }
 }
 

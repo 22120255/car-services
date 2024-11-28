@@ -85,7 +85,7 @@ class UserController {
     // [GET] /admin/products
     async products(req, res) {
         try {
-            res.render('admin/products', {
+            res.render('admin/inventory/products', {
                 layout: 'admin',
                 title: 'Quản lý sản phẩm',
             })
@@ -186,6 +186,36 @@ class UserController {
             _user: user,
             title: 'Thông tin cá nhân',
         })
+    }
+
+    // [GET] /admin/inventory/
+    async getProducts(req, res) {
+        const {
+            limit,
+            offset,
+            search,
+            status,
+            brand,
+            model,
+            priceMin,
+            priceMax,
+        } = req.query
+        try {
+            const { products, total } = await UserService.getProducts({
+                limit: limit || 10,
+                offset: offset || 1,
+                search,
+                status,
+                brand,
+                model,
+                priceMin,
+                priceMax,
+            })
+            return res.status(200).json({ products, total })
+        } catch (error) {
+            errorLog("UserController", 216, error.message)
+            res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' })
+        }
     }
 }
 

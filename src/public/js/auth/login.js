@@ -1,33 +1,35 @@
-import { isEmailValid } from '../helpers.js';
+import { isEmailValid } from '../helpers.js'
 
 // Handle event when user click on register button
 document.addEventListener('DOMContentLoaded', function () {
     $('#email').on('input', function () {
-        const email = $(this).val();
+        const email = $(this).val()
         if (email) {
             if (!isEmailValid(email)) {
-                $('#email-availability-message').text("Email không hợp lệ").css("color", "red");
-                return;
+                $('#email-availability-message')
+                    .text('Email không hợp lệ')
+                    .css('color', 'red')
+                return
             } else {
-                $('#email-availability-message').text('');
+                $('#email-availability-message').text('')
             }
-            $('#login-btn').prop('disabled', !isEmailValid(email));
+            $('#login-btn').prop('disabled', !isEmailValid(email))
         }
     })
 
     $('#login-form').on('submit', async function (event) {
-        event.preventDefault();
+        event.preventDefault()
 
-        const email = $('#email').val();
-        const password = $('#password').val();
-        const messageEle = $('#message-error');
+        const email = $('#email').val()
+        const password = $('#password').val()
+        const messageEle = $('#message-error')
 
-        messageEle.text('');
+        messageEle.text('')
 
         if (!email || !password) {
-            event.preventDefault();
-            messageEle.text("Vui lòng điền đầy đủ thông tin");
-            return;
+            event.preventDefault()
+            messageEle.text('Vui lòng điền đầy đủ thông tin')
+            return
         }
         try {
             $("#icon-loading").removeClass("d-none");
@@ -50,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     200(resp) {
                         if (resp.redirect) {
-                            window.location.href = resp.redirect;
+                            window.location.href = resp.redirect
                         }
                     }
                 }
@@ -60,6 +62,5 @@ document.addEventListener('DOMContentLoaded', function () {
         } finally {
             $("#icon-loading").addClass("d-none");
         }
-    });
+    })
 })
-

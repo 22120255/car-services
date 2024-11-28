@@ -26,51 +26,6 @@ class ProductController {
         })
     }
 
-    // getFilteredProducts = async (req, res, next) => {
-    //     // Xem xét tạo bảng riêng cho brands
-
-    //     try {
-    //         const query = {}
-
-    //         // Lọc sản phẩm theo brand
-    //         if (req.query.brand) {
-    //             query.brand = req.query.brand
-    //         }
-    //         if (req.query.transmission) {
-    //             query.transmission = req.query.transmission
-    //         }
-    //         if (req.query.category) {
-    //             query.category = req.query.category
-    //         }
-    //         if (req.query.priceMin && req.query.priceMax) {
-    //             query.price = {
-    //                 $gte: req.query.priceMin,
-    //                 $lte: req.query.priceMax,
-    //             }
-    //         }
-    //         if (req.query.year) {
-    //             query.year = req.query.year
-    //         }
-    //         if (req.query.status) {
-    //             query.status = req.query.status
-    //         }
-
-    //         const products = await ProductService.getFilteredProducts(query)
-    //         res.render('products/', {
-    //             products: multipleMongooseToObject(products),
-    //             queries: query,
-    //             years: years,
-    //             categories: categories,
-    //             brands: brands,
-    //             transmissions: transmissions,
-    //             statuses: statuses,
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //         next(error)
-    //     }
-    // }
-
     getDetail = async (req, res, next) => {
         try {
             const product = await ProductService.getDetail(req.params.id)
@@ -106,61 +61,6 @@ class ProductController {
             next(error)
         }
     }
-    // pagination = async (req, res, next) => {
-    //     const page = parseInt(req.query.page) || 1
-    //     const limit = parseInt(req.query.limit) || 8
-    //     const query = {}
-    //     const search = req.query.search
-
-    //     if (req.query.year) query.year = req.query.year
-    //     if (req.query.category) query.category = req.query.category
-    //     if (req.query.brand) query.brand = req.query.brand
-    //     if (req.query.status) query.status = req.query.status
-    //     if (req.query.transmission) query.transmission = req.query.transmission
-
-    //     if (req.query.priceMin || req.query.priceMax) {
-    //         query.price = {}
-    //         if (req.query.priceMin) query.price.$gte = req.query.priceMin
-    //         if (req.query.priceMax) query.price.$lte = req.query.priceMax
-    //     }
-
-    //     if (search) {
-    //         const keywords = search.split(' ')
-
-    //         const brandAndModel = keywords.map((key) => ({
-    //             $or: [
-    //                 { brand: { $regex: key, $options: 'i' } },
-    //                 { model: { $regex: key, $options: 'i' } },
-    //             ],
-    //         }))
-
-    //         const descriptionSearch = keywords.map((key) => ({
-    //             description: { $regex: key, $options: 'i' },
-    //         }))
-
-    //         query.$or = [...brandAndModel, ...descriptionSearch]
-    //     }
-
-    //     try {
-    //         const { products, total, totalPages, currentPage } =
-    //             await ProductService.getPaginatedProducts(query, page, limit)
-    //         res.render('products/index', {
-    //             products: multipleMongooseToObject(products),
-    //             years,
-    //             categories,
-    //             brands,
-    //             transmissions,
-    //             statuses,
-    //             prices,
-    //             perPages,
-    //             total,
-    //             title: 'Sản phẩm',
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //         next(error)
-    //     }
-    // }
 
     productsAndGetProducts = async (req, res, next) => {
         const page = parseInt(req.query.offset) || 1
