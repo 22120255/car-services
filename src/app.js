@@ -1,7 +1,10 @@
 const path = require('path')
 require('dotenv').config({
-    path: path.resolve(process.cwd(), process.env.NODE_ENV === 'production' ? '.env' : '.env.dev')
-});
+    path: path.resolve(
+        process.cwd(),
+        process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
+    ),
+})
 const express = require('express')
 const morgan = require('morgan')
 const methodOverride = require('method-override')

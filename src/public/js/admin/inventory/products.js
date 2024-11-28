@@ -1,6 +1,58 @@
-import { showModal, showToast } from '../../common.js'
+import { showModal, showToast, showProductModal } from '../../common.js'
 
 document.addEventListener('DOMContentLoaded', function () {
+    $('#save-product-btn').on('click', function () {
+        const form = $('#product-form')
+        const requiredFields = [
+            'brand',
+            'model',
+            'year',
+            'style',
+            'price',
+            'mileage',
+            'horsepower',
+        ]
+        let isValid = true
+
+        // Duyệt qua các trường bắt buộc
+        requiredFields.forEach((field) => {
+            const input = form.find(`[name="${field}"]`)
+            if (!input.val().trim()) {
+                // Nếu trường bị bỏ trống
+                isValid = false
+                input.addClass('is-invalid') // Thêm class để báo lỗi
+            } else {
+                input.removeClass('is-invalid') // Xóa lỗi nếu hợp lệ
+            }
+        })
+
+        // Kiểm tra select (status, transmission)
+        const status = form.find('#statusFilter').first() // Trường hợp có nhiều phần tử, chọn phần tử đầu tiên
+        const transmission = form.find('#statusFilter').last() // Nếu cần tách riêng ID, chỉnh lại ở đây
+
+        if (!status.val().trim()) {
+            isValid = false
+            status.addClass('is-invalid')
+        } else {
+            status.removeClass('is-invalid')
+        }
+
+        if (!transmission.val().trim()) {
+            isValid = false
+            transmission.addClass('is-invalid')
+        } else {
+            transmission.removeClass('is-invalid')
+        }
+
+        // Nếu form hợp lệ thì submit hoặc xử lý tiếp
+        if (isValid) {
+            console.log('Form hợp lệ, xử lý lưu sản phẩm...')
+            // Xử lý lưu sản phẩm hoặc gửi yêu cầu AJAX
+        } else {
+            console.error('Vui lòng nhập đầy đủ thông tin cần thiết!')
+        }
+    })
+
     $('#btnDetail').on('click', function () {
         const productId = $(this).data('id')
         $.get(`/api/product/${productId}`, function (data) {
@@ -29,11 +81,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#add-car-btn').on('click', function () {
         // Hiển thị modal để nhập thông tin sản phẩm
-        console.log(aaa)
-        showModalProduct('Thêm sản phẩm mới', function (formData) {
+        showProductModal('Thêm sản phẩm mới', function (formData) {
             // Gửi thông tin sản phẩm đến server để lưu vào cơ sở dữ liệu
             $.ajax({
-                url: '/api/inventory/', // API thêm sản phẩm mới
+                url: '/api/inventory/add', // API thêm sản phẩm mới
                 type: 'POST',
                 data: formData,
                 success: function (data) {
@@ -74,7 +125,8 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#limit').val(limit)
     $('#statusFilter').val(statusFilter)
     $('#brandFilter').val(brandFilter)
-    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
+    if (priceMinFilter && priceMaxFilter)
+        $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
@@ -199,6 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         products.forEach((product) => {
             const { images, status, brand, model, price, year } = product
+            const isSelected = status === 'used' || status === 'new'
             const imageSrc = images?.image1 || '/default-image.jpg' // Sử dụng ảnh mặc định nếu không có ảnh
             $('#inventoryTable').append(`
                 <tr>
@@ -212,7 +265,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${brand} ${model}</td>
                     <td>${year}</td>
                     <td>$${price}</td>
-                    <td><span class='status available'>${status}</span></td>
+                    <td><span class='status ${
+                        isSelected ? 'available' : 'sold'
+                    }'>${status}</span></td>
                     <td class='actions'>
                         <button class='detail' id='btnDetail'><i
                                 class='fa-solid fa-circle-info'
