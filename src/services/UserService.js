@@ -71,7 +71,7 @@ class UserService {
             throw new Error('Admin không thể xoá tài khoản của admin khác');
         }
 
-        // await User.findByIdAndDelete(userId);
+        await User.findByIdAndDelete(userId);
     }
 
     // Lấy thông tin user

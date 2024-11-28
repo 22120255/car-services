@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await $.ajax({
-                url: '/api/users',
+                url: '/api/user',
                 type: 'PATCH',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('userId', user._id)
 
         $.ajax({
-            url: '/api/users/avatar/store',
+            url: '/api/user/avatar/store',
             type: 'PATCH',
             data: formData,
             processData: false,

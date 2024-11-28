@@ -17,7 +17,7 @@ class UserController {
                 title: 'Quản lý tài khoản',
             })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 20, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' })
         }
     }
@@ -66,7 +66,7 @@ class UserController {
                 .status(200)
                 .json({ message: 'Cập nhật trạng thái thành công' })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 69, error.message)
             return res.status(403).json({ error: error.message })
         }
     }
@@ -77,19 +77,8 @@ class UserController {
             await UserService.deleteUser(req.params.id, req.user)
             res.status(200).json({ message: 'Xóa tài khoản thành công' })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 80, error.message)
             return res.status(403).json({ error: error.message })
-        }
-    }
-
-    // [GET] /admin/users/:id/details
-    async getUserDetails(req, res) {
-        try {
-            const user = await UserService.getUserDetails(req.params.id)
-            res.render('admin/users/detail', { user, layout: false })
-        } catch (error) {
-            logger.error(error.message)
-            res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
 
@@ -101,7 +90,7 @@ class UserController {
                 title: 'Quản lý sản phẩm',
             })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 93, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -114,7 +103,7 @@ class UserController {
                 title: 'Quản lý đơn hàng',
             })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 106, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -127,7 +116,7 @@ class UserController {
                 title: 'Báo cáo thống kê',
             })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 119, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -140,7 +129,7 @@ class UserController {
                 title: 'Cài đặt hệ thống',
             })
         } catch (error) {
-            logger.error(error.message)
+            errorLog("UserController", 132, error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
     }
@@ -150,7 +139,7 @@ class UserController {
         try {
             const userId = req.params.id;
             const user = await UserService.getUser(userId);
-            res.render("admin/users/detail", {
+            res.render("admin/detail", {
                 user,
                 layout: false
             })
