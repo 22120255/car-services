@@ -11,18 +11,18 @@ const authApiRouter = require('./api/auth')
 const cartApiRouter = require('./api/cart')
 
 function route(app) {
-    // API
-    app.use('/api/user', userApiRouter)
-    app.use('/api/auth', authApiRouter)
-    app.use('/api/cart', cartApiRouter)
-    app.use('/api/inventory', inventoryRouter)
-    // UI
-    app.use('/products', productRouter)
-    app.use('/auth', authRouter)
-    app.use('/dashboard', dashboardRouter)
-    app.use('/cart', cartRouter)
-    app.use('/user', userRouter)
-    app.use('/', siteRouter)
+  // API
+  app.use('/api/user', userApiRouter)
+  app.use('/api/auth', authApiRouter)
+  app.use('/api/cart', cartApiRouter)
+  app.use('/api/inventory', inventoryRouter)
+  // UI
+  app.use('/products', productRouter)
+  app.use('/auth', authRouter)
+  app.use('/dashboard', dashboardRouter)
+  app.use('/cart', cartRouter)
+  app.use('/user', userRouter)
+  app.use('/', siteRouter)
 }
 
 module.exports = route
