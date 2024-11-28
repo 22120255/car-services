@@ -1,5 +1,8 @@
 const UserService = require('../services/UserService')
 const { clearCache } = require('../utils/helperCache')
+const { errorLog } = require("../utils/customLog")
+
+
 class UserController {
     // [PATCH] /api/user
     async updateProfile(req, res) {
@@ -9,6 +12,7 @@ class UserController {
             clearCache(`/profile/${id}`)
             res.status(200).json(user)
         } catch (error) {
+            errorLog("UserController", 15, error.message)
             res.status(500).json({ message: error.message })
         }
     }
@@ -19,16 +23,10 @@ class UserController {
             const pathFile = req.file.path;
             const userId = req.body.userId;
 
-            await User.findByIdAndUpdate(userId, {
-                avatar: pathFile
-            });
-
-            res.status(200).json({
-                avatarUrl: pathFile
-            });
-
+            const result = await UserService.updateAvatar(userId, pathFile);
+            res.status(200).json(result);
         } catch (error) {
-            logger.error(error.message);
+            errorLog("UserController", 29, error.message);
             res.status(500).json({
                 error: 'Failed to update avatar'
             });

@@ -1,0 +1,3 @@
+2024-11-28 20:42:06 [ERROR]: Cannot read properties of null (reading 'role')
+2024-11-28 22:12:05 [ERROR]: File: UserController, line: 43, error: UserService is not defined
+2024-11-28 22:13:07 [ERROR]: File: UserController, line: 43, error: UserService is not defined

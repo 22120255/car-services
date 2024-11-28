@@ -15,7 +15,7 @@ class AdminService {
                 filter.status = status;
             }
             if (role) {
-                filter.role = role;
+                filter['role.name'] = role;
             }
             let sort = {};
             if (key) {
@@ -35,11 +35,11 @@ class AdminService {
     async updateUserRole(userId, role, currentUser) {
         const targetUser = await User.findById(userId);
 
-        if (targetUser.role === 'sadmin') {
+        if (targetUser.role.name === 'sadmin') {
             throw new Error('Không thể cập nhật vai trò của super admin');
         }
 
-        if (targetUser.role === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
+        if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
             throw new Error('Admin không thể cập nhật vai trò của admin khác');
         }
 
@@ -49,11 +49,11 @@ class AdminService {
     async updateUserStatus(userId, status, currentUser) {
         const targetUser = await User.findById(userId);
 
-        if (targetUser.role === 'sadmin') {
+        if (targetUser.role.name === 'sadmin') {
             throw new Error('Không thể thay đổi trạng thái của super admin');
         }
 
-        if (targetUser.role === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
+        if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
             throw new Error('Admin không thể thay đổi trạng thái của admin khác');
         }
 
@@ -62,24 +62,30 @@ class AdminService {
 
     async deleteUser(userId, currentUser) {
         const targetUser = await User.findById(userId);
-
-        if (targetUser.role === 'sadmin') {
+        console.log("targetUser ", userId);
+        if (targetUser.role.name === 'sadmin') {
             throw new Error('Không thể xoá tài khoản super admin');
         }
 
-        if (targetUser.role === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
+        if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
             throw new Error('Admin không thể xoá tài khoản của admin khác');
         }
 
-        await User.findByIdAndDelete(userId);
+        // await User.findByIdAndDelete(userId);
     }
 
-    async getUserDetails(userId) {
-        return await User.findById(userId).populate({
+    // Lấy thông tin user
+    async getUser(userId) {
+        const user = await User.findById(userId).populate({
             path: 'metadata.purchasedProducts',
             model: 'Product'
         });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        return user;
     }
 }
-
 module.exports = new AdminService();

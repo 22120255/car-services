@@ -21,7 +21,7 @@ class AdminController {
     }
 
     // [GET] /admin/users
-    async getUser(req, res) {
+    async getUsers(req, res) {
         const { limit, offset, key, direction, search, status, role } =
             req.query
         try {
@@ -140,6 +140,21 @@ class AdminController {
         } catch (error) {
             logger.error(error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
+        }
+    }
+
+    // [GET] /api/user/:id
+    async getUser(req, res) {
+        try {
+            const userId = req.params.id;
+            const user = await AdminService.getUser(userId);
+            res.render("admin/users/detail", {
+                user,
+                layout: false
+            })
+        } catch (error) {
+            errorLog("UserController", 43, error.message);
+            res.status(404).json({ message: error.message });
         }
     }
 }

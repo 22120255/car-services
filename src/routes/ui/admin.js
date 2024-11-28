@@ -11,5 +11,6 @@ router.get('/products', checkRole(['admin', 'sadmin']), adminController.products
 router.get('/orders', checkRole(['admin', 'sadmin']), adminController.orders) // render view Orders
 router.get('/reports', checkRole(['admin', 'sadmin']), adminController.reports) // render view Reports
 router.get('/settings', checkRole(['admin', 'sadmin']), adminController.settings) // render view Settings
+router.get('/:id', checkRole(['admin', 'sadmin']), adminController.getUser)
 
 module.exports = router

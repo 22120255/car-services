@@ -64,44 +64,7 @@
                     <th>Thao tác</th>
                 </tr>
             </thead>
-            <tbody id='accountsTable'>
-                {{!-- {{#each users}}
-                        <tr data-user-id="{{this.id}}">
-                            <td>
-                                <img src="{{this.avatar}}" alt="Avatar" class="user-avatar">
-                            </td>
-                            <td>{{this.fullName}}</td>
-                            <td>{{this.email}}</td>
-                            <td>
-                                <select class="role-select form-select" {{#if this.isCurrentUser}}disabled{{/if}}>
-                                    <option value="user" {{#if (eq this.role "user")}}selected{{/if}}>User</option>
-                                    <option value="admin" {{#if (eq this.role "admin")}}selected{{/if}}>Admin</option>
-                                    <option value="sadmin" {{#if (eq this.role "sadmin")}}selected{{/if}}>Super Admin</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="status-select form-select" {{#if this.isCurrentUser}}disabled{{/if}}>
-                                    <option value="active" {{#if (eq this.status "active")}}selected{{/if}}>Đang hoạt động</option>
-                                    <option value="inactive" {{#if (eq this.status "inactive")}}selected{{/if}}>Chưa kích hoạt</option>
-                                    <option value="suspended" {{#if (eq this.status "suspended")}}selected{{/if}}>Đã khóa</option>
-                                </select>
-                            </td>
-                            <td>{{formatDate this.lastLogin}}</td>
-                            <td>
-                                <div class="btn-group">
-                                    <button class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    {{#unless this.isCurrentUser}}
-                                        <button class="btn btn-danger btn-sm delete-user">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    {{/unless}}
-                                </div>
-                            </td>
-                        </tr>
-                    {{/each}} --}}
-            </tbody>
+            <tbody id='accountsTable'></tbody>
         </table>
     </div>
 

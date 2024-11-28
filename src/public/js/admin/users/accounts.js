@@ -56,10 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Xử lý xem chi tiết
     $(document).on('click', '.view-details', function () {
-        console.log('click')
         const userId = $(this).closest('tr').data('user-id')
-        console.log('userId ', userId)
-        $.get(`/api/users/${userId}/details`, function (data) {
+
+        $.get(`/admin/${userId}`, function (data) {
             $('#userDetailsModal .modal-body').html(data)
         })
     })
@@ -71,14 +70,14 @@ document.addEventListener('DOMContentLoaded', function () {
         showModal(
             'Xoá tài khoản',
             'Bạn có chắc chắn muốn xóa tài khoản này không?',
-            function () {
+            () => {
                 $.ajax({
                     url: `/api/users/${userId}`,
                     method: 'DELETE',
                     statusCode: {
                         200(resp) {
-                            showToast('Success', resp.message)
                             $(`tr[data-user-id=${userId}]`).remove()
+                            showToast('Success', resp.message)
                         },
                         403(resp) {
                             showToast('Error', resp.responseJSON.error)
