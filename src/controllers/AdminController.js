@@ -91,10 +91,10 @@ class AdminController {
         }
     }
 
-    // [GET] /admin/products
+    // [GET] /admin/inventory/products
     async products(req, res) {
         try {
-            res.render('admin/products', {
+            res.render('admin/inventory/products', {
                 layout: 'admin',
                 title: 'Quản lý sản phẩm',
             })
@@ -102,6 +102,24 @@ class AdminController {
             logger.error(error.message)
             res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' })
         }
+    }
+
+    // [GET] /admin/inventory/
+    async getProducts(req, res) {
+        const { limit, offset, search, status, brand, priceMin, priceMax } =
+            req.query
+        try {
+            const { products, total } = await AdminService.getProducts({
+                limit: limit || 10,
+                offset: offset || 1,
+                search,
+                status,
+                brand,
+                priceMin,
+                priceMax,
+            })
+            return res.status(200).json({ data: products, total })
+        } catch (error) {}
     }
 
     // [GET] /admin/orders
