@@ -11,7 +11,8 @@ const catch500 = (err, req, res, next) => {
     res.status(500).render('site/error', {
         layout: 'error',
         statusCode: 500,
-        title: 'Error server'
+        title: 'Error server',
+        message: 'Internal server error, please try again later.'
     });
 }
 
