@@ -106,7 +106,6 @@ class AdminController {
 
     // [GET] /admin/inventory/
     async getProducts(req, res) {
-        console.log(req.query)
         const {
             limit,
             offset,
@@ -128,7 +127,6 @@ class AdminController {
                 priceMin,
                 priceMax,
             })
-            console.log(products)
             return res.status(200).json({ products, total })
         } catch (error) {
             logger.error(error.message)
