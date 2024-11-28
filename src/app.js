@@ -16,6 +16,7 @@ const route = require('./routes')
 const db = require('./config/db')
 const passport = require('./config/passport')
 const { navigateUser } = require('./middleware/authMiddleware')
+const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 
 const app = express()
@@ -82,6 +83,9 @@ app.use('/css', express.static('public/css'))
 
 // Route init
 route(app)
+
+app.use(catch404);
+app.use(catch500);
 
 // Listen to port
 app.listen(process.env.PORT, () => {
