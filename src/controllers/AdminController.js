@@ -118,8 +118,11 @@ class AdminController {
                 priceMin,
                 priceMax,
             })
-            return res.status(200).json({ data: products, total })
-        } catch (error) {}
+            return res.status(200).json({ products, total })
+        } catch (error) {
+            logger.error(error.message)
+            res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' })
+        }
     }
 
     // [GET] /admin/orders

@@ -72,9 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#searchInput').val(searchText)
     $('#limit').val(limit)
-    $('#statusFilter').val(statusFilter)
-    $('#brandFilter').val(brandFilter)
-    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
+    $('#statusFilters').val(statusFilter)
+    $('#brandFilters').val(brandFilter)
+    $('#priceFilters').val(`${priceMinFilter}-${priceMaxFilter}`)
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Gọi hàm cho các bộ lọc
-    setupFilterHandlers('#statusFilter', 'status')
-    setupFilterHandlers('#brandFilter', 'brand')
+    setupFilterHandlers('#statusFilters', 'status')
+    setupFilterHandlers('#brandFilters', 'brand')
     setupFilterHandlers('#limit', 'limit')
 
     $('#searchInput').on('keyup', async function (event) {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await refresh()
     })
 
-    $('#priceFilter').on('change', async function () {
+    $('#priceFilters').on('change', async function () {
         const price = $(this).val()
         const [min, max] = price ? price.split('-') : ['', '']
         offset = 1
@@ -167,26 +167,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
         await $.ajax({
-            url: `/products?${apiQuery}`,
+            url: `/api/inventory?${apiQuery}`,
             type: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Thêm header Ajax
-            },
             statusCode: {
                 200(resp) {
                     products = resp.products
                     totalItems = resp.total
                     totalPages = Math.ceil(totalItems / limit)
-                    filters = resp.filters
                 },
                 500(resp) {
                     console.error('Lỗi khi tải dữ liệu:', resp)
                 },
             },
         })
-        if (filters) {
-            renderFilters(filters, params)
-        }
         renderProducts(products)
     }
 
@@ -234,4 +227,69 @@ document.addEventListener('DOMContentLoaded', function () {
             `)
         })
     }
+
+    // Xử lý sự kiện click pagination
+    $('.pagination').on('click', 'a.page-link', async function (e) {
+        e.preventDefault()
+        const $this = $(this)
+
+        // Kiểm tra nếu nút bị disable thì không thực hiện gì
+        if ($this.parent().hasClass('disabled')) return
+
+        // Cập nhật giá trị của offset dựa trên nút bấm
+        switch ($this.attr('id')) {
+            case 'firstPage':
+                offset = 1 // Trang đầu tiên
+                break
+            case 'prevPage':
+                if (offset > 1) offset-- // Tránh giá trị < 1
+                break
+            case 'nextPage':
+                if (offset < totalPages) offset++ // Tránh giá trị > totalPages
+                break
+            case 'lastPage':
+                offset = totalPages // Trang cuối cùng
+                break
+            default:
+                offset = parseInt($this.data('page')) // Điều hướng theo trang cụ thể
+        }
+
+        // Cập nhật query params và tải lại dữ liệu
+        updateQueryParams({ offset: offset })
+        await refresh()
+    })
+
+    // Handle items per page change
+    $('#limit').change(async function () {
+        limit = $(this).val()
+        totalPages = Math.ceil(totalItems / limit)
+        offset = 1
+        // updatePagination();
+        updateQueryParams({ limit: limit, offset: offset })
+        await refresh()
+    })
+
+    // updateQuery
+    function updateQueryParams(paramsToUpdate) {
+        const params = new URLSearchParams(window.location.search)
+        Object.entries(paramsToUpdate).forEach(([key, value]) => {
+            if (value == null || value === '') {
+                params.delete(key)
+            } else {
+                params.set(key, value)
+            }
+        })
+        window.history.pushState(
+            {},
+            '',
+            `${window.location.pathname}?${params.toString()}`
+        )
+    }
+
+    async function refresh() {
+        await loadData()
+        updatePagination()
+    }
+
+    refresh()
 })
