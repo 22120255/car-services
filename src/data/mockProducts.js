@@ -29,37 +29,37 @@ const brands = [
 ]
 
 const statuses = [
-    { name: 'new', label: 'new' },
-    { name: 'used', label: 'used' },
-    { name: 'sold', label: 'sold' },
+    { value: 'new', name: 'New' },
+    { value: 'used', name: 'Used' },
+    { value: 'sold', name: 'Sold' },
 ]
 
 const transmissions = [
-    { name: 'manual', label: 'Manual' },
-    { name: 'automatic', label: 'Automatic' },
+    { value: 'manual', name: 'Manual' },
+    { value: 'automatic', name: 'Automatic' },
 ]
 
 // Hàm lấy tất cả các category_id từ database
 const categories = [
-    { name: 'sedan', label: 'Sedan' },
-    { name: 'suv', label: 'SUV' },
-    { name: 'truck', label: 'Truck' },
-    { name: 'roadster', label: 'Roadster' },
+    { value: 'sedan', name: 'Sedan' },
+    { value: 'suv', name: 'SUV' },
+    { value: 'truck', name: 'Truck' },
+    { value: 'roadster', name: 'Roadster' },
 ]
 
-const price = [
+const prices = [
     { priceMin: 0, priceMax: 50000, label: '0 - 50000' },
     { priceMin: 50000, priceMax: 100000, label: '50000 - 100000' },
-    { priceMin: 100000, priceMax: 150000, label: '100000 - 200000' },
+    { priceMin: 100000, priceMax: 200000, label: '100000 - 200000' },
     { priceMin: 200000, priceMax: 5000000, label: '200000+' },
 ]
 
-const perPage = [
-    { value: 4, label: '4' },
-    { value: 8, label: '8' },
-    { value: 12, label: '12' },
-    { value: 16, label: '16' },
-    { value: 20, label: '20' },
+const perPages = [
+    { value: 4, name: '4' },
+    { value: 8, name: '8' },
+    { value: 12, name: '12' },
+    { value: 16, name: '16' },
+    { value: 20, name: '20' },
 ]
 
 // Hàm tạo dữ liệu sản phẩm giả
@@ -104,6 +104,6 @@ module.exports = {
     transmissions,
     years,
     categories,
-    price,
-    perPage,
+    prices,
+    perPages,
 }

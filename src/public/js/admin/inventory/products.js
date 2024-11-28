@@ -1,60 +1,132 @@
+import { showModal, showToast, showProductModal } from '../../common.js'
+
+document.addEventListener('DOMContentLoaded', function () {
+    $('#save-product-btn').on('click', function () {
+        const form = $('#product-form')
+        const requiredFields = [
+            'brand',
+            'model',
+            'year',
+            'style',
+            'price',
+            'mileage',
+            'horsepower',
+        ]
+        let isValid = true
+
+        // Duyệt qua các trường bắt buộc
+        requiredFields.forEach((field) => {
+            const input = form.find(`[name="${field}"]`)
+            if (!input.val().trim()) {
+                // Nếu trường bị bỏ trống
+                isValid = false
+                input.addClass('is-invalid') // Thêm class để báo lỗi
+            } else {
+                input.removeClass('is-invalid') // Xóa lỗi nếu hợp lệ
+            }
+        })
+
+        // Kiểm tra select (status, transmission)
+        const status = form.find('#statusFilter').first() // Trường hợp có nhiều phần tử, chọn phần tử đầu tiên
+        const transmission = form.find('#statusFilter').last() // Nếu cần tách riêng ID, chỉnh lại ở đây
+
+        if (!status.val().trim()) {
+            isValid = false
+            status.addClass('is-invalid')
+        } else {
+            status.removeClass('is-invalid')
+        }
+
+        if (!transmission.val().trim()) {
+            isValid = false
+            transmission.addClass('is-invalid')
+        } else {
+            transmission.removeClass('is-invalid')
+        }
+
+        // Nếu form hợp lệ thì submit hoặc xử lý tiếp
+        if (isValid) {
+            console.log('Form hợp lệ, xử lý lưu sản phẩm...')
+            // Xử lý lưu sản phẩm hoặc gửi yêu cầu AJAX
+        } else {
+            console.error('Vui lòng nhập đầy đủ thông tin cần thiết!')
+        }
+    })
+
+    $('#btnDetail').on('click', function () {
+        const productId = $(this).data('id')
+        $.get(`/api/product/${productId}`, function (data) {
+            showProductModal('Chi tiết sản phẩm', data)
+        })
+    })
+
+    $('#save-product-btn').on('click', () => {
+        const formData = $('#product-form').serializeArray()
+        const productData = {}
+
+        formData.forEach((item) => {
+            const keys = item.name.split('.')
+            if (keys.length > 1) {
+                if (!productData[keys[0]]) productData[keys[0]] = {}
+                productData[keys[0]][keys[1]] = item.value
+            } else {
+                productData[item.name] = item.value
+            }
+        })
+
+        console.log('Dữ liệu sản phẩm:', productData)
+
+        // Thực hiện callback hoặc AJAX gửi dữ liệu lên server
+    })
+
+    $('#add-car-btn').on('click', function () {
+        // Hiển thị modal để nhập thông tin sản phẩm
+        showProductModal('Thêm sản phẩm mới', function (formData) {
+            // Gửi thông tin sản phẩm đến server để lưu vào cơ sở dữ liệu
+            $.ajax({
+                url: '/api/inventory/add', // API thêm sản phẩm mới
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        showToast(
+                            'success',
+                            'Sản phẩm đã được thêm thành công!'
+                        )
+                        // Cập nhật danh sách sản phẩm hoặc làm mới trang
+                    } else {
+                        showToast('error', 'Thêm sản phẩm thất bại!')
+                    }
+                },
+                error: function () {
+                    showToast('error', 'Đã có lỗi xảy ra, vui lòng thử lại!')
+                },
+            })
+        })
+    })
+})
+
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search)
 
     let products = null
-    let limit = urlParams.get('limit') || 8
+    let limit = urlParams.get('limit') || 10
     let offset = parseInt(urlParams.get('offset')) || 1
     let totalPages = null
     let totalItems = null
-    let filters = null
 
     let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null
     let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null
-    let categoryFilter = urlParams.get('category') || null
     let brandFilter = urlParams.get('brand') || null
     let statusFilter = urlParams.get('status') || null
-    let transmissionFilter = urlParams.get('transmission') || null
     let searchText = urlParams.get('search') || ''
-    let yearFilter = parseInt(urlParams.get('year')) || null
 
     $('#searchInput').val(searchText)
     $('#limit').val(limit)
     $('#statusFilter').val(statusFilter)
     $('#brandFilter').val(brandFilter)
-    $('#categoryFilter').val(categoryFilter)
-    $('#transmissionFilter').val(transmissionFilter)
-    $('#yearFilter').val(yearFilter)
-    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
-
-    function syncFiltersFromURL() {
-        const urlParams = new URLSearchParams(window.location.search)
-        limit = parseInt(urlParams.get('limit')) || 8
-        offset = parseInt(urlParams.get('offset')) || 1
-        priceMinFilter = parseFloat(urlParams.get('priceMin')) || null
-        priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null
-        categoryFilter = urlParams.get('category') || null
-        brandFilter = urlParams.get('brand') || null
-        statusFilter = urlParams.get('status') || null
-        transmissionFilter = urlParams.get('transmission') || null
-        searchText = urlParams.get('search') || null
-        yearFilter = parseInt(urlParams.get('year')) || null
-
-        // Đồng bộ với giao diện
-        $('#searchInput').val(searchText)
-        $('#limit').val(limit)
-        $('#statusFilter').val(statusFilter)
-        $('#brandFilter').val(brandFilter)
-        $('#categoryFilter').val(categoryFilter)
-        $('#transmissionFilter').val(transmissionFilter)
-        $('#yearFilter').val(yearFilter)
+    if (priceMinFilter && priceMaxFilter)
         $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`)
-    }
-
-    // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
-    window.addEventListener('popstate', async function () {
-        syncFiltersFromURL() // Đồng bộ lại bộ lọc từ URL
-        await refresh() // Tải lại dữ liệu
-    })
 
     function setupFilterHandlers(filterElement, paramKey) {
         $(filterElement).on('change', async function () {
@@ -67,9 +139,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Gọi hàm cho các bộ lọc
     setupFilterHandlers('#statusFilter', 'status')
     setupFilterHandlers('#brandFilter', 'brand')
-    setupFilterHandlers('#categoryFilter', 'category')
-    setupFilterHandlers('#transmissionFilter', 'transmission')
-    setupFilterHandlers('#yearFilter', 'year')
     setupFilterHandlers('#limit', 'limit')
 
     $('#searchInput').on('keyup', async function (event) {
@@ -150,36 +219,29 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
         await $.ajax({
-            url: `/products?${apiQuery}`,
+            url: `/api/inventory?${apiQuery}`,
             type: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest', // Thêm header Ajax
-            },
             statusCode: {
                 200(resp) {
                     products = resp.products
                     totalItems = resp.total
                     totalPages = Math.ceil(totalItems / limit)
-                    filters = resp.filters
                 },
                 500(resp) {
                     console.error('Lỗi khi tải dữ liệu:', resp)
                 },
             },
         })
-        if (filters) {
-            renderFilters(filters, params)
-        }
         renderProducts(products)
     }
 
     // render products
     function renderProducts(products) {
         console.log(1)
-        $('#product-list').empty()
+        $('#inventoryTable').empty()
 
         if (!products || products.length === 0) {
-            $('#product-list').append(`<div class='col-lg-12'>
+            $('#inventoryTable').append(`<div class='col-lg-12'>
                     <div class='find-nothing text-center' >
                             <h2 style = "font-size: large; color: #978e8e">Find nothing!</h2>
                     </div>
@@ -188,107 +250,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         products.forEach((product) => {
-            const { _id, images, status, brand, price, year } = product
+            const { images, status, brand, model, price, year } = product
+            const isSelected = status === 'used' || status === 'new'
             const imageSrc = images?.image1 || '/default-image.jpg' // Sử dụng ảnh mặc định nếu không có ảnh
-            $('#product-list').append(`
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                <div class='card-product__container'>
-                    <div class='card-product__header'>
-                        <a href='/products/${_id}'>
-                            <img src='${imageSrc}' alt='car' />
-                            ${status === 'new' ? `<div class='new-arrival-badge'>New Arrival</div>` : ''}
-                        </a>
-                    </div>
-                    <div class='card-product__body'>
-                        <div class='product-header'>
-                            <a href='/products/${_id}' class='card-product__brand'>${brand || 'Unknown'}</a>
-                            <h3 class='card-product__price'>$${price || '0.00'}</h3>
-                        </div>
-                        <div class='star-rating'>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star star-empty'>★</span>
-                            <span class='rating-text'>(4.0)</span>
-                        </div>
-                    </div>
-                    <div class='card-product__footer'>
-                        <p>
-                            <span class='car-spec-label'>Model: </span>
-                            <span class='car-spec-value'>${year || 'N/A'}</span>
-                        </p>
-                        <a href='/products/${_id}' class='view-details-btn'>View Details</a>
-                    </div>
-                </div>
-                </div>
+            $('#inventoryTable').append(`
+                <tr>
+                    <td>
+                        <img
+                            src='${imageSrc}'
+                            alt='Toyota Camry'
+                            class='car-image'
+                        />
+                    </td>
+                    <td>${brand} ${model}</td>
+                    <td>${year}</td>
+                    <td>$${price}</td>
+                    <td><span class='status ${
+                        isSelected ? 'available' : 'sold'
+                    }'>${status}</span></td>
+                    <td class='actions'>
+                        <button class='detail' id='btnDetail'><i
+                                class='fa-solid fa-circle-info'
+                            ></i>
+                            Detail</button>
+                        <button class='edit'><i class='fas fa-edit'></i>
+                            Edit</button>
+                        <button class='delete'><i class='fas fa-trash'></i>
+                            Delete</button>
+                    </td>
+                </tr>
             `)
-        })
-    }
-
-    // render filters
-    function renderFilters(filters, params) {
-        // Xử lý từng loại filter
-        const renderSelectOptions = (
-            element,
-            options,
-            selectedValue,
-            defaultText
-        ) => {
-            element.empty().append(`<option value="">${defaultText}</option>`)
-            options.forEach((option) => {
-                element.append(
-                    `<option value="${option.value}" ${
-                        selectedValue === option.value ? 'selected' : ''
-                    }>${option.name}</option>`
-                )
-            })
-        }
-
-        renderSelectOptions(
-            $('#yearFilter'),
-            filters.years,
-            params.year,
-            'Select year'
-        )
-        renderSelectOptions(
-            $('#categoryFilter'),
-            filters.categories,
-            params.category,
-            'Select style'
-        )
-        renderSelectOptions(
-            $('#brandFilter'),
-            filters.brands,
-            params.brand,
-            'Select brand'
-        )
-        renderSelectOptions(
-            $('#statusFilter'),
-            filters.statuses,
-            params.status,
-            'Select status'
-        )
-        renderSelectOptions(
-            $('#transmissionFilter'),
-            filters.transmissions,
-            params.transmission,
-            'Select transmission'
-        )
-
-        // Xử lý riêng cho price filter
-        const priceFilter = $('#priceFilter')
-        priceFilter.empty().append('<option value="">Select price</option>')
-        filters.prices.forEach((price) => {
-            const isSelected =
-                parseFloat(params.priceMin) === price.priceMin &&
-                parseFloat(params.priceMax) === price.priceMax
-
-            priceFilter.append(
-                `<option value="${price.priceMin}-${price.priceMax}" ${
-                    isSelected ? 'selected' : ''
-                }>$${price.priceMin}-$${price.priceMax}</option>`
-            )
         })
     }
 

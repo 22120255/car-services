@@ -5,17 +5,17 @@ const dashboardRouter = require('./ui/dashboard')
 const cartRouter = require('./ui/cart')
 const adminRouter = require('./ui/admin')
 
+const inventoryRouter = require('./api/inventory')
 const userApiRouter = require('./api/user')
 const authApiRouter = require('./api/auth')
 const cartApiRouter = require('./api/cart')
-
 
 function route(app) {
     // API
     app.use('/api/users', userApiRouter)
     app.use('/api/auth', authApiRouter)
     app.use('/api/cart', cartApiRouter)
-
+    app.use('/api/inventory', inventoryRouter)
     // UI
     app.use('/products', productRouter)
     app.use('/auth', authRouter)

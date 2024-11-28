@@ -9,67 +9,22 @@ const {
     brands,
     transmissions,
     statuses,
-    price,
-    perPage,
+    prices,
+    perPages,
 } = require('../data/mockProducts')
 
 class ProductController {
     index(req, res) {
         res.render('products/index', {
-            title: 'Sản phẩm'
+            title: 'Sản phẩm',
         })
     }
 
     detail(req, res) {
         res.render('products/detail', {
-            title: 'Chi tiết sản phẩm'
+            title: 'Chi tiết sản phẩm',
         })
     }
-
-    // getFilteredProducts = async (req, res, next) => {
-    //     // Xem xét tạo bảng riêng cho brands
-
-    //     try {
-    //         const query = {}
-
-    //         // Lọc sản phẩm theo brand
-    //         if (req.query.brand) {
-    //             query.brand = req.query.brand
-    //         }
-    //         if (req.query.transmission) {
-    //             query.transmission = req.query.transmission
-    //         }
-    //         if (req.query.category) {
-    //             query.category = req.query.category
-    //         }
-    //         if (req.query.priceMin && req.query.priceMax) {
-    //             query.price = {
-    //                 $gte: req.query.priceMin,
-    //                 $lte: req.query.priceMax,
-    //             }
-    //         }
-    //         if (req.query.year) {
-    //             query.year = req.query.year
-    //         }
-    //         if (req.query.status) {
-    //             query.status = req.query.status
-    //         }
-
-    //         const products = await ProductService.getFilteredProducts(query)
-    //         res.render('products/index', {
-    //             products: multipleMongooseToObject(products),
-    //             queries: query,
-    //             years: years,
-    //             categories: categories,
-    //             brands: brands,
-    //             transmissions: transmissions,
-    //             statuses: statuses,
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //         next(error)
-    //     }
-    // }
 
     getDetail = async (req, res, next) => {
         try {
@@ -99,31 +54,35 @@ class ProductController {
                 sameYearProducts: multipleMongooseToObject(sameYearProducts),
                 similarPriceProducts:
                     multipleMongooseToObject(similarPriceProducts),
-                title: 'Chi tiết sản phẩm'
+                title: 'Chi tiết sản phẩm',
             })
         } catch (error) {
             console.log(error)
             next(error)
         }
     }
-    pagination = async (req, res, next) => {
-        const page = parseInt(req.query.page) || 1
+
+    productsAndGetProducts = async (req, res, next) => {
+        const page = parseInt(req.query.offset) || 1
         const limit = parseInt(req.query.limit) || 8
         const query = {}
         const search = req.query.search
 
+        // Lọc theo các trường cụ thể
         if (req.query.year) query.year = req.query.year
         if (req.query.category) query.category = req.query.category
         if (req.query.brand) query.brand = req.query.brand
         if (req.query.status) query.status = req.query.status
         if (req.query.transmission) query.transmission = req.query.transmission
 
+        // Lọc theo giá
         if (req.query.priceMin || req.query.priceMax) {
             query.price = {}
             if (req.query.priceMin) query.price.$gte = req.query.priceMin
             if (req.query.priceMax) query.price.$lte = req.query.priceMax
         }
 
+        // Tìm kiếm theo từ khóa
         if (search) {
             const keywords = search.split(' ')
 
@@ -142,8 +101,32 @@ class ProductController {
         }
 
         try {
-            const { products, total, totalPages, currentPage } =
+            // Lấy dữ liệu từ service
+            const { products, total } =
                 await ProductService.getPaginatedProducts(query, page, limit)
+
+            const isAjax =
+                req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest'
+            // Kiểm tra header X-Requested-With để phân biệt yêu cầu Ajax
+            if (isAjax && req.headers.referer?.includes('/products')) {
+                // Trả về JSON cho yêu cầu Ajax
+                return res.status(200).json({
+                    products: multipleMongooseToObject(products),
+                    total,
+                    filters: {
+                        years,
+                        categories,
+                        brands,
+                        transmissions,
+                        statuses,
+                        prices,
+                        perPages,
+                    },
+                    title: 'Sản phẩm',
+                })
+            }
+
+            // Nếu không phải yêu cầu Ajax, trả về HTML
             res.render('products/index', {
                 products: multipleMongooseToObject(products),
                 years,
@@ -151,15 +134,13 @@ class ProductController {
                 brands,
                 transmissions,
                 statuses,
+                prices,
+                perPages,
+                title: 'Sản phẩm',
                 total,
-                price,
-                pages: totalPages,
-                current: currentPage,
-                perPage,
-                title: 'Sản phẩm'
             })
         } catch (error) {
-            console.log(error)
+            console.error(error)
             next(error)
         }
     }

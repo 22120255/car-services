@@ -1,36 +1,38 @@
-import { isEmailValid } from '../helpers.js';
+import { isEmailValid } from '../helpers.js'
 
 // Handle event when user click on register button
 document.addEventListener('DOMContentLoaded', function () {
     $('#email').on('input', function () {
-        const email = $(this).val();
+        const email = $(this).val()
         if (email) {
             if (!isEmailValid(email)) {
-                $('#email-availability-message').text("Email không hợp lệ").css("color", "red");
-                return;
+                $('#email-availability-message')
+                    .text('Email không hợp lệ')
+                    .css('color', 'red')
+                return
             } else {
-                $('#email-availability-message').text('');
+                $('#email-availability-message').text('')
             }
-            $('#login-btn').prop('disabled', !isEmailValid(email));
+            $('#login-btn').prop('disabled', !isEmailValid(email))
         }
     })
 
     $('#login-form').on('submit', async function (event) {
-        event.preventDefault();
+        event.preventDefault()
 
-        const email = $('#email').val();
-        const password = $('#password').val();
-        const messageEle = $('#message-error');
+        const email = $('#email').val()
+        const password = $('#password').val()
+        const messageEle = $('#message-error')
 
-        messageEle.text('');
+        messageEle.text('')
 
         if (!email || !password) {
-            event.preventDefault();
-            messageEle.text("Vui lòng điền đầy đủ thông tin");
-            return;
+            event.preventDefault()
+            messageEle.text('Vui lòng điền đầy đủ thông tin')
+            return
         }
         try {
-            $("#icon-loading").removeClass("d-none");
+            $('#icon-loading').removeClass('d-none')
             await $.ajax({
                 url: '/api/auth/login/email/verify',
                 type: 'POST',
@@ -39,27 +41,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     400(resp) {
-                        console.log(resp.responseJSON);
-                        messageEle.text(resp.responseJSON.message);
-                        return;
+                        console.log(resp.responseJSON)
+                        messageEle.text(resp.responseJSON.message)
+                        return
                     },
                     401(resp) {
-                        console.log(resp.responseJSON);
-                        messageEle.text(resp.responseJSON.message);
-                        return;
+                        console.log(resp.responseJSON)
+                        messageEle.text(resp.responseJSON.message)
+                        return
                     },
                     200(resp) {
                         if (resp.redirect) {
-                            window.location.href = resp.redirect;
+                            window.location.href = resp.redirect
                         }
-                    }
-                }
-            });
+                    },
+                },
+            })
         } catch (error) {
-            console.error('Error during login:', error);
+            console.error('Error during login:', error)
         } finally {
-            $("#icon-loading").addClass("d-none");
+            $('#icon-loading').addClass('d-none')
         }
-    });
+    })
 })
-
