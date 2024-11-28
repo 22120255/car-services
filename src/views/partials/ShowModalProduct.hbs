@@ -1,0 +1,174 @@
+<div
+    class='modal fade'
+    id='product-modal'
+    tabindex='-1'
+    aria-labelledby='productModalLabel'
+    aria-hidden='true'
+>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='productModalLabel'>Chi tiết sản phẩm</h5>
+                <button
+                    type='button'
+                    class='btn-close'
+                    data-bs-dismiss='modal'
+                    aria-label='Close'
+                ></button>
+            </div>
+            <div class='modal-body'>
+                <!-- Form nội dung sản phẩm -->
+                <form id='product-form' METHOD='POST'>
+                    <div class='mb-3'>
+                        <label for='product-brand' class='form-label'>Thương
+                            hiệu</label>
+                        <input
+                            type='text'
+                            class='form-control'
+                            id='product-brand'
+                            name='brand'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-model' class='form-label'>Mẫu xe</label>
+                        <input
+                            type='text'
+                            class='form-control'
+                            id='product-model'
+                            name='model'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-year' class='form-label'>Năm sản
+                            xuất</label>
+                        <input
+                            type='text'
+                            class='form-control'
+                            id='product-year'
+                            name='year'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-category' class='form-label'>Danh
+                            mục</label>
+                        <input
+                            type='text'
+                            class='form-control'
+                            id='product-category'
+                            name='category'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-status' class='form-label'>Tình
+                            trạng</label>
+                        <input
+                            type='text'
+                            class='form-control'
+                            id='product-status'
+                            name='status'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label
+                            for='product-price'
+                            class='form-label'
+                        >Giá</label>
+                        <input
+                            type='number'
+                            class='form-control'
+                            id='product-price'
+                            name='price'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-mileage' class='form-label'>Số km đã
+                            chạy</label>
+                        <input
+                            type='number'
+                            class='form-control'
+                            id='product-mileage'
+                            name='mileage'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-horsepower' class='form-label'>Công
+                            suất</label>
+                        <input
+                            type='number'
+                            class='form-control'
+                            id='product-horsepower'
+                            name='horsepower'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-transmission' class='form-label'>Hộp
+                            số</label>
+                        <input
+                            type='text'
+                            class='form-control'
+                            id='product-transmission'
+                            name='transmission'
+                        />
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-description' class='form-label'>Mô
+                            tả</label>
+                        <textarea
+                            class='form-control'
+                            id='product-description'
+                            name='description'
+                            rows='3'
+                        ></textarea>
+                    </div>
+                    <div class='mb-3'>
+                        <label for='product-images' class='form-label'>Hình ảnh</label>
+                        <div id='product-images'>
+                            <input
+                                type='text'
+                                class='form-control mb-2'
+                                name='images.image1'
+                                placeholder='Link hình ảnh 1'
+                            />
+                            <input
+                                type='text'
+                                class='form-control mb-2'
+                                name='images.image2'
+                                placeholder='Link hình ảnh 2'
+                            />
+                            <input
+                                type='text'
+                                class='form-control mb-2'
+                                name='images.image3'
+                                placeholder='Link hình ảnh 3'
+                            />
+                            <input
+                                type='text'
+                                class='form-control mb-2'
+                                name='images.image4'
+                                placeholder='Link hình ảnh 4'
+                            />
+                            <input
+                                type='text'
+                                class='form-control mb-2'
+                                name='images.image5'
+                                placeholder='Link hình ảnh 5'
+                            />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class='modal-footer'>
+                <button
+                    type='button'
+                    class='btn btn-secondary'
+                    data-bs-dismiss='modal'
+                >Đóng</button>
+                <button
+                    type='button'
+                    id='save-product-btn'
+                    class='btn btn-primary'
+                >Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
