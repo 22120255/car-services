@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
     $('.add-to-cart').on('click', function (event) {
         event.preventDefault();
         const quantity = 1;
-        console.log($(this)); 
+        console.log($(this));
         $.ajax({
-            url: "/cart/add/" + $(this).data('id'),
+            url: "/api/cart/add/" + $(this).data('id'),
             type: 'POST',
             data: { quantity },
             success: function (response) {

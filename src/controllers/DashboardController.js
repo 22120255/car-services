@@ -5,10 +5,14 @@ class DashboardController {
     index = async (req, res, next) => {
         // Tạm thời chỉ chọn ra 3 sản phẩm bất kì, sau này tích hợp số liệu sau đó mới chọn ra sản phẩm bán chạy nhất
         try {
-            const mostBoughtProducts =
-                await DashboardService.getMostBoughtProducts({})
+            const { mostProducts, newProducts } =
+                await DashboardService.getMostAndNewBoughtProducts({
+                    status: 'new',
+                })
             res.render('dashboard/home', {
-                products: mostBoughtProducts,
+                mostProducts,
+                newProducts,
+                title: 'Trang chủ'
             })
         } catch (error) {
             console.log(error)
@@ -18,12 +22,16 @@ class DashboardController {
 
     // [GET] /about
     about(req, res) {
-        res.render('dashboard/about')
+        res.render('dashboard/about', {
+            title: 'Giới thiệu'
+        })
     }
 
     // [GET] /contact
     contact(req, res) {
-        res.render('dashboard/contact')
+        res.render('dashboard/contact', {
+            title: 'Liên hệ'
+        })
     }
 }
 

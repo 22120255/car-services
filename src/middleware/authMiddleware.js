@@ -1,5 +1,3 @@
-const Role = require('../models/Role');
-
 const navigateUser = (req, res, next) => {
     res.locals.user = req.user || null;
 
@@ -13,7 +11,7 @@ const isAuthenticated = (req, res, next) => {
 }
 const checkRole = (nameRoles) => {
     return async (req, res, next) => {
-        if (nameRoles.some(name => req.user.role.name === name)) {
+        if (nameRoles.some(name => req.user.role === name)) {
             return next();
         }
 

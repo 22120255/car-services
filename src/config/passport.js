@@ -9,13 +9,8 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async (id, done) => {
-    const user = await User.findById(id).populate({
-        path: 'role',
-        model: 'Role',
-        localField: 'role',
-        foreignField: 'name'
-    });
-    done(null, user);
+    const user = await User.findById(id);
+    done(null, user.toJSON().fullInfo);
 });
 
 passport.use(new LocalStrategy({
@@ -29,7 +24,7 @@ passport.use(new LocalStrategy({
             if (!user) {
                 return done(null, false, { message: 'Email chưa được đăng kí' });
             }
-            const isPasswordMatched = await bcrypt.compare(password, user.password);
+            const isPasswordMatched = await user.comparePassword(password);
 
             if (!isPasswordMatched) {
                 return done(null, false, { message: 'Mật khẩu không đúng' });

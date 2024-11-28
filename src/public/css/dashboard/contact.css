@@ -162,39 +162,6 @@ ul.contact-info li {
 .contact-page .info-left i {
   color: #fe846f; }
 
-.btn {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  font-family: 'Poppins', sans-serif;
-  padding: 10px 30px 10px;
-  font-size: 17px;
-  line-height: 28px;
-  border: 0px;
-  border-radius: 10px;
-  -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  -o-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out; }
-
-.btn-big {
-  color: #ffffff;
-  -webkit-box-shadow: 0px 5px 20px 0px rgba(45, 45, 45, 0.478431);
-  box-shadow: 2px 5px 10px 0px rgba(45, 45, 45, 0.19);
-  color: #fff !important;
-  margin-right: 20px;
-  background: #fe846f;
-  transition: 0.2s;
-  border: 2px solid #fe846f;
-  margin-top: 50px; }
-
 @media only screen and (max-width: 767px) {
   .contact-form {
     padding: 30px; }

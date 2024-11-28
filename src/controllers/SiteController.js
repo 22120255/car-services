@@ -9,29 +9,12 @@ class SiteController {
 
     // [GET] /profile/:id
     async profile(req, res) {
-        res.render("site/profile")
-    }
-
-    // [PATCH] /user/avatar/store
-    async updateAvatar(req, res) {
-        try {
-            const pathFile = req.file.path;
-            const userId = req.body.userId;
-
-            await User.findByIdAndUpdate(userId, {
-                avatar: pathFile
-            });
-
-            res.status(200).json({
-                avatarUrl: pathFile
-            });
-
-        } catch (error) {
-            logger.error(error.message);
-            res.status(500).json({
-                error: 'Failed to update avatar'
-            });
-        }
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        res.render("site/profile", {
+            _user: user,
+            title: 'Thông tin cá nhân'
+        })
     }
 }
 

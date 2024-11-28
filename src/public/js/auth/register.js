@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 debounceTimeout = setTimeout(async function () {
                     try {
                         const resp = await $.ajax({
-                            url: '/auth/check-email',
+                            url: '/api/auth/check-email',
                             type: 'GET',
                             data: { email },
                             dataType: 'json'
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             $("#icon-loading").removeClass("d-none");
             await $.ajax({
-                url: '/auth/register/email/store',
+                url: '/api/auth/register/email/store',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ email, password, fullName }),
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     200() {
                         showModal("Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công, vui lòng kiểm tra hộp thư để kích hoạt tài khoản!",
                             function () {
-                                window.location.href = "/dashboard";
+                                window.location.href = "/auth/login";
                             }
                         )
                     },

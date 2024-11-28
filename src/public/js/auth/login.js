@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     $('#login-form').on('submit', async function (event) {
+        event.preventDefault();
+
         const email = $('#email').val();
         const password = $('#password').val();
         const messageEle = $('#message-error');
@@ -26,6 +28,37 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             messageEle.text("Vui lòng điền đầy đủ thông tin");
             return;
+        }
+        try {
+            $("#icon-loading").removeClass("d-none");
+            await $.ajax({
+                url: '/api/auth/login/email/verify',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ email, password }),
+                dataType: 'json',
+                statusCode: {
+                    400(resp) {
+                        console.log(resp.responseJSON);
+                        messageEle.text(resp.responseJSON.message);
+                        return;
+                    },
+                    401(resp) {
+                        console.log(resp.responseJSON);
+                        messageEle.text(resp.responseJSON.message);
+                        return;
+                    },
+                    200(resp) {
+                        if (resp.redirect) {
+                            window.location.href = resp.redirect;
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error during login:', error);
+        } finally {
+            $("#icon-loading").addClass("d-none");
         }
     });
 })

@@ -2,11 +2,17 @@ const AdminService = require('../services/AdminService');
 const logger = require('../config/logger');
 const { errorLog } = require('../utils/customLog')
 class AdminController {
+    // [GET] /admin/dashboard
+    index(req, res) {
+        res.render("admin/dashboard", { layout: "admin", title: "Dashboard" })
+    }
+
     // [GET] /admin/users/accounts
     accounts(req, res) {
         try {
             res.render('admin/users/accounts', {
-                layout: 'admin'
+                layout: 'admin',
+                title: 'Quản lý tài khoản'
             });
         } catch (error) {
             logger.error(error.message);
@@ -66,6 +72,58 @@ class AdminController {
         try {
             const user = await AdminService.getUserDetails(req.params.id);
             res.render('admin/users/detail', { user, layout: false });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/products
+    async products(req, res) {
+        try {
+            res.render('admin/products', {
+                layout: 'admin',
+                title: 'Quản lý sản phẩm'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/orders  
+    async orders(req, res) {
+        try {
+            res.render('admin/orders', {
+                layout: 'admin',
+                title: 'Quản lý đơn hàng'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/reports
+    async reports(req, res) {
+        try {
+            res.render('admin/reports', {
+                layout: 'admin',
+                title: 'Báo cáo thống kê'
+            });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });
+        }
+    }
+
+    // [GET] /admin/settings
+    async settings(req, res) {
+        try {
+            res.render('admin/settings', {
+                layout: 'admin',
+                title: 'Cài đặt hệ thống'
+            });
         } catch (error) {
             logger.error(error.message);
             res.status(500).json({ error: "Có lỗi, vui lòng thử lại sau!" });

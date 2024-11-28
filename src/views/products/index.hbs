@@ -1,13 +1,9 @@
 <section id='featured-cars' class='featured-cars'>
     <div class='container'>
-        <div class='section-header'>
-            <p class='sub-title'>
-                Hãy khám phá những sản phẩm nổi bật của chúng tôi
-            </p>
-            <h2 class='main-title'>Sản phẩm của chúng tôi</h2>
-            <p class='section-description'>
-                Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.
-            </p>
+        <div class="section-header">
+            <p class="sub-title">Hãy khám phá những sản phẩm nổi bật của chúng tôi</p>
+            <h2 class="main-title">Sản phẩm của chúng tôi</h2>
+            <p class="section-description">Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.</p>
         </div>
         <div class="featured-cars-filter" id = "filter-form">
             <form id="filterForm" method="GET" action="/products">
@@ -16,7 +12,7 @@
                     <div class="model-search-content">
                         <div class="row mb-3">
                             <div class="input-group input-group-sm search-input">
-                                <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm..." name="search" value="{{queries.search}}">
+                                <input type="text" class="form-control" placeholder="Search products..." name="search" value="{{queries.search}}" id="searchInput">
                                 <button class="btn btn-outline-secondary" id="btn-search">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -26,12 +22,12 @@
                         <!-- Select Year -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Năm</h2>
+                            <h2>Year</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="year">
-                                    <option value="">Chọn năm</option>
+                                <select class="form-control" name="year" id="yearFilter">
+                                    <option value="">Select year</option>
                                     {{#each years}}
-                                        <option value="{{this.value}}" {{#if (eq ../queries.year this.value)}}selected{{/if}}>
+                                        <option value="{{this.value}}" {{#if (eq year this.value)}}selected{{/if}}>
                                             {{this.name}}
                                         </option>
                                     {{/each}} 
@@ -40,12 +36,12 @@
                             </div>
                             <!-- Select Category -->
                             <div class="single-model-search">
-                            <h2>Kiểu dáng</h2>
+                            <h2>Style</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="category">
-                                    <option value="">Chọn kiểu dáng</option>
+                                <select class="form-control" name="category" id="categoryFilter">
+                                    <option value="">Select style</option>
                                     {{#each categories}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.category this.name)}}selected{{/if}}>
+                                        <option value="{{this.name}}" {{#if (eq category this.name)}}selected{{/if}}>
                                             {{this.label}}
                                         </option>
                                     {{/each}} 
@@ -56,12 +52,12 @@
                         <!-- Select Make -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Hãng xe</h2>
+                            <h2>Brand</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="brand">
-                                    <option value="">Chọn hãng</option>
+                                <select class="form-control" name="brand" id="brandFilter">
+                                    <option value="">Select brand</option>
                                     {{#each brands}}
-                                        <option value="{{this.value}}" {{#if (eq ../queries.brand this.value)}}selected{{/if}}>
+                                        <option value="{{this.value}}" {{#if (eq brand this.value)}}selected{{/if}}>
                                             {{this.name}}
                                         </option>
                                     {{/each}}                  
@@ -70,12 +66,12 @@
                             </div>
                             <!-- Select Condition -->
                             <div class="single-model-search">
-                            <h2>Tình trạng</h2>
+                            <h2>Status</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="status">
-                                    <option value="">Chọn tình trạng</option>
+                                <select class="form-control" name="status" id="statusFilter">
+                                    <option value="">Select status</option>
                                     {{#each statuses}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.status this.name)}}selected{{/if}}>
+                                        <option value="{{this.name}}" {{#if (eq status this.name)}}selected{{/if}}>
                                             {{this.label}}
                                         </option>
                                     {{/each}}      
@@ -86,12 +82,12 @@
                         <!-- Select Model -->
                         <div class="col-md-offset-1 col-md-2 col-sm-12">
                             <div class="single-model-search">
-                            <h2>Hộp số</h2>
+                            <h2>Transmission</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="transmission">
-                                    <option value="">Chọn hộp số</option>
+                                <select class="form-control" name="transmission" id="transmisstionFilter">
+                                    <option value="">Select transmission</option>
                                 {{#each transmissions}}
-                                        <option value="{{this.name}}" {{#if (eq ../queries.transmission this.name)}}selected{{/if}}>
+                                        <option value="{{this.name}}" {{#if (eq transmission this.name)}}selected{{/if}}>
                                             {{this.label}}
                                         </option>
                                     {{/each}}   
@@ -100,16 +96,14 @@
                             </div>
                             <!-- Select Price -->
                             <div class="single-model-search">
-                            <h2>Mức giá ($)</h2>
+                            <h2>Price Range ($)</h2>
                             <div class="model-select-icon">
-                                <select class="form-control" name="price">
-                                    <option value="">Chọn mức giá</option>
+                                <select class="form-control" name="price" id = "priceFilter">
+                                    <option value="">Select price range</option>
                                     {{#each price}}
                                         <option 
                                             value="{{this.priceMin}}-{{this.priceMax}}"
-                                            data_price_min="{{this.priceMin}}" 
-                                            data_price_max="{{this.priceMax}}"
-                                            {{#if (gt 1 1) }}selected{{/if}}> <!-- 1 1 là true -->
+                                            {{#if (and (gt this.price this.priceMin) (lt this.price this.priceMax)) }}selected{{/if}}> <!-- 1 1 là true -->
                                             ${{this.priceMin}} - ${{this.priceMax}}
                                         </option>
                                     {{/each}}
@@ -126,7 +120,6 @@
         </div>
         <div class='container'>
             <div class='row featured-cars-content g-3' id='product-list'> <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
-                <h2 id="search-inform"></h2>
                 {{#each products}}
                     <div class='col-lg-3 col-md-4 col-sm-6'>
                         {{> CardProduct product=this}}
@@ -134,7 +127,7 @@
                 {{else}}
                 <div class='col-lg-12'>
                     <div class='find-nothing text-center' >
-                            <h2 style = "font-size: large; color: #978e8e">Không tìm thấy sản phẩm</h2>
+                            <h2 style = "font-size: large; color: #978e8e">Find nothing!</h2>
                     </div>
                 </div>
                 {{/each}}
@@ -215,12 +208,13 @@
             
             <!-- Items per page select -->
             <form id="filterForm" method="GET" action="/products">
-                <select class="form-select" aria-label="Items per page" style="width: auto;" name = "perPage" >
+                <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
                     {{#each perPage}}
-                        <option value="{{this.value}}" {{#if (eq ../queries.perPage this.value)}}selected{{/if}}>{{this.value}} / trang</option>
+                        <option value="{{this.value}}" {{#if (eq limit this.value)}}selected{{else if (eq this.value 8)}}selected{{/if}}>{{this.value}} / trang</option>
                     {{/each}}
                 </select>
             </form>
+
         </div>
     </div>
 </section>

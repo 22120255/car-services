@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const user = await signInWithGoogle();
 
             await $.ajax({
-                url: "/auth/register/google/store",
+                url: "/api/auth/register/google/store",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -33,19 +33,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     avatar: user.photoURL,
                 }),
                 statusCode: {
-                    200(message) {
-                        console.log(message);
-                        window.location.href = "/dashboard"
-                    },
                     500(message) {
-                        showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
+                        console.log("Error when login with Google: ", message);
+                        showToast("Error", "Login failed, please try again later!")
+                    },
+                    200(resp) {
+                        console.log("resp:", resp)
+                        window.location.href = resp.redirect;
                     }
                 }
             });
         } catch (error) {
             if (error.statusCode === 500) return;
+
+            if (error.code === "auth/cancelled-popup-request" || error.code === "auth/popup-closed-by-user") {
+                showToast("Error", "You have cancelled login!");
+                return;
+            }
             console.log(error)
-            showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
+            showToast("Error", "Login failed, please try again later!")
         }
     });
 });
@@ -56,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const user = await signInWithFacebook();
             await $.ajax({
-                url: "/auth/register/facebook/store",
+                url: "/api/auth/register/facebook/store",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -66,19 +72,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     avatar: user.photoURL,
                 }),
                 statusCode: {
-                    200(message) {
-                        console.log(message);
-                        window.location.href = "/dashboard"
-                    },
                     500(message) {
-                        showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
+                        console.log("Error when login with Facebook: ", message);
+                        showToast("Error", "Login failed, please try again later!")
+                    },
+                    200(resp) {
+                        window.location.href = resp.redirect;
                     }
                 }
             });
         } catch (error) {
             if (error.statusCode === 500) return;
+            if (error.code === "auth/cancelled-popup-request" || error.code === "auth/popup-closed-by-user") {
+                showToast("Error", "You have cancelled login!");
+                return;
+            }
             console.log(error)
-            showToast("Error", "Đăng nhập không thành công, vui lòng thử lại sau!")
+            showToast("Error", "Login failed, please try again later!")
         }
     });
 });
