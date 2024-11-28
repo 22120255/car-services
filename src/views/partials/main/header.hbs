@@ -48,7 +48,7 @@
                     <li class='nav-item mx-3'>
                         <a
                             class='nav-link text-white position-relative btn-cart'
-                            {{! href='/dashboard/shops' }}
+                            href='/cart'
                             role='button'
                         >
                             <i class='fa-solid fa-cart-shopping'></i>
@@ -59,11 +59,11 @@
                                 <span class='visually-hidden'>unread messages</span>
                             </span>
                         </a>
-                        <script type='module'>
+                        {{!-- <script type='module'>
                             import {showToast} from '/js/common.js';
                             $(".btn-cart").click(function() { showToast("Info",
                             "This feature is not available yet!"); });
-                        </script>
+                        </script> --}}
                     </li>
                     {{#if (hasUser user)}}
                         <li class='nav-item dropdown'>
