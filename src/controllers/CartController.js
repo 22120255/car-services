@@ -3,10 +3,26 @@ const Cart = require('../models/Cart');
 const { errorLog } = require('../utils/customLog');
 
 class CartController {
-    getCart(req, res) {
-        res.render('site/cart', {
+    cart(req, res) {
+        res.render('cart', {
             title: 'Giỏ hàng'
         });
+    }
+
+    async getCartData(req, res) {
+        try {
+            const userId = req.user.id;
+            const cart = await Cart.findOne({ userId });
+
+            if (!cart) {
+                return res.status(404).json({ message: 'Cart not found' });
+            }
+            console.log(cart);
+            return res.status(200).json();
+        } catch (error) {
+            errorLog("CartController.js", 44, error.message);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
     }
 
     async addToCart(req, res) {
@@ -43,10 +59,10 @@ class CartController {
             res.redirect('back')
         }
         catch (error) {
-            errorLog("CartController.js", 44, error.message);
+            errorLog("CartController.js", 63, error.message);
+            res.status(500).json({ message: 'Internal server error' });
         }
     }
-
 }
 
 module.exports = new CartController();
