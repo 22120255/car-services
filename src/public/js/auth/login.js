@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return
         }
         try {
-            $('#icon-loading').removeClass('d-none')
+            $("#icon-loading").removeClass("d-none");
             await $.ajax({
                 url: '/api/auth/login/email/verify',
                 type: 'POST',
@@ -41,26 +41,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     400(resp) {
-                        console.log(resp.responseJSON)
-                        messageEle.text(resp.responseJSON.message)
-                        return
+                        console.log(resp.responseJSON);
+                        messageEle.text(resp.responseJSON.message);
+                        return;
                     },
                     401(resp) {
-                        console.log(resp.responseJSON)
-                        messageEle.text(resp.responseJSON.message)
-                        return
+                        console.log(resp.responseJSON);
+                        messageEle.text(resp.responseJSON.message);
+                        return;
                     },
                     200(resp) {
                         if (resp.redirect) {
                             window.location.href = resp.redirect
                         }
-                    },
-                },
-            })
+                    }
+                }
+            });
         } catch (error) {
-            console.error('Error during login:', error)
+            console.error('Error during login:', error);
         } finally {
-            $('#icon-loading').addClass('d-none')
+            $("#icon-loading").addClass("d-none");
         }
     })
 })

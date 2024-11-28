@@ -30,10 +30,17 @@ function showToast(type, message) {
 // callback will be done when modal hidden
 function showModal(title, content, callback = () => {}) {
     const modal = $('#notify-modal')
+    // modal.off('hidden.bs.modal')
+
     modal.find('.modal-title').text(title)
     modal.find('.modal-body').text(content)
+
+    modal.on('hidden.bs.modal', () => {
+        callback()
+        modal.off('hidden.bs.modal')
+    })
+
     modal.modal('show').css('background-color', 'rgba(0, 0, 0, 0.4)')
-    modal.on('hidden.bs.modal', callback)
 }
 
 function showProductModal(title, product = null, callback = () => {}) {

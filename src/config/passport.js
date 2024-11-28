@@ -5,16 +5,13 @@ const User = require('../models/User')
 const LocalStrategy = require('passport-local').Strategy
 
 passport.serializeUser(function (user, done) {
-    done(null, user.id)
-})
+    done(null, user._id);
+});
 
 passport.deserializeUser(async (id, done) => {
-    const user = await User.findById(id)
-    if (!user) {
-        return done(new Error('User not found'), null)
-    }
-    done(null, user.toJSON().fullInfo)
-})
+    const user = await User.findById(id);
+    done(null, user.toJSON());
+});
 
 passport.use(
     new LocalStrategy(
@@ -28,18 +25,18 @@ passport.use(
 
                 if (!user) {
                     return done(null, false, {
-                        message: 'Email chưa được đăng kí',
+                        message: 'Email not registered',
                     })
                 }
                 const isPasswordMatched = await user.comparePassword(password)
 
                 if (!isPasswordMatched) {
-                    return done(null, false, { message: 'Mật khẩu không đúng' })
+                    return done(null, false, { message: 'Incorrect password' })
                 }
                 return done(null, user)
             } catch (error) {
                 return done(null, false, {
-                    message: 'Có lỗi, vui lòng thử lại sau!',
+                    message: 'An error occurred, please try again later.!',
                 })
             }
         }
