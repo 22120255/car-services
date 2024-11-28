@@ -5,12 +5,12 @@ const User = require('../models/User');
 const LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id);
-    done(null, user.toJSON().fullInfo);
+    done(null, user.toJSON());
 });
 
 passport.use(new LocalStrategy({

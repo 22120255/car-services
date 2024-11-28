@@ -1,4 +1,4 @@
-import { showModal, showToast } from '../../common.js'
+import { showModal, showToast } from '../common.js'
 
 document.addEventListener('DOMContentLoaded', function () {
     // Xử lý thay đổi role
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const $select = $(this)
 
         $.ajax({
-            url: '/api/users/update-role',
+            url: '/api/user/update-role',
             method: 'PATCH',
             data: { userId, role: newRole },
             statusCode: {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const $select = $(this)
 
         $.ajax({
-            url: '/api/users/update-status',
+            url: '/api/user/update-status',
             method: 'PATCH',
             data: { userId, status: newStatus },
             statusCode: {
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $(document).on('click', '.view-details', function () {
         const userId = $(this).closest('tr').data('user-id')
 
-        $.get(`/admin/${userId}`, function (data) {
+        $.get(`/user/${userId}`, function (data) {
             $('#userDetailsModal .modal-body').html(data)
         })
     })
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'Bạn có chắc chắn muốn xóa tài khoản này không?',
             () => {
                 $.ajax({
-                    url: `/api/users/${userId}`,
+                    url: `/api/user/${userId}`,
                     method: 'DELETE',
                     statusCode: {
                         200(resp) {
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = Object.fromEntries(urlParams.entries())
         const apiQuery = $.param(params)
         await $.ajax({
-            url: `/api/users?${apiQuery}`,
+            url: `/api/user?${apiQuery}`,
             type: 'GET',
             statusCode: {
                 200(resp) {
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add new data
         users.forEach((user) => {
             $('#accountsTable').append(`
-                <tr data-user-id="${user.id}">
+                <tr data-user-id="${user._id}">
                     <td>
                         <img src="${user.avatar}" alt="Avatar" class="user-avatar">
                     </td>
@@ -236,9 +236,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${user.email}</td>
                     <td>
                         <select class="role-select form-select" ${user.isCurrentUser ? 'disabled' : ''}>
-                            <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
-                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
-                            <option value="sadmin" ${user.role === 'sadmin' ? 'selected' : ''}>Super Admin</option>
+                            <option value="user" ${user.role.name === 'user' ? 'selected' : ''}>User</option>
+                            <option value="admin" ${user.role.name === 'admin' ? 'selected' : ''}>Admin</option>
+                            <option value="sadmin" ${user.role.name === 'sadmin' ? 'selected' : ''}>Super Admin</option>
                         </select>
                     </td>
                     <td>

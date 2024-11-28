@@ -97,7 +97,7 @@
                             >
                                 <li>
                                     <a
-                                        {{!-- href='/profile/{{user.id}}' --}}
+                                        {{!-- href='/profile/{{user._id}}' --}}
                                         class='d-flex align-items-center gap-1 text-decoration-none dropdown-item'
                                     >
                                         {{#if user.avatar}}
@@ -125,10 +125,10 @@
                                 <li>
                                     <a
                                         class='dropdown-item'
-                                        href='/profile/{{user.id}}'
+                                        href='/user/profile/{{user._id}}'
                                     >My profile</a>
                                 </li>
-                                {{#unless (isUser user.role)}}
+                                {{#unless (isUser user.role.name)}}
                                     <li>
                                         <a
                                             class='dropdown-item'
