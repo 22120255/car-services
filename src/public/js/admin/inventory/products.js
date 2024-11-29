@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('ID sản phẩm:', productId);
     $.get(`/api/user/inventory/${productId}`)
       .done(function (data) {
-        console.log(data);
         showModalDetail(data);
       })
       .fail(function () {
