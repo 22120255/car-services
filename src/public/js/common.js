@@ -45,6 +45,7 @@ function showModal(title, content, callback = () => {}) {
 function showProductModal(title, product = null, callback = () => {}) {
   const modal = $('#product-modal');
 
+  // Cập nhật tiêu đề của modal
   modal.find('.modal-title').text(title);
 
   // Reset form
@@ -66,7 +67,6 @@ function showProductModal(title, product = null, callback = () => {}) {
 
   // Hiển thị modal
   modal.modal('show');
-  modal.on('hidden.bs.modal', callback);
 }
 
 // Hàm hiển thị modal chi tiết sản phẩm
@@ -105,7 +105,7 @@ function showModalDetail(product) {
     { label: 'Mileage', value: product.mileage ? `${product.mileage} mi` : 'N/A' },
     { label: 'Horsepower', value: product.horsepower ? `${product.horsepower}HP` : 'N/A' },
     { label: 'Transmission', value: product.transmission || 'N/A' },
-    { label: 'Category', value: product.category || 'N/A' },
+    { label: 'Style', value: product.style || 'N/A' },
   ];
   specs.forEach((spec) => {
     const $specItem = $('<div>').addClass('spec-item').html(`

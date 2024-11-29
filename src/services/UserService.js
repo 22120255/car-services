@@ -158,6 +158,29 @@ class UserService {
 
     return product;
   }
+
+  // Tạo sản phẩm
+
+  async createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images) {
+    try {
+      await Product.create({
+        brand,
+        model,
+        year,
+        style,
+        status,
+        price,
+        mileage,
+        horsepower,
+        transmission,
+        description,
+        images,
+      });
+    } catch (error) {
+      console.error('Error creating product:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new UserService();

@@ -5,7 +5,7 @@
         <h5 class='modal-title' id='productModalLabel'>Chi tiết sản phẩm</h5>
         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
-      <div class='modal-body' style='max-height: 550px; overflow-y: auto; '>
+      <div class='modal-body' style='max-height: 550px; overflow-y: auto;'>
         <!-- Form nội dung sản phẩm -->
         <form id='product-form'>
           <div class='mb-3'>
@@ -27,18 +27,10 @@
             <label for='product-style' class='form-label'>Style</label>
             <input type='text' class='form-control' id='product-style' name='style' />
             <div class='invalid-feedback'>Please enter Style!</div>
-
           </div>
-
           <div class='mb-3'>
             <label for='product-status' class='form-label'>Status</label>
-            <select
-              id='statusFilter'
-              style='padding: 8px; border: 1px solid
-                            #ddd; border-radius: 5px; flex-grow: 1; width:
-                           100%; '
-              name='status'
-            >
+            <select id='product-status' name='status' style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; flex-grow: 1; width: 100%;'>
               <option value='new'>New</option>
               <option value='used'>Used</option>
               <option value='sold'>Sold</option>
@@ -48,28 +40,23 @@
             <label for='product-price' class='form-label'>Price</label>
             <input type='number' class='form-control' id='product-price' name='price' />
             <div class='invalid-feedback'>Please enter Price!</div>
-
           </div>
           <div class='mb-3'>
             <label for='product-mileage' class='form-label'>Mileage</label>
             <input type='number' class='form-control' id='product-mileage' name='mileage' />
             <div class='invalid-feedback'>Please enter Mileage!</div>
-
           </div>
           <div class='mb-3'>
             <label for='product-horsepower' class='form-label'>Horsepower</label>
             <input type='number' class='form-control' id='product-horsepower' name='horsepower' />
             <div class='invalid-feedback'>Please enter Horsepower!</div>
-
           </div>
           <div class='mb-3'>
             <label for='product-transmission' class='form-label'>Transmission</label>
             <select
-              id='statusFilter'
-              style='padding: 8px; border: 1px solid
-                            #ddd; border-radius: 5px; flex-grow: 1; width:
-                           100%; '
+              id='product-transmission'
               name='transmission'
+              style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; flex-grow: 1; width: 100%;'
             >
               <option value='manual'>Manual</option>
               <option value='automatic'>Automatic</option>
@@ -79,7 +66,6 @@
             <label for='product-description' class='form-label'>Description</label>
             <textarea class='form-control' id='product-description' name='description' rows='3'></textarea>
             <div class='invalid-feedback'>Please enter Description!</div>
-
           </div>
           <div class='mb-3'>
             <label for='product-images' class='form-label'>Images</label>

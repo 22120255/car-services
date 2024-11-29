@@ -22,89 +22,57 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  // lưu sản phẩm mới (not working)
-  $('#save-product-btn').on('click', function () {
-    const form = $('#product-form');
-    const requiredFields = ['brand', 'model', 'year', 'style', 'price', 'mileage', 'horsepower'];
-    let isValid = true;
-
-    // Duyệt qua các trường bắt buộc
-    requiredFields.forEach((field) => {
-      const input = form.find(`[name="${field}"]`);
-      if (!input.val().trim()) {
-        // Nếu trường bị bỏ trống
-        isValid = false;
-        input.addClass('is-invalid'); // Thêm class để báo lỗi
-      } else {
-        input.removeClass('is-invalid'); // Xóa lỗi nếu hợp lệ
-      }
-    });
-
-    // Kiểm tra select (status, transmission)
-    const status = form.find('#statusFilter').first(); // Trường hợp có nhiều phần tử, chọn phần tử đầu tiên
-    const transmission = form.find('#statusFilter').last(); // Nếu cần tách riêng ID, chỉnh lại ở đây
-
-    if (!status.val().trim()) {
-      isValid = false;
-      status.addClass('is-invalid');
-    } else {
-      status.removeClass('is-invalid');
-    }
-
-    if (!transmission.val().trim()) {
-      isValid = false;
-      transmission.addClass('is-invalid');
-    } else {
-      transmission.removeClass('is-invalid');
-    }
-
-    // Nếu form hợp lệ thì submit hoặc xử lý tiếp
-    if (isValid) {
-      console.log('Form hợp lệ, xử lý lưu sản phẩm...');
-      // Xử lý lưu sản phẩm hoặc gửi yêu cầu AJAX
-    } else {
-      console.error('Vui lòng nhập đầy đủ thông tin cần thiết!');
-    }
-  });
-
-  // (not working)
-  $('#save-product-btn').on('click', () => {
-    const formData = $('#product-form').serializeArray();
-    const productData = {};
-
-    formData.forEach((item) => {
-      const keys = item.name.split('.');
-      if (keys.length > 1) {
-        if (!productData[keys[0]]) productData[keys[0]] = {};
-        productData[keys[0]][keys[1]] = item.value;
-      } else {
-        productData[item.name] = item.value;
-      }
-    });
-
-    console.log('Dữ liệu sản phẩm:', productData);
-
-    // Thực hiện callback hoặc AJAX gửi dữ liệu lên server
-  });
-
   // Nút thêm sản phẩm (not working)
   $('#add-car-btn').on('click', function () {
-    showProductModal('Add new car', function (formData) {
-      $.ajax({
-        url: '/api/user/inventory/create-product',
-        type: 'POST',
-        data: formData,
-        success: function (data) {
-          if (data.success) {
-            showToast('success', 'Sản phẩm đã được thêm thành công!');
-          } else {
-            showToast('error', 'Thêm sản phẩm thất bại!');
-          }
-        },
-        error: function () {
-          showToast('error', 'Đã có lỗi xảy ra, vui lòng thử lại!');
-        },
-      });
+    // Gọi modal với tiêu đề "Add new car" và không có sản phẩm (product = null)
+    showProductModal('Add new car');
+  });
+
+  // Đăng ký sự kiện cho nút Save trong modal
+  $('#add-car-btn').on('click', function () {
+    // Gọi modal với tiêu đề "Add new car" và không có sản phẩm (product = null)
+    showProductModal('Add new car');
+  });
+
+  // Đăng ký sự kiện cho nút Save trong modal
+  $('#save-product-btn').on('click', function () {
+    // Lấy dữ liệu từ các trường input
+    const productData = {
+      brand: $('#product-brand').val(),
+      model: $('#product-model').val(),
+      year: parseInt($('#product-year').val()),
+      style: $('#product-style').val(),
+      status: $('#product-status').val(),
+      price: parseFloat($('#product-price').val()),
+      mileage: parseInt($('#product-mileage').val()),
+      horsepower: parseInt($('#product-horsepower').val()),
+      transmission: $('#product-transmission').val(),
+      description: $('#product-description').val(),
+      images: {
+        image1: $('input[name="images.image1"]').val(),
+        image2: $('input[name="images.image2"]').val(),
+        image3: $('input[name="images.image3"]').val(),
+        image4: $('input[name="images.image4"]').val(),
+        image5: $('input[name="images.image5"]').val(),
+      },
+    };
+
+    // Gửi dữ liệu qua AJAX
+    $.ajax({
+      url: '/api/user/inventory/create-product', // Địa chỉ API của bạn
+      type: 'POST',
+      data: productData, // Gửi dữ liệu
+      success: function (response) {
+        if (response.success) {
+          showToast('success', 'Sản phẩm đã được thêm thành công!');
+          $('#product-modal').modal('hide'); // Đóng modal
+        } else {
+          showToast('error', 'Thêm sản phẩm thất bại!');
+        }
+      },
+      error: function () {
+        showToast('error', 'Đã có lỗi xảy ra, vui lòng thử lại!');
+      },
     });
   });
 });
