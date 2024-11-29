@@ -15,10 +15,11 @@ class CartController {
             const cart = await Cart.findOne({ userId });
 
             if (!cart) {
+                errorLog("CartController.js", 44, error.message);
                 return res.status(404).json({ message: 'Cart not found' });
             }
             console.log(cart);
-            return res.status(200).json();
+            return res.status(200).json(cart);
         } catch (error) {
             errorLog("CartController.js", 44, error.message);
             return res.status(500).json({ message: 'Internal server error' });
