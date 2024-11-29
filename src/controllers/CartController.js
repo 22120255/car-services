@@ -12,6 +12,7 @@ class CartController {
     async getCartData(req, res) {
         try {
             const userId = req.user.id;
+            
             const cart = await Cart.findOne({ userId });
 
             if (!cart) {
