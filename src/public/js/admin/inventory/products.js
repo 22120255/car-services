@@ -22,12 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  // Nút thêm sản phẩm (not working)
-  $('#add-car-btn').on('click', function () {
-    // Gọi modal với tiêu đề "Add new car" và không có sản phẩm (product = null)
-    showProductModal('Add new car');
-  });
-
   // Đăng ký sự kiện cho nút Save trong modal
   $('#add-car-btn').on('click', function () {
     // Gọi modal với tiêu đề "Add new car" và không có sản phẩm (product = null)
@@ -62,16 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
       url: '/api/user/inventory/create-product', // Địa chỉ API của bạn
       type: 'POST',
       data: productData, // Gửi dữ liệu
-      success: function (response) {
-        if (response.success) {
-          showToast('success', 'Sản phẩm đã được thêm thành công!');
-          $('#product-modal').modal('hide'); // Đóng modal
-        } else {
-          showToast('error', 'Thêm sản phẩm thất bại!');
-        }
-      },
-      error: function () {
-        showToast('error', 'Đã có lỗi xảy ra, vui lòng thử lại!');
+      statusCode: {
+        201: function (response) {
+          if (response.message) {
+            showToast('success', response.message);
+            $('#product-modal').modal('hide'); // Đóng modal
+          } else {
+            showToast('error', 'Thêm sản phẩm thất bại!');
+          }
+        },
+        403: function () {
+          showToast('error', 'Đã có lỗi xảy ra, vui lòng thử lại!');
+        },
       },
     });
   });

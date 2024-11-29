@@ -163,7 +163,7 @@ class UserService {
 
   async createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images) {
     try {
-      await Product.create({
+      const product = await Product.create({
         brand,
         model,
         year,
@@ -176,6 +176,7 @@ class UserService {
         description,
         images,
       });
+      return product;
     } catch (error) {
       console.error('Error creating product:', error);
       throw error;

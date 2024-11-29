@@ -115,8 +115,21 @@ class UserController {
   async createProduct(req, res) {
     try {
       const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images } = req.body;
-      await UserService.createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images);
-      return res.status(201).json({ message: 'Tạo sản phẩm thành công' });
+      console.log(req.body);
+      const product = await UserService.createProduct(
+        brand,
+        model,
+        year,
+        style,
+        status,
+        price,
+        mileage,
+        horsepower,
+        transmission,
+        description,
+        images
+      );
+      if (product) return res.status(201).json({ message: 'Tạo sản phẩm thành công' });
     } catch (error) {
       errorLog('UserController', 36, error.message);
       return res.status(403).json({ error: error.message });
