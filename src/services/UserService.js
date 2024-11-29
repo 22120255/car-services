@@ -182,6 +182,25 @@ class UserService {
       throw error;
     }
   }
+
+  // Cập nhật sản phẩm
+  async updateProduct(productId, data) {
+    try {
+      const allowedFields = ['brand', 'model', 'year', 'style', 'status', 'price', 'mileage', 'horsepower', 'transmission', 'description', 'images'];
+      const updateData = Object.keys(data)
+        .filter((key) => allowedFields.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = data[key];
+          return obj;
+        }, {});
+
+      const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+      return updatedProduct;
+    } catch (error) {
+      console.error('Error updating product:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new UserService();

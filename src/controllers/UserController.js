@@ -147,6 +147,19 @@ class UserController {
     }
   }
 
+  // [PATCH] /api/inventory/update-product.
+  async updateProduct(req, res) {
+    try {
+      const { id } = req.params; // Lấy id từ params
+      const data = req.body; // Lấy các thông tin còn lại
+      const product = await UserService.updateProduct(id, data);
+      if (product) return res.status(200).json({ message: 'Cập nhật sản phẩm thành công' });
+    } catch (error) {
+      errorLog('UserController', 62, error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
   // [GET] /admin/orders
   async orders(req, res) {
     try {
