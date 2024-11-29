@@ -1,1 +1,10 @@
-2024-11-29 00:08:00 [ERROR]: File: cacheMiddleware, line: 23, error: Error: Connection timeout
+2024-11-29 00:37:00 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
+2024-11-29 00:37:03 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
+2024-11-29 00:37:04 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
+2024-11-29 00:44:56 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
+2024-11-29 00:45:03 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
+2024-11-29 00:45:05 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
+2024-11-29 00:45:13 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
+2024-11-29 00:45:15 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
+2024-11-29 00:45:54 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
+2024-11-29 00:47:30 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
