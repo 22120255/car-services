@@ -71,7 +71,7 @@ function showProductModal(title, product = null, callback = () => {}) {
 
 // Hàm hiển thị modal chi tiết sản phẩm
 function showModalDetail(product) {
-  $('#modalTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
+  $('#modalTitle').text(`ProductID: ${product._id}`);
   $('#mainImage')
     .attr('src', product.images?.image1 || '/path/to/default-image.jpg')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
@@ -79,10 +79,15 @@ function showModalDetail(product) {
   const $thumbnailContainer = $('#thumbnailImages');
   $thumbnailContainer.empty();
 
-  // Duyệt qua các thuộc tính trong object `images`
   if (product.images && typeof product.images === 'object') {
     Object.values(product.images).forEach((image) => {
-      const $img = $('<img>').attr('src', image).attr('alt', 'thumbnail').addClass('thumbnail');
+      const $img = $('<img>')
+        .attr('src', image)
+        .attr('alt', 'thumbnail')
+        .addClass('thumbnail')
+        .on('click', function () {
+          $('#mainImage').attr('src', image);
+        });
       $thumbnailContainer.append($img);
     });
   } else {
@@ -104,9 +109,9 @@ function showModalDetail(product) {
   ];
   specs.forEach((spec) => {
     const $specItem = $('<div>').addClass('spec-item').html(`
-              <span class="spec-label">${spec.label}:</span>
-              <span class="spec-value">${spec.value}</span>
-            `);
+          <span class="spec-label">${spec.label}:</span>
+          <span class="spec-value">${spec.value}</span>
+        `);
     $specsContainer.append($specItem);
   });
 
