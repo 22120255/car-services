@@ -1,8 +1,16 @@
-<div class='modal fade' id='product-modal' tabindex='-1' aria-labelledby='productModalLabel' aria-hidden='true'>
+<div
+  class='modal fade'
+  id='product-modal'
+  tabindex='-1'
+  aria-labelledby='productModalLabel'
+  aria-hidden='true'
+  data-is-editing='false'
+  data-product-id=''
+>
   <div class='modal-dialog modal-lg'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <h5 class='modal-title' id='productModalLabel'>Chi tiết sản phẩm</h5>
+        <h5 class='modal-title' id='productModalLabel' value=''>Chi tiết sản phẩm</h5>
         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
       <div class='modal-body' style='max-height: 550px; overflow-y: auto;'>
@@ -10,22 +18,22 @@
         <form id='product-form'>
           <div class='mb-3'>
             <label for='product-brand' class='form-label'>Brand</label>
-            <input type='text' class='form-control' id='product-brand' name='brand' />
+            <input type='text' class='form-control' id='product-brand' name='brand' value='' />
             <div class='invalid-feedback'>Please enter Brand!</div>
           </div>
           <div class='mb-3'>
             <label for='product-model' class='form-label'>Model</label>
-            <input type='text' class='form-control' id='product-model' name='model' />
+            <input type='text' class='form-control' id='product-model' name='model' value='' />
             <div class='invalid-feedback'>Please enter Model!</div>
           </div>
           <div class='mb-3'>
             <label for='product-year' class='form-label'>Year</label>
-            <input type='text' class='form-control' id='product-year' name='year' />
+            <input type='text' class='form-control' id='product-year' name='year' value='' />
             <div class='invalid-feedback'>Please enter Year!</div>
           </div>
           <div class='mb-3'>
             <label for='product-style' class='form-label'>Style</label>
-            <input type='text' class='form-control' id='product-style' name='style' />
+            <input type='text' class='form-control' id='product-style' name='style' value='' />
             <div class='invalid-feedback'>Please enter Style!</div>
           </div>
           <div class='mb-3'>
@@ -38,17 +46,17 @@
           </div>
           <div class='mb-3'>
             <label for='product-price' class='form-label'>Price</label>
-            <input type='number' class='form-control' id='product-price' name='price' />
+            <input type='number' class='form-control' id='product-price' name='price' value='' />
             <div class='invalid-feedback'>Please enter Price!</div>
           </div>
           <div class='mb-3'>
             <label for='product-mileage' class='form-label'>Mileage</label>
-            <input type='number' class='form-control' id='product-mileage' name='mileage' />
+            <input type='number' class='form-control' id='product-mileage' name='mileage' value='' />
             <div class='invalid-feedback'>Please enter Mileage!</div>
           </div>
           <div class='mb-3'>
             <label for='product-horsepower' class='form-label'>Horsepower</label>
-            <input type='number' class='form-control' id='product-horsepower' name='horsepower' />
+            <input type='number' class='form-control' id='product-horsepower' name='horsepower' value='' />
             <div class='invalid-feedback'>Please enter Horsepower!</div>
           </div>
           <div class='mb-3'>
@@ -70,11 +78,11 @@
           <div class='mb-3'>
             <label for='product-images' class='form-label'>Images</label>
             <div id='product-images'>
-              <input type='text' class='form-control mb-2' name='images.image1' placeholder='Link image1' />
-              <input type='text' class='form-control mb-2' name='images.image2' placeholder='Link image2' />
-              <input type='text' class='form-control mb-2' name='images.image3' placeholder='Link image3' />
-              <input type='text' class='form-control mb-2' name='images.image4' placeholder='Link image4' />
-              <input type='text' class='form-control mb-2' name='images.image5' placeholder='Link image5' />
+              <input type='text' class='form-control mb-2' name='images.image1' placeholder='Link image1' value='' />
+              <input type='text' class='form-control mb-2' name='images.image2' placeholder='Link image2' value='' />
+              <input type='text' class='form-control mb-2' name='images.image3' placeholder='Link image3' value='' />
+              <input type='text' class='form-control mb-2' name='images.image4' placeholder='Link image4' value='' />
+              <input type='text' class='form-control mb-2' name='images.image5' placeholder='Link image5' value='' />
             </div>
           </div>
         </form>

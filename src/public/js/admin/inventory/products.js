@@ -1,6 +1,7 @@
-import { showModal, showToast, showProductModal, showModalDetail } from '../../common.js';
+import { showModal, showToast, showProductModal, handleProductAction } from '../../common.js';
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------js for CRUD products-----------------------------------------------
   // loại bỏ thuộc tính aria-hidden khi modal được hiển thị
   $('#productDetailModal').on('show.bs.modal', function () {
     $(this).removeAttr('aria-hidden');
@@ -9,34 +10,20 @@ document.addEventListener('DOMContentLoaded', function () {
     $(this).attr('aria-hidden', 'true');
   });
 
-  // Hiển thị modal chi tiết sản phẩm
-  $('#inventoryTable').on('click', '.detail', function () {
+  // Đăng ký sự kiện click nút Detail và Edit
+  $('#inventoryTable').on('click', '.detail, .edit', function () {
     const productId = $(this).closest('tr').data('product-id');
-    console.log('ID sản phẩm:', productId);
-    $.get(`/api/user/inventory/${productId}`)
-      .done(function (data) {
-        showModalDetail(data);
-      })
-      .fail(function () {
-        showToast('error', 'Cannot load data. Please try again!');
-      });
-  });
-
-  // Nút thêm sản phẩm (not working)
-  $('#add-car-btn').on('click', function () {
-    // Gọi modal với tiêu đề "Add new car" và không có sản phẩm (product = null)
-    showProductModal('Add new car');
+    const action = $(this).hasClass('detail') ? 'detail' : 'edit';
+    handleProductAction(action, productId);
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
   $('#add-car-btn').on('click', function () {
-    // Gọi modal với tiêu đề "Add new car" và không có sản phẩm (product = null)
     showProductModal('Add new car');
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
   $('#save-product-btn').on('click', function () {
-    // Lấy dữ liệu từ các trường input
     const productData = {
       brand: $('#product-brand').val(),
       model: $('#product-model').val(),
@@ -57,27 +44,46 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     };
 
+    // Kiểm tra xem có đang chỉnh sửa hay không
+    const isEditing = $('#product-modal').data('is-editing');
+    const productId = $('#product-modal').data('product-id');
+    // Xác định URL và phương thức HTTP
+    let url = '/api/user/inventory/create-product';
+    let method = 'POST';
+
+    if (isEditing) {
+      url = `/api/user/inventory/update-product/${productId}`;
+      method = 'PUT';
+    }
+
     // Gửi dữ liệu qua AJAX
     $.ajax({
-      url: '/api/user/inventory/create-product', // Địa chỉ API của bạn
-      type: 'POST',
-      data: productData, // Gửi dữ liệu
+      url: url,
+      type: method,
+      contentType: 'application/json',
+      data: JSON.stringify(productData),
       success: function (response) {
-        if (response.success) {
-          showToast('success', 'Sản phẩm đã được thêm thành công!');
-          $('#product-modal').modal('hide'); // Đóng modal
+        if (response.message) {
+          showToast('success', response.message);
+          $('#product-modal').modal('hide');
+          refresh();
         } else {
-          showToast('error', 'Thêm sản phẩm thất bại!');
+          showToast('error', 'Không thể lưu sản phẩm!');
         }
       },
-      error: function () {
-        showToast('error', 'Đã có lỗi xảy ra, vui lòng thử lại!');
+      error: function (xhr) {
+        const errors = xhr.responseJSON?.errors || {};
+        for (const field in errors) {
+          const input = $(`#product-${field}`);
+          input.addClass('is-invalid');
+          input.siblings('.invalid-feedback').text(errors[field]);
+        }
+        showToast('error', 'Vui lòng kiểm tra lại thông tin!');
       },
     });
   });
-});
 
-document.addEventListener('DOMContentLoaded', function () {
+  // --------------------------------------------------js for all pages-------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
 
   let products = null;

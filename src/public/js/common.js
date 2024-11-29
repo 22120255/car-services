@@ -42,31 +42,41 @@ function showModal(title, content, callback = () => {}) {
 }
 
 // show product modal for create or update
-function showProductModal(title, product = null, callback = () => {}) {
-  const modal = $('#product-modal');
+function showProductModal(title, productID = null, product = null) {
+  $('#product-modal .modal-title').text(title);
 
-  // Cập nhật tiêu đề của modal
-  modal.find('.modal-title').text(title);
-
-  // Reset form
-  const form = modal.find('#product-form')[0];
-  form.reset();
-
-  // Nếu có dữ liệu sản phẩm, điền vào các field
+  // Nếu product tồn tại, tức là đang chỉnh sửa
   if (product) {
-    Object.keys(product).forEach((key) => {
-      if (typeof product[key] === 'object' && key === 'images') {
-        Object.keys(product[key]).forEach((imageKey, index) => {
-          form[`images.image${index + 1}`].value = product[key][imageKey];
-        });
-      } else if (form[key]) {
-        form[key].value = product[key];
-      }
-    });
+    $('#product-modal').data('is-editing', true); // Đang chỉnh sửa
+    $('#product-modal').data('product-id', productID); // Lưu ID sản phẩm
+
+    // Điền dữ liệu sản phẩm vào modal
+    $('#product-brand').val(product.brand);
+    $('#product-model').val(product.model);
+    $('#product-year').val(product.year);
+    $('#product-style').val(product.style);
+    $('#product-status').val(product.status);
+    $('#product-price').val(product.price);
+    $('#product-mileage').val(product.mileage);
+    $('#product-horsepower').val(product.horsepower);
+    $('#product-transmission').val(product.transmission);
+    $('#product-description').val(product.description);
+    $('input[name="images.image1"]').val(product.images.image1);
+    $('input[name="images.image2"]').val(product.images.image2);
+    $('input[name="images.image3"]').val(product.images.image3);
+    $('input[name="images.image4"]').val(product.images.image4);
+    $('input[name="images.image5"]').val(product.images.image5);
+  } else {
+    // Nếu không có sản phẩm, tức là tạo mới
+    $('#product-modal').data('is-editing', false); // Tạo mới
+    $('#product-modal').data('product-id', null); // Xóa ID sản phẩm
+
+    // Reset các trường input
+    $('#product-form')[0].reset();
   }
 
   // Hiển thị modal
-  modal.modal('show');
+  $('#product-modal').modal('show');
 }
 
 // Hàm hiển thị modal chi tiết sản phẩm
@@ -118,4 +128,18 @@ function showModalDetail(product) {
   $('#productDetailModal').modal('show');
 }
 
-export { showToast, showModal, showProductModal, showModalDetail };
+function handleProductAction(action, productId) {
+  $.get(`/api/user/inventory/${productId}`)
+    .done(function (data) {
+      if (action === 'detail') {
+        showModalDetail(data);
+      } else if (action === 'edit') {
+        showProductModal('Edit car', productId, data);
+      }
+    })
+    .fail(function () {
+      showToast('error', 'Cannot load data. Please try again!');
+    });
+}
+
+export { showToast, showModal, showProductModal, showModalDetail, handleProductAction };
