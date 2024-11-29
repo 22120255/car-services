@@ -114,10 +114,11 @@ class UserController {
   // [POST] /api/inventory/create-product
   async createProduct(req, res) {
     try {
-      await UserService.createProduct(req.body);
+      const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images } = req.body;
+      await UserService.createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images);
       return res.status(201).json({ message: 'Tạo sản phẩm thành công' });
     } catch (error) {
-      errorLog('InventoryController', 36, error.message);
+      errorLog('UserController', 36, error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -128,7 +129,7 @@ class UserController {
       const product = await UserService.getProduct(req.params.id);
       return res.status(200).json(product);
     } catch (error) {
-      errorLog('InventoryController', 48, error.message);
+      errorLog('UserController', 48, error.message);
       return res.status(404).json({ error: error.message });
     }
   }
