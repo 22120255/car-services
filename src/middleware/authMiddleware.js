@@ -7,7 +7,11 @@ const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next()
     }
-    res.redirect('/auth/login')
+    res.render('site/error', {
+        title: 'Unauthorized',
+        statusCode: 401,
+        layout: "error"
+    })
 }
 const checkRole = (nameRoles) => {
     return async (req, res, next) => {
@@ -15,7 +19,11 @@ const checkRole = (nameRoles) => {
             return next();
         }
 
-        res.redirect('/auth/login')
+        res.render('site/error', {
+            title: 'Unauthorized',
+            statusCode: 401,
+            layout: "error"
+        })
     }
 }
 
