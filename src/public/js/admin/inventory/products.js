@@ -1,6 +1,29 @@
-import { showModal, showToast, showProductModal } from '../../common.js';
+import { showModal, showToast, showProductModal, showModalDetail } from '../../common.js';
 
 document.addEventListener('DOMContentLoaded', function () {
+  // loại bỏ thuộc tính aria-hidden khi modal được hiển thị
+  $('#productDetailModal').on('show.bs.modal', function () {
+    $(this).removeAttr('aria-hidden');
+  });
+  $('#productDetailModal').on('hidden.bs.modal', function () {
+    $(this).attr('aria-hidden', 'true');
+  });
+
+  // Hiển thị modal chi tiết sản phẩm
+  $('#inventoryTable').on('click', '.detail', function () {
+    const productId = $(this).closest('tr').data('product-id');
+    console.log('ID sản phẩm:', productId);
+    $.get(`/api/user/inventory/${productId}`)
+      .done(function (data) {
+        console.log(data);
+        showModalDetail(data);
+      })
+      .fail(function () {
+        showToast('error', 'Cannot load data. Please try again!');
+      });
+  });
+
+  // lưu sản phẩm mới (not working)
   $('#save-product-btn').on('click', function () {
     const form = $('#product-form');
     const requiredFields = ['brand', 'model', 'year', 'style', 'price', 'mileage', 'horsepower'];
@@ -45,13 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  $('#btnDetail').on('click', function () {
-    const productId = $(this).data('id');
-    $.get(`/api/product/${productId}`, function (data) {
-      showProductModal('Chi tiết sản phẩm', data);
-    });
-  });
-
+  // (not working)
   $('#save-product-btn').on('click', () => {
     const formData = $('#product-form').serializeArray();
     const productData = {};
@@ -71,18 +88,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Thực hiện callback hoặc AJAX gửi dữ liệu lên server
   });
 
+  // Nút thêm sản phẩm (not working)
   $('#add-car-btn').on('click', function () {
-    // Hiển thị modal để nhập thông tin sản phẩm
     showProductModal('Add new car', function (formData) {
-      // Gửi thông tin sản phẩm đến server để lưu vào cơ sở dữ liệu
       $.ajax({
-        url: '/api/user/inventory/create-product', // API thêm sản phẩm mới
+        url: '/api/user/inventory/create-product',
         type: 'POST',
         data: formData,
         success: function (data) {
           if (data.success) {
             showToast('success', 'Sản phẩm đã được thêm thành công!');
-            // Cập nhật danh sách sản phẩm hoặc làm mới trang
           } else {
             showToast('error', 'Thêm sản phẩm thất bại!');
           }
@@ -238,11 +253,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     products.forEach((product) => {
-      const { images, status, brand, model, price, year } = product;
+      const { _id, images, status, brand, model, price, year } = product;
+      console.log(_id);
       const isSelected = status === 'used' || status === 'new';
       const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
       $('#inventoryTable').append(`
-                <tr>
+                <tr data-product-id="${_id}">
                     <td>
                         <img
                             src='${imageSrc}'
@@ -255,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>$${price}</td>
                     <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
                     <td class='actions'>
-                        <button class='detail' id='btnDetail'><i
+                        <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
                                 class='fa-solid fa-circle-info'
                             ></i>
                             Detail</button>

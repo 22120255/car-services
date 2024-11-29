@@ -16,7 +16,8 @@ router.get('/', isAuthenticated, checkRole(['admin', 'sadmin']), userController.
 router.patch('/', isAuthenticated, userController.updateProfile);
 
 // inventory
-router.get('/inventory', checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
+router.get('/inventory/:id', checkRole(['admin', 'sadmin']), userController.getProduct);
 router.post('/inventory/create-product', checkRole(['admin', 'sadmin']), userController.createProduct);
+router.get('/inventory', checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
 
 module.exports = router;

@@ -114,11 +114,22 @@ class UserController {
   // [POST] /api/inventory/create-product
   async createProduct(req, res) {
     try {
-      await InventoryService.createProduct(req.body);
+      await UserService.createProduct(req.body);
       return res.status(201).json({ message: 'Tạo sản phẩm thành công' });
     } catch (error) {
       errorLog('InventoryController', 36, error.message);
       return res.status(403).json({ error: error.message });
+    }
+  }
+
+  // [GET] /api/inventory/:id
+  async getProduct(req, res) {
+    try {
+      const product = await UserService.getProduct(req.params.id);
+      return res.status(200).json(product);
+    } catch (error) {
+      errorLog('InventoryController', 48, error.message);
+      return res.status(404).json({ error: error.message });
     }
   }
 
@@ -213,27 +224,6 @@ class UserController {
       _user: user,
       title: 'Thông tin cá nhân',
     });
-  }
-
-  // [GET] /admin/inventory/
-  async getProducts(req, res) {
-    const { limit, offset, search, status, brand, model, priceMin, priceMax } = req.query;
-    try {
-      const { products, total } = await UserService.getProducts({
-        limit: limit || 10,
-        offset: offset || 1,
-        search,
-        status,
-        brand,
-        model,
-        priceMin,
-        priceMax,
-      });
-      return res.status(200).json({ products, total });
-    } catch (error) {
-      errorLog('UserController', 216, error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' });
-    }
   }
 }
 
