@@ -1,18 +1,22 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const { isAuthenticated } = require('../../middleware/authMiddleware')
-const userController = require('../../controllers/UserController')
-const { checkRole } = require('../../middleware/authMiddleware')
-const { uploadImage } = require('../../config/multer')
+const { isAuthenticated } = require('../../middleware/authMiddleware');
+const userController = require('../../controllers/UserController');
+const { checkRole } = require('../../middleware/authMiddleware');
+const { uploadImage } = require('../../config/multer');
+const productController = require('../../controllers/ProductController');
 
-router.patch('/update-role', isAuthenticated, checkRole(['admin', 'sadmin']), userController.updateRole)
-router.patch('/update-status', isAuthenticated, checkRole(['admin', 'sadmin']), userController.updateStatus)
-router.patch('/avatar/store', isAuthenticated, uploadImage.single('avatar'), userController.updateAvatar)
-router.delete('/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.deleteUser)
-router.get('/', isAuthenticated, checkRole(['admin', 'sadmin']), userController.getUsers)
+router.patch('/update-role', isAuthenticated, checkRole(['admin', 'sadmin']), userController.updateRole);
+router.patch('/update-status', isAuthenticated, checkRole(['admin', 'sadmin']), userController.updateStatus);
+router.patch('/avatar/store', isAuthenticated, uploadImage.single('avatar'), userController.updateAvatar);
+router.delete('/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.deleteUser);
+router.get('/', isAuthenticated, checkRole(['admin', 'sadmin']), userController.getUsers);
 
-router.patch("/", isAuthenticated, userController.updateProfile)
+router.patch('/', isAuthenticated, userController.updateProfile);
 
+// inventory
+router.get('/inventory', checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
+router.post('/inventory/create-product', checkRole(['admin', 'sadmin']), userController.createProduct);
 
-module.exports = router
+module.exports = router;

@@ -1,54 +1,54 @@
 {
-    "name": "website-car-service",
-    "version": "1.0.0",
-    "main": "src/app.js",
-    "scripts": {
-        "beautiful": "prettier --write --single-quote --trailing-comma all \"src/**/*.js\"",
-        "dev": "cross-env NODE_ENV=development nodemon src/app.js",
-        "start": "cross-env NODE_ENV=production node src/app.js && node src/data/seed/role.js",
-        "watch": "node-sass --watch src/styles/ --output src/public/css/",
-        "seed:users": "cross-env NODE_ENV=development node src/data/seed/user.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/22120255/car-services.git"
-    },
-    "author": "Ngô Nguyễn Duy Nhân, Trần Thái Nhật",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/22120255/car-services/issues"
-    },
-    "homepage": "https://github.com/22120255/car-services#readme",
-    "description": "",
-    "dependencies": {
-        "bcrypt": "^5.1.1",
-        "chance": "^1.1.12",
-        "cloudinary": "^1.21.0",
-        "connect-flash": "^0.1.1",
-        "connect-mongodb-session": "^5.0.0",
-        "dotenv": "^16.4.5",
-        "express": "^4.21.1",
-        "express-handlebars": "^8.0.1",
-        "express-session": "^1.18.1",
-        "firebase": "^11.0.1",
-        "method-override": "^3.0.0",
-        "mongodb": "^6.10.0",
-        "mongoose": "^8.8.0",
-        "mongoose-sequence": "^6.0.1",
-        "multer": "^1.4.5-lts.1",
-        "multer-storage-cloudinary": "^4.0.0",
-        "nodemailer": "^6.9.16",
-        "passport": "^0.7.0",
-        "passport-local": "^1.0.0",
-        "prettier": "^3.3.3",
-        "redis": "^4.7.0",
-        "winston": "^3.17.0"
-    },
-    "devDependencies": {
-        "cross-env": "^7.0.3",
-        "morgan": "^1.10.0",
-        "node-sass": "^9.0.0",
-        "nodemon": "^3.1.7"
-    }
+  "name": "website-car-service",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "beautiful": "prettier --write --single-quote --trailing-comma all \"src/**/*.js\"",
+    "dev": "cross-env NODE_ENV=development nodemon src/app.js",
+    "start": "cross-env NODE_ENV=production node src/app.js && node src/data/seed/role.js",
+    "watch": "node-sass --watch src/styles/ --output src/public/css/",
+    "seed:users": "cross-env NODE_ENV=development node src/data/seed/user.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/22120255/car-services.git"
+  },
+  "author": "Ngô Nguyễn Duy Nhân, Trần Thái Nhật",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/22120255/car-services/issues"
+  },
+  "homepage": "https://github.com/22120255/car-services#readme",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "chance": "^1.1.12",
+    "cloudinary": "^1.21.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "firebase": "^11.0.1",
+    "method-override": "^3.0.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.0",
+    "mongoose-sequence": "^6.0.1",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "nodemailer": "^6.9.16",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "prettier": "^3.3.3",
+    "redis": "^4.7.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "morgan": "^1.10.0",
+    "node-sass": "^9.0.0",
+    "nodemon": "^3.1.7"
+  }
 }
