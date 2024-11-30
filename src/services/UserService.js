@@ -62,7 +62,7 @@ class UserService {
 
   async deleteUser(userId, currentUser) {
     const targetUser = await User.findById(userId);
-    console.log('targetUser ', userId);
+
     if (targetUser.role.name === 'sadmin') {
       throw new Error('Không thể xoá tài khoản super admin');
     }

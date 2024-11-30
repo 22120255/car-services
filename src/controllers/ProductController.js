@@ -5,19 +5,20 @@ const { years, styles, brands, transmissions, statuses, prices, perPages } = req
 class ProductController {
   index(req, res) {
     res.render('products/index', {
-      title: 'Sản phẩm',
+      title: 'Product',
     });
   }
 
-  detail(req, res) {
-    res.render('products/detail', {
-      title: 'Chi tiết sản phẩm',
-    });
-  }
+  // detail(req, res) {
+  //   res.render('products/detail', {
+  //     title: 'Product details',
+  //   });
+  // }
 
   getDetail = async (req, res, next) => {
     try {
       const product = await ProductService.getDetail(req.params.id);
+      if (!product) return next();
       // Tạm thời hard code delta = 10000
       const delta = 10000;
       const sameBrandProducts = await ProductService.getFilteredProducts({
@@ -41,11 +42,11 @@ class ProductController {
         sameBrandProducts: multipleMongooseToObject(sameBrandProducts),
         sameYearProducts: multipleMongooseToObject(sameYearProducts),
         similarPriceProducts: multipleMongooseToObject(similarPriceProducts),
-        title: 'Chi tiết sản phẩm',
+        title: 'Product details',
       });
     } catch (error) {
       console.log(error);
-      next(error);
+      next();
     }
   };
 
@@ -124,7 +125,7 @@ class ProductController {
             prices,
             perPages,
           },
-          title: 'Sản phẩm',
+          title: 'Products',
         });
       }
     } catch (error) {

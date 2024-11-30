@@ -1,6 +1,8 @@
 // function changeTab(event, tabId) {
 //     event.preventDefault();
 
+import { showToast } from "../common"
+
 //     // Xóa lớp 'active' khỏi tất cả các tab và nội dung tab
 //     $('.nav-link').removeClass('active').attr('aria-selected', 'false');
 //     $('.tab-pane').removeClass('show active');
@@ -19,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function () {
             data: { quantity },
             success: function (response) {
                 console.log(response)
-                alert('Thêm sản phẩm vào giỏ hàng thành công')
+                showToast('success', 'Product added to cart successfully')
             },
             error: function (error) {
                 console.log(error)
-                alert('Có lỗi xảy ra, vui lòng thử lại sau')
+                showToast('error', 'Error adding product to cart')
             },
         })
     })

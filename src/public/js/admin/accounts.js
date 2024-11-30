@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!users || users.length == 0) {
             const columnCount = $('.table thead th').length
             $('#accountsTable').append(
-                `<tr><td class="text-center" colspan="${columnCount}">Không có dữ liệu</td></tr>`
+                `<tr><td class="text-center" colspan="${columnCount}">No data</td></tr>`
             )
             return
         }
@@ -254,15 +254,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${
-                                !user.isCurrentUser
-                                    ? `
+                            ${!user.isCurrentUser
+                    ? `
                                 <button type="button" title="Xóa" class="btn btn-danger btn-sm delete-user">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             `
-                                    : ''
-                            }
+                    : ''
+                }
                         </div>
                     </td>
                 </tr>
