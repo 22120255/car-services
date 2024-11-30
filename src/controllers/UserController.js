@@ -114,8 +114,8 @@ class UserController {
   // [POST] /api/inventory/create-product
   async createProduct(req, res) {
     try {
-      const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images } = req.body;
       console.log(req.body);
+      const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images } = req.body;
       const product = await UserService.createProduct(
         brand,
         model,
@@ -129,7 +129,7 @@ class UserController {
         description,
         images
       );
-      if (product) return res.status(201).json({ message: 'Tạo sản phẩm thành công' });
+      if (product) return res.status(201).json({ message: 'Create product successfully' });
     } catch (error) {
       errorLog('UserController', 36, error.message);
       return res.status(403).json({ error: error.message });
@@ -153,7 +153,7 @@ class UserController {
       const { id } = req.params; // Lấy id từ params
       const data = req.body; // Lấy các thông tin còn lại
       const product = await UserService.updateProduct(id, data);
-      if (product) return res.status(200).json({ message: 'Cập nhật sản phẩm thành công' });
+      if (product) return res.status(200).json({ message: 'Update product successfully' });
     } catch (error) {
       errorLog('UserController', 62, error.message);
       return res.status(403).json({ error: error.message });
