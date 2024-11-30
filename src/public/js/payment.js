@@ -36,9 +36,9 @@ async function checkPayment(cartID, cartTotalPrice) {
         const lastPayment = data.data[data.data.length - 1];
         const lastPaymentAmount = lastPayment['Giá trị'];
         const lastPaymentInfo = lastPayment['Mô tả'];
-        console.log('Last payment:', lastPayment);
-        console.log('Last payment amount:', lastPaymentAmount);
-        console.log('Last payment info:', lastPaymentInfo);
+        // console.log('Last payment:', lastPayment);
+        // console.log('Last payment amount:', lastPaymentAmount);
+        // console.log('Last payment info:', lastPaymentInfo);
         
         if (lastPaymentAmount == cartTotalPrice && lastPaymentInfo.includes(cartID)) {
             console.log('Payment successful!');

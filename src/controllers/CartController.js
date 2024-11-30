@@ -17,7 +17,7 @@ class CartController {
                 errorLog("CartController.js", 44, error.message);
                 return res.status(404).json({ message: 'Cart not found' });
             }
-            console.log(cart);
+            // console.log(cart);
             return res.status(200).json(cart);
         } catch (error) {
             errorLog("CartController.js", 44, error.message);
