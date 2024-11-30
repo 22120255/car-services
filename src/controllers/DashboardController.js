@@ -12,7 +12,7 @@ class DashboardController {
             res.render('dashboard/home', {
                 mostProducts,
                 newProducts,
-                title: 'Trang chủ'
+                title: 'Home'
             })
         } catch (error) {
             console.log(error)
@@ -23,14 +23,14 @@ class DashboardController {
     // [GET] /about
     about(req, res) {
         res.render('dashboard/about', {
-            title: 'Giới thiệu'
+            title: 'Introduce'
         })
     }
 
     // [GET] /contact
     contact(req, res) {
         res.render('dashboard/contact', {
-            title: 'Liên hệ'
+            title: 'Contact'
         })
     }
 }
