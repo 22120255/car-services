@@ -7,13 +7,10 @@ class SiteController {
         res.redirect('/dashboard')
     }
 
-    // [GET] /profile/:id
-    async profile(req, res) {
-        const userId = req.params.id
-        const user = await User.findById(userId)
-        res.render('site/profile', {
-            _user: user,
-            title: 'Thông tin cá nhân',
+    // [GET] /settings
+    settings(req, res) {
+        res.render("site/settings", {
+            title: "Cài đặt"
         })
     }
 }

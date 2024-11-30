@@ -1,4 +1,4 @@
-@import '../../variables';
+@import '../variables';
 
 .header-area {
     background-color: $bg-header;
@@ -57,6 +57,11 @@
             .btn {
                 padding: 0.25rem 0.5rem;
             }
+        }
+
+        #accountsTable {
+            max-height: 500px;
+            overflow-y: auto;
         }
     }
 

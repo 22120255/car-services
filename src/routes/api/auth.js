@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-
+const { isAuthenticated } = require('../../middleware/authMiddleware')
 const authController = require('../../controllers/AuthController')
 
 router.post("/login/email/verify", authController.verifyEmail);
@@ -14,6 +14,6 @@ router.post("/register/facebook/store", authController.registerWithFacebook);
 router.post("/forgot-password/send-code", authController.sendVerificationCode);
 router.post("/reset-password", authController.resetPassword);
 //Function logout password
-router.get("/logout", authController.logout);
+router.get("/logout", isAuthenticated, authController.logout);
 
 module.exports = router

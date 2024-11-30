@@ -1,207 +1,332 @@
 @import '../variables';
 
+/* Reset Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-
+/* Header Area */
 .header-area {
-    background-color: $bg-header;
+  background-color: $bg-header;
 }
 
+/* Active Section */
 .active-section {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #ffffff;
-    height: 100%;
-    padding: 20px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #ffffff;
+  height: 100%;
+  padding: 20px;
 }
 
+/* Container */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
+/* Section Header */
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
+/* Header Actions */
 .header-actions {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
+/* Buttons */
 .btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition:
-        background-color 0.3s,
-        transform 0.1s;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition:
+    background-color 0.3s,
+    transform 0.1s;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .btn-primary {
-    background-color: #2ecc71;
-    color: white;
+  background-color: #2ecc71;
+  color: white;
 }
 
 .btn-primary:hover {
-    background-color: #27ae60;
+  background-color: #27ae60;
 }
 
 .btn-secondary {
-    background-color: #3498db;
-    color: white;
+  background-color: #3498db;
+  color: white;
 }
 
 .btn-secondary:hover {
-    background-color: #2980b9;
+  background-color: #2980b9;
 }
 
+/* Filters */
 .filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .filters input,
 .filters select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    flex-grow: 1;
-    min-width: 150px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  flex-grow: 1;
+  min-width: 150px;
 }
 
-/* Keep existing styles for section-header, header-actions, btn classes, and filters */
-
+/* Table */
 .table-responsive {
-    overflow-x: auto;
-    margin-top: 20px;
+  overflow-x: auto;
+  margin-top: 20px;
 }
 
 .car-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .car-table th,
 .car-table td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  height: 85px;
+  line-height: 1.5;
 }
 
 .car-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #2c3e50;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
 .car-table tbody tr:hover {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 .car-image {
-    width: 100px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 4px;
+  width: 100px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
+/* Status */
 .status {
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    display: inline-block;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
 }
 
 .status.available {
-    background-color: #e3fcef;
-    color: #2ecc71;
+  background-color: #e3fcef;
+  color: #2ecc71;
 }
 
 .status.sold {
-    background-color: #fee2e2;
-    color: #ef4444;
+  background-color: #fee2e2;
+  color: #ef4444;
 }
 
+/* Actions */
 .actions {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
 }
 
 .actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    transition: opacity 0.2s;
+  margin: 0;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s;
+  white-space: nowrap; /* Ngăn nút bị xuống dòng */
+  min-width: 50px;
+  height: auto;
 }
 
 .actions button:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .actions .detail {
-    background-color: #3498db;
-    color: white;
+  background-color: #3498db;
+  color: white;
 }
 
 .actions .edit {
-    background-color: #f39c12;
-    color: white;
+  background-color: #f39c12;
+  color: white;
 }
 
 .actions .delete {
-    background-color: #e74c3c;
-    color: white;
+  background-color: #e74c3c;
+  color: white;
 }
 
-/* Responsive styles */
+/* Responsive Styles */
 @media (max-width: 768px) {
-    .car-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+  .car-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 
-    .actions {
-        min-width: 200px;
-    }
+  .actions {
+    min-width: 200px;
+  }
 
-    .filters {
-        flex-direction: column;
-    }
+  .filters {
+    flex-direction: column;
+  }
 
-    .filters input,
-    .filters select {
-        width: 100%;
-    }
+  .filters input,
+  .filters select {
+    width: 100%;
+  }
+}
+
+/* Modal Dialog */
+.modal-dialog.modal-xl {
+  max-width: 1200px;
+}
+
+/* Product Detail */
+.product-detail-wrapper {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.product-images {
+  flex: 1;
+  max-width: 600px;
+}
+
+.main-image {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.main-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.thumbnail-images {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.thumbnail:hover {
+  opacity: 0.8;
+}
+
+.product-info {
+  flex: 1;
+  padding: 1rem;
+}
+
+.product-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.product-description {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.product-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.spec-label {
+  font-weight: bold;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.spec-value {
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .product-detail-wrapper {
+    flex-direction: column;
+  }
+
+  .product-images {
+    max-width: 100%;
+  }
 }

@@ -11,15 +11,12 @@ class CartController {
 
     async getCartData(req, res) {
         try {
-            const userId = req.user.id;
-            
+            const userId = req.user._id;
             const cart = await Cart.findOne({ userId });
-
             if (!cart) {
                 errorLog("CartController.js", 44, error.message);
                 return res.status(404).json({ message: 'Cart not found' });
             }
-            console.log(cart);
             return res.status(200).json(cart);
         } catch (error) {
             errorLog("CartController.js", 44, error.message);
@@ -29,7 +26,7 @@ class CartController {
 
     async addToCart(req, res) {
         try {
-            const userId = req.user.id;
+            const userId = req.user._id;
             const { productId } = req.params;
             const quantity = parseInt(req.body.quantity);
 
@@ -55,6 +52,7 @@ class CartController {
                     quantity: quantity,
                     price: product.price
                 });
+                cart.total += product.price * quantity;
             }
             await cart.save();
             req.flash('success', 'Added to cart');
