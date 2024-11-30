@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const params = Object.fromEntries(urlParams.entries());
     const apiQuery = $.param(params);
     await $.ajax({
-      url: `/products?${apiQuery}`,
+      url: `/api/products?${apiQuery}`,
       type: 'GET',
       headers: {
         'X-Requested-With': 'XMLHttpRequest', // Thêm header Ajax
