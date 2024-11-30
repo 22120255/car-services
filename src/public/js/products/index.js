@@ -1,3 +1,19 @@
+import { getFilterConfigProduct } from "../config";
+
+// Load filter
+document.addEventListener('DOMContentLoaded', function () {
+  const {
+    years,
+    styles,
+    brands,
+    transmissions,
+    statuses,
+    prices,
+    perPages
+  } = getFilterConfigProduct();
+  // TODO: here
+})
+
 document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search);
 
