@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Xác định URL và phương thức HTTP
     let url = '/api/user/inventory/create-product';
     let method = 'POST';
-
     if (isEditing) {
       url = `/api/user/inventory/update-product/${productId}`;
       method = 'PUT';
