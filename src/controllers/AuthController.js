@@ -11,7 +11,7 @@ class AuthController {
         res.render('auth/login', {
             layout: 'auth',
             message: req.flash('error') || '',
-            title: 'Đăng nhập',
+            title: 'Login',
         })
     }
 
@@ -23,7 +23,7 @@ class AuthController {
             }
 
             if (!user) {
-                return res.status(400).json({ message: 'Đăng nhập thất bại' })
+                return res.status(400).json({ message: 'Login failed' })
             }
 
             // Check if the user's account is verified
@@ -32,7 +32,7 @@ class AuthController {
                     .status(401)
                     .json({
                         message:
-                            'Tài khoản chưa được xác thực. Vui lòng kiểm tra email để tiến hành xác thực',
+                            'Account not verified. Please check your email to verify.',
                     })
             }
 
@@ -54,7 +54,7 @@ class AuthController {
     register(req, res) {
         res.render('auth/register', {
             layout: 'auth',
-            title: 'Đăng kí',
+            title: 'Register',
         })
     }
 
@@ -81,7 +81,7 @@ class AuthController {
             )
             res.status(200).json({
                 message:
-                    'Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.',
+                    'Registration successful! Please check your email to activate your account.',
             })
         } catch (err) {
             res.status(400).json({ error: err.message })
@@ -98,16 +98,16 @@ class AuthController {
                 layout: 'auth',
                 error: false,
                 message:
-                    'Tài khoản của bạn đã được kích hoạt thành công! Vui lòng đăng nhập vào tài khoản để sử dụng.',
-                title: 'Kích hoạt tài khoản',
+                    'Your account has been successfully activated! Please log in to your account to use it.',
+                title: 'Activate account',
             })
         } catch (err) {
             res.render('auth/activate-account', {
                 layout: 'auth',
                 error: true,
                 message:
-                    'Không thể kích hoạt tài khoản. Token không hợp lệ hoặc đã hết hạn.',
-                title: 'Kích hoạt tài khoản',
+                    'Unable to activate account. Token is invalid or expired.',
+                title: 'Activate account',
             })
         }
     }
@@ -127,7 +127,7 @@ class AuthController {
                 if (err) {
                     return res
                         .status(500)
-                        .json({ error: 'Đăng nhập tự động thất bại.' })
+                        .json({ error: 'Login failed.' })
                 }
                 // Clear cache before redirecting
                 clearCache('/dashboard')
@@ -136,7 +136,7 @@ class AuthController {
                 res.status(200).json({ redirect: '/dashboard' });
             })
         } catch (error) {
-            res.status(500).json({ message: 'Lỗi server' })
+            res.status(500).json({ message: 'Server error' })
         }
     }
 
@@ -155,7 +155,7 @@ class AuthController {
                 if (err) {
                     return res
                         .status(500)
-                        .json({ error: 'Đăng nhập tự động thất bại.' })
+                        .json({ error: 'Login failed.' })
                 }
                 // Clear cache before redirecting
                 clearCache('/dashboard')
@@ -164,14 +164,14 @@ class AuthController {
                 res.status(200).json({ redirect: '/dashboard' });
             })
         } catch (error) {
-            res.status(500).json({ message: 'Lỗi server' })
+            res.status(500).json({ message: 'Server error' })
         }
     }
 
     forgotPassword(req, res) {
         res.render('auth/forgot-password', {
             layout: 'auth',
-            title: 'Quên mật khẩu',
+            title: 'Forgot Password',
         })
     }
 
@@ -181,7 +181,7 @@ class AuthController {
         try {
             await AuthService.sendVerificationCode(email)
             res.status(200).json({
-                message: 'Mã xác thực đã được gửi đến email của bạn',
+                message: 'A verification code has been sent to your email.',
             })
         } catch (err) {
             res.status(404).json({ error: err.message })
@@ -193,7 +193,7 @@ class AuthController {
 
         try {
             await AuthService.resetPassword(email, verificationCode, password)
-            res.status(200).json({ message: 'Mật khẩu đã được thay đổi.' })
+            res.status(200).json({ message: 'Password has been changed.' })
         } catch (err) {
             res.status(400).json({ error: err.message })
         }

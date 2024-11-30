@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
           $('#product-modal').modal('hide');
           refresh();
         } else {
-          showToast('error', 'Không thể lưu sản phẩm!');
+          showToast('error', 'Unable to save product!');
         }
       },
       error: function (xhr) {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
           input.addClass('is-invalid');
           input.siblings('.invalid-feedback').text(errors[field]);
         }
-        showToast('error', 'Vui lòng kiểm tra lại thông tin!');
+        showToast('error', 'Please check the information again!');
       },
     });
   });
