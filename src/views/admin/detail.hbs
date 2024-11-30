@@ -3,7 +3,7 @@
         <div class="col-md-4 text-center mb-4">
             <img src="{{user.avatar}}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
             <h4>{{user.fullName}}</h4>
-            <p class="text-muted">{{user.role}}</p>
+            <p class="text-muted">{{user.role.name}}</p>
             <span class="badge {{#if (eq user.status 'active')}}bg-success{{else if (eq user.status 'inactive')}}bg-warning{{else}}bg-danger{{/if}}">
                 {{user.status}}
             </span>

@@ -54,9 +54,7 @@ const UserSchema = new mongoose.Schema({
         satisfaction: { type: Number, min: 0, max: 5, default: 0 }
     }
 }, {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    timestamps: true
 });
 
 // Indexes
@@ -96,18 +94,5 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
         throw error;
     }
 };
-
-// Virtual for full user info
-UserSchema.virtual('fullInfo').get(function () {
-    return {
-        id: this._id,
-        fullName: this.fullName,
-        email: this.email,
-        role: this.role.name,
-        status: this.status,
-        metadata: this.metadata,
-        avatar: this.avatar
-    };
-});
 
 module.exports = mongoose.model('User', UserSchema, 'users');

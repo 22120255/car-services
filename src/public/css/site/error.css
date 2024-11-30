@@ -1,0 +1,16 @@
+.error-page {
+  background-color: #f8f9fa; }
+  .error-page h1 {
+    font-size: 8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); }
+  .error-page h2 {
+    color: #343a40; }
+  .error-page p {
+    color: #6c757d; }
+  .error-page .btn-primary {
+    padding: 0.8rem 2rem;
+    font-weight: 500;
+    transition: all 0.3s ease; }
+    .error-page .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }

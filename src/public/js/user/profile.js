@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = $(this).serializeArray();
         const data = {
-            id: user.id
+            id: user._id
         };
         $.each(formData, function (value, field) {
             data[field.name] = field.value;
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await $.ajax({
-                url: '/api/users',
+                url: '/api/user',
                 type: 'PATCH',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
@@ -109,10 +109,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         const formData = new FormData();
         formData.append('avatar', file);
-        formData.append('userId', user.id)
+        formData.append('userId', user._id)
 
         $.ajax({
-            url: '/api/users/avatar/store',
+            url: '/api/user/avatar/store',
             type: 'PATCH',
             data: formData,
             processData: false,

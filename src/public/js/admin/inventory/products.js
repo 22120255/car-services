@@ -1,60 +1,107 @@
+import { showModal, showToast, showProductModal, handleProductAction } from '../../common.js';
+
 document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------js for CRUD products-----------------------------------------------
+  // loại bỏ thuộc tính aria-hidden khi modal được hiển thị
+  $('#productDetailModal').on('show.bs.modal', function () {
+    $(this).removeAttr('aria-hidden');
+  });
+  $('#productDetailModal').on('hidden.bs.modal', function () {
+    $(this).attr('aria-hidden', 'true');
+  });
+
+  // Đăng ký sự kiện click nút Detail và Edit
+  $('#inventoryTable').on('click', '.detail, .edit', function () {
+    const productId = $(this).closest('tr').data('product-id');
+    const action = $(this).hasClass('detail') ? 'detail' : 'edit';
+    handleProductAction(action, productId);
+  });
+
+  // Đăng ký sự kiện cho nút Save trong modal
+  $('#add-car-btn').on('click', function () {
+    showProductModal('Add new car');
+  });
+
+  // Đăng ký sự kiện cho nút Save trong modal
+  $('#save-product-btn').on('click', function () {
+    const productData = {
+      brand: $('#product-brand').val(),
+      model: $('#product-model').val(),
+      year: parseInt($('#product-year').val()),
+      style: $('#product-style').val(),
+      status: $('#product-status').val(),
+      price: parseFloat($('#product-price').val()),
+      mileage: parseInt($('#product-mileage').val()),
+      horsepower: parseInt($('#product-horsepower').val()),
+      transmission: $('#product-transmission').val(),
+      description: $('#product-description').val(),
+      images: {
+        image1: $('input[name="images.image1"]').val(),
+        image2: $('input[name="images.image2"]').val(),
+        image3: $('input[name="images.image3"]').val(),
+        image4: $('input[name="images.image4"]').val(),
+        image5: $('input[name="images.image5"]').val(),
+      },
+    };
+
+    // Kiểm tra xem có đang chỉnh sửa hay không
+    const isEditing = $('#product-modal').data('is-editing');
+    const productId = $('#product-modal').data('product-id');
+    // Xác định URL và phương thức HTTP
+    let url = '/api/user/inventory/create-product';
+    let method = 'POST';
+    if (isEditing) {
+      url = `/api/user/inventory/update-product/${productId}`;
+      method = 'PUT';
+    }
+
+    // Gửi dữ liệu qua AJAX
+    $.ajax({
+      url: url,
+      type: method,
+      contentType: 'application/json',
+      data: JSON.stringify(productData),
+      success: function (response) {
+        if (response.message) {
+          showToast('success', response.message);
+          $('#product-modal').modal('hide');
+          refresh();
+        } else {
+          showToast('error', 'Không thể lưu sản phẩm!');
+        }
+      },
+      error: function (xhr) {
+        const errors = xhr.responseJSON?.errors || {};
+        for (const field in errors) {
+          const input = $(`#product-${field}`);
+          input.addClass('is-invalid');
+          input.siblings('.invalid-feedback').text(errors[field]);
+        }
+        showToast('error', 'Vui lòng kiểm tra lại thông tin!');
+      },
+    });
+  });
+
+  // --------------------------------------------------js for all pages-------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
 
   let products = null;
-  let limit = urlParams.get('limit') || 8;
+  let limit = urlParams.get('limit') || 10;
   let offset = parseInt(urlParams.get('offset')) || 1;
   let totalPages = null;
   let totalItems = null;
-  let filters = null;
 
   let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
   let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-  let styleFilter = urlParams.get('style') || null;
   let brandFilter = urlParams.get('brand') || null;
   let statusFilter = urlParams.get('status') || null;
-  let transmissionFilter = urlParams.get('transmission') || null;
   let searchText = urlParams.get('search') || '';
-  let yearFilter = parseInt(urlParams.get('year')) || null;
 
   $('#searchInput').val(searchText);
   $('#limit').val(limit);
   $('#statusFilter').val(statusFilter);
   $('#brandFilter').val(brandFilter);
-  $('#styleFilter').val(styleFilter);
-  $('#transmissionFilter').val(transmissionFilter);
-  $('#yearFilter').val(yearFilter);
-  $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
-
-  function syncFiltersFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8;
-    offset = parseInt(urlParams.get('offset')) || 1;
-    priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-    priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-    styleFilter = urlParams.get('style') || null;
-    brandFilter = urlParams.get('brand') || null;
-    statusFilter = urlParams.get('status') || null;
-    transmissionFilter = urlParams.get('transmission') || null;
-    searchText = urlParams.get('search') || null;
-    yearFilter = parseInt(urlParams.get('year')) || null;
-
-    // Đồng bộ với giao diện
-    $('#searchInput').val(searchText);
-    $('#limit').val(limit);
-    $('#statusFilter').val(statusFilter);
-    $('#brandFilter').val(brandFilter);
-    $('#styleFilter').val(styleFilter);
-    $('#transmissionFilter').val(transmissionFilter);
-    $('#yearFilter').val(yearFilter);
-    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
-  }
-
-  // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
-  window.addEventListener('popstate', async function () {
-    syncFiltersFromURL(); // Đồng bộ lại bộ lọc từ URL
-    await refresh(); // Tải lại dữ liệu
-  });
+  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
@@ -67,9 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Gọi hàm cho các bộ lọc
   setupFilterHandlers('#statusFilter', 'status');
   setupFilterHandlers('#brandFilter', 'brand');
-  setupFilterHandlers('#styleFilter', 'style');
-  setupFilterHandlers('#transmissionFilter', 'transmission');
-  setupFilterHandlers('#yearFilter', 'year');
   setupFilterHandlers('#limit', 'limit');
 
   $('#searchInput').on('keyup', async function (event) {
@@ -150,36 +194,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const params = Object.fromEntries(urlParams.entries());
     const apiQuery = $.param(params);
     await $.ajax({
-      url: `/products?${apiQuery}`,
+      url: `/api/user/inventory?${apiQuery}`,
       type: 'GET',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest', // Thêm header Ajax
-      },
       statusCode: {
         200(resp) {
           products = resp.products;
           totalItems = resp.total;
           totalPages = Math.ceil(totalItems / limit);
-          filters = resp.filters;
         },
         500(resp) {
           console.error('Lỗi khi tải dữ liệu:', resp);
         },
       },
     });
-    if (filters) {
-      renderFilters(filters, params);
-    }
     renderProducts(products);
   }
 
   // render products
   function renderProducts(products) {
     console.log(1);
-    $('#product-list').empty();
+    $('#inventoryTable').empty();
 
     if (!products || products.length === 0) {
-      $('#product-list').append(`<div class='col-lg-12'>
+      $('#inventoryTable').append(`<div class='col-lg-12'>
                     <div class='find-nothing text-center' >
                             <h2 style = "font-size: large; color: #978e8e">Find nothing!</h2>
                     </div>
@@ -188,69 +225,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     products.forEach((product) => {
-      const { _id, images, status, brand, price, year } = product;
+      const { _id, images, status, brand, model, price, year } = product;
+      console.log(_id);
+      const isSelected = status === 'used' || status === 'new';
       const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
-      $('#product-list').append(`
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                <div class='card-product__container'>
-                    <div class='card-product__header'>
-                        <a href='/products/${_id}'>
-                            <img src='${imageSrc}' alt='car' />
-                            ${status === 'new' ? `<div class='new-arrival-badge'>New Arrival</div>` : ''}
-                        </a>
-                    </div>
-                    <div class='card-product__body'>
-                        <div class='product-header'>
-                            <a href='/products/${_id}' class='card-product__brand'>${brand || 'Unknown'}</a>
-                            <h3 class='card-product__price'>$${price || '0.00'}</h3>
-                        </div>
-                        <div class='star-rating'>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star star-empty'>★</span>
-                            <span class='rating-text'>(4.0)</span>
-                        </div>
-                    </div>
-                    <div class='card-product__footer'>
-                        <p>
-                            <span class='car-spec-label'>Model: </span>
-                            <span class='car-spec-value'>${year || 'N/A'}</span>
-                        </p>
-                        <a href='/products/${_id}' class='view-details-btn'>View Details</a>
-                    </div>
-                </div>
-                </div>
+      $('#inventoryTable').append(`
+                <tr data-product-id="${_id}">
+                    <td>
+                        <img
+                            src='${imageSrc}'
+                            alt='Toyota Camry'
+                            class='car-image'
+                        />
+                    </td>
+                    <td>${brand} ${model}</td>
+                    <td>${year}</td>
+                    <td>$${price}</td>
+                    <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
+                    <td class='actions'>
+                        <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
+                                class='fa-solid fa-circle-info'
+                            ></i>
+                            Detail</button>
+                        <button class='edit'><i class='fas fa-edit'></i>
+                            Edit</button>
+                        <button class='delete'><i class='fas fa-trash'></i>
+                            Delete</button>
+                    </td>
+                </tr>
             `);
-    });
-  }
-
-  // render filters
-  function renderFilters(filters, params) {
-    // Xử lý từng loại filter
-    const renderSelectOptions = (element, options, selectedValue, defaultText) => {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-      options.forEach((option) => {
-        element.append(`<option value="${option.value}" ${selectedValue === option.value ? 'selected' : ''}>${option.name}</option>`);
-      });
-    };
-
-    renderSelectOptions($('#yearFilter'), filters.years, params.year, 'Select year');
-    renderSelectOptions($('#styleFilter'), filters.styles, params.style, 'Select style');
-    renderSelectOptions($('#brandFilter'), filters.brands, params.brand, 'Select brand');
-    renderSelectOptions($('#statusFilter'), filters.statuses, params.status, 'Select status');
-    renderSelectOptions($('#transmissionFilter'), filters.transmissions, params.transmission, 'Select transmission');
-
-    // Xử lý riêng cho price filter
-    const priceFilter = $('#priceFilter');
-    priceFilter.empty().append('<option value="">Select price</option>');
-    filters.prices.forEach((price) => {
-      const isSelected = parseFloat(params.priceMin) === price.priceMin && parseFloat(params.priceMax) === price.priceMax;
-
-      priceFilter.append(
-        `<option value="${price.priceMin}-${price.priceMax}" ${isSelected ? 'selected' : ''}>$${price.priceMin}-$${price.priceMax}</option>`
-      );
     });
   }
 
