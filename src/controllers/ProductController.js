@@ -49,6 +49,26 @@ class ProductController {
     }
   };
 
+  // [GET] /products
+  products = async (req, res, next) => {
+    try {
+      res.render('products/index', {
+        years,
+        styles,
+        brands,
+        transmissions,
+        statuses,
+        prices,
+        perPages,
+        title: 'Sản phẩm',
+      });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  };
+
+  // [GET] /api/products
   productsAndGetProducts = async (req, res, next) => {
     const page = parseInt(req.query.offset) || 1;
     const limit = parseInt(req.query.limit) || 8;
@@ -107,20 +127,6 @@ class ProductController {
           title: 'Sản phẩm',
         });
       }
-
-      // Nếu không phải yêu cầu Ajax, trả về HTML
-      res.render('products/index', {
-        products: multipleMongooseToObject(products),
-        years,
-        styles,
-        brands,
-        transmissions,
-        statuses,
-        prices,
-        perPages,
-        title: 'Sản phẩm',
-        total,
-      });
     } catch (error) {
       console.error(error);
       next(error);
