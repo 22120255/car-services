@@ -53,7 +53,7 @@ class ProductController {
   // [GET] /products
   products = async (req, res, next) => {
     try {
-      res.render('products/', {
+      res.render('products/index', {
         years,
         styles,
         brands,
