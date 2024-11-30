@@ -18,6 +18,7 @@ class ProductController {
   getDetail = async (req, res, next) => {
     try {
       const product = await ProductService.getDetail(req.params.id);
+      if (!product) return next();
       // Tạm thời hard code delta = 10000
       const delta = 10000;
       const sameBrandProducts = await ProductService.getFilteredProducts({

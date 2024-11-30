@@ -12,7 +12,8 @@ const users = [
         password: 'sadmin123',
         role: {
             name: 'sadmin',
-            description: 'Super Administrator'
+            description: 'Super Administrator',
+            permissions: ['manage_users', 'manage_admins', 'manage_system']
         },
         status: 'active',
         avatar: '/images/avatar-default.jpg',
@@ -45,7 +46,7 @@ const users = [
         password: 'user123',
         role: {
             name: i % 3 === 0 ? 'sadmin' : i % 3 === 1 ? 'admin' : 'user',
-            description: i % 3 === 0 ? 'Super Administrator' : i % 3 === 1 ? 'Administrator' : 'Regular User'
+            description: i % 3 === 0 ? 'Super Administrator' : i % 3 === 1 ? 'Administrator' : 'Regular User',
         },
         status: i % 2 === 0 ? 'active' : 'inactive',
         avatar: '/images/avatar-default.jpg',
