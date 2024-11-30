@@ -1,6 +1,26 @@
-require('dotenv').config();
 document.addEventListener('DOMContentLoaded', function() {
-    let cart = JSON.parse(localStorage.getItem('cart'));
-    const amount = cart.total;
-    let QR = `https://img.vietqr.io/image/${process.env.BANK_ID}-${process.env.ACCOUNT_NO}-compact2.png?amount=<AMOUNT>&addInfo=<DESCRIPTION>&accountName=<ACCOUNT_NAME>`;
+    let QR = null;
+    $.ajax({
+        url: '/api/payment/createQR',
+        type: 'GET',
+        statusCode: {
+            200: function (data) {
+                QR = data.QR;
+                console.log('QR created:', QR);
+                $('#qr-code').attr('src', QR);
+            },
+            500: function () {
+                console.log('Server error occurred.');
+            }
+        }
+    })
+    $('#qr-code').attr('src', QR);
+    async function checkPayment() {
+        try {
+            const response = await fetch('/api/payment/checkPayment');
+        }
+        catch {
+
+        }
+    }
 });

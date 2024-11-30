@@ -9,12 +9,14 @@ const paymentRouter = require('./ui/payment');
 const userApiRouter = require('./api/user');
 const authApiRouter = require('./api/auth');
 const cartApiRouter = require('./api/cart');
+const paymentApiRouter = require('./api/payment');
 
 function route(app) {
   // API
   app.use('/api/user', userApiRouter);
   app.use('/api/auth', authApiRouter);
   app.use('/api/cart', cartApiRouter);
+  app.use('/api/payment', paymentApiRouter);
 
   // UI
   app.use('/products', productRouter);

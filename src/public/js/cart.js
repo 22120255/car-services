@@ -1,5 +1,3 @@
-import { loadCartData } from './loadCartData.js';
-
 document.addEventListener('DOMContentLoaded', async function() {
     try {   
         let cart = await loadCartData();
@@ -14,6 +12,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Error loading cart:', error);
     }
 });
+
+async function loadCartData() {
+    let cart = null;
+    await $.ajax({
+        url: '/api/cart/data',
+        type: 'GET',
+        statusCode: {
+            200: function (data) {
+                cart = data;
+                console.log('Cart loaded:', cart);
+            },
+            404: function () {
+                console.log('Cart data not found.');
+            },
+            500: function () {
+                console.log('Server error occurred.');
+            }
+        }
+    });
+    return cart;
+}
 
 function renderCartTable(cart) {
     let items = cart.items;
