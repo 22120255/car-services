@@ -11,6 +11,7 @@ const methodOverride = require('method-override')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
 const flash = require('connect-flash')
+const cors = require('cors')
 
 const route = require('./routes')
 const db = require('./config/db')
@@ -33,6 +34,11 @@ app.use(
         cookie: { maxAge: 10000 * 60 * 60 },
     })
 )
+// CORS
+var corsOptions = {
+    origin: "http://localhost:3000"
+};
+app.use(cors(corsOptions));
 
 // Connect to DB
 db.connectDB()

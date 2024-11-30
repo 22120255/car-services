@@ -3,6 +3,6 @@ const router = express.Router()
 
 const paymentController = require('../../controllers/PaymentController')
 
-router.get('/', paymentController.payment)
+router.get('/:cartID', paymentController.payment)
 
 module.exports = router;

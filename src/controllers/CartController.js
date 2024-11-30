@@ -17,6 +17,7 @@ class CartController {
                 errorLog("CartController.js", 44, error.message);
                 return res.status(404).json({ message: 'Cart not found' });
             }
+            console.log(cart);
             return res.status(200).json(cart);
         } catch (error) {
             errorLog("CartController.js", 44, error.message);
@@ -40,9 +41,10 @@ class CartController {
             }
 
             const existingItem = cart.items.find(item => item.productId.toString() === productId);
+            console.log(existingItem);
             if (existingItem) {
                 existingItem.quantity += quantity;
-                existingItem.price = existingItem.quantity * existingItem.price;
+                cart.total += existingItem.price * quantity
             }
             else {
                 const product = await Product.findById(productId);

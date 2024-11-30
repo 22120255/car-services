@@ -8,7 +8,7 @@ class PaymentController {
   async createQR(req, res) {
     try {
 
-      const userId = req.user._id;
+      let userId = req.user._id;
       const cart = await Cart.findOne({ userId });
       
       if (!cart) {
@@ -16,7 +16,10 @@ class PaymentController {
       }
 
       const amount = cart.total;
-      const QR = `https://img.vietqr.io/image/${process.env.BANK_ID}-${process.env.ACCOUNT_NO}-compact2.png?amount=${amount}`;
+      const cartID = cart._id;
+      userId = userId.toString().slice(-4) + 'XXXX';
+      const description = `KH ${userId} TT ${cartID}`;
+      const QR = `https://img.vietqr.io/image/${process.env.BANK_ID}-${process.env.ACCOUNT_NO}-compact2.png?amount=${amount}&addInfo=${description}&accountName=${process.env.ACCOUNT_NAME}`;
       return res.status(200).json({ QR });
     }
     catch (error) {
