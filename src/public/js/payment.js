@@ -41,10 +41,20 @@ async function checkPayment(cartID, cartTotalPrice) {
         // console.log('Last payment info:', lastPaymentInfo);
         
         if (lastPaymentAmount == cartTotalPrice && lastPaymentInfo.includes(cartID)) {
-            console.log('Payment successful!');
             clearInterval(interval);
-            alert('Payment successful!'); 
-            // Fetch api để cập nhật trạng thái thanh toán của cart 
+            const response = await fetch(`/api/cart/update/${cartID}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    isPaid: true
+                })
+            });
+            if (response.status === 200) {
+                console.log('Payment successful!');
+                alert('Payment successful!');
+            }
         }
     } catch (error) {
         console.log('Server error occurred.', error);
