@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../utils.js';
+import { showToast, showModal } from '../../common.js';
 
 // show product modal for create or update
 function showProductModal(title, productID = null, product = null) {
@@ -121,6 +121,37 @@ document.addEventListener('DOMContentLoaded', function () {
   // Đăng ký sự kiện cho nút Save trong modal
   $('#add-car-btn').on('click', function () {
     showProductModal('Add new car');
+  });
+
+  // Đăng ký sự kiện cho nút Delete
+  $('#inventoryTable').on('click', '.delete', function () {
+    const productId = $(this).closest('tr').data('product-id');
+
+    // Hiển thị modal xác nhận xóa
+    showModal('Delete Product', 'Are you sure you want to delete this product?', () => {
+      $.ajax({
+        url: `/api/user/inventory/delete-product/${productId}`,
+        type: 'DELETE',
+        statusCode: {
+          200: function (response) {
+            showToast('success', response.message);
+            refresh();
+          },
+          403: function (xhr) {
+            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+            showToast('error', message);
+          },
+          404: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Product not found!';
+            showToast('error', message);
+          },
+          500: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+            showToast('error', message);
+          },
+        },
+      });
+    });
   });
 
   // Đăng ký sự kiện cho nút Save trong modal

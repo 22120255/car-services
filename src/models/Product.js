@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
 
 const ProductSchema = new mongoose.Schema(
   {
@@ -26,5 +27,24 @@ const ProductSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Add plugin
+ProductSchema.plugin(mongooseDelete, { overrideMethods: 'all' });
+
+// Hook trước khi xóa mềm
+ProductSchema.pre('softDelete', async function (next, options) {
+  if (options.userDelete) {
+    this.set('userDelete', options.userDelete); // Thêm trường dynamic userDelete
+    await this.save();
+  }
+  next();
+});
+
+// Hook trước khi khôi phục
+ProductSchema.pre('restore', async function (next) {
+  this.unset('userDelete'); // Xóa trường dynamic userDelete
+  await this.save();
+  next();
+});
 
 module.exports = mongoose.model('Product', ProductSchema, 'products');

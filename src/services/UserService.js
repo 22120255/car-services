@@ -201,6 +201,20 @@ class UserService {
       throw error;
     }
   }
+
+  // Xoá sản phẩm
+  async deleteProduct(productId) {
+    try {
+      const result = await Product.delete({ _id: productId });
+      if (result.deletedCount === 0) {
+        throw new Error(`No product found with ID: ${productId}`);
+      }
+      console.log(`Product with ID ${productId} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new UserService();
