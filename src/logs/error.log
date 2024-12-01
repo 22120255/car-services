@@ -1,1 +1,5 @@
 2024-11-30 21:59:41 [ERROR]: File: UserController, line: 80, error: Admin không thể xoá tài khoản của admin khác
+2024-12-02 00:18:46 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
+2024-12-02 00:30:11 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
+2024-12-02 00:30:18 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
+2024-12-02 00:34:48 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
