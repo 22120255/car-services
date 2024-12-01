@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../utils.js';
+import { showToast, showModal } from '../../common.js';
 
 // show product modal for create or update
 function showProductModal(title, productID = null, product = null) {
