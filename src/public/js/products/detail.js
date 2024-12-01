@@ -63,22 +63,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Xử lí sự kiện click related-by-brand-tab
   $('#related-by-brand-tab').on('click', function () {
+    offset = 1;
     fieldData = brand;
+    updateQueryParams({ offset: offset });
     loadData('brand', fieldData);
     updatePagination();
   });
 
   // Xử lí sự kiện click related-by-year-tab
   $('#related-by-year-tab').on('click', function () {
+    offset = 1;
     fieldData = year;
     loadData('year', fieldData);
+    updateQueryParams({ offset: offset });
     updatePagination();
   });
 
   // Xử lí sự kiện click related-by-price-tab
   $('#related-by-price-tab').on('click', function () {
+    offset = 1;
     fieldData = price;
     loadData('price', fieldData);
+    updateQueryParams({ offset: offset });
     updatePagination();
   });
 
@@ -101,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
         200(resp) {
           products = resp.products || [];
           totalItems = resp.total || 0;
-          totalPages = Math.ceil(totalItems / (resp.limit || 10));
+          totalPages = Math.ceil(totalItems / (resp.limit || 4));
           renderProducts(products, relatedBy);
           console.log(`Tìm thấy ${products.length} sản phẩm liên quan (${relatedBy})`);
         },
