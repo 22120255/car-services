@@ -8,43 +8,46 @@ class ProductController {
       title: 'Product',
     });
   }
-
-  // detail(req, res) {
-  //   res.render('products/detail', {
-  //     title: 'Product details',
-  //   });
-  // }
-
   // [GET] /api/products/related/:id/:by
   getRelatedProducts = async (req, res, next) => {
-    const { id, by } = req.params;
-    const { limit = 4, offset = 1 } = req.query;
-    console.log(`Tìm sản phẩm liên quan với ${id} theo ${by}`);
-    console.log(req.query);
-    try {
-      let products, total;
+    const { id } = req.params;
+    const { limit = 4, offset = 1, ...query } = req.query;
+    console.log(`Tìm sản phẩm liên quan với ${id}`);
+    console.log('Query nhận được:', query);
 
-      // Đảm bảo limit và offset là kiểu số
+    try {
+      let products = [];
+      let total = 0;
+
       const limitNumber = parseInt(limit);
       const offsetNumber = parseInt(offset);
 
       const baseQuery = { _id: { $ne: id } };
 
-      switch (by) {
+      const [activeTab, fieldData] = Object.entries(query)[0] || [];
+      if (!activeTab || !fieldData) {
+        return res.status(400).json({ message: 'Thiếu hoặc không hợp lệ activeTab và fieldData trong query.' });
+      }
+
+      // Xử lý các trường hợp của activeTab
+      switch (activeTab) {
         case 'brand':
-          const brandQuery = { ...baseQuery, brand: req.query.brand };
+          const brandQuery = { ...baseQuery, brand: fieldData };
           ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
           break;
 
         case 'year':
-          const yearQuery = { ...baseQuery, year: req.query.year };
+          const yearQuery = { ...baseQuery, year: fieldData };
           ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
           break;
 
         case 'price':
-          // Tạm thời hard code delta = 10000
+          // Tạm thời mặc định 10000
           const delta = 10000;
-          const currentPrice = parseFloat(req.query.price) || 0; // Lấy giá từ query, mặc định là 0 nếu không có
+          const currentPrice = parseFloat(fieldData);
+          if (isNaN(currentPrice)) {
+            return res.status(400).json({ message: 'Giá (price) không hợp lệ.' });
+          }
           const priceQuery = {
             ...baseQuery,
             price: {
@@ -56,17 +59,12 @@ class ProductController {
           break;
 
         default:
-          ({ products, total } = await ProductService.getPaginatedProducts(baseQuery, offsetNumber, limitNumber));
-          break;
+          return res.status(400).json({ message: `Loại tìm kiếm "${activeTab}" không hợp lệ.` });
       }
 
-      console.log(`Tìm thấy ${products.length} sản phẩm liên quan (${by})`);
-      return res.status(200).json({
-        products: multipleMongooseToObject(products),
-        total: total,
-      });
+      res.status(200).json({ products, total });
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching related products:', error);
       next(error);
     }
   };
