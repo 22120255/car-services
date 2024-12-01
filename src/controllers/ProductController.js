@@ -15,33 +15,69 @@ class ProductController {
   //   });
   // }
 
+  // [GET] /api/products/related/:id/:by
+  getRelatedProducts = async (req, res, next) => {
+    const { id, by } = req.params;
+    const { limit = 4, offset = 1 } = req.query;
+    console.log(`Tìm sản phẩm liên quan với ${id} theo ${by}`);
+    console.log(req.query);
+    try {
+      let products, total;
+
+      // Đảm bảo limit và offset là kiểu số
+      const limitNumber = parseInt(limit);
+      const offsetNumber = parseInt(offset);
+
+      const baseQuery = { _id: { $ne: id } };
+
+      switch (by) {
+        case 'brand':
+          const brandQuery = { ...baseQuery, brand: req.query.brand };
+          ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
+          break;
+
+        case 'year':
+          const yearQuery = { ...baseQuery, year: req.query.year };
+          ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
+          break;
+
+        case 'price':
+          // Tạm thời hard code delta = 10000
+          const delta = 10000;
+          const currentPrice = parseFloat(req.query.price) || 0; // Lấy giá từ query, mặc định là 0 nếu không có
+          const priceQuery = {
+            ...baseQuery,
+            price: {
+              $gte: currentPrice - delta,
+              $lte: currentPrice + delta,
+            },
+          };
+          ({ products, total } = await ProductService.getPaginatedProducts(priceQuery, offsetNumber, limitNumber));
+          break;
+
+        default:
+          ({ products, total } = await ProductService.getPaginatedProducts(baseQuery, offsetNumber, limitNumber));
+          break;
+      }
+
+      console.log(`Tìm thấy ${products.length} sản phẩm liên quan (${by})`);
+      return res.status(200).json({
+        products: multipleMongooseToObject(products),
+        total: total,
+      });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  };
+
+  // [GET] /products/:id
   getDetail = async (req, res, next) => {
     try {
       const product = await ProductService.getDetail(req.params.id);
       if (!product) return next();
-      // Tạm thời hard code delta = 10000
-      const delta = 10000;
-      const sameBrandProducts = await ProductService.getFilteredProducts({
-        brand: product.brand,
-        _id: { $ne: product._id },
-      });
-      const sameYearProducts = await ProductService.getFilteredProducts({
-        year: product.year,
-        _id: { $ne: product._id },
-      });
-      const similarPriceProducts = await ProductService.getFilteredProducts({
-        price: {
-          $gte: product.price - delta,
-          $lte: product.price + delta,
-        },
-        _id: { $ne: product._id },
-      });
-
       res.render('products/detail', {
         product: mongooseToObject(product),
-        sameBrandProducts: multipleMongooseToObject(sameBrandProducts),
-        sameYearProducts: multipleMongooseToObject(sameYearProducts),
-        similarPriceProducts: multipleMongooseToObject(similarPriceProducts),
         title: 'Product details',
       });
     } catch (error) {
