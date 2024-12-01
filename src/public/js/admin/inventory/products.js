@@ -126,7 +126,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Đăng ký sự kiện cho nút Delete
   $('#inventoryTable').on('click', '.delete', function () {
     const productId = $(this).closest('tr').data('product-id');
-    showModal('Delete product', 'Are you sure you want to delete this product?', () => {
+    showModal('Delete product', 'Are you sure you want to delete this product?', handleDelete());
+
+    function handleDelete() {
       $.ajax({
         url: `/api/user/inventory/delete-product/${productId}`,
         type: 'DELETE',
@@ -141,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
         },
       });
-    });
+    }
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
