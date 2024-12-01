@@ -6,6 +6,8 @@ const { checkRole } = require('../../middleware/authMiddleware');
 const { uploadImage } = require('../../config/multer');
 const productController = require('../../controllers/ProductController');
 
+// /api/products/related/:by
+router.get('/related/:id/:by', productController.getRelatedProducts);
 router.get('/', productController.productsAndGetProducts);
 
 module.exports = router;

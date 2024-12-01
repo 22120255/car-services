@@ -18,10 +18,10 @@ class ProductService {
       throw new Error(error);
     }
   };
-  getPaginatedProducts = async (query, page, limit) => {
+  getPaginatedProducts = async (query, offset, limit) => {
     try {
       const products = await Product.find(query)
-        .skip(limit * page - limit)
+        .skip(limit * offset - limit)
         .limit(limit)
         .exec();
 
