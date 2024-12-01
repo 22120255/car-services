@@ -1,4 +1,5 @@
-import { loadCartData } from '../js/loadCartData.js';
+import { loadCartData } from '../loadCartData.js';
+import { showModal } from '../common.js';
 let interval;
 
 document.addEventListener('DOMContentLoaded', async function() {
@@ -53,7 +54,9 @@ async function checkPayment(cartID, cartTotalPrice) {
             });
             if (response.status === 200) {
                 console.log('Payment successful!');
-                alert('Payment successful!');
+                showModal('Successful', 'Your transaction is successful. Thank you for buying our products', function() {
+                    window.location.href = '/';
+                });
             }
         }
     } catch (error) {

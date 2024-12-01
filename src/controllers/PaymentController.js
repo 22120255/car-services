@@ -1,9 +1,10 @@
 require('dotenv').config();
 const Cart = require('../models/Cart');
+const { errorLog } = require('../utils/customLog');
 
 class PaymentController {
   payment(req, res) {
-    res.render('payment');
+    res.render('cart/payment');
   }
   async createQR(req, res) {
     try {
@@ -11,6 +12,7 @@ class PaymentController {
       const cart = await Cart.findOne({ userId });
       
       if (!cart) {
+        errorLog('PaymentController.js', 11, 'Cart not found');
         return res.status(400).json({ message: 'Cart not found.' });
       }
 
@@ -24,6 +26,7 @@ class PaymentController {
       return res.status(200).json({ QR });
     }
     catch (error) {
+      errorLog('PaymentController.js', 11, error.message);
       return res.status(500).json({ message: 'Server error occurred.' });
     }
   }

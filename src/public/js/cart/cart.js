@@ -1,4 +1,4 @@
-import { loadCartData } from '../js/loadCartData.js';
+import { loadCartData } from '../loadCartData.js';
 
 document.addEventListener('DOMContentLoaded', async function() {
     try {   

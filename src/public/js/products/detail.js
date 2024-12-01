@@ -7,6 +7,8 @@
 //     $(`#${tabId}-tab`).addClass('active').attr('aria-selected', 'true');
 //     $(`#${tabId}`).addClass('show active');
 // }
+import { showModal } from "../common"
+
 document.addEventListener('DOMContentLoaded', function () {
     // Lắng nghe sự kiện click vào tab
     $('.add-to-cart').on('click', function (event) {
@@ -19,11 +21,15 @@ document.addEventListener('DOMContentLoaded', function () {
             data: { quantity },
             success: function (response) {
                 console.log(response)
-                alert('Thêm sản phẩm vào giỏ hàng thành công')
+                showModal('Success', 'Added to cart', function () {
+                    window.location.reload()
+                })
             },
             error: function (error) {
                 console.log(error)
-                alert('Có lỗi xảy ra, vui lòng thử lại sau')
+                showModal('Error', 'Failed to add to cart', function () {
+                    window.location.reload()
+                })
             },
         })
     })
