@@ -160,6 +160,18 @@ class UserController {
     }
   }
 
+  // [DELETE] /api/inventory/delete-product/:id
+  async deleteProduct(req, res) {
+    try {
+      console.log(req.params.id);
+      await UserService.deleteProduct(req.params.id);
+      return res.status(200).json({ message: 'Delete product successfully' });
+    } catch (error) {
+      errorLog('UserController', 74, error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
   // [GET] /admin/orders
   async orders(req, res) {
     try {

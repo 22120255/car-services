@@ -123,6 +123,27 @@ document.addEventListener('DOMContentLoaded', function () {
     showProductModal('Add new car');
   });
 
+  // Đăng ký sự kiện cho nút Delete
+  $('#inventoryTable').on('click', '.delete', function () {
+    const productId = $(this).closest('tr').data('product-id');
+    showModal('Delete product', 'Are you sure you want to delete this product?', () => {
+      $.ajax({
+        url: `/api/user/inventory/delete-product/${productId}`,
+        type: 'DELETE',
+        statusCode: {
+          200: function (response) {
+            showToast('success', response.message);
+            refresh();
+          },
+          403: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Unable to delete product!';
+            showToast('error', message);
+          },
+        },
+      });
+    });
+  });
+
   // Đăng ký sự kiện cho nút Save trong modal
   $('#save-product-btn').on('click', function () {
     const productData = {

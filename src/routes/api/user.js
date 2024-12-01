@@ -19,6 +19,7 @@ router.patch('/', isAuthenticated, userController.updateProfile);
 router.get('/inventory/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.getProduct);
 router.post('/inventory/create-product', isAuthenticated, checkRole(['admin', 'sadmin']), userController.createProduct);
 router.put('/inventory/update-product/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.updateProduct);
+router.delete('/inventory/delete-product/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.deleteProduct);
 router.get('/inventory', isAuthenticated, checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
 
 module.exports = router;
