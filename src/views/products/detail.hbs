@@ -104,6 +104,7 @@
           of buyers enjoyed this product!
           <strong>(87 votes)</strong></p>
         <!-- Add hidden fields for brand, year, and price -->
+        <input type='hidden' id='product-id' value='{{product._id}}' />
         <input type='hidden' id='product-brand' value='{{product.brand}}' />
         <input type='hidden' id='product-year' value='{{product.year}}' />
         <input type='hidden' id='product-price' value='{{product.price}}' />
@@ -152,9 +153,6 @@
               <!-- Products will be dynamically injected here -->
             </div>
           </div>
-          <nav aria-label='Related product pagination' class='mt-1'>
-            <ul class='pagination d-flex justify-content-center' id='brand-related-pagination'></ul>
-          </nav>
         </div>
 
         <!-- Related by Year -->
@@ -164,9 +162,6 @@
               <!-- Products will be dynamically injected here -->
             </div>
           </div>
-          <nav aria-label='Related product pagination ' class='mt-1'>
-            <ul class='pagination d-flex justify-content-center' id='year-related-pagination'></ul>
-          </nav>
         </div>
 
         <!-- Related by Price -->
@@ -176,11 +171,15 @@
               <!-- Products will be dynamically injected here -->
             </div>
           </div>
-          <nav aria-label='Related product pagination' class='mt-1'>
-            <ul class='pagination d-flex justify-content-center' id='price-related-pagination'></ul>
-          </nav>
         </div>
       </div>
+
+      <!-- Single pagination outside of tabs -->
+      <nav aria-label='Related product pagination' class='mt-1'>
+        <ul class='pagination d-flex justify-content-center' id='related-products-pagination'>
+          <!-- Pagination links will be dynamically injected here -->
+        </ul>
+      </nav>
 
     </div>
   </section>
