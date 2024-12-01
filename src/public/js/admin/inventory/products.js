@@ -1,3 +1,5 @@
+import { showToast, showModal } from '../utils.js';
+
 // show product modal for create or update
 function showProductModal(title, productID = null, product = null) {
   $('#product-modal .modal-title').text(title);
