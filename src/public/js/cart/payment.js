@@ -1,5 +1,4 @@
-import { loadCartData } from '../loadCartData.js';
-import { showModal } from '../common.js';
+import { loadCartData, showModal } from '../common.js';
 let interval;
 
 document.addEventListener('DOMContentLoaded', async function() {

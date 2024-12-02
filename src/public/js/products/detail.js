@@ -7,7 +7,7 @@
 //     $(`#${tabId}-tab`).addClass('active').attr('aria-selected', 'true');
 //     $(`#${tabId}`).addClass('show active');
 // }
-import { showModal } from "../common"
+import { showModal } from "../common.js"
 
 document.addEventListener('DOMContentLoaded', function () {
     // Lắng nghe sự kiện click vào tab
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
             success: function (response) {
                 console.log(response)
                 showModal('Success', 'Added to cart', function () {
-                    window.location.reload()
                 })
             },
             error: function (error) {

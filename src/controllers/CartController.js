@@ -12,7 +12,7 @@ class CartController {
     async getCartData(req, res) {
         try {
             const userId = req.user._id;
-            console.log(userId);
+            // console.log(userId);
             const cart = await Cart.findOne({ userId, isPaid: false });
             if (!cart) {
                 errorLog("CartController.js", 44, error.message);
