@@ -7,13 +7,13 @@ const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
 
-    // Kiểm tra nếu chưa có products thì tạo mới
-    const products = await Product.find();
-    if (products.length === 0) {
-      const mockProducts = await generateMockProducts(40); // Tạo dữ liệu mock products
-      await Product.insertMany(mockProducts); // Chèn products vào DB
-      console.log('Mock products inserted!');
-    }
+    // // Kiểm tra nếu chưa có products thì tạo mới
+    // const products = await Product.find();
+    // if (products.length === 0) {
+    //   const mockProducts = await generateMockProducts(40); // Tạo dữ liệu mock products
+    //   await Product.insertMany(mockProducts); // Chèn products vào DB
+    //   console.log('Mock products inserted!');
+    // }
 
     console.log('Connected to MongoDB');
   } catch (error) {

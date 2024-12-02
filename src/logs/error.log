@@ -1,1 +1,3 @@
-2024-11-30 21:59:41 [ERROR]: File: UserController, line: 80, error: Admin không thể xoá tài khoản của admin khác
+2024-12-02 00:02:12 [ERROR]: File: cacheMiddleware, line: 23, error: Error: Connection timeout
+2024-12-02 00:02:15 [ERROR]: File: cacheMiddleware, line: 23, error: Error: The client is closed
+2024-12-02 08:50:22 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin

@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     products.forEach((product) => {
       const { _id, images, status, brand, price, year } = product;
-      const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
       $('#product-list').append(`
                 <div class='col-lg-3 col-md-4 col-sm-6'>
                 <div class='card-product__container'>

@@ -20,11 +20,9 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
     $('#product-description').val(product.description);
-    $('input[name="images.image1"]').val(product.images.image1);
-    $('input[name="images.image2"]').val(product.images.image2);
-    $('input[name="images.image3"]').val(product.images.image3);
-    $('input[name="images.image4"]').val(product.images.image4);
-    $('input[name="images.image5"]').val(product.images.image5);
+    product.images.forEach((image, index) => {
+      $(`input[name="images.image${index + 1}"]`).val(image);
+    });
   } else {
     // Nếu không có sản phẩm, tức là tạo mới
     $('#product-modal').data('is-editing', false); // Tạo mới
