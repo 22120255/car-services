@@ -145,3 +145,29 @@
 2024-12-03 00:13:52 [ERROR]: File: CartController.js, line: 44, error: error is not defined
 2024-12-03 00:35:03 [ERROR]: File: CartController.js, line: 44, error: error is not defined
 2024-12-03 00:46:02 [ERROR]: File: CartController.js, line: 44, error: error is not defined
+2024-12-03 01:42:37 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 01:42:50 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 01:53:47 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 01:53:48 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 01:53:49 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 01:53:52 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:02:50 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:03:13 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:03:16 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:03:16 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:03:27 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:04:12 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:04:13 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:04:18 [ERROR]: File: CartController.js, line: 77, error: error is not defined
+2024-12-03 02:15:18 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:17:37 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:19:14 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:20:24 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:23:28 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:28:42 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:28:53 [ERROR]: File: CartController.js, line: 54, error: Cart validation failed: total: Cast to Number failed for value "NaN" (type number) at path "total", items.0.quantity: Path `quantity` is required.
+2024-12-03 02:30:52 [ERROR]: File: CartController.js, line: 54, error: quantity is not defined
+2024-12-03 02:31:25 [ERROR]: File: CartController.js, line: 54, error: quantity is not defined
+2024-12-03 02:32:23 [ERROR]: File: CartController.js, line: 54, error: quantity is not defined
+2024-12-03 02:32:36 [ERROR]: File: CartController.js, line: 54, error: quantity is not defined
+2024-12-03 02:32:54 [ERROR]: File: CartController.js, line: 54, error: quantity is not defined

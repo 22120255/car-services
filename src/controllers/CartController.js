@@ -67,6 +67,50 @@ class CartController {
         }
     }
 
+    async updateQuantity(req, res) {
+        try {
+            const { cartId, newQuantity } = req.body;
+            const { productId } = req.params;
+            
+            // Ensure the quantity is valid
+            if (newQuantity <= 0) {
+                return res.status(400).json({ message: 'Quantity must be greater than 0' });
+            }
+
+            // Find the cart
+            let cart = await Cart.findOne({ _id: cartId });
+            if (!cart) {
+                return res.status(404).json({ message: 'Cart not found' });
+            }
+            console.log(1);
+            // Find the product in the cart items
+            const item = cart.items.find(item => item.productId.toString() === productId);
+            if (!item) {
+                return res.status(404).json({ message: 'Product not found in cart' });
+            }
+
+            // Update the quantity and recalculate the total
+            item.quantity = newQuantity;
+            const product = await Product.findById(productId);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            // Recalculate the total price
+            cart.total = cart.items.reduce((total, item) => {
+                const product = cart.items.find(p => p.productId.toString() === item.productId.toString());
+                return total + (item.quantity * product.price);
+            }, 0);
+
+            // Save the updated cart
+            await cart.save();
+            return res.status(200).json({ message: 'Cart updated successfully', cart });
+        } catch (error) {
+            errorLog("CartController.js", 54, error.message);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+
     async updatePaymentStatus(req, res) {
         try {
             const { cartID } = req.params;

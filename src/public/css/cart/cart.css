@@ -23,3 +23,30 @@ body {
     vertical-align: middle;
   }
   
+  .quantity-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn {
+    height: 30px; /* Điều chỉnh chiều cao để khớp */
+    width: 30px;  /* Chiều rộng cho nút */
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quantity-input {
+    height: 40px; /* Khớp chiều cao với nút */
+    width: 50px;
+    text-align: center;
+    margin: 0 5px; /* Tạo khoảng cách giữa các phần tử */
+}
+
+.btn-disable {
+    background-color: #e0e0e0;
+    color: #c4c4c4;
+    cursor: not-allowed;  
+}

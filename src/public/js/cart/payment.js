@@ -42,7 +42,7 @@ async function checkPayment(cartID, cartTotalPrice) {
         
         if (lastPaymentAmount == cartTotalPrice && lastPaymentInfo.includes(cartID)) {
             clearInterval(interval);
-            const response = await fetch(`/api/cart/update/${cartID}`, {
+            const response = await fetch(`/api/cart/update/status/${cartID}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
