@@ -1,7 +1,10 @@
 const path = require('path')
 require('dotenv').config({
-    path: path.resolve(process.cwd(), process.env.NODE_ENV === 'production' ? '.env' : '.env.dev')
-});
+    path: path.resolve(
+        process.cwd(),
+        process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
+    ),
+})
 const express = require('express')
 const morgan = require('morgan')
 const methodOverride = require('method-override')
@@ -13,6 +16,7 @@ const route = require('./routes')
 const db = require('./config/db')
 const passport = require('./config/passport')
 const { navigateUser } = require('./middleware/authMiddleware')
+const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 
 const app = express()
@@ -79,6 +83,9 @@ app.use('/css', express.static('public/css'))
 
 // Route init
 route(app)
+
+app.use(catch404);
+app.use(catch500);
 
 // Listen to port
 app.listen(process.env.PORT, () => {

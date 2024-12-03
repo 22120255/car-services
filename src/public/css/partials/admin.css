@@ -16,13 +16,11 @@
   height: 100%; }
 
 .header-area {
-  height: 58px; }
+  height: 58px;
+  background-color: #666; }
 
 .navbar-nav .nav-link.active {
   color: #0d6efd !important; }
-
-.header-area.scrolled {
-  background-color: #666; }
 
 .btn-login,
 .btn-register {

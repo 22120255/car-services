@@ -5,13 +5,13 @@ const { errorLog } = require('../utils/customLog');
 class CartController {
     getCart(req, res) {
         res.render('cart', {
-            title: 'Giỏ hàng'
+            title: 'Shopping Cart'
         });
     }
 
     async addToCart(req, res) {
         try {
-            const userId = req.user.id;
+            const userId = req.user._id;
             const { productId } = req.params;
             const quantity = parseInt(req.body.quantity);
 

@@ -1,0 +1,91 @@
+@import '../variables';
+
+.header-area {
+  background-color: $bg-header;
+}
+
+.accounts-management {
+  padding: 20px;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+    .search-box {
+      width: 576px;
+      input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    .filters {
+      width: 100%;
+
+      .row {
+        margin-bottom: 1rem;
+
+        .col {
+          padding: 0 0.5rem;
+        }
+      }
+    }
+  }
+  .table-accounts {
+    max-height: 500px;
+    position: relative;
+    margin-top: 1rem;
+  }
+
+  .table {
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    th {
+      white-space: nowrap;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .btn-group {
+      .btn {
+        padding: 0.25rem 0.5rem;
+      }
+    }
+
+    #accountsTable {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+  }
+
+  .form-select,
+  .form-control {
+    width: 100%;
+  }
+
+  .pagination {
+    margin-bottom: 0;
+  }
+}
+
+#userDetailsModal {
+  .modal-dialog {
+    max-width: 800px;
+  }
+}

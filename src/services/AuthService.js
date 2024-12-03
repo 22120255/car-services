@@ -11,7 +11,7 @@ class AuthService {
             const userExists = await User.findOne({ email });
             return !userExists;  // Trả về true nếu email chưa tồn tại
         } catch (err) {
-            throw new Error("Lỗi khi kiểm tra email.");
+            throw new Error("Error checking email.");
         }
     }
 
@@ -21,12 +21,12 @@ class AuthService {
             const user = new User({ email, fullName, verificationCode, password, avatar: "/images/avatar-default.jpg" });
             const activationLink = `${process.env.DOMAIN_URL}/auth/activate?token=${verificationCode}`;
 
-            await sendEmail(email, "Kích hoạt tài khoản", `Xin chào ${fullName}, vui lòng kích hoạt tài khoản của bạn bằng cách nhấn vào liên kết sau: ${activationLink}`);
+            await sendEmail(email, "Activate account", `Hello ${fullName}, please activate your account by clicking the following link.: ${activationLink}`);
             await user.save();
 
             return user;
         } catch (err) {
-            throw new Error("Có lỗi khi lưu thông tin người dùng.");
+            throw new Error("There was an error saving user information.");
         }
     }
 
@@ -35,7 +35,7 @@ class AuthService {
             const user = await User.findOne({ verificationCode: token });
 
             if (!user) {
-                throw new Error("Token không hợp lệ.");
+                throw new Error("Invalid Token.");
             }
 
             user.status = "active";
@@ -44,7 +44,7 @@ class AuthService {
 
             return user;
         } catch (err) {
-            throw new Error("Có lỗi xảy ra khi kích hoạt tài khoản.");
+            throw new Error("An error occurred while activating your account.");
         }
     }
 
@@ -65,7 +65,7 @@ class AuthService {
 
             return user; // Nếu người dùng đã tồn tại
         } catch (error) {
-            throw new Error("Lỗi khi đăng ký với tài khoản mạng xã hội.");
+            throw new Error("Error registering with social network account.");
         }
     }
 
@@ -73,14 +73,14 @@ class AuthService {
         try {
             const user = await User.findOne({ email });
             if (!user) {
-                throw new Error("Email chưa đăng kí tài khoản");
+                throw new Error("Email not registered account");
             }
 
             const verificationCode = Math.floor(100000 + Math.random() * 900000);
             user.verificationCode = verificationCode;
             await user.save();
 
-            await sendEmail(email, "Mã xác thực", `Mã xác thực của bạn là: ${verificationCode}`);
+            await sendEmail(email, "Verification code", `Your verification code is: ${verificationCode}`);
         }
         catch (err) {
             throw new Error(err.message);
@@ -91,18 +91,18 @@ class AuthService {
         try {
             const user = await User.findOne({ email });
             if (!user) {
-                throw new Error("Email chưa đăng kí tài khoản");
+                throw new Error("Email not registered account");
             }
 
             if (user.verificationCode !== verificationCode) {
-                throw new Error("Mã xác thực không đúng");
+                throw new Error("Incorrect verification code");
             }
 
             user.password = password;
             user.verificationCode = undefined;
             await user.save();
 
-            await sendEmail(email, "Thay đổi mật khẩu", `Mật khẩu của bạn đã được thay đổi.`);
+            await sendEmail(email, "Change Password", `Your password has been changed.`);
         }
         catch (err) {
             throw new Error(err.message);

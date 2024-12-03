@@ -1,170 +1,170 @@
 @import '../variables';
 
 .detail-product__wrapper {
-    margin-top: $height-header;
-    padding: 0 20px;
+  margin-top: $height-header;
+  padding: 0 20px;
 }
 .header-area {
-    background-color: $bg-header;
+  background-color: $bg-header;
 }
 .product-details {
-    margin-top: 50px;
-    padding: 50px 0;
+  margin-top: 50px;
+  padding: 50px 0;
 }
 .product-details img {
-    max-width: 100%;
+  max-width: 100%;
 }
 .product-price {
-    font-size: 24px;
-    color: #ff6b6b;
-    margin-top: 20px;
+  font-size: 24px;
+  color: #ff6b6b;
+  margin-top: 20px;
 }
 .add-to-cart-btn {
-    background-color: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 20px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
 }
 .add-to-cart-btn:hover {
-    background-color: #ff4040;
+  background-color: #ff4040;
 }
 .specifications-table,
 .review-section {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 .related-products {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .preview {
-    padding-left: 20px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
+  padding-left: 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 @media screen and (max-width: 996px) {
-    .preview {
-        margin-bottom: 20px;
-    }
+  .preview {
+    margin-bottom: 20px;
+  }
 }
 
 .preview-pic {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
 }
 
 .preview-thumbnail.nav-tabs {
-    display: flex; /* Align thumbnails horizontally */
-    justify-content: center; /* Center thumbnails */
-    border: none; /* No border around the container */
-    margin-top: 15px; /* Top margin for spacing */
+  display: flex; /* Align thumbnails horizontally */
+  justify-content: center; /* Center thumbnails */
+  border: none; /* No border around the container */
+  margin-top: 15px; /* Top margin for spacing */
 }
 
 .preview-thumbnail.nav-tabs li {
-    width: 18%; /* Set the width of each thumbnail */
-    margin-right: 2.5%; /* Add space between thumbnails */
-    list-style: none; /* Remove default list bullet */
-    display: flex; /* Use flex to center the image */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    aspect-ratio: 1 / 1; /* Make the thumbnail square */
-    overflow: hidden; /* Hide overflowing image content */
+  width: 18%; /* Set the width of each thumbnail */
+  margin-right: 2.5%; /* Add space between thumbnails */
+  list-style: none; /* Remove default list bullet */
+  display: flex; /* Use flex to center the image */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  aspect-ratio: 1 / 1; /* Make the thumbnail square */
+  overflow: hidden; /* Hide overflowing image content */
 }
 
 .preview-thumbnail.nav-tabs li a {
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    display: block; /* Make the link fill the li container */
-    height: 50%; /* Ensure the link fills the entire li */
-    width: 80%; /* Ensure the link fills the entire li */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  display: block; /* Make the link fill the li container */
+  height: 50%; /* Ensure the link fills the entire li */
+  width: 80%; /* Ensure the link fills the entire li */
 }
 
 .preview-thumbnail.nav-tabs li img {
-    width: 100%; /* Make image fill the width of the li */
-    height: 100%; /* Make image fill the height of the li */
-    object-fit: cover; /* Ensure image covers the square frame without distortion */
-    cursor: pointer; /* Change cursor on hover */
-    transition: transform 0.2s ease; /* Add smooth hover effect */
+  width: 100%; /* Make image fill the width of the li */
+  height: 100%; /* Make image fill the height of the li */
+  object-fit: cover; /* Ensure image covers the square frame without distortion */
+  cursor: pointer; /* Change cursor on hover */
+  transition: transform 0.2s ease; /* Add smooth hover effect */
 }
 
 .preview-thumbnail.nav-tabs li.active img {
-    border: 2px solid #ff9f1a; /* Orange border for active image */
-    transform: scale(1.05); /* Scale up the image slightly */
+  border: 2px solid #ff9f1a; /* Orange border for active image */
+  transform: scale(1.05); /* Scale up the image slightly */
 }
 
 /* Remove the margin for the last li */
 .preview-thumbnail.nav-tabs li:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 /* Style the tab content */
 
 .tab-content {
-    position: relative; /* Ensures the container is positioned for absolute children */
-    width: 100%; /* Full width of the parent container */
-    overflow: hidden; /* Prevents images from spilling out */
+  position: relative; /* Ensures the container is positioned for absolute children */
+  width: 100%; /* Full width of the parent container */
+  overflow: hidden; /* Prevents images from spilling out */
 }
 
 .preview-pic img {
-    position: absolute; /* Absolutely position the images */
-    top: 0; /* Align to the top of the container */
-    left: 0; /* Align to the left of the container */
-    width: 100%; /* Stretch to fill the container */
-    height: 100%; /* Ensure the image fills the container */
-    object-fit: cover; /* Ensures the image covers the container without distortion */
-    -webkit-animation-name: opacity;
-    animation-name: opacity;
-    -webkit-animation-duration: 0.3s;
-    animation-duration: 0.3s;
+  position: absolute; /* Absolutely position the images */
+  top: 0; /* Align to the top of the container */
+  left: 0; /* Align to the left of the container */
+  width: 100%; /* Stretch to fill the container */
+  height: 100%; /* Ensure the image fills the container */
+  object-fit: cover; /* Ensures the image covers the container without distortion */
+  -webkit-animation-name: opacity;
+  animation-name: opacity;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
 }
 
 .card {
-    margin: 20px 0;
-    background: #eee;
-    padding: 20px;
+  margin: 20px 0;
+  background: #eee;
+  padding: 20px;
 }
 
 .details {
-    padding-top: 1.5em;
-    padding-left: 50px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
+  padding-top: 1.5em;
+  padding-left: 50px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 
 .colors {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
 }
 
 .product-title,
 .price,
 .year,
 .colors {
-    text-transform: UPPERCASE;
-    font-weight: bold;
+  text-transform: UPPERCASE;
+  font-weight: bold;
 }
 
 .checked,
 .price span {
-    color: #ff9f1a;
+  color: #ff9f1a;
 }
 
 .product-title,
@@ -173,261 +173,266 @@
 .price,
 .vote,
 .year {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .product-title {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .size {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 .size:first-of-type {
-    margin-left: 40px;
+  margin-left: 40px;
 }
 
 .color {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
-    height: 2em;
-    width: 2em;
-    border-radius: 2px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  height: 2em;
+  width: 2em;
+  border-radius: 2px;
 }
 .color:first-of-type {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .add-to-cart,
 .like {
-    background: #ff9f1a;
-    padding: 1.2em 1.5em;
-    border: none;
-    text-transform: UPPERCASE;
-    font-weight: bold;
-    color: #fff;
-    -webkit-transition: background 0.3s ease;
-    transition: background 0.3s ease;
+  background: #ff9f1a;
+  padding: 1.2em 1.5em;
+  border: none;
+  text-transform: UPPERCASE;
+  font-weight: bold;
+  color: #fff;
+  -webkit-transition: background 0.3s ease;
+  transition: background 0.3s ease;
 }
 .add-to-cart:hover,
 .like:hover {
-    background: #b36800;
-    color: #fff;
+  background: #b36800;
+  color: #fff;
 }
 
 .not-available {
-    text-align: center;
-    line-height: 2em;
+  text-align: center;
+  line-height: 2em;
 }
 .not-available:before {
-    font-family: fontawesome;
-    content: '\f00d';
-    color: #fff;
+  font-family: fontawesome;
+  content: '\f00d';
+  color: #fff;
 }
 
 .orange {
-    background: #ff9f1a;
+  background: #ff9f1a;
 }
 
 .green {
-    background: #85ad00;
+  background: #85ad00;
 }
 
 .blue {
-    background: #0076ad;
+  background: #0076ad;
 }
 
 @-webkit-keyframes opacity {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(3);
-        transform: scale(3);
-    }
-    100% {
-        opacity: 1;
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(3);
+    transform: scale(3);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
 }
 
 @keyframes opacity {
-    0% {
-        opacity: 0;
-        -webkit-transform: scale(3);
-        transform: scale(3);
-    }
-    100% {
-        opacity: 1;
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(3);
+    transform: scale(3);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
 .card-product__container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 28rem;
-    background-color: white;
-    border-radius: 0.75rem;
-    box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 28rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 .card-product__container:hover {
-    box-shadow:
-        0 20px 25px -5px rgba(0, 0, 0, 0.1),
-        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 .card-product__header {
-    position: relative;
-    width: 100%;
-    height: 120%;
-    padding-bottom: 45%; /* This creates a 4:3 aspect ratio */
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 120%;
+  padding-bottom: 45%; /* This creates a 4:3 aspect ratio */
+  overflow: hidden;
 }
 .card-product__header img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 .card-product__header:hover img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 .new-arrival-badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background-color: rgba(199, 76, 76, 0.5);
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    z-index: 10;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: rgba(199, 76, 76, 0.5);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  z-index: 10;
 }
 .card-product__body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
 }
 .product-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 .card-product__brand {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #1f2937;
-    text-decoration: none;
-    transition: color 0.3s ease;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 .card-product__brand:hover {
-    color: #2563eb;
+  color: #2563eb;
 }
 .card-product__price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #10b981;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #10b981;
 }
 .card-product__desc {
-    color: #4b5563;
-    margin-bottom: 1rem;
+  color: #4b5563;
+  margin-bottom: 1rem;
 }
 .star-rating {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 .star {
-    color: #fbbf24;
-    font-size: 1.25rem;
+  color: #fbbf24;
+  font-size: 1.25rem;
 }
 .star-empty {
-    color: #d1d5db;
+  color: #d1d5db;
 }
 .rating-text {
-    margin-left: 0.5rem;
-    color: #4b5563;
-    font-size: 0.875rem;
+  margin-left: 0.5rem;
+  color: #4b5563;
+  font-size: 0.875rem;
 }
 .card-product__footer {
-    background-color: #f9fafb;
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background-color: #f9fafb;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .car-spec-label {
-    color: #4b5563;
+  color: #4b5563;
 }
 .car-spec-value {
-    font-weight: 600;
-    color: #1f2937;
+  font-weight: 600;
+  color: #1f2937;
 }
 .view-details-btn {
-    background-color: #2563eb;
-    color: white;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 .view-details-btn:hover {
-    background-color: #1d4ed8;
+  background-color: #1d4ed8;
 }
 .section-header {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 2rem;
-    position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
 }
 
 .section-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
-    background-color: #f59e0b;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background-color: #f59e0b;
 }
 
 .sub-title {
-    font-size: 1.2em;
-    color: #718096;
-    text-align: center;
-    margin: 0;
-    animation: fadeInDown 1s ease;
+  font-size: 1.2em;
+  color: #718096;
+  text-align: center;
+  margin: 0;
+  animation: fadeInDown 1s ease;
 }
 
 .main-title {
-    font-size: 3em;
-    font-weight: 800;
-    color: #3a4f66;
-    text-align: center;
-    margin: 20px 0 10px;
-    position: relative;
-    animation: fadeInUp 1s ease;
+  font-size: 3em;
+  font-weight: 800;
+  color: #3a4f66;
+  text-align: center;
+  margin: 20px 0 10px;
+  position: relative;
+  animation: fadeInUp 1s ease;
 }
 
 .section-description {
-    text-align: center;
-    font-size: 1em;
-    color: #1a202c;
-    margin-bottom: 20px;
+  text-align: center;
+  font-size: 1em;
+  color: #1a202c;
+  margin-bottom: 20px;
+}
+// Custom styles
+#relatedProductsContent {
+  max-height: 754px;
+  overflow-y: auto;
 }
