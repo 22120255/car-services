@@ -9,6 +9,7 @@
     "watch": "node-sass --watch src/styles/ --output src/public/css/",
     "seed:users": "cross-env NODE_ENV=development node src/data/seed/user.js",
     "seed:products": "cross-env NODE_ENV=development node src/data/seed/product.js",
+    "seed:accessory": "cross-env NODE_ENV=development node src/data/seed/accessory.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

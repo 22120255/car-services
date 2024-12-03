@@ -10,8 +10,10 @@ const ProductSchema = new mongoose.Schema(
     mileage: { type: Number, required: true },
     model: { type: String, required: true },
     price: { type: Number, required: true },
+    importPrice: { type: Number, required: true },
     transmission: { type: String, required: true },
     style: { type: String, required: true },
+    fuelType: { type: String, enum: ['petrol', 'diesel', 'electric', 'hybrid'], required: true },
     status: {
       type: String,
       enum: ['new', 'used', 'sold'],
