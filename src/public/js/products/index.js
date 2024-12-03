@@ -4,10 +4,7 @@ import { getFilterConfigProduct } from '../config.js';
 document.addEventListener('DOMContentLoaded', function () {
   const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
   // TODO: here
-  const $yearFilter = $('#yearFilter');
-  const $styleFilter = $('#styleFilter');
   const $brandFilter = $('#brandFilter');
-  const $transmissionFilter = $('#transmissionFilter');
   const $statusFilter = $('#statusFilter');
   const $priceFilter = $('#priceFilter');
   const $limit = $('#limit');
@@ -25,10 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
-  renderSelectOptions($yearFilter, years, 'Select year');
-  renderSelectOptions($styleFilter, styles, 'Select style');
   renderSelectOptions($brandFilter, brands, 'Select brand');
-  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
   renderSelectOptions($priceFilter, prices, 'Select price');

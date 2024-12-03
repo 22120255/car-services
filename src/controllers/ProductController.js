@@ -119,7 +119,15 @@ class ProductController {
       const keywords = search.split(' ');
 
       const brandAndModel = keywords.map((key) => ({
-        $or: [{ brand: { $regex: key, $options: 'i' } }, { model: { $regex: key, $options: 'i' } }],
+        $or: [
+          { brand: { $regex: key, $options: 'i' } },
+          { model: { $regex: key, $options: 'i' } },
+          { year: { $regex: key, $options: 'i' } },
+          { style: { $regex: key, $options: 'i' } },
+          { transmission: { $regex: key, $options: 'i' } },
+          { status: { $regex: key, $options: 'i' } },
+          { description: { $regex: key, $options: 'i' } },
+        ],
       }));
 
       const descriptionSearch = keywords.map((key) => ({

@@ -1,4 +1,5 @@
 import { showToast, showModal } from '../../common.js';
+import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
 function showProductModal(title, productID = null, product = null) {
@@ -102,6 +103,38 @@ function handleProductAction(action, productId) {
       showToast('error', 'Cannot load data. Please try again!');
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
+  const $yearFilter = $('#yearFilter');
+  const $styleFilter = $('#styleFilter');
+  const $brandFilter = $('#brandFilter');
+  const $transmissionFilter = $('#transmissionFilter');
+  const $statusFilter = $('#statusFilter');
+  const $priceFilter = $('#priceFilter');
+  const $limit = $('#limit');
+
+  // Render options
+  const renderSelectOptions = (element, options, defaultText) => {
+    if (defaultText !== 'Items per page') {
+      element.empty().append(`<option value="">${defaultText}</option>`);
+    }
+
+    options.forEach((option) => {
+      if (defaultText === 'Select price') {
+        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
+      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
+    });
+  };
+
+  renderSelectOptions($yearFilter, years, 'Select year');
+  renderSelectOptions($styleFilter, styles, 'Select style');
+  renderSelectOptions($brandFilter, brands, 'Select brand');
+  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
+  renderSelectOptions($statusFilter, statuses, 'Select status');
+  renderSelectOptions($limit, perPages, 'Items per page');
+  renderSelectOptions($priceFilter, prices, 'Select price');
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------js for CRUD products-----------------------------------------------
@@ -257,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
   setupFilterHandlers('#brandFilter', 'brand');
   setupFilterHandlers('#limit', 'limit');
 
-  $('#searchInput').on('keyup', async function (event) {
+  $('#searchInput').on('keyup keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const search = $('#searchInput').val();
       offset = 1;
