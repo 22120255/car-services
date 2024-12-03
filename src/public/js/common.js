@@ -26,7 +26,7 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal(title, content, btnSubmit = "OK", callback = () => { }) {
+function showModal(title, content, btnSubmit = 'OK', callback = () => {}) {
   const modal = $('#notify-modal');
 
   // Cập nhật tiêu đề và nội dung của modal

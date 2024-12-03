@@ -20,9 +20,12 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
     $('#product-description').val(product.description);
-    product.images.forEach((image, index) => {
+    product.images.forEach((index, image) => {
       $(`input[name="images.image${index + 1}"]`).val(image);
     });
+    for (let i = 0; i < product.images.length; i++) {
+      $(`input[name="images.${i + 1}"]`).val(product.images[i]);
+    }
   } else {
     // Nếu không có sản phẩm, tức là tạo mới
     $('#product-modal').data('is-editing', false); // Tạo mới
@@ -40,7 +43,7 @@ function showProductModal(title, productID = null, product = null) {
 function showModalDetail(product) {
   $('#modalTitle').text(`Product Detail`);
   $('#mainImage')
-    .attr('src', product.images?.image1 || '/path/to/default-image.jpg')
+    .attr('src', product.images?.image1 || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
   const $thumbnailContainer = $('#thumbnailImages');
@@ -91,6 +94,7 @@ function handleProductAction(action, productId) {
       if (action === 'detail') {
         showModalDetail(data);
       } else if (action === 'edit') {
+        console.log(data);
         showProductModal('Edit car', productId, data);
       }
     })
@@ -110,9 +114,16 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Đăng ký sự kiện click nút Detail và Edit
-  $('#inventoryTable').on('click', '.detail, .edit', function () {
+  $('#inventoryTable').on('click', '.detail', function () {
     const productId = $(this).closest('tr').data('product-id');
-    const action = $(this).hasClass('detail') ? 'detail' : 'edit';
+    const action = 'detail';
+    handleProductAction(action, productId);
+  });
+
+  // Đăng ký sự kiện click nút Edit
+  $('#inventoryTable').on('click', '.edit', function () {
+    const productId = $(this).closest('tr').data('product-id');
+    const action = 'edit';
     handleProductAction(action, productId);
   });
 
@@ -126,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const productId = $(this).closest('tr').data('product-id');
 
     // Hiển thị modal xác nhận xóa
-    showModal('Delete Product', 'Are you sure you want to delete this product?', () => {
+    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
       $.ajax({
         url: `/api/user/inventory/delete-product/${productId}`,
         type: 'DELETE',
