@@ -12,8 +12,6 @@ class ProductController {
   getRelatedProducts = async (req, res, next) => {
     const { id } = req.params;
     const { limit = 4, offset = 1, ...query } = req.query;
-    console.log(`Tìm sản phẩm liên quan với ${id}`);
-    console.log('Query nhận được:', query);
 
     try {
       let products = [];

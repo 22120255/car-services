@@ -36,11 +36,11 @@ class UserService {
     const targetUser = await User.findById(userId);
 
     if (targetUser.role.name === 'sadmin') {
-      throw new Error('Không thể cập nhật vai trò của super admin');
+      throw new Error('Unable to update super admin role');
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin không thể cập nhật vai trò của admin khác');
+      throw new Error('Admin cannot update other admin\'s role');
     }
 
     await User.findByIdAndUpdate(userId, { role });
@@ -50,11 +50,11 @@ class UserService {
     const targetUser = await User.findById(userId);
 
     if (targetUser.role.name === 'sadmin') {
-      throw new Error('Không thể thay đổi trạng thái của super admin');
+      throw new Error('Cannot change super admin status');
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin không thể thay đổi trạng thái của admin khác');
+      throw new Error('Admin cannot change other admin\'s status');
     }
 
     await User.findByIdAndUpdate(userId, { status });
@@ -64,14 +64,14 @@ class UserService {
     const targetUser = await User.findById(userId);
 
     if (targetUser.role.name === 'sadmin') {
-      throw new Error('Không thể xoá tài khoản super admin');
+      throw new Error('Cannot delete super admin account');
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin không thể xoá tài khoản của admin khác');
+      throw new Error('Admin cannot delete another admin\'s account');
     }
 
-    await User.findByIdAndDelete(userId);
+    // await User.findByIdAndDelete(userId);
   }
 
   // Lấy thông tin user
@@ -198,6 +198,20 @@ class UserService {
       return updatedProduct;
     } catch (error) {
       console.error('Error updating product:', error);
+      throw error;
+    }
+  }
+
+  // Xoá sản phẩm
+  async deleteProduct(productId) {
+    try {
+      const result = await Product.delete({ _id: productId });
+      if (result.deletedCount === 0) {
+        throw new Error(`No product found with ID: ${productId}`);
+      }
+      console.log(`Product with ID ${productId} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting product:', error);
       throw error;
     }
   }
