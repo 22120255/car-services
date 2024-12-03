@@ -1,3 +1,11 @@
+import { getFilterConfigProduct } from '../config.js';
+
+// Load filter
+document.addEventListener('DOMContentLoaded', function () {
+  const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
+  // TODO: here
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -150,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const params = Object.fromEntries(urlParams.entries());
     const apiQuery = $.param(params);
     await $.ajax({
-      url: `/products?${apiQuery}`,
+      url: `/api/products?${apiQuery}`,
       type: 'GET',
       headers: {
         'X-Requested-With': 'XMLHttpRequest', // Thêm header Ajax
@@ -189,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     products.forEach((product) => {
       const { _id, images, status, brand, price, year } = product;
-      const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
       $('#product-list').append(`
                 <div class='col-lg-3 col-md-4 col-sm-6'>
                 <div class='card-product__container'>

@@ -1,4 +1,103 @@
-import { showModal, showToast, showProductModal, handleProductAction } from '../../common.js';
+import { showToast, showModal } from '../../common.js';
+
+// show product modal for create or update
+function showProductModal(title, productID = null, product = null) {
+  $('#product-modal .modal-title').text(title);
+
+  // Nếu product tồn tại, tức là đang chỉnh sửa
+  if (product) {
+    $('#product-modal').data('is-editing', true); // Đang chỉnh sửa
+    $('#product-modal').data('product-id', productID); // Lưu ID sản phẩm
+
+    // Điền dữ liệu sản phẩm vào modal
+    $('#product-brand').val(product.brand);
+    $('#product-model').val(product.model);
+    $('#product-year').val(product.year);
+    $('#product-style').val(product.style);
+    $('#product-status').val(product.status);
+    $('#product-price').val(product.price);
+    $('#product-mileage').val(product.mileage);
+    $('#product-horsepower').val(product.horsepower);
+    $('#product-transmission').val(product.transmission);
+    $('#product-description').val(product.description);
+    product.images.forEach((image, index) => {
+      $(`input[name="images.image${index + 1}"]`).val(image);
+    });
+  } else {
+    // Nếu không có sản phẩm, tức là tạo mới
+    $('#product-modal').data('is-editing', false); // Tạo mới
+    $('#product-modal').data('product-id', null); // Xóa ID sản phẩm
+
+    // Reset các trường input
+    $('#product-form')[0].reset();
+  }
+
+  // Hiển thị modal
+  $('#product-modal').modal('show');
+}
+
+// Hàm hiển thị modal chi tiết sản phẩm
+function showModalDetail(product) {
+  $('#modalTitle').text(`Product Detail`);
+  $('#mainImage')
+    .attr('src', product.images?.image1 || '/path/to/default-image.jpg')
+    .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
+
+  const $thumbnailContainer = $('#thumbnailImages');
+  $thumbnailContainer.empty();
+
+  if (product.images && typeof product.images === 'object') {
+    Object.values(product.images).forEach((image) => {
+      const $img = $('<img>')
+        .attr('src', image)
+        .attr('alt', 'thumbnail')
+        .addClass('thumbnail')
+        .on('click', function () {
+          $('#mainImage').attr('src', image);
+        });
+      $thumbnailContainer.append($img);
+    });
+  } else {
+    $thumbnailContainer.append('<p>No images available</p>');
+  }
+
+  $('#productTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
+  $('#productPrice').text(product.price ? `$${product.price}` : 'N/A');
+  $('#productDescription').text(product.description || 'No description available.');
+
+  const $specsContainer = $('#productSpecs');
+  $specsContainer.empty();
+  const specs = [
+    { label: 'Model Year', value: product.year || 'N/A' },
+    { label: 'Mileage', value: product.mileage ? `${product.mileage} mi` : 'N/A' },
+    { label: 'Horsepower', value: product.horsepower ? `${product.horsepower}HP` : 'N/A' },
+    { label: 'Transmission', value: product.transmission || 'N/A' },
+    { label: 'Style', value: product.style || 'N/A' },
+  ];
+  specs.forEach((spec) => {
+    const $specItem = $('<div>').addClass('spec-item').html(`
+          <span class="spec-label">${spec.label}:</span>
+          <span class="spec-value">${spec.value}</span>
+        `);
+    $specsContainer.append($specItem);
+  });
+
+  $('#productDetailModal').modal('show');
+}
+
+function handleProductAction(action, productId) {
+  $.get(`/api/user/inventory/${productId}`)
+    .done(function (data) {
+      if (action === 'detail') {
+        showModalDetail(data);
+      } else if (action === 'edit') {
+        showProductModal('Edit car', productId, data);
+      }
+    })
+    .fail(function () {
+      showToast('error', 'Cannot load data. Please try again!');
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------js for CRUD products-----------------------------------------------
@@ -20,6 +119,37 @@ document.addEventListener('DOMContentLoaded', function () {
   // Đăng ký sự kiện cho nút Save trong modal
   $('#add-car-btn').on('click', function () {
     showProductModal('Add new car');
+  });
+
+  // Đăng ký sự kiện cho nút Delete
+  $('#inventoryTable').on('click', '.delete', function () {
+    const productId = $(this).closest('tr').data('product-id');
+
+    // Hiển thị modal xác nhận xóa
+    showModal('Delete Product', 'Are you sure you want to delete this product?', () => {
+      $.ajax({
+        url: `/api/user/inventory/delete-product/${productId}`,
+        type: 'DELETE',
+        statusCode: {
+          200: function (response) {
+            showToast('success', response.message);
+            refresh();
+          },
+          403: function (xhr) {
+            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+            showToast('error', message);
+          },
+          404: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Product not found!';
+            showToast('error', message);
+          },
+          500: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+            showToast('error', message);
+          },
+        },
+      });
+    });
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
@@ -50,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Xác định URL và phương thức HTTP
     let url = '/api/user/inventory/create-product';
     let method = 'POST';
-
     if (isEditing) {
       url = `/api/user/inventory/update-product/${productId}`;
       method = 'PUT';
@@ -68,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
           $('#product-modal').modal('hide');
           refresh();
         } else {
-          showToast('error', 'Không thể lưu sản phẩm!');
+          showToast('error', 'Unable to save product!');
         }
       },
       error: function (xhr) {
@@ -78,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
           input.addClass('is-invalid');
           input.siblings('.invalid-feedback').text(errors[field]);
         }
-        showToast('error', 'Vui lòng kiểm tra lại thông tin!');
+        showToast('error', 'Please check the information again!');
       },
     });
   });

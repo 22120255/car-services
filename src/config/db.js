@@ -1,19 +1,9 @@
 const mongoose = require('mongoose');
-const { generateMockProducts } = require('../data/mockProducts');
-const Product = require('../models/Product');
 var MongoDBStore = require('connect-mongodb-session');
 
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-
-    // Kiểm tra nếu chưa có products thì tạo mới
-    const products = await Product.find();
-    if (products.length === 0) {
-      const mockProducts = await generateMockProducts(100); // Tạo dữ liệu mock products
-      await Product.insertMany(mockProducts); // Chèn products vào DB
-      console.log('Mock products inserted!');
-    }
 
     console.log('Connected to MongoDB');
   } catch (error) {

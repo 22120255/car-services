@@ -5,50 +5,103 @@ const { years, styles, brands, transmissions, statuses, prices, perPages } = req
 class ProductController {
   index(req, res) {
     res.render('products/index', {
-      title: 'Sản phẩm',
+      title: 'Product',
     });
   }
+  // [GET] /api/products/related/:id/:by
+  getRelatedProducts = async (req, res, next) => {
+    const { id } = req.params;
+    const { limit = 4, offset = 1, ...query } = req.query;
 
-  detail(req, res) {
-    res.render('products/detail', {
-      title: 'Chi tiết sản phẩm',
-    });
-  }
-
-  getDetail = async (req, res, next) => {
     try {
-      const product = await ProductService.getDetail(req.params.id);
-      // Tạm thời hard code delta = 10000
-      const delta = 10000;
-      const sameBrandProducts = await ProductService.getFilteredProducts({
-        brand: product.brand,
-        _id: { $ne: product._id },
-      });
-      const sameYearProducts = await ProductService.getFilteredProducts({
-        year: product.year,
-        _id: { $ne: product._id },
-      });
-      const similarPriceProducts = await ProductService.getFilteredProducts({
-        price: {
-          $gte: product.price - delta,
-          $lte: product.price + delta,
-        },
-        _id: { $ne: product._id },
-      });
+      let products = [];
+      let total = 0;
 
-      res.render('products/detail', {
-        product: mongooseToObject(product),
-        sameBrandProducts: multipleMongooseToObject(sameBrandProducts),
-        sameYearProducts: multipleMongooseToObject(sameYearProducts),
-        similarPriceProducts: multipleMongooseToObject(similarPriceProducts),
-        title: 'Chi tiết sản phẩm',
-      });
+      const limitNumber = parseInt(limit);
+      const offsetNumber = parseInt(offset);
+
+      const baseQuery = { _id: { $ne: id } };
+
+      const [activeTab, fieldData] = Object.entries(query)[0] || [];
+      if (!activeTab || !fieldData) {
+        return res.status(400).json({ message: 'Thiếu hoặc không hợp lệ activeTab và fieldData trong query.' });
+      }
+
+      // Xử lý các trường hợp của activeTab
+      switch (activeTab) {
+        case 'brand':
+          const brandQuery = { ...baseQuery, brand: fieldData };
+          ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
+          break;
+
+        case 'year':
+          const yearQuery = { ...baseQuery, year: fieldData };
+          ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
+          break;
+
+        case 'price':
+          // Tạm thời mặc định 10000
+          const delta = 10000;
+          const currentPrice = parseFloat(fieldData);
+          if (isNaN(currentPrice)) {
+            return res.status(400).json({ message: 'Giá (price) không hợp lệ.' });
+          }
+          const priceQuery = {
+            ...baseQuery,
+            price: {
+              $gte: currentPrice - delta,
+              $lte: currentPrice + delta,
+            },
+          };
+          ({ products, total } = await ProductService.getPaginatedProducts(priceQuery, offsetNumber, limitNumber));
+          break;
+
+        default:
+          return res.status(400).json({ message: `Loại tìm kiếm "${activeTab}" không hợp lệ.` });
+      }
+
+      res.status(200).json({ products, total });
     } catch (error) {
-      console.log(error);
+      console.error('Error fetching related products:', error);
       next(error);
     }
   };
 
+  // [GET] /products/:id
+  getDetail = async (req, res, next) => {
+    try {
+      const product = await ProductService.getDetail(req.params.id);
+      if (!product) return next();
+      res.render('products/detail', {
+        product: mongooseToObject(product),
+        title: 'Product details',
+      });
+    } catch (error) {
+      console.log(error);
+      next();
+    }
+  };
+
+  // [GET] /products
+  products = async (req, res, next) => {
+    try {
+      res.render('products/index', {
+        years,
+        styles,
+        brands,
+        transmissions,
+        statuses,
+        prices,
+        perPages,
+        title: 'Sản phẩm',
+      });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  };
+
+  // [GET] /api/products
   productsAndGetProducts = async (req, res, next) => {
     const page = parseInt(req.query.offset) || 1;
     const limit = parseInt(req.query.limit) || 8;
@@ -104,23 +157,9 @@ class ProductController {
             prices,
             perPages,
           },
-          title: 'Sản phẩm',
+          title: 'Products',
         });
       }
-
-      // Nếu không phải yêu cầu Ajax, trả về HTML
-      res.render('products/index', {
-        products: multipleMongooseToObject(products),
-        years,
-        styles,
-        brands,
-        transmissions,
-        statuses,
-        prices,
-        perPages,
-        title: 'Sản phẩm',
-        total,
-      });
     } catch (error) {
       console.error(error);
       next(error);

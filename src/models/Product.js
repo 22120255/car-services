@@ -1,22 +1,19 @@
 const mongoose = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
 
 const ProductSchema = new mongoose.Schema(
   {
     brand: { type: String, required: true },
     description: { type: String, required: true },
     horsepower: { type: Number, required: true },
-    images: [{
-      image1: { type: String, required: false },
-      image2: { type: String, required: false },
-      image3: { type: String, required: false },
-      image4: { type: String, required: false },
-      image5: { type: String, required: false },
-    }],
+    images: [{ type: String, required: false }],
     mileage: { type: Number, required: true },
     model: { type: String, required: true },
     price: { type: Number, required: true },
+    importPrice: { type: Number, required: true },
     transmission: { type: String, required: true },
     style: { type: String, required: true },
+    fuelType: { type: String, enum: ['petrol', 'diesel', 'electric', 'hybrid'], required: true },
     status: {
       type: String,
       enum: ['new', 'used', 'sold'],
@@ -26,5 +23,24 @@ const ProductSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Add plugin
+ProductSchema.plugin(mongooseDelete, { overrideMethods: 'all' });
+
+// Hook trước khi xóa mềm
+ProductSchema.pre('softDelete', async function (next, options) {
+  if (options.userDelete) {
+    this.set('userDelete', options.userDelete); // Thêm trường dynamic userDelete
+    await this.save();
+  }
+  next();
+});
+
+// Hook trước khi khôi phục
+ProductSchema.pre('restore', async function (next) {
+  this.unset('userDelete'); // Xóa trường dynamic userDelete
+  await this.save();
+  next();
+});
 
 module.exports = mongoose.model('Product', ProductSchema, 'products');
