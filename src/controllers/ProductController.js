@@ -100,12 +100,12 @@ class ProductController {
     const query = {};
     const search = req.query.search;
 
-    // Lọc theo các trường cụ thể
+    // Lọc theo các trường cụ thể với không phân biệt hoa thường
     if (req.query.year) query.year = req.query.year;
-    if (req.query.style) query.style = req.query.style;
-    if (req.query.brand) query.brand = req.query.brand;
-    if (req.query.status) query.status = req.query.status;
-    if (req.query.transmission) query.transmission = req.query.transmission;
+    if (req.query.style) query.style = { $regex: new RegExp(req.query.style, 'i') }; // Không phân biệt hoa thường
+    if (req.query.brand) query.brand = { $regex: new RegExp(req.query.brand, 'i') }; // Không phân biệt hoa thường
+    if (req.query.status) query.status = { $regex: new RegExp(req.query.status, 'i') }; // Không phân biệt hoa thường
+    if (req.query.transmission) query.transmission = { $regex: new RegExp(req.query.transmission, 'i') }; // Không phân biệt hoa thường
 
     // Lọc theo giá
     if (req.query.priceMin || req.query.priceMax) {
@@ -119,7 +119,14 @@ class ProductController {
       const keywords = search.split(' ');
 
       const brandAndModel = keywords.map((key) => ({
-        $or: [{ brand: { $regex: key, $options: 'i' } }, { model: { $regex: key, $options: 'i' } }],
+        $or: [
+          { brand: { $regex: key, $options: 'i' } },
+          { model: { $regex: key, $options: 'i' } },
+          { year: { $regex: key, $options: 'i' } },
+          { style: { $regex: key, $options: 'i' } },
+          { transmission: { $regex: key, $options: 'i' } },
+          { status: { $regex: key, $options: 'i' } },
+        ],
       }));
 
       const descriptionSearch = keywords.map((key) => ({
