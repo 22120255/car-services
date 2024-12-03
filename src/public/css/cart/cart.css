@@ -29,7 +29,7 @@ body {
     justify-content: center;
 }
 
-.btn {
+.btn-handler {
     height: 30px; /* Điều chỉnh chiều cao để khớp */
     width: 30px;  /* Chiều rộng cho nút */
     padding: 0;
