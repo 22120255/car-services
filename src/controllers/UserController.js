@@ -172,6 +172,18 @@ class UserController {
     }
   }
 
+  // [GET] /admin/inventory/trash
+  async trash(req, res) {
+    try {
+      res.render('admin/inventory/trash', {
+        layout: 'admin',
+        title: 'Trash',
+      });
+    } catch (error) {
+      errorLog('UserController', 137, error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
   // [GET] /admin/orders
   async orders(req, res) {
     try {

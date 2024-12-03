@@ -42,12 +42,16 @@ function showProductModal(title, productID = null, product = null) {
 
 // Hàm hiển thị modal chi tiết sản phẩm
 function showModalDetail(product) {
-  $('#modalTitle').text(`Product Detail`);
-  $('#mainImage')
+  // Cập nhật tiêu đề modal
+  $('#detailModalTitle').text('Product Details');
+
+  // Cập nhật hình ảnh chính
+  $('#mainDetailImage')
     .attr('src', product.images?.image1 || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
-  const $thumbnailContainer = $('#thumbnailImages');
+  // Cập nhật các hình ảnh thu nhỏ
+  const $thumbnailContainer = $('#detailThumbnailImages');
   $thumbnailContainer.empty();
 
   if (product.images && typeof product.images === 'object') {
@@ -55,9 +59,9 @@ function showModalDetail(product) {
       const $img = $('<img>')
         .attr('src', image)
         .attr('alt', 'thumbnail')
-        .addClass('thumbnail')
+        .addClass('detail-thumbnail')
         .on('click', function () {
-          $('#mainImage').attr('src', image);
+          $('#mainDetailImage').attr('src', image);
         });
       $thumbnailContainer.append($img);
     });
@@ -65,11 +69,13 @@ function showModalDetail(product) {
     $thumbnailContainer.append('<p>No images available</p>');
   }
 
-  $('#productTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
-  $('#productPrice').text(product.price ? `$${product.price}` : 'N/A');
-  $('#productDescription').text(product.description || 'No description available.');
+  // Cập nhật thông tin sản phẩm
+  $('#detailProductTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
+  $('#detailProductPrice').text(product.price ? `$${product.price}` : 'N/A');
+  $('#detailProductDescription').text(product.description || 'No description available.');
 
-  const $specsContainer = $('#productSpecs');
+  // Cập nhật thông số kỹ thuật
+  const $specsContainer = $('#detailProductSpecs');
   $specsContainer.empty();
   const specs = [
     { label: 'Model Year', value: product.year || 'N/A' },
@@ -78,11 +84,12 @@ function showModalDetail(product) {
     { label: 'Transmission', value: product.transmission || 'N/A' },
     { label: 'Style', value: product.style || 'N/A' },
   ];
+
   specs.forEach((spec) => {
-    const $specItem = $('<div>').addClass('spec-item').html(`
-          <span class="spec-label">${spec.label}:</span>
-          <span class="spec-value">${spec.value}</span>
-        `);
+    const $specItem = $('<div>').addClass('detail-spec-item').html(`
+      <span class="detail-spec-label">${spec.label}:</span>
+      <span class="detail-spec-value">${spec.value}</span>
+    `);
     $specsContainer.append($specItem);
   });
 
@@ -138,6 +145,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------js for CRUD products-----------------------------------------------
+
+  // view-trash-btn
+  $('#view-trash-btn').on('click', function () {
+    window.location.href = '/admin/inventory/trash';
+  });
+
   // loại bỏ thuộc tính aria-hidden khi modal được hiển thị
   $('#productDetailModal').on('show.bs.modal', function () {
     $(this).removeAttr('aria-hidden');
@@ -146,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $(this).attr('aria-hidden', 'true');
   });
 
-  // Đăng ký sự kiện click nút Detail và Edit
+  // Đăng ký sự kiện click nút Detail
   $('#inventoryTable').on('click', '.detail', function () {
     const productId = $(this).closest('tr').data('product-id');
     const action = 'detail';
@@ -156,13 +169,25 @@ document.addEventListener('DOMContentLoaded', function () {
   // Đăng ký sự kiện click nút Edit
   $('#inventoryTable').on('click', '.edit', function () {
     const productId = $(this).closest('tr').data('product-id');
-    const action = 'edit';
-    handleProductAction(action, productId);
+    const modal = $('#product-modal');
+    modal.find('.modal-title').text('Edit Product');
+    modal.find('#save-product-btn').text('Update').removeClass('btn-primary').addClass('btn-warning');
+    modal.find('.modal-header').css('background-color', '#ffc107');
+    modal.data('is-editing', true);
+    handleProductAction('edit', productId);
   });
-
   // Đăng ký sự kiện cho nút Save trong modal
   $('#add-car-btn').on('click', function () {
-    showProductModal('Add new car');
+    const modal = $('#product-modal');
+
+    modal.find('.modal-title').text('Add New Car');
+
+    modal.find('#save-product-btn').text('Save').removeClass('btn-warning').addClass('btn-primary');
+
+    modal.find('.modal-header').css('background-color', '#007bff');
+    modal.data('is-editing', false);
+    modal.find('form')[0].reset();
+    showProductModal('Add New Car');
   });
 
   // Đăng ký sự kiện cho nút Delete
@@ -402,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const { _id, images, status, brand, model, price, year } = product;
       console.log(_id);
       const isSelected = status === 'used' || status === 'new';
-      const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images?.at(0) || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
       $('#inventoryTable').append(`
                 <tr data-product-id="${_id}">
                     <td>
