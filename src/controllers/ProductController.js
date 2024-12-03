@@ -1,6 +1,5 @@
 const ProductService = require('../services/ProductService');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
-const { years, styles, brands, transmissions, statuses, prices, perPages } = require('../data/mockProducts');
 
 class ProductController {
   index(req, res) {
@@ -12,8 +11,6 @@ class ProductController {
   getRelatedProducts = async (req, res, next) => {
     const { id } = req.params;
     const { limit = 4, offset = 1, ...query } = req.query;
-    console.log(`Tìm sản phẩm liên quan với ${id}`);
-    console.log('Query nhận được:', query);
 
     try {
       let products = [];
@@ -88,13 +85,6 @@ class ProductController {
   products = async (req, res, next) => {
     try {
       res.render('products/index', {
-        years,
-        styles,
-        brands,
-        transmissions,
-        statuses,
-        prices,
-        perPages,
         title: 'Sản phẩm',
       });
     } catch (error) {
@@ -150,15 +140,6 @@ class ProductController {
         return res.status(200).json({
           products: multipleMongooseToObject(products),
           total,
-          filters: {
-            years,
-            styles,
-            brands,
-            transmissions,
-            statuses,
-            prices,
-            perPages,
-          },
           title: 'Products',
         });
       }

@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: background-color 0.3s, transform 0.1s; }
+  transition: background-color 0.3s, transform 0.1s; }
 
 .btn:hover {
   transform: translateY(-2px); }
@@ -83,8 +83,13 @@
 
 /* Table */
 .table-responsive {
-  overflow-x: auto;
-  margin-top: 20px; }
+  overflow-y: auto;
+  margin-top: 20px;
+  max-height: 516px; }
+  .table-responsive thead {
+    position: sticky;
+    top: 0;
+    z-index: 999; }
 
 .car-table {
   width: 100%;

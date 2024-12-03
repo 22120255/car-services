@@ -422,3 +422,7 @@
   font-size: 1em;
   color: #1a202c;
   margin-bottom: 20px; }
+
+#relatedProductsContent {
+  max-height: 754px;
+  overflow-y: auto; }

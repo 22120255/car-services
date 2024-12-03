@@ -26,27 +26,21 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal(title, content, onDelete = () => {}) {
+function showModal(title, content, btnSubmit = 'OK', callback = () => {}) {
   const modal = $('#notify-modal');
 
   // Cập nhật tiêu đề và nội dung của modal
   modal.find('.modal-title').text(title);
   modal.find('.modal-body').text(content);
+  modal.find('.btn-submit').text(btnSubmit);
 
+  // Override method click of btn submit
   modal
-    .find('.btn-danger')
-    .off('click')
+    .find('.btn-submit')
+    .off('click') // Gỡ các sự kiện cũ để tránh lặp callback
     .on('click', () => {
-      onDelete(); // Gọi callback khi nhấn Delete
-      modal.modal('hide'); // Đóng modal sau khi thực hiện
-    });
-
-  // Gắn sự kiện cho nút Close (chỉ cần đảm bảo modal đóng)
-  modal
-    .find('.btn-secondary')
-    .off('click')
-    .on('click', () => {
-      modal.modal('hide'); // Đóng modal khi nhấn Close
+      callback();
+      modal.modal('hide');
     });
 
   modal.modal('show').css('background-color', 'rgba(0, 0, 0, 0.4)');

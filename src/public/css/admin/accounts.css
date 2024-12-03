@@ -23,20 +23,26 @@
         margin-bottom: 1rem; }
         .accounts-management .header .filters .row .col {
           padding: 0 0.5rem; }
-  .accounts-management .table {
+  .accounts-management .table-accounts {
+    max-height: 500px;
+    position: relative;
     margin-top: 1rem; }
-    .accounts-management .table th {
-      white-space: nowrap; }
-    .accounts-management .table .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover; }
-    .accounts-management .table .btn-group .btn {
-      padding: 0.25rem 0.5rem; }
-    .accounts-management .table #accountsTable {
-      max-height: 500px;
-      overflow-y: auto; }
+  .accounts-management .table thead {
+    position: sticky;
+    top: 0;
+    z-index: 999; }
+  .accounts-management .table th {
+    white-space: nowrap; }
+  .accounts-management .table .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover; }
+  .accounts-management .table .btn-group .btn {
+    padding: 0.25rem 0.5rem; }
+  .accounts-management .table #accountsTable {
+    max-height: 500px;
+    overflow-y: auto; }
   .accounts-management .form-select,
   .accounts-management .form-control {
     width: 100%; }

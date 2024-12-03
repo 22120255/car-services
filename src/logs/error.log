@@ -1,11 +1,6 @@
-2024-11-30 21:59:41 [ERROR]: File: UserController, line: 80, error: Admin không thể xoá tài khoản của admin khác
-2024-12-02 00:18:46 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 00:30:11 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 00:30:18 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 00:34:48 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 00:47:48 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 01:21:58 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 01:50:45 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
-2024-12-02 02:19:00 [ERROR]: File: UserController, line: 74, error: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Product"
-2024-12-02 02:19:19 [ERROR]: File: UserController, line: 74, error: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Product"
-2024-12-02 02:20:07 [ERROR]: File: UserController, line: 74, error: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "Product"
+2024-12-03 00:13:59 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
+2024-12-03 00:14:04 [ERROR]: File: UserController, line: 80, error: Admin không thể xoá tài khoản của admin khác
+2024-12-03 00:15:58 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
+2024-12-03 00:16:03 [ERROR]: File: UserController, line: 80, error: Không thể xoá tài khoản super admin
+2024-12-03 21:51:21 [ERROR]: File: UserController, line: 48, error: Product not found
+2024-12-03 21:51:21 [ERROR]: File: UserController, line: 48, error: Product not found

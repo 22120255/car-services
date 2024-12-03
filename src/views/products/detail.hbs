@@ -3,49 +3,21 @@
     <div class='wrapper row'>
       <div class='preview col-md-6'>
         <div class='preview-pic tab-content'>
-          <div class='tab-pane active' id='pic-1'>
-            <img src='{{product.images.image1}}' />
-          </div>
-          <div class='tab-pane' id='pic-2'>
-            <img src='{{product.images.image2}}' />
-          </div>
-          <div class='tab-pane' id='pic-3'>
-            <img src='{{product.images.image3}}' />
-          </div>
-          <div class='tab-pane' id='pic-4'>
-            <img src='{{product.images.image4}}' />
-          </div>
-          <div class='tab-pane' id='pic-5'>
-            <img src='{{product.images.image5}}' />
-          </div>
+          {{#each product.images}}
+            <div class='tab-pane' id='pic-{{@index}}'>
+              <img src='{{this}}' alt='car' />
+            </div>
+          {{/each}}
         </div>
 
         <ul class='preview-thumbnail nav nav-tabs'>
-          <li class='nav-item'>
-            <a class='nav-link active' id='pic-1-tab' data-bs-toggle='tab' href='#pic-1'>
-              <img src='{{product.images.image1}}' />
-            </a>
-          </li>
-          <li class='nav-item'>
-            <a class='nav-link' id='pic-2-tab' data-bs-toggle='tab' href='#pic-2'>
-              <img src='{{product.images.image2}}' />
-            </a>
-          </li>
-          <li class='nav-item'>
-            <a class='nav-link' id='pic-3-tab' data-bs-toggle='tab' href='#pic-3'>
-              <img src='{{product.images.image3}}' />
-            </a>
-          </li>
-          <li class='nav-item'>
-            <a class='nav-link' id='pic-4-tab' data-bs-toggle='tab' href='#pic-4'>
-              <img src='{{product.images.image4}}' />
-            </a>
-          </li>
-          <li class='nav-item'>
-            <a class='nav-link' id='pic-5-tab' data-bs-toggle='tab' href='#pic-5'>
-              <img src='{{product.images.image5}}' />
-            </a>
-          </li>
+          {{#each product.images}}
+            <li class='nav-item'>
+              <a class='nav-link active' id='pic-{{@index}}-tab' data-bs-toggle='tab' href='#pic-{{@index}}'>
+                <img src='{{this}}' alt='car' />
+              </a>
+            </li>
+          {{/each}}
         </ul>
 
       </div>

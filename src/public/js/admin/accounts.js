@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $(document).on('click', '.delete-user', function () {
     const userId = $(this).closest('tr').data('user-id');
 
-    showModal('Xoá tài khoản', 'Bạn có chắc chắn muốn xóa tài khoản này không?', () => {
+    showModal('Xoá tài khoản', 'Bạn có chắc chắn muốn xóa tài khoản này không?', "Delete", () => {
       $.ajax({
         url: `/api/user/${userId}`,
         method: 'DELETE',
@@ -244,15 +244,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
-                            ${
-                              !user.isCurrentUser
-                                ? `
+                            ${!user.isCurrentUser
+          ? `
                                 <button type="button" title="Xóa" class="btn btn-danger btn-sm delete-user">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             `
-                                : ''
-                            }
+          : ''
+        }
                         </div>
                     </td>
                 </tr>

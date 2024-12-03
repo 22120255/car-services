@@ -4,6 +4,34 @@ import { getFilterConfigProduct } from '../config.js';
 document.addEventListener('DOMContentLoaded', function () {
   const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
   // TODO: here
+  const $yearFilter = $('#yearFilter');
+  const $styleFilter = $('#styleFilter');
+  const $brandFilter = $('#brandFilter');
+  const $transmissionFilter = $('#transmissionFilter');
+  const $statusFilter = $('#statusFilter');
+  const $priceFilter = $('#priceFilter');
+  const $limit = $('#limit');
+
+  // Render options
+  const renderSelectOptions = (element, options, defaultText) => {
+    if (defaultText !== 'Items per page') {
+      element.empty().append(`<option value="">${defaultText}</option>`);
+    }
+
+    options.forEach((option) => {
+      if (defaultText === 'Select price') {
+        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
+      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
+    });
+  };
+
+  renderSelectOptions($yearFilter, years, 'Select year');
+  renderSelectOptions($styleFilter, styles, 'Select style');
+  renderSelectOptions($brandFilter, brands, 'Select brand');
+  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
+  renderSelectOptions($statusFilter, statuses, 'Select status');
+  renderSelectOptions($limit, perPages, 'Items per page');
+  renderSelectOptions($priceFilter, prices, 'Select price');
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -23,7 +51,12 @@ document.addEventListener('DOMContentLoaded', function () {
   let statusFilter = urlParams.get('status') || null;
   let transmissionFilter = urlParams.get('transmission') || null;
   let searchText = urlParams.get('search') || '';
-  let yearFilter = parseInt(urlParams.get('year')) || null;
+  let yearFilter = parseInt(urlParams.get('year')) || '';
+
+  let priceValue = `${priceMinFilter}-${priceMaxFilter}`;
+  if (priceMinFilter === null && priceMaxFilter === null) {
+    priceValue = '';
+  }
 
   $('#searchInput').val(searchText);
   $('#limit').val(limit);
@@ -32,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#styleFilter').val(styleFilter);
   $('#transmissionFilter').val(transmissionFilter);
   $('#yearFilter').val(yearFilter);
-  $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
+  $('#priceFilter').val(`${priceValue}`);
 
   function syncFiltersFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -55,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#styleFilter').val(styleFilter);
     $('#transmissionFilter').val(transmissionFilter);
     $('#yearFilter').val(yearFilter);
-    $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
+    $('#priceFilter').val(`${priceValue}`);
   }
 
   // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
@@ -197,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     products.forEach((product) => {
       const { _id, images, status, brand, price, year } = product;
-      const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
       $('#product-list').append(`
                 <div class='col-lg-3 col-md-4 col-sm-6'>
                 <div class='card-product__container'>
