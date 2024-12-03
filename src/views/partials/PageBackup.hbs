@@ -1,8 +1,9 @@
 <div class='container text-center py-5 w-100 h-100 d-flex flex-column justify-content-center align-items-center'>
     <i class='fas fa-tools fa-4x mb-4 text-warning'></i>
     <h2 class='mb-3'>Trang đang được phát triển</h2>
-    <p class='lead mb-4'>Chúng tôi đang nỗ lực hoàn thiện trang web này. Vui
-        lòng quay lại sau.</p>
+    <div id="lottie-container" style="width: 300px; height: 300px;"></div>
+     <p class='lead mb-4'>Chúng tôi đang nỗ lực hoàn thiện trang web này. Vui
+        lòng quay lại sau.</p> 
     <div class='mt-4'>
         <a href='/dashboard' class='btn btn-primary'>
             <i class='fas fa-arrow-left me-2'></i>
@@ -10,3 +11,14 @@
         </a>
     </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var animation = lottie.loadAnimation({
+    container: document.getElementById('lottie-container'), 
+    renderer: 'svg', 
+    loop: true,     
+    autoplay: true,  
+    path: '/lottie/no-data.json'
+  });
+  })
+</script>

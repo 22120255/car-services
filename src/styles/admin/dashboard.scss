@@ -1,0 +1,115 @@
+/* General styles */
+body {
+  background-color: #f9fafb;
+}
+
+/* Card styles */
+.card {
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.card .card-body {
+  padding: 1.5rem;
+}
+
+/* Metric cards */
+.metric-card {
+  .metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.b-l-purple {
+  border-left: 4px solid #7c3aed;
+}
+.b-l-warning {
+  border-left: 4px solid #fbbf24;
+}
+.b-l-info {
+  border-left: 4px solid #0ea5e9;
+}
+
+.metric-card .metric-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Background colors */
+.bg-purple {
+  background-color: #7c3aed;
+}
+
+.bg-warning {
+  background-color: #fbbf24;
+}
+
+.bg-info {
+  background-color: #0ea5e9;
+}
+
+/* Feature icons */
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-icon i {
+  font-size: 1.75rem;
+  color: white;
+}
+
+/* Form controls */
+.form-select {
+  border-color: #e5e7eb;
+  padding: 0.5rem 1rem;
+}
+
+.form-select:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.25);
+}
+
+/* Progress bar */
+.progress {
+  background-color: #e5e7eb;
+}
+
+.progress .progress-bar {
+  background-color: #7c3aed;
+}
+
+/* Additional styles */
+.text-purple {
+  color: #7c3aed;
+}
+
+.btn-light {
+  background-color: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.btn-light:hover {
+  background-color: #e5e7eb;
+}
+
+/* Chart responsiveness */
+.revenue-chart-wrapper {
+  .revenue-stats {
+    border-top: 1px solid #ded7d7;
+    border-bottom: 1px solid #ded7d7;
+    .data-stats {
+    }
+  }
+  .btn-open-report {
+    color: #7c3aed;
+  }
+}

@@ -431,3 +431,8 @@
   color: #1a202c;
   margin-bottom: 20px;
 }
+// Custom styles
+#relatedProductsContent {
+  max-height: 754px;
+  overflow-y: auto;
+}
