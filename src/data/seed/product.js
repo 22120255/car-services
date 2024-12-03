@@ -37,6 +37,13 @@ const statuses = [
     { value: 'sold', name: 'Sold' },
 ];
 
+const fuelTypes = [
+    { value: 'petrol', name: 'Petrol' },
+    { value: 'diesel', name: 'Diesel' },
+    { value: 'electric', name: 'Electric' },
+    { value: 'hybrid', name: 'Hybrid' },
+];
+
 const transmissions = [
     { value: 'manual', name: 'Manual' },
     { value: 'automatic', name: 'Automatic' },
@@ -72,7 +79,8 @@ async function generateMockProducts(num = 10) {
         const randomTransmission = chance.pickone(transmissions);
         const randomYear = chance.pickone(years);
         const randomStyle = chance.pickone(styles);
-
+        const randomFuelType = chance.pickone(fuelTypes);
+        const price = chance.integer({ min: 20000, max: 200000 });
         const numImages = chance.integer({ min: 1, max: 5 });
         const productImages = [];
         for (let j = 0; j < numImages; j++) {
@@ -86,9 +94,11 @@ async function generateMockProducts(num = 10) {
             images: productImages,
             mileage: chance.integer({ min: 0, max: 500 }),
             model: chance.word(),
-            price: chance.integer({ min: 20000, max: 200000 }),
+            price: price,
+            importPrice: price * 0.7,
             transmission: randomTransmission.value,
             status: randomStatus.value,
+            fuelType: randomFuelType.value,
             year: randomYear.value,
             style: randomStyle.value,
         });
