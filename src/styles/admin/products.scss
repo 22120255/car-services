@@ -98,8 +98,15 @@
 
 /* Table */
 .table-responsive {
-  overflow-x: auto;
+  overflow-y: auto;
   margin-top: 20px;
+  max-height: 516px;
+
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
 }
 
 .car-table {
