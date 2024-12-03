@@ -33,10 +33,9 @@ function showModal(title, content, onDelete = () => {}) {
   modal.find('.modal-title').text(title);
   modal.find('.modal-body').text(content);
 
-  // Gắn sự kiện cho nút Delete
   modal
     .find('.btn-danger')
-    .off('click') // Gỡ các sự kiện cũ để tránh lặp callback
+    .off('click')
     .on('click', () => {
       onDelete(); // Gọi callback khi nhấn Delete
       modal.modal('hide'); // Đóng modal sau khi thực hiện
