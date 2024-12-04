@@ -72,4 +72,17 @@ async function loadCartData() {
   return cart;
 }
 
-export { showToast, showModal, loadCartData };
+const refreshCart = async () => {
+  const cart = await loadCartData();
+  if (!cart || cart.items?.length === 0) {
+    $('#btn-cart .btn-cart__badge').addClass("d-none");
+    return;
+  };
+  $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await refreshCart();
+});
+
+export { showToast, showModal, loadCartData, refreshCart };

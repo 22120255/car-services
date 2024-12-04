@@ -1,4 +1,5 @@
-import { showModal, showToast } from "../common.js"
+import { showToast, refreshCart } from "../common.js"
+
 
 document.addEventListener('DOMContentLoaded', function () {
   // Lắng nghe sự kiện click vào tab
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
       success: function (response) {
         console.log(response)
         showToast('Success', 'Added to cart')
+        refreshCart();
       },
       error: function (error) {
         console.log(error)

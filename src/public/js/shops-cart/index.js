@@ -1,4 +1,4 @@
-import { loadCartData, showModal } from '../common.js';
+import { loadCartData, showModal, refreshCart } from '../common.js';
 import { createQr } from './payment.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -141,6 +141,7 @@ function removeItemHandler(cart) {
         button.addEventListener('click', async (event) => {
             const productId = event.target.getAttribute('data-id');
             await removeItem(cart, productId);
+            await refreshCart();
         });
     });
 }
@@ -196,7 +197,6 @@ async function removeItem(cart, productId) {
 
         const data = await response.json();
         if (response.ok && data.cart) {
-            console.log('Item removed successfully', data.cart);
             renderCartTable(data.cart);
         } else {
             console.error('Error:', data.message || 'Unexpected response');
