@@ -3,7 +3,7 @@ const Cart = require('../models/Cart');
 const { errorLog } = require('../utils/customLog');
 
 class CartController {
-    getCart(req, res) {
+    cart(req, res) {
         res.render('cart/cart', {
             title: 'Shopping Cart'
         });
