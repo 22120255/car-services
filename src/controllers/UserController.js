@@ -163,8 +163,8 @@ class UserController {
   // [DELETE] /api/inventory/delete-product/:id
   async deleteProduct(req, res) {
     try {
-      console.log(req.params.id);
-      await UserService.deleteProduct(req.params.id);
+      const userId = req.user?._id || req.session?.userId;
+      await UserService.deleteProduct(req.params.id, userId);
       return res.status(200).json({ message: 'Delete product successfully' });
     } catch (error) {
       errorLog('UserController', 74, error.message);
@@ -175,15 +175,34 @@ class UserController {
   // [GET] /admin/inventory/trash
   async trash(req, res) {
     try {
+      const { limit, offset, search, status, brand, model, priceMin, priceMax } = req.query;
+      const products = await UserService.getProducts({ limit, offset, search, status, brand, model, priceMin, priceMax });
       res.render('admin/inventory/trash', {
         layout: 'admin',
         title: 'Trash',
+        products,
       });
     } catch (error) {
       errorLog('UserController', 137, error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
+
+  // [GET] /admin/inventory/trash
+  async trashAndGetProducts(req, res) {
+    const { limit, offset } = req.query;
+    try {
+      const { products, total } = await UserService.trashAndGetProducts({
+        limit: limit || 10,
+        offset: offset || 1,
+      });
+      return res.status(200).json({ products, total });
+    } catch (error) {
+      errorLog('UserController', 137, error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
   // [GET] /admin/orders
   async orders(req, res) {
     try {
