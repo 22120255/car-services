@@ -40,7 +40,7 @@ class UserService {
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin cannot update other admin\'s role');
+      throw new Error("Admin cannot update other admin's role");
     }
 
     await User.findByIdAndUpdate(userId, { role });
@@ -54,7 +54,7 @@ class UserService {
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin cannot change other admin\'s status');
+      throw new Error("Admin cannot change other admin's status");
     }
 
     await User.findByIdAndUpdate(userId, { status });
@@ -68,7 +68,7 @@ class UserService {
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin cannot delete another admin\'s account');
+      throw new Error("Admin cannot delete another admin's account");
     }
 
     // await User.findByIdAndDelete(userId);
@@ -203,15 +203,30 @@ class UserService {
   }
 
   // Xoá sản phẩm
-  async deleteProduct(productId) {
+  async deleteProduct(productId, idUser) {
     try {
-      const result = await Product.delete({ _id: productId });
-      if (result.deletedCount === 0) {
-        throw new Error(`No product found with ID: ${productId}`);
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error(`Product with ID ${productId} not found.`);
       }
-      console.log(`Product with ID ${productId} deleted successfully.`);
+
+      // Sử dụng phương thức delete của mongoose-delete
+      await product.delete(idUser);
+      console.log(`Product with ID ${productId} deleted by user ${idUser}`);
     } catch (error) {
       console.error('Error deleting product:', error);
+      throw error;
+    }
+  }
+  // Lấy danh sách sản phẩm đã xoá
+  async trashAndGetProducts(limit, offset) {
+    try {
+      const products = await Product.findDeleted()
+        .skip(offset * limit - limit)
+        .limit(limit);
+      const total = await Product.countDocuments({ deletedAt: { $ne: null } });
+      return { products, total };
+    } catch (error) {
       throw error;
     }
   }

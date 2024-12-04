@@ -1,55 +1,74 @@
-<div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Trash Products</h2>
-        <a href="/admin/inventory/products" class="btn btn-primary">
-            <i class="fas fa-arrow-left"></i> Return
-        </a>
+<div class="container">
+  <header class="header">
+    <h1 class="title">Trash Products</h1>
+    <a href="/admin/inventory/products" class="btn btn-return">
+      <i class="fas fa-arrow-left"></i> Return
+    </a>
+  </header>
+  
+  <div class="table-container">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th><span>Image</span></th>
+          <th><span>Product Name</span></th>
+          <th><span>Deleted By</span></th>
+          <th><span>Created Date</span></th>
+          <th><span>Deleted Date</span></th>
+          <th><span>Status</span></th>
+          <th><span>Actions</span></th>
+        </tr>
+      </thead>
+      <tbody id="trashTable">
+        {{!-- {{#each products}}
+          <tr>
+            <td>
+              <img src="{{this.image}}" alt="{{this.name}}" class="product-image">
+            </td>
+            <td>{{this.brand}} {{this.model}}</td>
+            <td>{{this.deletedBy}}</td>
+            <td>{{formatDate this.createdAt}}</td>
+            <td>{{formatDate this.deletedAt}}</td>
+            <td>
+              <span class="status-badge {{#if this.status}}status-active{{else}}status-deleted{{/if}}">
+                {{#if this.status}}Active{{else}}Deleted{{/if}}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-delete" data-id="{{this._id}}">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+                <button class="btn btn-restore" data-id="{{this._id}}">
+                  <i class="fas fa-undo"></i> Restore
+                </button>
+              </div>
+            </td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="7" class="empty-message">No products in trash</td>
+          </tr>
+        {{/each}} --}}
+        
+      </tbody>
+      
+    </table>
+    
+  </div>
+  <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
+        <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
+        <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
+            <ul class="pagination" style="margin: 0;">
+                <!--pagination here-->
+            </ul>
+    <!-- Items per page select -->
+        <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
+            <option value="5">5 / trang</option>
+            <option value="10">10 / trang</option>
+            <option value="20">20 / trang</option>
+        </select>
     </div>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Product Name</th>
-                        <th>Deleted By</th>
-                        <th>Created Date</th>
-                        <th>Deleted Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each products}}
-                    <tr>
-                        <td>
-                            <img src="{{this.image}}" alt="{{this.name}}" class="product-image">
-                        </td>
-                        <td>{{this.name}}</td>
-                        <td>{{this.deletedBy}}</td>
-                        <td>{{formatDate this.createdAt}}</td>
-                        <td>{{formatDate this.deletedAt}}</td>
-                        <td>
-                            <span class="badge {{#if this.status}}badge-success{{else}}badge-danger{{/if}}">
-                                {{#if this.status}}Active{{else}}Deleted{{/if}}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-danger btn-sm" data-id="{{this._id}}">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                                <button class="btn btn-success btn-sm" data-id="{{this._id}}">
-                                    <i class="fas fa-undo"></i> Restore
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {{else}}
-                    <tr>
-                        <td colspan="7" class="text-center">No products in trash</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </div>
+</div>
+
+<script type ="module" src="\js\admin\inventory\trash.js"></script>

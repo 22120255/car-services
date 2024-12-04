@@ -25,7 +25,7 @@ const ProductSchema = new mongoose.Schema(
 );
 
 // Add plugin
-ProductSchema.plugin(mongooseDelete, { overrideMethods: 'all' });
+ProductSchema.plugin(mongooseDelete, { deletedBy: true, deletedAt: true, deletedByType: String, overrideMethods: 'all' });
 
 // Hook trước khi xóa mềm
 ProductSchema.pre('softDelete', async function (next, options) {
