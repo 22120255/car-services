@@ -26,12 +26,12 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal(title, content, btnSubmit = 'OK', callback = () => { }) {
+function showModal(title, content, btnSubmit = 'OK', callback = () => { }, onShowCallback = () => { }) {
   const modal = $('#notify-modal');
 
   // Cập nhật tiêu đề và nội dung của modal
   modal.find('.modal-title').text(title);
-  modal.find('.modal-body').text(content);
+  modal.find('.modal-body').html(content);
   modal.find('.btn-submit').text(btnSubmit);
 
   // Override method click of btn submit
@@ -41,6 +41,12 @@ function showModal(title, content, btnSubmit = 'OK', callback = () => { }) {
     .on('click', () => {
       callback();
       modal.modal('hide');
+    });
+
+  modal
+    .off('shown.bs.modal')
+    .on('shown.bs.modal', () => {
+      onShowCallback();
     });
 
   modal.modal('show').css('background-color', 'rgba(0, 0, 0, 0.4)');
@@ -54,7 +60,6 @@ async function loadCartData() {
     statusCode: {
       200: function (data) {
         cart = data;
-        console.log('Cart loaded:', cart);
       },
       404: function () {
         console.log('Cart data not found.');

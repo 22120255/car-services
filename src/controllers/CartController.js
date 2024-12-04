@@ -4,7 +4,9 @@ const { errorLog } = require('../utils/customLog');
 
 class CartController {
     payment(req, res) {
-        res.render('shops-cart/payment');
+        res.render('shops-cart/payment', {
+            layout: false
+        });
     }
     async createQR(req, res) {
         try {

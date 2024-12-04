@@ -1,12 +1,26 @@
-import { loadCartData } from '../common.js';
+import { loadCartData, showModal } from '../common.js';
+import { createQr } from './payment.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     try {
         let cart = await loadCartData();
 
-        if (cart && cart.items) {
+        if (cart && cart.items && cart.items.length > 0) {
             renderCartTable(cart);
-            $('#checkout').attr('href', '/cart/payment/' + cart._id);
+            $('#checkout').on('click', function (event) {
+                $.ajax(`/cart/payment/${cart._id}`, {
+                    method: 'GET',
+                    success: function (data) {
+                        showModal('Payment', data, 'OK', () => { }, () => {
+                            createQr();
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                }
+                )
+            })
         } else {
             console.error('Cart is empty or invalid.');
             $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
@@ -157,7 +171,6 @@ async function updateQuantity(cart, productId, delta) {
 
             const data = await response.json();
             if (response.ok && data.cart) {
-                console.log('Cart updated successfully', data.cart);
                 renderCartTable(data.cart);
             } else {
                 console.error('Error:', data.message || 'Unexpected response');
@@ -192,3 +205,4 @@ async function removeItem(cart, productId) {
         console.error('Error removing item:', error);
     }
 }
+// Handle click checkout 
