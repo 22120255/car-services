@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
-    "beautiful": "prettier --write --single-quote --trailing-comma all \"src/**/*.js\"",
     "dev": "cross-env NODE_ENV=development nodemon src/app.js",
     "start": "cross-env NODE_ENV=production node src/app.js && node src/data/seed/role.js && node src/data/seed/product.js",
     "watch": "node-sass --watch src/styles/ --output src/public/css/",

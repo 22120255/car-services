@@ -26,12 +26,12 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal(title, content, btnSubmit = 'OK', callback = () => {}) {
+function showModal(title, content, btnSubmit = 'OK', callback = () => { }, onShowCallback = () => { }) {
   const modal = $('#notify-modal');
 
   // Cập nhật tiêu đề và nội dung của modal
   modal.find('.modal-title').text(title);
-  modal.find('.modal-body').text(content);
+  modal.find('.modal-body').html(content);
   modal.find('.btn-submit').text(btnSubmit);
 
   // Override method click of btn submit
@@ -43,28 +43,46 @@ function showModal(title, content, btnSubmit = 'OK', callback = () => {}) {
       modal.modal('hide');
     });
 
+  modal
+    .off('shown.bs.modal')
+    .on('shown.bs.modal', () => {
+      onShowCallback();
+    });
+
   modal.modal('show').css('background-color', 'rgba(0, 0, 0, 0.4)');
 }
 
 async function loadCartData() {
   let cart = null;
   await $.ajax({
-      url: '/api/cart/data',
-      type: 'GET',
-      statusCode: {
-          200: function (data) {
-              cart = data;
-              console.log('Cart loaded:', cart);
-          },
-          404: function () {
-              console.log('Cart data not found.');
-          },
-          500: function () {
-              console.log('Server error occurred.');
-          }
+    url: '/api/cart/data',
+    type: 'GET',
+    statusCode: {
+      200: function (data) {
+        cart = data;
+      },
+      404: function () {
+        console.log('Cart data not found.');
+      },
+      500: function () {
+        console.log('Server error occurred.');
       }
+    }
   });
   return cart;
 }
 
-export { showToast, showModal,  loadCartData };
+const refreshCart = async () => {
+  const cart = await loadCartData();
+  if (!cart || cart.items?.length === 0) {
+    $('#btn-cart .btn-cart__badge').addClass("d-none");
+    return;
+  };
+  $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await refreshCart();
+});
+
+export { showToast, showModal, loadCartData, refreshCart };

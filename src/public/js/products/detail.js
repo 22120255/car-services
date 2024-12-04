@@ -1,39 +1,31 @@
-// function changeTab(event, tabId) {
-//     event.preventDefault();
+import { showToast, refreshCart } from "../common.js"
 
-// import { showToast } from '../common';
-
-//     // Xóa lớp 'active' khỏi tất cả các tab và nội dung tab
-//     $('.nav-link').removeClass('active').attr('aria-selected', 'false');
-//     $('.tab-pane').removeClass('show active');
-//     $(`#${tabId}-tab`).addClass('active').attr('aria-selected', 'true');
-//     $(`#${tabId}`).addClass('show active');
-// }
-import { showModal } from "../common.js"
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Lắng nghe sự kiện click vào tab
-    $('.add-to-cart').on('click', function (event) {
-        event.preventDefault()
-        const quantity = 1
-        console.log($(this))
-        $.ajax({
-            url: '/api/cart/add/' + $(this).data('id'),
-            type: 'POST',
-            data: { quantity },
-            success: function (response) {
-                console.log(response)
-                showModal('Success', 'Added to cart', function () {
-                })
-            },
-            error: function (error) {
-                console.log(error)
-                showModal('Error', 'Failed to add to cart', function () {
-                    window.location.reload()
-                })
-            },
-        })
+  // Lắng nghe sự kiện click vào tab
+  $('.add-to-cart').on('click', function (event) {
+    event.preventDefault()
+    const quantity = 1
+    $("#icon-loading").removeClass("d-none");
+
+    $.ajax({
+      url: '/api/cart/add/' + $(this).data('id'),
+      type: 'POST',
+      data: { quantity },
+      success: function (response) {
+        console.log(response)
+        showToast('Success', 'Added to cart')
+        refreshCart();
+      },
+      error: function (error) {
+        console.log(error)
+        showToast('Error', 'Failed to add to cart')
+      },
+      complete: function () {
+        $("#icon-loading").addClass("d-none");
+      }
     })
+  })
 
   const urlParams = new URLSearchParams(window.location.search);
   let products = null;
@@ -44,10 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
   let fieldData = null;
   let activeTab = 'brand'; // Default to 'brand' tab
 
-  let brand = $('#product-brand').val();
-  let year = $('#product-year').val();
-  let price = $('#product-price').val();
-  const id = $('#product-id').val();
+  let brand = product.brand;
+  let year = product.year;
+  let price = product.price;
+  const id = product._id;
   fieldData = brand;
 
   function syncFiltersFromURL() {

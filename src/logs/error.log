@@ -1,0 +1,10 @@
+2024-12-04 18:36:57 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "dashboard" (type string) at path "_id" for model "User"
+2024-12-04 18:37:36 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "dashboard" (type string) at path "_id" for model "User"
+2024-12-04 18:38:53 [ERROR]: File: CartController.js, line: 44, error: error is not defined
+2024-12-04 18:39:22 [ERROR]: File: CartController.js, line: 44, error: error is not defined
+2024-12-04 19:50:32 [ERROR]: File: CartController.js, line: 44, error: Cannot populate path `productId` because it is not in your schema. Set the `strictPopulate` option to false to override.
+2024-12-04 19:50:51 [ERROR]: File: CartController.js, line: 44, error: Schema hasn't been registered for model "products".
+Use mongoose.model(name, schema)
+2024-12-04 19:53:24 [ERROR]: File: CartController.js, line: 44, error: Schema hasn't been registered for model "products".
+Use mongoose.model(name, schema)
+2024-12-04 21:03:28 [ERROR]: File: CartController.js, line: 54, error: Cannot read properties of undefined (reading 'toString')
