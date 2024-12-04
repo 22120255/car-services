@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-const cartController = require('../../controllers/CartController');
+const paymentController = require('../../controllers/PaymentController')
 const { isAuthenticated } = require('../../middleware/authMiddleware')
 
-router.get('/', isAuthenticated, cartController.cart)
+router.get('/createQR', isAuthenticated, paymentController.createQR);
 
 module.exports = router

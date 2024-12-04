@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (defaultText !== 'Items per page') {
       element.empty().append(`<option value="">${defaultText}</option>`);
     }
-
     options.forEach((option) => {
       if (defaultText === 'Select price') {
         element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
