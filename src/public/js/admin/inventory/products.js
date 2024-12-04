@@ -1,7 +1,156 @@
-import { showModal, showToast, showProductModal, handleProductAction } from '../../common.js';
+import { showToast, showModal } from '../../common.js';
+import { getFilterConfigProduct } from '../../config.js';
+
+// show product modal for create or update
+function showProductModal(title, productID = null, product = null) {
+  $('#product-modal .modal-title').text(title);
+
+  // Nếu product tồn tại, tức là đang chỉnh sửa
+  if (product) {
+    $('#product-modal').data('is-editing', true); // Đang chỉnh sửa
+    $('#product-modal').data('product-id', productID); // Lưu ID sản phẩm
+
+    // Điền dữ liệu sản phẩm vào modal
+    $('#product-brand').val(product.brand);
+    $('#product-model').val(product.model);
+    $('#product-year').val(product.year);
+    $('#product-style').val(product.style);
+    $('#product-status').val(product.status);
+    $('#product-price').val(product.price);
+    $('#product-mileage').val(product.mileage);
+    $('#product-horsepower').val(product.horsepower);
+    $('#product-transmission').val(product.transmission);
+    $('#product-description').val(product.description);
+    product.images.forEach((index, image) => {
+      $(`input[name="images.image${index + 1}"]`).val(image);
+    });
+    for (let i = 0; i < product.images.length; i++) {
+      $(`input[name="images.${i + 1}"]`).val(product.images[i]);
+    }
+  } else {
+    // Nếu không có sản phẩm, tức là tạo mới
+    $('#product-modal').data('is-editing', false); // Tạo mới
+    $('#product-modal').data('product-id', null); // Xóa ID sản phẩm
+
+    // Reset các trường input
+    $('#product-form')[0].reset();
+  }
+
+  // Hiển thị modal
+  $('#product-modal').modal('show');
+}
+
+// Hàm hiển thị modal chi tiết sản phẩm
+function showModalDetail(product) {
+  // Cập nhật tiêu đề modal
+  $('#detailModalTitle').text('Product Details');
+
+  // Cập nhật hình ảnh chính
+  $('#mainDetailImage')
+    .attr('src', product.images?.image1 || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
+    .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
+
+  // Cập nhật các hình ảnh thu nhỏ
+  const $thumbnailContainer = $('#detailThumbnailImages');
+  $thumbnailContainer.empty();
+
+  if (product.images && typeof product.images === 'object') {
+    Object.values(product.images).forEach((image) => {
+      const $img = $('<img>')
+        .attr('src', image)
+        .attr('alt', 'thumbnail')
+        .addClass('detail-thumbnail')
+        .on('click', function () {
+          $('#mainDetailImage').attr('src', image);
+        });
+      $thumbnailContainer.append($img);
+    });
+  } else {
+    $thumbnailContainer.append('<p>No images available</p>');
+  }
+
+  // Cập nhật thông tin sản phẩm
+  $('#detailProductTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
+  $('#detailProductPrice').text(product.price ? `$${product.price}` : 'N/A');
+  $('#detailProductDescription').text(product.description || 'No description available.');
+
+  // Cập nhật thông số kỹ thuật
+  const $specsContainer = $('#detailProductSpecs');
+  $specsContainer.empty();
+  const specs = [
+    { label: 'Model Year', value: product.year || 'N/A' },
+    { label: 'Mileage', value: product.mileage ? `${product.mileage} mi` : 'N/A' },
+    { label: 'Horsepower', value: product.horsepower ? `${product.horsepower}HP` : 'N/A' },
+    { label: 'Transmission', value: product.transmission || 'N/A' },
+    { label: 'Style', value: product.style || 'N/A' },
+  ];
+
+  specs.forEach((spec) => {
+    const $specItem = $('<div>').addClass('detail-spec-item').html(`
+      <span class="detail-spec-label">${spec.label}:</span>
+      <span class="detail-spec-value">${spec.value}</span>
+    `);
+    $specsContainer.append($specItem);
+  });
+
+  $('#productDetailModal').modal('show');
+}
+
+function handleProductAction(action, productId) {
+  $.get(`/api/user/inventory/${productId}`)
+    .done(function (data) {
+      if (action === 'detail') {
+        showModalDetail(data);
+      } else if (action === 'edit') {
+        console.log(data);
+        showProductModal('Edit car', productId, data);
+      }
+    })
+    .fail(function () {
+      showToast('error', 'Cannot load data. Please try again!');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
+  const $yearFilter = $('#yearFilter');
+  const $styleFilter = $('#styleFilter');
+  const $brandFilter = $('#brandFilter');
+  const $transmissionFilter = $('#transmissionFilter');
+  const $statusFilter = $('#statusFilter');
+  const $priceFilter = $('#priceFilter');
+  const $limit = $('#limit');
+
+  // Render options
+  const renderSelectOptions = (element, options, defaultText) => {
+    if (defaultText !== 'Items per page') {
+      element.empty().append(`<option value="">${defaultText}</option>`);
+    }
+
+    options.forEach((option) => {
+      if (defaultText === 'Select price') {
+        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
+      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
+    });
+  };
+
+  renderSelectOptions($yearFilter, years, 'Select year');
+  renderSelectOptions($styleFilter, styles, 'Select style');
+  renderSelectOptions($brandFilter, brands, 'Select brand');
+  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
+  renderSelectOptions($statusFilter, statuses, 'Select status');
+  renderSelectOptions($limit, perPages, 'Items per page');
+  renderSelectOptions($priceFilter, prices, 'Select price');
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------js for CRUD products-----------------------------------------------
+
+  // view-trash-btn
+  $('#view-trash-btn').on('click', function () {
+    window.location.href = '/admin/inventory/trash';
+  });
+
   // loại bỏ thuộc tính aria-hidden khi modal được hiển thị
   $('#productDetailModal').on('show.bs.modal', function () {
     $(this).removeAttr('aria-hidden');
@@ -10,16 +159,66 @@ document.addEventListener('DOMContentLoaded', function () {
     $(this).attr('aria-hidden', 'true');
   });
 
-  // Đăng ký sự kiện click nút Detail và Edit
-  $('#inventoryTable').on('click', '.detail, .edit', function () {
+  // Đăng ký sự kiện click nút Detail
+  $('#inventoryTable').on('click', '.detail', function () {
     const productId = $(this).closest('tr').data('product-id');
-    const action = $(this).hasClass('detail') ? 'detail' : 'edit';
+    const action = 'detail';
     handleProductAction(action, productId);
   });
 
+  // Đăng ký sự kiện click nút Edit
+  $('#inventoryTable').on('click', '.edit', function () {
+    const productId = $(this).closest('tr').data('product-id');
+    const modal = $('#product-modal');
+    modal.find('.modal-title').text('Edit Product');
+    modal.find('#save-product-btn').text('Update').removeClass('btn-primary').addClass('btn-warning');
+    modal.find('.modal-header').css('background-color', '#ffc107');
+    modal.data('is-editing', true);
+    handleProductAction('edit', productId);
+  });
   // Đăng ký sự kiện cho nút Save trong modal
   $('#add-car-btn').on('click', function () {
-    showProductModal('Add new car');
+    const modal = $('#product-modal');
+
+    modal.find('.modal-title').text('Add New Car');
+
+    modal.find('#save-product-btn').text('Save').removeClass('btn-warning').addClass('btn-primary');
+
+    modal.find('.modal-header').css('background-color', '#007bff');
+    modal.data('is-editing', false);
+    modal.find('form')[0].reset();
+    showProductModal('Add New Car');
+  });
+
+  // Đăng ký sự kiện cho nút Delete
+  $('#inventoryTable').on('click', '.delete', function () {
+    const productId = $(this).closest('tr').data('product-id');
+
+    // Hiển thị modal xác nhận xóa
+    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
+      $.ajax({
+        url: `/api/user/inventory/delete-product/${productId}`,
+        type: 'DELETE',
+        statusCode: {
+          200: function (response) {
+            showToast('success', response.message);
+            refresh();
+          },
+          403: function (xhr) {
+            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+            showToast('error', message);
+          },
+          404: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Product not found!';
+            showToast('error', message);
+          },
+          500: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+            showToast('error', message);
+          },
+        },
+      });
+    });
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
@@ -67,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
           $('#product-modal').modal('hide');
           refresh();
         } else {
-          showToast('error', 'Không thể lưu sản phẩm!');
+          showToast('error', 'Unable to save product!');
         }
       },
       error: function (xhr) {
@@ -77,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
           input.addClass('is-invalid');
           input.siblings('.invalid-feedback').text(errors[field]);
         }
-        showToast('error', 'Vui lòng kiểm tra lại thông tin!');
+        showToast('error', 'Please check the information again!');
       },
     });
   });
@@ -116,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
   setupFilterHandlers('#brandFilter', 'brand');
   setupFilterHandlers('#limit', 'limit');
 
-  $('#searchInput').on('keyup', async function (event) {
+  $('#searchInput').on('keyup keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const search = $('#searchInput').val();
       offset = 1;
@@ -228,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const { _id, images, status, brand, model, price, year } = product;
       console.log(_id);
       const isSelected = status === 'used' || status === 'new';
-      const imageSrc = images?.image1 || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images?.at(0) || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
       $('#inventoryTable').append(`
                 <tr data-product-id="${_id}">
                     <td>

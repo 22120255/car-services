@@ -3,9 +3,9 @@ const Cart = require('../models/Cart');
 const { errorLog } = require('../utils/customLog');
 
 class CartController {
-    cart(req, res) {
+    getCart(req, res) {
         res.render('cart/cart', {
-            title: 'Giỏ hàng'
+            title: 'Shopping Cart'
         });
     }
 

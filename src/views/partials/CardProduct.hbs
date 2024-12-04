@@ -1,7 +1,7 @@
 <div class='card-product__container'>
     <div class='card-product__header'>
         <a href='/products/{{_id}}'>
-            <img src='{{images.image1}}' alt='car' />
+            <img src='{{images[0]}}' alt='car' />
             {{#if (eq status 'new')}}<div class='new-arrival-badge'>New Arrival</div>
             {{else}}
             {{/if}}

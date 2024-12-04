@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = $(this).val();
         if (email) {
             if (!isEmailValid(email)) {
-                $('#email-availability-message').text("Email không hợp lệ").css("color", "red");
+                $('#email-availability-message').text("Invalid email").css("color", "red");
                 $('#login-btn').prop('disabled', true);
                 return;
             }
@@ -26,19 +26,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
 
                         if (resp.isAvailable) {
-                            $('#email-availability-message').text("Email khả dụng").css("color", "green");
+                            $('#email-availability-message').text("Email available").css("color", "green");
                         } else {
-                            $('#email-availability-message').text("Email đã được sử dụng").css("color", "red");
+                            $('#email-availability-message').text("Email already in use").css("color", "red");
                         }
                         $('#login-btn').prop('disabled', !resp.isAvailable);
 
                     } catch (error) {
-                        $('#email-availability-message').text("Có lỗi khi kiểm tra email");
+                        $('#email-availability-message').text("There was an error checking email.");
                     }
                 }, 500);
 
             } catch (error) {
-                $('#email-availability-message').text("Có lỗi khi kiểm tra email");
+                $('#email-availability-message').text("There was an error checking email.");
             }
         }
     });
@@ -53,17 +53,17 @@ document.addEventListener('DOMContentLoaded', function () {
         messageEle.text('');
 
         if (!email || !password || !confirmPassword || !fullName) {
-            messageEle.text("Vui lòng điền đầy đủ thông tin");
+            messageEle.text("Please fill in all information");
             return;
         }
 
         if (!isStrongPassword(password)) {
-            messageEle.text("Mật khẩu phải có ít nhất 8 ký tự, một chữ in hoa, một chữ in thường. một kí tự đặc biệt và một số");
+            messageEle.text("Password must be at least 8 characters, one uppercase letter, one lowercase letter. one special character and one number.");
             return;
         }
 
         if (password !== confirmPassword) {
-            messageEle.text("Mật khẩu nhập lại không khớp");
+            messageEle.text("Re-entered password does not match");
             return;
         }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     200() {
-                        showModal("Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công, vui lòng kiểm tra hộp thư để kích hoạt tài khoản!",
+                        showModal("Registration successful", "Your account has been created successfully, please check your inbox to activate your account!",
                             function () {
                                 window.location.href = "/auth/login";
                             }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     400(resp) {
                         console.log(resp.responseJSON);
-                        messageEle.text("Đăng ký không thành công, vui lòng thử lại.");
+                        messageEle.text("Registration failed, please try again.");
                     }
                 }
             });
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = error.responseJSON || {};
             console.error(error);
-            alert(result.error || "Đăng ký không thành công, vui lòng thử lại.");
+            alert(result.error || "Registration failed, please try again.");
         } finally {
             $("#icon-loading").addClass("d-none");
         }

@@ -1,0 +1,139 @@
+.container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-top: 40px;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #2c3e50;
+  font-weight: 600;
+  margin: 0;
+}
+
+.return-btn {
+  transition: all 0.3s ease;
+}
+
+.return-btn:hover {
+  transform: translateX(-5px);
+}
+
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead {
+  background-color: #f1f3f5;
+}
+
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+  color: #495057;
+  font-weight: 600;
+  padding: 15px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  padding: 15px;
+}
+
+.product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.1);
+}
+
+.badge {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.btn-group {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+  border-color: #c0392b;
+}
+
+.btn-success {
+  background-color: #2ecc71;
+  border-color: #2ecc71;
+}
+
+.btn-success:hover {
+  background-color: #27ae60;
+  border-color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .table td,
+  .table th {
+    padding: 10px;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .btn-sm {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}

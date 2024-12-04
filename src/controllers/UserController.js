@@ -14,11 +14,11 @@ class UserController {
     try {
       res.render('admin/accounts', {
         layout: 'admin',
-        title: 'Quản lý tài khoản',
+        title: 'Account Management',
       });
     } catch (error) {
       errorLog('UserController', 20, error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' });
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
 
@@ -38,7 +38,7 @@ class UserController {
       return res.status(200).json({ data: users, total });
     } catch (error) {
       errorLog('AdminController', 24, error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' });
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
 
@@ -47,7 +47,7 @@ class UserController {
     try {
       const { userId, role } = req.body;
       await UserService.updateUserRole(userId, role, req.user);
-      return res.status(200).json({ message: 'Cập nhật vai trò thành công' });
+      return res.status(200).json({ message: 'Role update successful!' });
     } catch (error) {
       errorLog('AdminController', 36, error.message);
       return res.status(403).json({ error: error.message });
@@ -59,7 +59,7 @@ class UserController {
     try {
       const { userId, status } = req.body;
       await UserService.updateUserStatus(userId, status, req.user);
-      return res.status(200).json({ message: 'Cập nhật trạng thái thành công' });
+      return res.status(200).json({ message: 'Status update successful!' });
     } catch (error) {
       errorLog('UserController', 69, error.message);
       return res.status(403).json({ error: error.message });
@@ -70,7 +70,7 @@ class UserController {
   async deleteUser(req, res) {
     try {
       await UserService.deleteUser(req.params.id, req.user);
-      res.status(200).json({ message: 'Xóa tài khoản thành công' });
+      res.status(200).json({ message: 'Account deleted successfully!' });
     } catch (error) {
       errorLog('UserController', 80, error.message);
       return res.status(403).json({ error: error.message });
@@ -82,11 +82,11 @@ class UserController {
     try {
       res.render('admin/inventory/products', {
         layout: 'admin',
-        title: 'Quản lý sản phẩm',
+        title: 'Product Management',
       });
     } catch (error) {
       logger.error(error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' });
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
 
@@ -107,7 +107,7 @@ class UserController {
       return res.status(200).json({ products, total });
     } catch (error) {
       errorLog('UserController', 137, error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau' });
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
 
@@ -160,16 +160,40 @@ class UserController {
     }
   }
 
+  // [DELETE] /api/inventory/delete-product/:id
+  async deleteProduct(req, res) {
+    try {
+      console.log(req.params.id);
+      await UserService.deleteProduct(req.params.id);
+      return res.status(200).json({ message: 'Delete product successfully' });
+    } catch (error) {
+      errorLog('UserController', 74, error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
+  // [GET] /admin/inventory/trash
+  async trash(req, res) {
+    try {
+      res.render('admin/inventory/trash', {
+        layout: 'admin',
+        title: 'Trash',
+      });
+    } catch (error) {
+      errorLog('UserController', 137, error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
   // [GET] /admin/orders
   async orders(req, res) {
     try {
       res.render('admin/orders', {
         layout: 'admin',
-        title: 'Quản lý đơn hàng',
+        title: 'Order Management',
       });
     } catch (error) {
       errorLog('UserController', 137, error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' });
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
 
@@ -178,11 +202,11 @@ class UserController {
     try {
       res.render('admin/reports', {
         layout: 'admin',
-        title: 'Báo cáo thống kê',
+        title: 'Statistical report',
       });
     } catch (error) {
       errorLog('UserController', 150, error.message);
-      res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' });
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
 
@@ -249,7 +273,7 @@ class UserController {
     const user = await User.findById(userId);
     res.render('user/profile', {
       _user: user,
-      title: 'Thông tin cá nhân',
+      title: 'Personal information',
     });
   }
 }
