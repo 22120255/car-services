@@ -193,7 +193,7 @@ class UserController {
     const { limit, offset } = req.query;
     try {
       const { products, total } = await UserService.trashAndGetProducts({
-        limit: limit || 10,
+        limit: limit || 8,
         offset: offset || 1,
       });
       return res.status(200).json({ products, total });
