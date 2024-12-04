@@ -2,9 +2,8 @@
 const AuthService = require('../services/AuthService');
 const passport = require('passport');
 const User = require('../models/User');
-const redisClient = require('../config/redis');
-const { errorLog } = require('../utils/customLog');
 const { clearCache } = require('../utils/helperCache');
+
 class AuthController {
   //[GET] /login
   login(req, res) {
