@@ -14,7 +14,7 @@ class CartController {
             const cart = await Cart.findOne({ userId });
 
             if (!cart) {
-                errorLog('CartController.js', 11, 'Cart not found');
+                errorLog('CartController.js', "createQR", 'Cart not found');
                 return res.status(400).json({ message: 'Cart not found.' });
             }
 
@@ -28,7 +28,7 @@ class CartController {
             return res.status(200).json({ QR });
         }
         catch (error) {
-            errorLog('CartController.js', 11, error.message);
+            errorLog('CartController.js', "createQR", error.message);
             return res.status(500).json({ message: 'Server error occurred.' });
         }
     }
@@ -44,13 +44,13 @@ class CartController {
             // console.log(userId);
             const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
             if (!cart) {
-                errorLog("CartController.js", 44, error.message);
+                errorLog("CartController.js", "getCartData", error.message);
                 return res.status(404).json({ message: 'Cart not found' });
             }
             // console.log(cart);
             return res.status(200).json(cart);
         } catch (error) {
-            errorLog("CartController.js", 44, error.message);
+            errorLog("CartController.js", "getCartData", error.message);
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
@@ -91,7 +91,7 @@ class CartController {
             res.redirect('back')
         }
         catch (error) {
-            errorLog("CartController.js", 63, error.message);
+            errorLog("CartController.js", "addToCart", error.message);
             res.status(500).json({ message: 'Internal server error' });
         }
     }
@@ -132,7 +132,7 @@ class CartController {
             await cart.save();
             return res.status(200).json({ message: 'Cart updated successfully', cart });
         } catch (error) {
-            errorLog("CartController.js", 54, error.message);
+            errorLog("CartController.js", "updateQuantity", error.message);
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
@@ -164,7 +164,7 @@ class CartController {
             return res.status(200).json({ message: 'Item removed from cart successfully', cart });
         }
         catch (error) {
-            errorLog('cartController.js', 63, error.message);
+            errorLog('cartController.js', "removeItemFromCart", error.message);
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
@@ -177,7 +177,7 @@ class CartController {
             const cart = await Cart.findOne({ _id: cartId });
 
             if (!cart) {
-                errorLog("CartController.js", 77, error.message);
+                errorLog("CartController.js", "updatePaymentStatus", error.message);
                 return res.status(404).json({ message: 'Cart not found' });
             }
 
@@ -186,7 +186,7 @@ class CartController {
             return res.status(200).json({ message: 'Update cart payment status successful' });
         }
         catch (error) {
-            errorLog("CartController.js", 77, error.message);
+            errorLog("CartController.js", "updatePaymentStatus", error.message);
             return res.status(500).json({ message: 'Internal server error' });
         }
     }

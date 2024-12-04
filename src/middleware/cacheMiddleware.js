@@ -20,7 +20,7 @@ async function cacheMiddleware(req, res, next) {
             next();
         }
     } catch (err) {
-        errorLog("cacheMiddleware", 23, err);
+        errorLog("cacheMiddleware", "cacheMiddleware", err);
         next();
     }
 }
