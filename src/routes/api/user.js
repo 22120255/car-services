@@ -22,4 +22,6 @@ router.put('/inventory/update-product/:id', isAuthenticated, checkRole(['admin',
 router.delete('/inventory/delete-product/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.deleteProduct);
 router.get('/inventory', isAuthenticated, checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
 
+// trash
+router.get('/trash', isAuthenticated, checkRole(['admin', 'sadmin']), userController.trashAndGetProducts);
 module.exports = router;
