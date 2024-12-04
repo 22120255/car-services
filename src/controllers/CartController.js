@@ -146,12 +146,12 @@ class CartController {
                 return res.status(400).json({ message: 'Invalid request data: cartId or productId missing' });
             }
 
-            const cart = await Cart.findOne({ _id: cartId });
+            const cart = await Cart.findOne({ _id: cartId }).populate('items.productId');
             if (!cart) {
                 return res.status(404).json({ message: 'Cart not found' });
             }
 
-            const removedItemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
+            const removedItemIndex = cart.items.findIndex(item => item.productId._id.toString() === productId);
             if (removedItemIndex === -1) {
                 return res.status(404).json({ message: 'Product not found in cart' });
             }
