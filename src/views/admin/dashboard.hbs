@@ -1,1 +1,205 @@
-{{> PageBackup}}
+<div class='container-fluid py-4 px-3'>
+  <!-- Header -->
+  <div class='d-flex justify-content-between align-items-center mb-4'>
+    <div>
+      <h1 class='h3 mb-1'>Dashboard</h1>
+      <p class='text-muted'>Sales overview & summary</p>
+    </div>
+    <div class='d-flex gap-3'>
+      <select class='form-select' style='width: 200px;'>
+        <option>Order type</option>
+      </select>
+      <select class='form-select' style='width: 200px;'>
+        <option>Last year</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Metrics Cards -->
+  <div class='row g-3 mb-4'>
+    <div class='col-md-3'>
+      <div class='card metric-card b-l-purple'>
+        <div class='card-body'>
+          <div class='d-flex justify-content-between align-items-start'>
+            <div>
+              <h3 class='h2 mb-2'>101.1K</h3>
+              <p class='text-muted mb-0'>Downloads</p>
+              <small class='text-success'>
+                <i class="fa-solid fa-arrow-up"></i>
+                3% from last month
+              </small>
+            </div>
+            <div class='metric-icon bg-purple'>
+             <i class="fa-solid fa-download"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-3'>
+      <div class='card metric-card b-l-warning'>
+        <div class='card-body'>
+          <div class='d-flex justify-content-between align-items-start'>
+            <div>
+              <h3 class='h2 mb-2'>12.2K</h3>
+              <p class='text-muted mb-0'>Purchases</p>
+              <small class='text-success'>
+                <i class="fa-solid fa-arrow-up"></i>
+                3% from last month
+              </small>
+            </div>
+            <div class='metric-icon bg-warning'>
+            <i class="fa-solid fa-shop"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-3'>
+      <div class='card metric-card b-l-purple'>
+        <div class='card-body'>
+          <div class='d-flex justify-content-between align-items-start'>
+            <div>
+              <h3 class='h2 mb-2'>5.3K</h3>
+              <p class='text-muted mb-0'>Customers</p>
+              <small class='text-success'>
+                <i class="fa-solid fa-arrow-up"></i>
+                3% from last month
+              </small>
+            </div>
+            <div class='metric-icon bg-purple'>
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-3'>
+      <div class='card metric-card b-l-info'>
+        <div class='card-body'>
+          <div class='d-flex justify-content-between align-items-start'>
+            <div>
+              <h3 class='h2 mb-2'>7</h3>
+              <p class='text-muted mb-0'>Channels</p>
+              <small class='text-success'>
+                <i class="fa-solid fa-arrow-up"></i>
+                3% from last month
+              </small>
+            </div>
+            <div class='metric-icon bg-info'>
+              <i class="fa-solid fa-diagram-successor"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class='row g-4 mb-4'>
+    <div class='col-md-8'>
+      <div class='card revenue-chart-wrapper h-100'>
+        <div class='card-body p-0'>
+          <div class='d-flex justify-content-between align-items-center p-4'>
+            <div>
+              <h5 class='card-title mb-1'>Revenue Breakdown</h5>
+              <p class='text-muted small mb-0'>Compared to previous year</p>
+            </div>
+            <div class='d-flex gap-2'>
+              <button class='btn btn-light btn-sm'>
+                <i class="fa-solid fa-download"></i>
+              </button>
+              <button class='btn btn-light btn-sm'>
+                <i class="fa-solid fa-print"></i>
+              </button>
+            </div>
+          </div>
+         <div class="d-flex revenue-stats p-4 gap-4">
+              <div class='data-stats mb-4'>
+                <div class='mb-3'>
+                  <p class='mb-1 small'>Actual Revenue</p>
+                  <h4>$59,482</h4>
+                </div>
+                <div class='mb-3'>
+                  <p class='mb-1 small'>Revenue Target</p>
+                  <h4>$50,000</h4>
+                </div>
+                <div>
+                  <p class='mb-1 small'>Goal</p>
+                  <h4>119%</h4>
+                </div>
+              </div>
+              <div id='revenue-chart' class="flex-1"></div>
+         </div>
+         <div class="d-flex justify-content-end p-4">
+            <button type="button" class="btn-open-report">
+                OPEN REPORT
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
+         </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-4'>
+      <div class='card revenue-chart-wrapper h-100'>
+        <div class='card-body p-0 d-flex flex-column'>
+          <div class='d-flex justify-content-between align-items-center  p-4'>
+            <div>
+              <h5 class='card-title mb-1'>Segments</h5>
+              <p class='text-muted small mb-0'>Revenue sources</p>
+            </div>
+            <button class='btn btn-light btn-sm'>
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+          </div>
+          <div id='segments-chart' class="revenue-stats flex-1 d-flex justify-content-center align-items-center"></div>
+           <div class="d-flex justify-content-end p-4">
+            <button type="button" class="btn-open-report">
+                OPEN REPORT
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Cards -->
+  <div class='row g-4'>
+    <div class='col-md-6'>
+      <div class='card'>
+        <div class='card-body'>
+          <div class='d-flex align-items-center gap-4'>
+            <div class='feature-icon bg-purple'>
+              <i class="fa-solid fa-shield"></i>
+            </div>
+            <div>
+              <h5 class='card-title'>Privacy Suggestions</h5>
+              <p class='card-text text-muted mb-0'>Take our privacy checkup to choose which settings are right for you.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='col-md-6'>
+      <div class='card'>
+        <div class='card-body'>
+          <div class='d-flex align-items-center gap-4'>
+            <div class='feature-icon bg-purple'>
+              <i class="fa-solid fa-cloud"></i>
+            </div>
+            <div>
+              <h5 class='card-title'>Account Storage</h5>
+              <p class='card-text text-muted mb-0'>Your account storage is shared across all devices.</p>
+              <div class='progress mt-2' style='height: 6px;'>
+                <div class='progress-bar bg-purple' style='width: 33%'></div>
+              </div>
+              <small class='text-muted'>10 GB of 30 GB used</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src='/js/admin/dashboard.js'></script>

@@ -1,33 +1,32 @@
 @import '../variables.scss';
 
 .admin-layout {
-    .content-admin {
-        margin-top: $height-header;
-    }
-    aside {
-        width: $sidebar-width;
-        position: fixed;
-        top: $height-header;
-        left: 0;
-        bottom: 0;
-    }
-    main {
-        margin-left: $sidebar-width;
-    }
+  .content-admin {
+    margin-top: $height-header;
+  }
+  aside {
+    width: $sidebar-width;
+    position: fixed;
+    top: $height-header;
+    left: 0;
+    bottom: 0;
+  }
+  main {
+    margin-left: $sidebar-width;
+  }
 }
 .admin-sidebar {
-    height: 100%;
+  height: 100%;
 }
 //Header
 .header-area {
-    height: $height-header;
+  height: $height-header;
+  background-color: $bg-header;
 }
 .navbar-nav .nav-link.active {
-    color: $bs-primary !important;
+  color: $bs-primary !important;
 }
-.header-area.scrolled {
-    background-color: $bg-header;
-}
+
 .btn-login,
 .btn-register {
     min-width: 92px !important;
@@ -35,23 +34,23 @@
     color: #fff !important;
 }
 .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 #tippy-content.show {
-    display: flex;
-    flex-direction: column;
-    left: -100px;
-    width: max-content;
-    padding: 8px;
+  display: flex;
+  flex-direction: column;
+  left: -100px;
+  width: max-content;
+  padding: 8px;
 }
 .username {
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    white-space: nowrap;
-    width: 150px;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  width: 150px;
 }
 .btn-cart__badge {
-    top: 7px;
+  top: 7px;
 }

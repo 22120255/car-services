@@ -49,11 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         if (!isStrongPassword(password)) {
-            messageEle.text("Mật khẩu phải có ít nhất 8 ký tự, một chữ in hoa, một chữ in thường. một kí tự đặc biệt và một số");
+            messageEle.text("Password must be at least 8 characters, one uppercase letter, one lowercase letter. one special character and one number.");
             return;
         }
         if (password !== confirmPassword) {
-            messageEle.text("Mật khẩu nhập lại không khớp");
+            messageEle.text("Re-entered password does not match");
             return;
         }
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: JSON.stringify({ email, verificationCode, password }),
             statusCode: {
                 200() {
-                    showModal("Đặt lại mật khẩu", "Mật khẩu đã thay đổi thành công, vui lòng đăng nhập lại!", function () {
+                    showModal("Reset Password", "Password changed successfully, please log in again!", function () {
                         window.location.href = "/auth/login";
                     })
                 },

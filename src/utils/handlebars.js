@@ -43,4 +43,8 @@ module.exports = {
     isSuperAdmin(role) {
         return role === 'sadmin'
     },
+    getValueAt(array, index) {
+        if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return ''
+        return array[index]
+    },
 }
