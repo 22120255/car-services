@@ -212,7 +212,6 @@ class UserService {
 
       // Sử dụng phương thức delete của mongoose-delete
       await product.delete(idUser);
-      console.log(`Product with ID ${productId} deleted by user ${idUser}`);
     } catch (error) {
       console.error('Error deleting product:', error);
       throw error;
@@ -235,6 +234,32 @@ class UserService {
       return { products, total };
     } catch (error) {
       console.error('Error fetching deleted products:', error.message);
+      throw error;
+    }
+  }
+
+  // Xoá vĩnh viễn sản phẩm
+  async forceDeleteProduct(productId) {
+    try {
+      const product = await Product.deleteOne({ _id: productId });
+      if (!product.deletedCount) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
+    } catch (error) {
+      console.error('Error force deleting product:', error);
+      throw error;
+    }
+  }
+
+  // Khôi phục sản phẩm
+  async restoreProduct(productId) {
+    try {
+      const product = await Product.restore({ _id: productId });
+      if (!product) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
+    } catch (error) {
+      console.error('Error restoring product:', error);
       throw error;
     }
   }
