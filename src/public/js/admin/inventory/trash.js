@@ -169,10 +169,10 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td>
               <div class="action-buttons">
-                <button class="btn-action btn-delete" data-id="${_id}">
+                <button class="btn-action btn-delete" data-id="${_id}" id="btnDelete">
                   <i class="fas fa-trash"></i> 
                 </button>
-                <button class="btn-action btn-restore" data-id="${_id}">
+                <button class="btn-action btn-restore" data-id="${_id}" id="btnRestore" >
                   <i class="fas fa-undo"></i> 
                 </button>
               </div>
