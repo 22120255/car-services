@@ -1,49 +1,10 @@
-2024-11-29 00:37:00 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
-2024-11-29 00:37:03 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
-2024-11-29 00:37:04 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
-2024-11-29 00:44:56 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
-2024-11-29 00:45:03 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
-2024-11-29 00:45:05 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
-2024-11-29 00:45:13 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
-2024-11-29 00:45:15 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
-2024-11-29 00:45:54 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "products" (type string) at path "_id" for model "User"
-2024-11-29 00:47:30 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "inventory" (type string) at path "_id" for model "User"
-2024-11-29 14:59:53 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 14:59:54 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 14:59:54 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 14:59:55 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:01:16 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:01:20 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:01:20 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:01:20 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:01:20 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:03:58 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:12:45 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:14:23 [ERROR]: File: InventoryController, line: 36, error: UserService.createProduct is not a function
-2024-11-29 15:17:03 [ERROR]: File: InventoryController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:18:48 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:18:49 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:18:49 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:18:49 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:19:38 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:21:10 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., description: Path `description` is required., horsepower: Path `horsepower` is required., mileage: Path `mileage` is required., price: Path `price` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:21:22 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:21:54 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., status: `` is not a valid enum value for path `status`.
-2024-11-29 15:35:03 [ERROR]: File: UserController, line: 36, error: Product validation failed: transmission: Path `transmission` is required.
-2024-11-29 15:37:14 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required., transmission: Path `transmission` is required., brand: Path `brand` is required., description: Path `description` is required., horsepower: Path `horsepower` is required., mileage: Path `mileage` is required., model: Path `model` is required., price: Path `price` is required., status: `` is not a valid enum value for path `status`., year: Path `year` is required.
-2024-11-29 15:40:03 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:41:12 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:41:12 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:41:12 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:41:12 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:42:08 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:43:17 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:43:22 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 15:43:37 [ERROR]: File: UserController, line: 36, error: Product validation failed: price: Cast to Number failed for value "NaN" (type string) at path "price", category: Path `category` is required., brand: Path `brand` is required., description: Path `description` is required., model: Path `model` is required.
-2024-11-29 15:46:12 [ERROR]: File: UserController, line: 36, error: First argument to `Model` constructor must be an object, **not** a string. Make sure you're calling `mongoose.model()`, not `mongoose.Model()`.
-2024-11-29 15:50:46 [ERROR]: File: UserController, line: 36, error: Product validation failed: price: Cast to Number failed for value "NaN" (type string) at path "price", category: Path `category` is required., brand: Path `brand` is required., description: Path `description` is required., model: Path `model` is required.
-2024-11-29 15:51:31 [ERROR]: File: UserController, line: 36, error: Product validation failed: category: Path `category` is required.
-2024-11-29 20:38:00 [ERROR]: File: cacheMiddleware, line: 23, error: Error: Connection timeout
-2024-11-29 20:39:25 [ERROR]: File: cacheMiddleware, line: 23, error: Error: The client is closed
-2024-11-29 20:41:07 [ERROR]: File: cacheMiddleware, line: 23, error: Error: The client is closed
-2024-11-29 20:48:50 [ERROR]: File: cacheMiddleware, line: 23, error: Error: The client is closed
+2024-12-04 18:36:57 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "dashboard" (type string) at path "_id" for model "User"
+2024-12-04 18:37:36 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "dashboard" (type string) at path "_id" for model "User"
+2024-12-04 18:38:53 [ERROR]: File: CartController.js, line: 44, error: error is not defined
+2024-12-04 18:39:22 [ERROR]: File: CartController.js, line: 44, error: error is not defined
+2024-12-04 19:50:32 [ERROR]: File: CartController.js, line: 44, error: Cannot populate path `productId` because it is not in your schema. Set the `strictPopulate` option to false to override.
+2024-12-04 19:50:51 [ERROR]: File: CartController.js, line: 44, error: Schema hasn't been registered for model "products".
+Use mongoose.model(name, schema)
+2024-12-04 19:53:24 [ERROR]: File: CartController.js, line: 44, error: Schema hasn't been registered for model "products".
+Use mongoose.model(name, schema)
+2024-12-04 21:03:28 [ERROR]: File: CartController.js, line: 54, error: Cannot read properties of undefined (reading 'toString')

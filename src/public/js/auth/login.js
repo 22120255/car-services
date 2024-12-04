@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (email) {
             if (!isEmailValid(email)) {
                 $('#email-availability-message')
-                    .text('Email không hợp lệ')
+                    .text('Invalid email')
                     .css('color', 'red')
                 return
             } else {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!email || !password) {
             event.preventDefault()
-            messageEle.text('Vui lòng điền đầy đủ thông tin')
+            messageEle.text('Please fill in all information')
             return
         }
         try {

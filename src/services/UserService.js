@@ -36,11 +36,11 @@ class UserService {
     const targetUser = await User.findById(userId);
 
     if (targetUser.role.name === 'sadmin') {
-      throw new Error('Không thể cập nhật vai trò của super admin');
+      throw new Error('Unable to update super admin role');
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin không thể cập nhật vai trò của admin khác');
+      throw new Error("Admin cannot update other admin's role");
     }
 
     await User.findByIdAndUpdate(userId, { role });
@@ -50,11 +50,11 @@ class UserService {
     const targetUser = await User.findById(userId);
 
     if (targetUser.role.name === 'sadmin') {
-      throw new Error('Không thể thay đổi trạng thái của super admin');
+      throw new Error('Cannot change super admin status');
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin không thể thay đổi trạng thái của admin khác');
+      throw new Error("Admin cannot change other admin's status");
     }
 
     await User.findByIdAndUpdate(userId, { status });
@@ -62,16 +62,16 @@ class UserService {
 
   async deleteUser(userId, currentUser) {
     const targetUser = await User.findById(userId);
-    console.log('targetUser ', userId);
+
     if (targetUser.role.name === 'sadmin') {
-      throw new Error('Không thể xoá tài khoản super admin');
+      throw new Error('Cannot delete super admin account');
     }
 
     if (targetUser.role.name === 'admin' && !currentUser.role.permissions.includes('manage_admins')) {
-      throw new Error('Admin không thể xoá tài khoản của admin khác');
+      throw new Error("Admin cannot delete another admin's account");
     }
 
-    await User.findByIdAndDelete(userId);
+    // await User.findByIdAndDelete(userId);
   }
 
   // Lấy thông tin user
@@ -198,6 +198,35 @@ class UserService {
       return updatedProduct;
     } catch (error) {
       console.error('Error updating product:', error);
+      throw error;
+    }
+  }
+
+  // Xoá sản phẩm
+  async deleteProduct(productId, idUser) {
+    try {
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
+
+      // Sử dụng phương thức delete của mongoose-delete
+      await product.delete(idUser);
+      console.log(`Product with ID ${productId} deleted by user ${idUser}`);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      throw error;
+    }
+  }
+  // Lấy danh sách sản phẩm đã xoá
+  async trashAndGetProducts(limit, offset) {
+    try {
+      const products = await Product.findDeleted()
+        .skip(offset * limit - limit)
+        .limit(limit);
+      const total = await Product.countDocuments({ deletedAt: { $ne: null } });
+      return { products, total };
+    } catch (error) {
       throw error;
     }
   }

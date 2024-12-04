@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: background-color 0.3s, transform 0.1s; }
+  transition: background-color 0.3s, transform 0.1s; }
 
 .btn:hover {
   transform: translateY(-2px); }
@@ -83,8 +83,13 @@
 
 /* Table */
 .table-responsive {
-  overflow-x: auto;
-  margin-top: 20px; }
+  overflow-y: auto;
+  margin-top: 20px;
+  max-height: 516px; }
+  .table-responsive thead {
+    position: sticky;
+    top: 0;
+    z-index: 999; }
 
 .car-table {
   width: 100%;
@@ -186,90 +191,203 @@
   .filters select {
     width: 100%; } }
 
-/* Modal Dialog */
-.modal-dialog.modal-xl {
-  max-width: 1200px; }
-
-/* Product Detail */
-.product-detail-wrapper {
-  display: flex;
-  gap: 2rem;
-  padding: 1rem; }
-
-.product-images {
-  flex: 1;
-  max-width: 600px; }
-
-.main-image {
-  width: 100%;
-  margin-bottom: 1rem;
+/* Modal Chỉnh sửa */
+/* CSS tùy chỉnh cho modal */
+/* Modal styles */
+.modal-content {
   border-radius: 8px;
-  overflow: hidden; }
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); }
 
-.main-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover; }
+.modal-header {
+  background-color: #3498db;
+  color: #fff;
+  padding: 15px 20px;
+  border-bottom: none; }
 
-.thumbnail-images {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto; }
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600; }
 
-.thumbnail {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
-  cursor: pointer;
+.btn-close {
+  color: #fff;
+  opacity: 0.8;
   transition: opacity 0.2s; }
 
-.thumbnail:hover {
-  opacity: 0.8; }
+.btn-close:hover {
+  opacity: 1; }
 
-.product-info {
-  flex: 1;
-  padding: 1rem; }
+.modal-body {
+  padding: 20px;
+  background-color: #f8f9fa; }
 
-.product-title {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #333; }
-
-.product-price {
-  font-size: 1.5rem;
-  font-weight: bold;
+/* Form styles */
+.form-label {
+  font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 1rem; }
+  margin-bottom: 5px; }
 
-.product-description {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1.5rem; }
+.form-control,
+select {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 1rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
 
-.product-specs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  background: #f8f9fa;
-  padding: 1rem;
+.form-control:focus,
+select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25); }
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px; }
+
+.invalid-feedback {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 5px; }
+
+/* Button styles */
+.btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease; }
+
+.btn-primary {
+  background-color: #3498db;
+  border-color: #3498db; }
+
+.btn-primary:hover {
+  background-color: #2980b9;
+  border-color: #2980b9; }
+
+.btn-secondary {
+  background-color: #95a5a6;
+  border-color: #95a5a6; }
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+  border-color: #7f8c8d; }
+
+/* Image input styles */
+#product-images input {
+  margin-bottom: 10px; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 0.5rem; }
+  .modal-content {
+    border-radius: 0; } }
+
+/* Scrollbar styles */
+.modal-body::-webkit-scrollbar {
+  width: 8px; }
+
+.modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1; }
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px; }
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #555; }
+
+/* CSS cho modal chi tiết sản phẩm */
+.detail-product-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px; }
+
+.detail-product-images {
+  width: 50%; }
+
+.detail-main-image {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+
+.detail-main-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.3s ease; }
+
+.detail-main-image:hover img {
+  transform: scale(1.05); }
+
+.detail-thumbnail-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; }
+
+.detail-thumbnail {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease; }
+
+.detail-thumbnail:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); }
+
+.detail-product-info {
+  width: 45%; }
+
+.detail-product-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 600; }
+
+.detail-product-price {
+  font-size: 1.8rem;
+  color: #e74c3c;
+  margin-bottom: 25px;
+  font-weight: 600; }
+
+.detail-product-description {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6; }
+
+.detail-product-specs {
+  font-size: 1rem;
+  background-color: #f8f9fa;
+  padding: 20px;
   border-radius: 8px; }
 
-.spec-item {
+.detail-spec-item {
+  margin-bottom: 15px;
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem; }
+  justify-content: space-between; }
 
-.spec-label {
-  font-weight: bold;
-  color: #666;
-  font-size: 0.9rem; }
-
-.spec-value {
+.detail-spec-label {
+  font-weight: 600;
   color: #333; }
 
+.detail-spec-value {
+  color: #666; }
+
 @media (max-width: 768px) {
-  .product-detail-wrapper {
+  .detail-product-wrapper {
     flex-direction: column; }
-  .product-images {
-    max-width: 100%; } }
+  .detail-product-images,
+  .detail-product-info {
+    width: 100%; }
+  .detail-product-title {
+    font-size: 1.6rem; }
+  .detail-product-price {
+    font-size: 1.5rem; } }
