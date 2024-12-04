@@ -1,36 +1,27 @@
-// function changeTab(event, tabId) {
-//     event.preventDefault();
-
-// import { showToast } from '../common';
-
-//     // Xóa lớp 'active' khỏi tất cả các tab và nội dung tab
-//     $('.nav-link').removeClass('active').attr('aria-selected', 'false');
-//     $('.tab-pane').removeClass('show active');
-//     $(`#${tabId}-tab`).addClass('active').attr('aria-selected', 'true');
-//     $(`#${tabId}`).addClass('show active');
-// }
-import { showModal } from "../common.js"
+import { showModal, showToast } from "../common.js"
 
 document.addEventListener('DOMContentLoaded', function () {
   // Lắng nghe sự kiện click vào tab
   $('.add-to-cart').on('click', function (event) {
     event.preventDefault()
     const quantity = 1
-    console.log($(this))
+    $("#icon-loading").removeClass("d-none");
+
     $.ajax({
       url: '/api/cart/add/' + $(this).data('id'),
       type: 'POST',
       data: { quantity },
       success: function (response) {
         console.log(response)
-        showModal('Success', 'Added to cart')
+        showToast('Success', 'Added to cart')
       },
       error: function (error) {
         console.log(error)
-        showModal('Error', 'Failed to add to cart', "OK", function () {
-          window.location.reload()
-        })
+        showToast('Error', 'Failed to add to cart')
       },
+      complete: function () {
+        $("#icon-loading").addClass("d-none");
+      }
     })
   })
 
@@ -43,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
   let fieldData = null;
   let activeTab = 'brand'; // Default to 'brand' tab
 
-  let brand = $('#product-brand').val();
-  let year = $('#product-year').val();
-  let price = $('#product-price').val();
-  const id = $('#product-id').val();
+  let brand = product.brand;
+  let year = product.year;
+  let price = product.price;
+  const id = product._id;
   fieldData = brand;
 
   function syncFiltersFromURL() {

@@ -3,8 +3,35 @@ const Cart = require('../models/Cart');
 const { errorLog } = require('../utils/customLog');
 
 class CartController {
+    payment(req, res) {
+        res.render('shops-cart/payment');
+    }
+    async createQR(req, res) {
+        try {
+            let userId = req.user._id;
+            const cart = await Cart.findOne({ userId });
+
+            if (!cart) {
+                errorLog('CartController.js', 11, 'Cart not found');
+                return res.status(400).json({ message: 'Cart not found.' });
+            }
+
+            const amount = cart.total;
+            const cartID = cart._id;
+            userId = userId.toString().slice(-4) + 'XXXX';
+            const description = `KH ${userId} TT ${cartID}`;
+            // QR code quick link
+            const QR = `https://img.vietqr.io/image/${process.env.BANK_ID}-${process.env.ACCOUNT_NO}-compact2.png?amount=${amount}&addInfo=${description}&accountName=${process.env.ACCOUNT_NAME}`;
+
+            return res.status(200).json({ QR });
+        }
+        catch (error) {
+            errorLog('CartController.js', 11, error.message);
+            return res.status(500).json({ message: 'Server error occurred.' });
+        }
+    }
     cart(req, res) {
-        res.render('cart/cart', {
+        res.render('shops-cart/index', {
             title: 'Shopping Cart'
         });
     }
@@ -13,7 +40,7 @@ class CartController {
         try {
             const userId = req.user._id;
             // console.log(userId);
-            const cart = await Cart.findOne({ userId, isPaid: false });
+            const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
             if (!cart) {
                 errorLog("CartController.js", 44, error.message);
                 return res.status(404).json({ message: 'Cart not found' });
@@ -42,7 +69,7 @@ class CartController {
             }
 
             const existingItem = cart.items.find(item => item.productId.toString() === productId);
-            
+
             if (existingItem) {
                 existingItem.quantity += quantity;
                 cart.total += existingItem.price * quantity
@@ -71,20 +98,20 @@ class CartController {
         try {
             const { cartId, newQuantity } = req.body;
             const { productId } = req.params;
-            
+
             // Ensure the quantity is valid
             if (newQuantity <= 0) {
                 return res.status(400).json({ message: 'Quantity must be greater than 0' });
             }
 
             // Find the cart
-            let cart = await Cart.findOne({ _id: cartId });
+            let cart = await Cart.findOne({ _id: cartId }).populate('items.productId');
             if (!cart) {
                 return res.status(404).json({ message: 'Cart not found' });
             }
 
             // Find the product in the cart items
-            const item = cart.items.find(item => item.productId.toString() === productId);
+            const item = cart.items.find(item => item.productId._id.toString() === productId);
             if (!item) {
                 return res.status(404).json({ message: 'Product not found in cart' });
             }
@@ -155,7 +182,7 @@ class CartController {
             cart.isPaid = isPaid;
             await cart.save();
             return res.status(200).json({ message: 'Update cart payment status successful' });
-        } 
+        }
         catch (error) {
             errorLog("CartController.js", 77, error.message);
             return res.status(500).json({ message: 'Internal server error' });

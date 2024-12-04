@@ -1,10 +1,10 @@
 import { loadCartData, showModal } from '../common.js';
 let interval;
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     let QR = null;
     $.ajax({
-        url: '/api/payment/createQR',
+        url: '/api/cart/payment/createQR',
         type: 'GET',
         statusCode: {
             200: function (data) {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     interval = setInterval(() => {
         checkPayment(cartID, cartTotalPrice);
     }, 5000);
-    
+
 });
 
 async function checkPayment(cartID, cartTotalPrice) {
@@ -39,7 +39,7 @@ async function checkPayment(cartID, cartTotalPrice) {
         // console.log('Last payment:', lastPayment);
         // console.log('Last payment amount:', lastPaymentAmount);
         // console.log('Last payment info:', lastPaymentInfo);
-        
+
         if (lastPaymentAmount == cartTotalPrice && lastPaymentInfo.includes(cartID)) {
             clearInterval(interval);
             const response = await fetch(`/api/cart/update/status/${cartID}`, {
@@ -53,7 +53,7 @@ async function checkPayment(cartID, cartTotalPrice) {
             });
             if (response.status === 200) {
                 console.log('Payment successful!');
-                showModal('Successful', 'Your transaction is successful. Thank you for buying our products', function() {
+                showModal('Successful', 'Your transaction is successful. Thank you for buying our products', function () {
                     window.location.href = '/';
                 });
             }
