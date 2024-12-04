@@ -1,0 +1,52 @@
+body {
+    margin-top: 20px;
+    background: #eee;
+  }
+  
+  .ui-w-40 {
+    width: 40px !important;
+    height: auto;
+  }
+  
+  .card {
+    box-shadow: 0 1px 15px 1px rgba(52, 40, 104, 0.08);
+  }
+  
+  .ui-product-color {
+    display: inline-block;
+    overflow: hidden;
+    margin: 0.144em;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 10rem;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset;
+    vertical-align: middle;
+  }
+  
+  .quantity-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-handler {
+    height: 30px; /* Điều chỉnh chiều cao để khớp */
+    width: 30px;  /* Chiều rộng cho nút */
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quantity-input {
+    height: 40px; /* Khớp chiều cao với nút */
+    width: 50px;
+    text-align: center;
+    margin: 0 5px; /* Tạo khoảng cách giữa các phần tử */
+}
+
+.btn-disable {
+    background-color: #e0e0e0;
+    color: #c4c4c4;
+    cursor: not-allowed;  
+}
