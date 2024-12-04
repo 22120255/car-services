@@ -72,8 +72,8 @@ h3,
     font-size: 1.75rem; } }
 
 a,
-/* a:hover {
-  padding: 8px !important; } */
+a:hover {
+  padding: 8px !important; }
 
 h4,
 .h4 {

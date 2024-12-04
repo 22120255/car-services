@@ -12,28 +12,27 @@
 import { showModal } from "../common.js"
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Lắng nghe sự kiện click vào tab
-    $('.add-to-cart').on('click', function (event) {
-        event.preventDefault()
-        const quantity = 1
-        console.log($(this))
-        $.ajax({
-            url: '/api/cart/add/' + $(this).data('id'),
-            type: 'POST',
-            data: { quantity },
-            success: function (response) {
-                console.log(response)
-                showModal('Success', 'Added to cart', function () {
-                })
-            },
-            error: function (error) {
-                console.log(error)
-                showModal('Error', 'Failed to add to cart', function () {
-                    window.location.reload()
-                })
-            },
+  // Lắng nghe sự kiện click vào tab
+  $('.add-to-cart').on('click', function (event) {
+    event.preventDefault()
+    const quantity = 1
+    console.log($(this))
+    $.ajax({
+      url: '/api/cart/add/' + $(this).data('id'),
+      type: 'POST',
+      data: { quantity },
+      success: function (response) {
+        console.log(response)
+        showModal('Success', 'Added to cart')
+      },
+      error: function (error) {
+        console.log(error)
+        showModal('Error', 'Failed to add to cart', "OK", function () {
+          window.location.reload()
         })
+      },
     })
+  })
 
   const urlParams = new URLSearchParams(window.location.search);
   let products = null;

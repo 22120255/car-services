@@ -1,0 +1,4 @@
+2024-12-04 18:36:57 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "dashboard" (type string) at path "_id" for model "User"
+2024-12-04 18:37:36 [ERROR]: File: UserController, line: 178, error: Cast to ObjectId failed for value "dashboard" (type string) at path "_id" for model "User"
+2024-12-04 18:38:53 [ERROR]: File: CartController.js, line: 44, error: error is not defined
+2024-12-04 18:39:22 [ERROR]: File: CartController.js, line: 44, error: error is not defined
