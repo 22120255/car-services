@@ -8,3 +8,6 @@ Use mongoose.model(name, schema)
 2024-12-04 19:53:24 [ERROR]: File: CartController.js, line: 44, error: Schema hasn't been registered for model "products".
 Use mongoose.model(name, schema)
 2024-12-04 21:03:28 [ERROR]: File: CartController.js, line: 54, error: Cannot read properties of undefined (reading 'toString')
+2024-12-05 01:27:34 [ERROR]: File: UserController, line: 74, error: this.unset is not a function
+2024-12-05 01:51:32 [ERROR]: File: UserController, line: 137, error: Model.find() no longer accepts a callback
+2024-12-05 01:51:39 [ERROR]: File: UserController, line: 137, error: Model.find() no longer accepts a callback

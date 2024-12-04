@@ -188,6 +188,30 @@ class UserController {
     }
   }
 
+  // [DELETE] /admin/inventory/trash/delete
+  async forceDeleteProduct(req, res) {
+    try {
+      const productId = req.params.id;
+      await UserService.forceDeleteProduct(productId);
+      return res.status(200).json({ message: 'Delete product successfully' });
+    } catch (error) {
+      errorLog('UserController', 74, error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
+  // [PATCH] /admin/inventory/trash/restore
+  async restoreProduct(req, res) {
+    try {
+      const productId = req.params.id;
+      await UserService.restoreProduct(productId);
+      return res.status(200).json({ message: 'Restore product successfully' });
+    } catch (error) {
+      errorLog('UserController', 74, error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
   // [GET] /admin/inventory/trash
   async trashAndGetProducts(req, res) {
     const { limit, offset } = req.query;
