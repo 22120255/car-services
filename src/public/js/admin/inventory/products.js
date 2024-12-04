@@ -144,6 +144,28 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------ Declare variables -----------------------------------------------
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+  let products = null;
+  let limit = urlParams.get('limit') || 8;
+  let offset = parseInt(urlParams.get('offset')) || 1;
+  let totalPages = null;
+  let totalItems = null;
+
+  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
+  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
+  let brandFilter = urlParams.get('brand') || null;
+  let statusFilter = urlParams.get('status') || null;
+  let searchText = urlParams.get('search') || '';
+
+  $('#searchInput').val(searchText);
+  $('#limit').val(limit);
+  $('#statusFilter').val(statusFilter);
+  $('#brandFilter').val(brandFilter);
+  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
+
   // ------------------------------------js for CRUD products-----------------------------------------------
 
   // view-trash-btn
@@ -282,25 +304,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --------------------------------------------------js for all pages-------------------------------------------
-  const urlParams = new URLSearchParams(window.location.search);
-
-  let products = null;
-  let limit = urlParams.get('limit') || 10;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
-  let totalItems = null;
-
-  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-  let brandFilter = urlParams.get('brand') || null;
-  let statusFilter = urlParams.get('status') || null;
-  let searchText = urlParams.get('search') || '';
-
-  $('#searchInput').val(searchText);
-  $('#limit').val(limit);
-  $('#statusFilter').val(statusFilter);
-  $('#brandFilter').val(brandFilter);
-  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {

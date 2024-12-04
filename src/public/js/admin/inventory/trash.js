@@ -6,6 +6,70 @@ function formatDate(date) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  const { perPages } = getFilterConfigProduct();
+  const $limit = $('#limit');
+
+  // Render options
+  const renderSelectOptions = (element, options, defaultText) => {
+    if (defaultText !== 'Items per page') {
+      element.empty().append(`<option value="">${defaultText}</option>`);
+    }
+
+    options.forEach((option) => {
+      if (defaultText === 'Select price') {
+        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
+      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
+    });
+  };
+
+  renderSelectOptions($limit, perPages, 'Items per page');
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------ Declare variables -----------------------------------------------
+  const urlParams = new URLSearchParams(window.location.search);
+
+  let products = null;
+  let limit = urlParams.get('limit') || 8;
+  let offset = parseInt(urlParams.get('offset')) || 1;
+  let totalPages = null;
+  let totalItems = null;
+
+  const $btnDelete = $('#btnDelete');
+  const $btnRestore = $('#btnRestore');
+  const $limit = $('#limit');
+
+  $limit.val(limit);
+
+  // Xử lí sự kiện click vào nút xóa
+  $('#trashTable').on('click', '.btn-delete', function () {
+    const productId = $(this).data('id');
+    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
+      $.ajax({
+        url: `/api/user/trash/delete/${productId}`,
+        type: 'DELETE',
+        statusCode: {
+          200: function (response) {
+            showToast('success', response.message);
+            refresh();
+          },
+          403: function (xhr) {
+            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+            showToast('error', message);
+          },
+          404: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Product not found!';
+            showToast('error', message);
+          },
+          500: function (xhr) {
+            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+            showToast('error', message);
+          },
+        },
+      });
+    });
+  });
+
   // ------------------------------------js for CRUD products-----------------------------------------------
 
   // Đăng ký sự kiện cho nút Delete
@@ -40,13 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --------------------------------------------------js for all pages-------------------------------------------
-  const urlParams = new URLSearchParams(window.location.search);
-
-  let products = null;
-  let limit = urlParams.get('limit') || 10;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
-  let totalItems = null;
 
   function updatePagination() {
     const $pagination = $('.pagination');
@@ -169,10 +226,10 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td>
               <div class="action-buttons">
-                <button class="btn-action btn-delete" data-id="${_id}">
+                <button class="btn-action btn-delete" data-id="${_id}" id="btnDelete">
                   <i class="fas fa-trash"></i> 
                 </button>
-                <button class="btn-action btn-restore" data-id="${_id}">
+                <button class="btn-action btn-restore" data-id="${_id}" id="btnRestore" >
                   <i class="fas fa-undo"></i> 
                 </button>
               </div>

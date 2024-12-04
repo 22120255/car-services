@@ -219,14 +219,22 @@ class UserService {
     }
   }
   // Lấy danh sách sản phẩm đã xoá
-  async trashAndGetProducts(limit, offset) {
+  async trashAndGetProducts(query) {
     try {
-      const products = await Product.findDeleted()
-        .skip(offset * limit - limit)
-        .limit(limit);
-      const total = await Product.countDocuments({ deletedAt: { $ne: null } });
+      const { limit, offset } = query;
+      const allDeletedProducts = await Product.findDeleted();
+
+      const startIndex = (offset - 1) * limit;
+      const endIndex = startIndex + limit;
+
+      const products = allDeletedProducts.slice(startIndex, endIndex);
+
+      const total = allDeletedProducts.length;
+
+      console.log(`Total deleted products: ${total}`);
       return { products, total };
     } catch (error) {
+      console.error('Error fetching deleted products:', error.message);
       throw error;
     }
   }
