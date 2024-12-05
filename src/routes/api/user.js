@@ -23,5 +23,8 @@ router.delete('/inventory/delete-product/:id', isAuthenticated, checkRole(['admi
 router.get('/inventory', isAuthenticated, checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
 
 // trash
+router.delete('/trash/delete/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.forceDeleteProduct);
+router.patch('/trash/restore/:id', isAuthenticated, checkRole(['admin', 'sadmin']), userController.restoreProduct);
 router.get('/trash', isAuthenticated, checkRole(['admin', 'sadmin']), userController.trashAndGetProducts);
+
 module.exports = router;

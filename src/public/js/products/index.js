@@ -3,8 +3,10 @@ import { getFilterConfigProduct } from '../config.js';
 // Load filter
 document.addEventListener('DOMContentLoaded', function () {
   const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
-  // TODO: here
+  const $yearFilter = $('#yearFilter');
+  const $styleFilter = $('#styleFilter');
   const $brandFilter = $('#brandFilter');
+  const $transmissionFilter = $('#transmissionFilter');
   const $statusFilter = $('#statusFilter');
   const $priceFilter = $('#priceFilter');
   const $limit = $('#limit');
@@ -14,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (defaultText !== 'Items per page') {
       element.empty().append(`<option value="">${defaultText}</option>`);
     }
+
     options.forEach((option) => {
       if (defaultText === 'Select price') {
         element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
@@ -21,7 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
+  renderSelectOptions($yearFilter, years, 'Select year');
+  renderSelectOptions($styleFilter, styles, 'Select style');
   renderSelectOptions($brandFilter, brands, 'Select brand');
+  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
   renderSelectOptions($priceFilter, prices, 'Select price');
@@ -209,7 +215,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // render products
   function renderProducts(products) {
-    console.log(1);
     $('#product-list').empty();
 
     if (!products || products.length === 0) {

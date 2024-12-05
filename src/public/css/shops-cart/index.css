@@ -100,3 +100,7 @@
 
 #checkout.btn.btn-lg {
   padding: 8px 40px !important; }
+
+.wrapper-qr {
+  width: 250px;
+  height: 300px; }

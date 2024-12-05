@@ -6,16 +6,50 @@ function formatDate(date) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  const { perPages } = getFilterConfigProduct();
+  const $limit = $('#limit');
+
+  // Render options
+  const renderSelectOptions = (element, options, defaultText) => {
+    if (defaultText !== 'Items per page') {
+      element.empty().append(`<option value="">${defaultText}</option>`);
+    }
+
+    options.forEach((option) => {
+      if (defaultText === 'Select price') {
+        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
+      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
+    });
+  };
+
+  renderSelectOptions($limit, perPages, 'Items per page');
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------ Declare variables -----------------------------------------------
+  const urlParams = new URLSearchParams(window.location.search);
+
+  let products = null;
+  let limit = urlParams.get('limit') || 8;
+  let offset = parseInt(urlParams.get('offset')) || 1;
+  let totalPages = null;
+  let totalItems = null;
+
+  const $btnDelete = $('#btnDelete');
+  const $btnRestore = $('#btnRestore');
+  const $limit = $('#limit');
+
+  $limit.val(limit);
+
   // ------------------------------------js for CRUD products-----------------------------------------------
 
   // Đăng ký sự kiện cho nút Delete
-  $('#inventoryTable').on('click', '.delete', function () {
+  $('#trashTable').on('click', '#btnDelete', function () {
     const productId = $(this).closest('tr').data('product-id');
 
-    // Hiển thị modal xác nhận xóa
-    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
+    showModal('Delete Product', 'Are you sure you want to delete permanently this product?', 'Delete ', () => {
       $.ajax({
-        url: `/api/user/inventory/delete-product/${productId}`,
+        url: `/api/user/trash/delete/${productId}`,
         type: 'DELETE',
         statusCode: {
           200: function (response) {
@@ -39,14 +73,35 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // --------------------------------------------------js for all pages-------------------------------------------
-  const urlParams = new URLSearchParams(window.location.search);
+  // Đăng ký sự kiện cho nút Restore
+  $('#trashTable').on('click', '#btnRestore', function () {
+    const productId = $(this).closest('tr').data('product-id');
 
-  let products = null;
-  let limit = urlParams.get('limit') || 10;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
-  let totalItems = null;
+    $.ajax({
+      url: `/api/user/trash/restore/${productId}`,
+      type: 'PATCH',
+      statusCode: {
+        200: function (response) {
+          showToast('success', response.message);
+          refresh();
+        },
+        403: function (xhr) {
+          const message = xhr.responseJSON?.error || 'You are not authorized to restore this product!';
+          showToast('error', message);
+        },
+        404: function (xhr) {
+          const message = xhr.responseJSON?.error || 'Product not found!';
+          showToast('error', message);
+        },
+        500: function (xhr) {
+          const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+          showToast('error', message);
+        },
+      },
+    });
+  });
+
+  // --------------------------------------------------js for all pages-------------------------------------------
 
   function updatePagination() {
     const $pagination = $('.pagination');
@@ -121,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function renderProducts(products) {
     console.log(1);
     $('#trashTable').empty();
-
+    let count = 0;
     if (!products || products.length === 0) {
       $('#trashTable').append(`<div class='col-lg-12'>
                       <div class='find-nothing text-center' >
@@ -130,9 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
                   </div>`);
       return;
     }
-
     products.forEach((product) => {
-      const { _id, images, brand, model, deletedBy, createdAt, deletedAt, status } = product;
+      const { _id, images, brand, model, deletedBy, createdAt, deletedAt, status, deleted } = product;
 
       // Xác định class CSS và văn bản dựa trên trạng thái
       let statusBadge;
@@ -151,35 +205,46 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       const imageSrc = images?.at(0) || '/default-image.jpg';
-
       // Thêm hàng mới vào bảng
-      $('#trashTable').append(`
-          <tr>
-            <td>
-              <img src="${imageSrc}" alt="${brand} ${model}" class="product-image">
-            </td>
-            <td>${brand} ${model}</td>
-            <td>${deletedBy}</td>
-            <td>${formatDate(createdAt)}</td>
-            <td>${formatDate(deletedAt)}</td>
-            <td>
-              <span class="status-badge ${statusBadge}">
-                ${status}
-              </span>
-            </td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn-action btn-delete" data-id="${_id}">
-                  <i class="fas fa-trash"></i> 
-                </button>
-                <button class="btn-action btn-restore" data-id="${_id}">
-                  <i class="fas fa-undo"></i> 
-                </button>
-              </div>
-            </td>
-          </tr>
-        `);
+      // Kiểm tra nếu trường 'deleted' không có hoặc có giá trị là false
+      if (deleted && deleted !== false) {
+        count++;
+        $('#trashTable').append(`
+      <tr data-product-id="${_id}">
+        <td>
+          <img src="${imageSrc}" alt="${brand} ${model}" class="product-image">
+        </td>
+        <td>${brand} ${model}</td>
+        <td>${deletedBy}</td>
+        <td>${formatDate(createdAt)}</td>
+        <td>${formatDate(deletedAt)}</td>
+        <td>
+          <span class="status-badge ${statusBadge}">
+            ${status}
+          </span>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-action btn-delete" data-id="${_id}" id="btnDelete">
+              <i class="fas fa-trash"></i> 
+            </button>
+            <button class="btn-action btn-restore" data-id="${_id}" id="btnRestore" >
+              <i class="fas fa-undo"></i> 
+            </button>
+          </div>
+        </td>
+      </tr>
+    `);
+      }
     });
+    if (count === 0) {
+      $('#trashTable').append(`<div class='col-lg-12'>
+                      <div class='find-nothing text-center' >
+                              <h2 style = "font-size: large; color: #978e8e">Nothing in trash!</h2>
+                      </div>
+                  </div>`);
+      return;
+    }
   }
 
   // Xử lý sự kiện click pagination
