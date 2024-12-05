@@ -72,7 +72,13 @@ function showModalDetail(product) {
 
   // Cập nhật thông tin sản phẩm
   $('#detailProductTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
-  $('#detailProductPrice').text(product.price ? `$${product.price}` : 'N/A');
+
+  // Hiển thị giá sản phẩm
+  const sellingPrice = product.price ? `$${product.price}` : 'N/A';
+  const originalPrice = product.importPrice ? `$${product.importPrice}` : 'N/A';
+  $('#detailProductPrice').text(`Original Price: ${originalPrice}`);
+  $('#detailimportPrice').text(`Selling Price: ${sellingPrice}`);
+
   $('#detailProductDescription').text(product.description || 'No description available.');
 
   // Cập nhật thông số kỹ thuật
@@ -81,19 +87,20 @@ function showModalDetail(product) {
   const specs = [
     { label: 'Model Year', value: product.year || 'N/A' },
     { label: 'Mileage', value: product.mileage ? `${product.mileage} mi` : 'N/A' },
-    { label: 'Horsepower', value: product.horsepower ? `${product.horsepower}HP` : 'N/A' },
+    { label: 'Horsepower', value: product.horsepower ? `${product.hhorsepower} HP` : 'N/A' },
     { label: 'Transmission', value: product.transmission || 'N/A' },
     { label: 'Style', value: product.style || 'N/A' },
   ];
 
   specs.forEach((spec) => {
     const $specItem = $('<div>').addClass('detail-spec-item').html(`
-      <span class="detail-spec-label">${spec.label}:</span>
-      <span class="detail-spec-value">${spec.value}</span>
-    `);
+        <span class="detail-spec-label">${spec.label}:</span>
+        <span class="detail-spec-value">${spec.value}</span>
+      `);
     $specsContainer.append($specItem);
   });
 
+  // Hiển thị modal
   $('#productDetailModal').modal('show');
 }
 
