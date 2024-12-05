@@ -43,7 +43,6 @@ class CartController {
       const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
 
       if (!cart) {
-        errorLog('CartController.js', 'getCartData', error.message);
         return res.status(404).json({ message: 'Cart not found' });
       }
       return res.status(200).json(cart);
