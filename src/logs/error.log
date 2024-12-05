@@ -1,0 +1,24 @@
+2024-12-05 11:12:04 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[ { image1: '1', image2: '1', image3: '1', image4: '1', image5: '1' } ]" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:12:10 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[ { image1: '1', image2: '1', image3: '1', image4: '1', image5: '1' } ]" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:12:12 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[ { image1: '1', image2: '1', image3: '1', image4: '1', image5: '1' } ]" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:12:14 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[ { image1: '1', image2: '1', image3: '1', image4: '1', image5: '1' } ]" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:14:42 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[ { image1: '', image2: '', image3: '', image4: '', image5: '' } ]" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:16:16 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[ { image1: '1', image2: '1', image3: '1', image4: '1', image5: '1' } ]" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:18:18 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[\n' +
+  "  { image1: '1' },\n" +
+  "  { image2: '1' },\n" +
+  "  { image3: '1' },\n" +
+  "  { image4: '1' },\n" +
+  "  { image5: '1' }\n" +
+  ']" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:19:20 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: images.0: Cast to [string] failed for value "[\n' +
+  "  { image1: '1' },\n" +
+  "  { image2: '1' },\n" +
+  "  { image3: '1' },\n" +
+  "  { image4: '1' },\n" +
+  "  { image5: '1' }\n" +
+  ']" (type string) at path "images.0" because of "CastError", fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:19:39 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:21:27 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:21:59 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.
+2024-12-05 11:22:13 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: fuelType: Path `fuelType` is required., importPrice: Path `importPrice` is required.

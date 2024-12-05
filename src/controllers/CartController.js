@@ -40,7 +40,6 @@ class CartController {
   async getCartData(req, res) {
     try {
       const userId = req.user._id;
-      // console.log(userId);
       const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
       console.log(cart);
       if (!cart) {
