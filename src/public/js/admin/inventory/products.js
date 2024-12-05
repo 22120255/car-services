@@ -17,6 +17,7 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-style').val(product.style);
     $('#product-status').val(product.status);
     $('#product-price').val(product.price);
+    $('#product-priceSelling').val(product.priceSelling);
     $('#product-mileage').val(product.mileage);
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
@@ -71,7 +72,13 @@ function showModalDetail(product) {
 
   // Cập nhật thông tin sản phẩm
   $('#detailProductTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
-  $('#detailProductPrice').text(product.price ? `$${product.price}` : 'N/A');
+
+  // Hiển thị giá sản phẩm
+  const sellingPrice = product.price ? `$${product.price}` : 'N/A';
+  const originalPrice = product.importPrice ? `$${product.importPrice}` : 'N/A';
+  $('#detailProductPrice').text(`Original Price: ${originalPrice}`);
+  $('#detailimportPrice').text(`Selling Price: ${sellingPrice}`);
+
   $('#detailProductDescription').text(product.description || 'No description available.');
 
   // Cập nhật thông số kỹ thuật
@@ -80,19 +87,20 @@ function showModalDetail(product) {
   const specs = [
     { label: 'Model Year', value: product.year || 'N/A' },
     { label: 'Mileage', value: product.mileage ? `${product.mileage} mi` : 'N/A' },
-    { label: 'Horsepower', value: product.horsepower ? `${product.horsepower}HP` : 'N/A' },
+    { label: 'Horsepower', value: product.horsepower ? `${product.hhorsepower} HP` : 'N/A' },
     { label: 'Transmission', value: product.transmission || 'N/A' },
     { label: 'Style', value: product.style || 'N/A' },
   ];
 
   specs.forEach((spec) => {
     const $specItem = $('<div>').addClass('detail-spec-item').html(`
-      <span class="detail-spec-label">${spec.label}:</span>
-      <span class="detail-spec-value">${spec.value}</span>
-    `);
+        <span class="detail-spec-label">${spec.label}:</span>
+        <span class="detail-spec-value">${spec.value}</span>
+      `);
     $specsContainer.append($specItem);
   });
 
+  // Hiển thị modal
   $('#productDetailModal').modal('show');
 }
 
@@ -112,11 +120,9 @@ function handleProductAction(action, productId) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
-  const $yearFilter = $('#yearFilter');
-  const $styleFilter = $('#styleFilter');
+  const { brands, statuses, prices, perPages } = getFilterConfigProduct();
+  // TODO: here
   const $brandFilter = $('#brandFilter');
-  const $transmissionFilter = $('#transmissionFilter');
   const $statusFilter = $('#statusFilter');
   const $priceFilter = $('#priceFilter');
   const $limit = $('#limit');
@@ -126,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (defaultText !== 'Items per page') {
       element.empty().append(`<option value="">${defaultText}</option>`);
     }
-
     options.forEach((option) => {
       if (defaultText === 'Select price') {
         element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
@@ -134,10 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
-  renderSelectOptions($yearFilter, years, 'Select year');
-  renderSelectOptions($styleFilter, styles, 'Select style');
   renderSelectOptions($brandFilter, brands, 'Select brand');
-  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
   renderSelectOptions($priceFilter, prices, 'Select price');
