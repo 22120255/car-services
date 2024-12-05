@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Đăng ký sự kiện cho nút Delete
   $('#trashTable').on('click', '#btnDelete', function () {
     const productId = $(this).closest('tr').data('product-id');
-    console.log(productId);
+
     showModal('Delete Product', 'Are you sure you want to delete permanently this product?', 'Delete ', () => {
       $.ajax({
         url: `/api/user/trash/delete/${productId}`,
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Đăng ký sự kiện cho nút Restore
   $('#trashTable').on('click', '#btnRestore', function () {
     const productId = $(this).closest('tr').data('product-id');
-    console.log(productId);
+
     $.ajax({
       url: `/api/user/trash/restore/${productId}`,
       type: 'PATCH',
