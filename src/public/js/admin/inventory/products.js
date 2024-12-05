@@ -17,13 +17,13 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-style').val(product.style);
     $('#product-status').val(product.status);
     $('#product-price').val(product.price);
-    $('#product-priceSelling').val(product.priceSelling);
+    $('#product-importPrice').val(product.importPrice);
     $('#product-mileage').val(product.mileage);
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
     $('#product-description').val(product.description);
     product.images.forEach((index, image) => {
-      $(`input[name="images.image${index + 1}"]`).val(image);
+      $(`input[name="images.at(index)"]`).val(image);
     });
     for (let i = 0; i < product.images.length; i++) {
       $(`input[name="images.${i + 1}"]`).val(product.images[i]);
@@ -254,17 +254,20 @@ document.addEventListener('DOMContentLoaded', function () {
       style: $('#product-style').val(),
       status: $('#product-status').val(),
       price: parseFloat($('#product-price').val()),
+      importPrice: parseFloat($('#product-importPrice').val()),
       mileage: parseInt($('#product-mileage').val()),
       horsepower: parseInt($('#product-horsepower').val()),
       transmission: $('#product-transmission').val(),
       description: $('#product-description').val(),
-      images: {
-        image1: $('input[name="images.image1"]').val(),
-        image2: $('input[name="images.image2"]').val(),
-        image3: $('input[name="images.image3"]').val(),
-        image4: $('input[name="images.image4"]').val(),
-        image5: $('input[name="images.image5"]').val(),
-      },
+      fuelType: $('#product-fuelType').val(),
+      importPrice: parseFloat($('#product-importPrice').val()),
+      images: [
+        $('input[name="images.image1"]').val(),
+        $('input[name="images.image2"]').val(),
+        $('input[name="images.image3"]').val(),
+        $('input[name="images.image4"]').val(),
+        $('input[name="images.image5"]').val(),
+      ],
     };
 
     // Kiểm tra xem có đang chỉnh sửa hay không
@@ -429,35 +432,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     products.forEach((product) => {
-      const { _id, images, status, brand, model, price, year } = product;
+      const { _id, images, status, brand, model, price, year, importPrice } = product; // Lấy giá trị importPrice
       console.log(_id);
+
       const isSelected = status === 'used' || status === 'new';
       const imageSrc = images?.at(0) || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+
       $('#inventoryTable').append(`
-                <tr data-product-id="${_id}">
-                    <td>
-                        <img
-                            src='${imageSrc}'
-                            alt='Toyota Camry'
-                            class='car-image'
-                        />
-                    </td>
-                    <td>${brand} ${model}</td>
-                    <td>${year}</td>
-                    <td>$${price}</td>
-                    <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
-                    <td class='actions'>
-                        <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
-                                class='fa-solid fa-circle-info'
-                            ></i>
-                            Detail</button>
-                        <button class='edit'><i class='fas fa-edit'></i>
-                            Edit</button>
-                        <button class='delete'><i class='fas fa-trash'></i>
-                            Delete</button>
-                    </td>
-                </tr>
-            `);
+        <tr data-product-id="${_id}">
+            <td>
+                <img
+                    src='${imageSrc}'
+                    alt='Toyota Camry'
+                    class='car-image'
+                />
+            </td>
+            <td>${brand} ${model}</td>
+            <td>${year}</td>
+            <td>$${importPrice}</td> <!-- Hiển thị giá nhập khẩu -->
+            <td>$${price}</td>
+            <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
+            <td class='actions'>
+                <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
+                        class='fa-solid fa-circle-info'></i>
+                    Detail</button>
+                <button class='edit'><i class='fas fa-edit'></i>
+                    Edit</button>
+                <button class='delete'><i class='fas fa-trash'></i>
+                    Delete</button>
+            </td>
+        </tr>
+      `);
     });
   }
 
