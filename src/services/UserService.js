@@ -161,7 +161,7 @@ class UserService {
 
   // Tạo sản phẩm
 
-  async createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images) {
+  async createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images, importPrice, fuelType) {
     try {
       const product = await Product.create({
         brand,
@@ -175,6 +175,8 @@ class UserService {
         transmission,
         description,
         images,
+        importPrice,
+        fuelType,
       });
       return product;
     } catch (error) {
@@ -186,7 +188,20 @@ class UserService {
   // Cập nhật sản phẩm
   async updateProduct(productId, data) {
     try {
-      const allowedFields = ['brand', 'model', 'year', 'style', 'status', 'price', 'mileage', 'horsepower', 'transmission', 'description', 'images'];
+      const allowedFields = [
+        'brand',
+        'model',
+        'year',
+        'style',
+        'status',
+        'price',
+        'mileage',
+        'horsepower',
+        'transmission',
+        'description',
+        'images',
+        'importPrice',
+      ];
       const updateData = Object.keys(data)
         .filter((key) => allowedFields.includes(key))
         .reduce((obj, key) => {
