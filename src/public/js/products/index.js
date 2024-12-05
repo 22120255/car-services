@@ -215,7 +215,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // render products
   function renderProducts(products) {
-    console.log(1);
     $('#product-list').empty();
 
     if (!products || products.length === 0) {

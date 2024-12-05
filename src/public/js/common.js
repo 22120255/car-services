@@ -81,8 +81,4 @@ const refreshCart = async () => {
   $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await refreshCart();
-});
-
 export { showToast, showModal, loadCartData, refreshCart };
