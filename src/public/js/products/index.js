@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Nút "First" và "Prev"
     $pagination.append(`
             <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="prevPage">&laquo;</a>
+                <a class="page-link" href="#" id="prevPage">&lsaquo;</a>
             </li>
         `);
 
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Nút "Next" và "Last"
     $pagination.append(`
             <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="nextPage">&raquo;</a>
+                <a class="page-link" href="#" id="nextPage">&rsaquo;</a>
             </li>
         `);
   }
@@ -200,16 +200,14 @@ document.addEventListener('DOMContentLoaded', function () {
           products = resp.products;
           totalItems = resp.total;
           totalPages = Math.ceil(totalItems / limit);
-          filters = resp.filters;
+          // filters = resp.filters;
         },
         500(resp) {
           console.error('Lỗi khi tải dữ liệu:', resp);
         },
       },
     });
-    if (filters) {
-      renderFilters(filters, params);
-    }
+
     renderProducts(products);
   }
 
@@ -265,33 +263,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // render filters
-  function renderFilters(filters, params) {
-    // Xử lý từng loại filter
-    const renderSelectOptions = (element, options, selectedValue, defaultText) => {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-      options.forEach((option) => {
-        element.append(`<option value="${option.value}" ${selectedValue === option.value ? 'selected' : ''}>${option.name}</option>`);
-      });
-    };
-
-    renderSelectOptions($('#yearFilter'), filters.years, params.year, 'Select year');
-    renderSelectOptions($('#styleFilter'), filters.styles, params.style, 'Select style');
-    renderSelectOptions($('#brandFilter'), filters.brands, params.brand, 'Select brand');
-    renderSelectOptions($('#statusFilter'), filters.statuses, params.status, 'Select status');
-    renderSelectOptions($('#transmissionFilter'), filters.transmissions, params.transmission, 'Select transmission');
-
-    // Xử lý riêng cho price filter
-    const priceFilter = $('#priceFilter');
-    priceFilter.empty().append('<option value="">Select price</option>');
-    filters.prices.forEach((price) => {
-      const isSelected = parseFloat(params.priceMin) === price.priceMin && parseFloat(params.priceMax) === price.priceMax;
-
-      priceFilter.append(
-        `<option value="${price.priceMin}-${price.priceMax}" ${isSelected ? 'selected' : ''}>$${price.priceMin}-$${price.priceMax}</option>`
-      );
-    });
-  }
 
   // Xử lý sự kiện click pagination
   $('.pagination').on('click', 'a.page-link', async function (e) {
