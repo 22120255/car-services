@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const siteController = require('../../controllers/SiteController')
-const { checkRole } = require('../../middleware/authMiddleware');
+const { checkRole, isAuthenticated } = require('../../middleware/authMiddleware');
 const cacheMiddleware = require('../../middleware/cacheMiddleware')
 
 router.get('/settings', cacheMiddleware, siteController.settings)

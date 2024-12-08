@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $pagination.append(`
         <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-            <a class="page-link" href="#" id="prevPage">&laquo;</a>
+            <a class="page-link" href="#" id="prevPage">&lsaquo;</a>
         </li>
       `);
 
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $pagination.append(`
         <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-            <a class="page-link" href="#" id="nextPage">&raquo;</a>
+            <a class="page-link" href="#" id="nextPage">&rsaquo;</a>
         </li>
       `);
   }
