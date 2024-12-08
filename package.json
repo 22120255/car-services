@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/app.js",
     "start": "cross-env NODE_ENV=production node src/app.js",
+    "watch": "node-sass --watch src/styles/ --output src/public/css/",
     "seed:users": "cross-env NODE_ENV=development node src/data/seed/user.js",
     "seed:products": "cross-env NODE_ENV=development node src/data/seed/product.js",
     "seed:accessory": "cross-env NODE_ENV=development node src/data/seed/accessory.js",
