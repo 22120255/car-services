@@ -114,7 +114,6 @@ class UserController {
   // [POST] /api/inventory/create-product
   async createProduct(req, res) {
     try {
-      console.log(req.body);
       const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images, importPrice, fuelType } = req.body;
       const product = await UserService.createProduct(
         brand,
@@ -288,7 +287,7 @@ class UserController {
     try {
       const { id } = req.body;
       const user = await UserService.updateProfile(id, req.body);
-      clearCache(`/profile/${id}`);
+      clearCache(`user/profile/${id}`);
       res.status(200).json(user);
     } catch (error) {
       errorLog('UserController', 'updateProfile', error.message);
@@ -302,8 +301,9 @@ class UserController {
       const pathFile = req.file.path;
       const userId = req.body.userId;
 
-      const result = await UserService.updateAvatar(userId, pathFile);
-      res.status(200).json(result);
+      await UserService.updateAvatar(userId, pathFile);
+      clearCache(`user/profile/${userId}`);
+      res.status(200).json(pathFile);
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
       res.status(500).json({

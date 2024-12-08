@@ -57,14 +57,13 @@ async function loadCartData() {
   await $.ajax({
     url: '/api/cart/data',
     type: 'GET',
-    statusCode: {
-      200: function (data) {
-        cart = data;
-      },
-      404: function () {
+    success(data) {
+      cart = data;
+    },
+    error(xhr) {
+      if (xhr.status === 404) {
         console.log('Cart data not found.');
-      },
-      500: function () {
+      } else if (xhr.status === 500) {
         console.log('Server error occurred.');
       }
     }
@@ -72,13 +71,13 @@ async function loadCartData() {
   return cart;
 }
 
-const refreshCart = async () => {
-  const cart = await loadCartData();
-  if (!cart || cart.items?.length === 0) {
-    $('#btn-cart .btn-cart__badge').addClass("d-none");
-    return;
-  };
-  $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
-};
+// const refreshCart = async () => {
+//   const cart = await loadCartData();
+//   if (!cart || cart.items?.length === 0) {
+//     $('#btn-cart .btn-cart__badge').addClass("d-none");
+//     return;
+//   };
+//   $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
+// };
 
-export { showToast, showModal, loadCartData, refreshCart };
+export { showToast, showModal, loadCartData };

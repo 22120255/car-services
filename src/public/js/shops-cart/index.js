@@ -1,4 +1,5 @@
-import { loadCartData, showModal, refreshCart } from '../common.js';
+import { loadCartData, showModal } from '../common.js';
+import { updateAmountCart } from '../store/index.js';
 import { createQr } from './payment.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async function () {
               'Payment',
               data,
               'OK',
-              () => {},
+              () => { },
               () => {
                 createQr();
               }
@@ -144,7 +145,6 @@ function removeItemHandler(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await removeItem(cart, productId);
-      await refreshCart();
     });
   });
 }
@@ -200,6 +200,7 @@ async function removeItem(cart, productId) {
     const data = await response.json();
     if (response.ok && data.cart) {
       renderCartTable(data.cart);
+      updateAmountCart(data.cart.length)
     } else {
       console.error('Error:', data.message || 'Unexpected response');
     }

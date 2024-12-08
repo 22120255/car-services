@@ -1,4 +1,5 @@
-import { showToast, refreshCart } from "../common.js"
+import { showToast } from "../common.js"
+import { store, updateAmountCart } from "../store/index.js";
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -13,9 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'POST',
       data: { quantity },
       success: function (response) {
-        console.log(response)
         showToast('Success', 'Added to cart')
-        refreshCart();
+        const amountCart = store.getState().amountCart;
+        updateAmountCart(amountCart + 1);
       },
       error: function (error) {
         console.log(error)
