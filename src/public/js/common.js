@@ -43,11 +43,9 @@ function showModal(title, content, btnSubmit = 'OK', callback = () => { }, onSho
       modal.modal('hide');
     });
 
-  modal
-    .off('shown.bs.modal')
-    .on('shown.bs.modal', () => {
-      onShowCallback();
-    });
+  modal.off('shown.bs.modal').on('shown.bs.modal', () => {
+    onShowCallback();
+  });
 
   modal.modal('show').css('background-color', 'rgba(0, 0, 0, 0.4)');
 }
@@ -66,18 +64,21 @@ async function loadCartData() {
       } else if (xhr.status === 500) {
         console.log('Server error occurred.');
       }
-    }
+    },
   });
   return cart;
 }
 
-// const refreshCart = async () => {
-//   const cart = await loadCartData();
-//   if (!cart || cart.items?.length === 0) {
-//     $('#btn-cart .btn-cart__badge').addClass("d-none");
-//     return;
-//   };
-//   $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
-// };
+function updateQueryParams(paramsToUpdate) {
+  const params = new URLSearchParams(window.location.search);
+  Object.entries(paramsToUpdate).forEach(([key, value]) => {
+    if (value == null || value === '') {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+  });
+  window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+}
 
-export { showToast, showModal, loadCartData };
+export { showToast, showModal, loadCartData, updateQueryParams };

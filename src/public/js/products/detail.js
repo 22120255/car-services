@@ -1,13 +1,13 @@
-import { showToast } from "../common.js"
+import { showToast, updateQueryParams } from '../common.js';
 import { store, updateAmountCart } from "../store/index.js";
 
 
 document.addEventListener('DOMContentLoaded', function () {
   // Lắng nghe sự kiện click vào tab
   $('.add-to-cart').on('click', function (event) {
-    event.preventDefault()
-    const quantity = 1
-    $("#icon-loading").removeClass("d-none");
+    event.preventDefault();
+    const quantity = 1;
+    $('#icon-loading').removeClass('d-none');
 
     $.ajax({
       url: '/api/cart/add/' + $(this).data('id'),
@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', function () {
         updateAmountCart(amountCart + 1);
       },
       error: function (error) {
-        console.log(error)
-        showToast('Error', 'Failed to add to cart')
+        console.log(error);
+        showToast('Error', 'Failed to add to cart');
       },
       complete: function () {
-        $("#icon-loading").addClass("d-none");
-      }
-    })
-  })
+        $('#icon-loading').addClass('d-none');
+      },
+    });
+  });
 
   const urlParams = new URLSearchParams(window.location.search);
   let products = null;
@@ -224,18 +224,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit, offset });
     await refresh();
   });
-
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   async function refresh() {
     await loadData(); // Tải dữ liệu mới
