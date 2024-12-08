@@ -11,3 +11,4 @@
 2024-12-05 14:02:08 [ERROR]: File: CartController.js, func: getCartData, error: error is not defined
 2024-12-05 14:02:11 [ERROR]: File: CartController.js, func: getCartData, error: error is not defined
 2024-12-05 14:02:15 [ERROR]: File: CartController.js, func: getCartData, error: error is not defined
+2024-12-08 17:12:30 [ERROR]: File: UserController, func: createProduct, error: Product validation failed: brand: Path `brand` is required., description: Path `description` is required., horsepower: Path `horsepower` is required., mileage: Path `mileage` is required., model: Path `model` is required., price: Path `price` is required., importPrice: Path `importPrice` is required., transmission: Path `transmission` is required., style: Path `style` is required., fuelType: Path `fuelType` is required., status: `` is not a valid enum value for path `status`., year: Path `year` is required.

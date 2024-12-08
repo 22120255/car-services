@@ -4,15 +4,15 @@ const router = express.Router();
 const { isAuthenticated } = require('../../middleware/authMiddleware');
 const userController = require('../../controllers/UserController');
 const { checkRole } = require('../../middleware/authMiddleware');
-const { uploadImage } = require('../../config/multer');
+const { uploadAvatar, uploadProductImage } = require('../../config/multer');
 const productController = require('../../controllers/ProductController');
 
 router.patch('/update-role', checkRole(['admin', 'sadmin']), userController.updateRole);
 router.patch('/update-status', checkRole(['admin', 'sadmin']), userController.updateStatus);
-router.patch('/avatar/store', uploadImage.single('avatar'), userController.updateAvatar);
+router.patch('/avatar/store', uploadAvatar.single('avatar'), userController.updateAvatar);
 router.delete('/:id', checkRole(['admin', 'sadmin']), userController.deleteUser);
 router.get('/', checkRole(['admin', 'sadmin']), userController.getUsers);
-
+router.patch('/product/store', uploadProductImage.single('image'), userController.storeProduct);
 router.patch('/', isAuthenticated, userController.updateProfile);
 
 // inventory

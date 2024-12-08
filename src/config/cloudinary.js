@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+const { v2: cloudinary } = require('cloudinary');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -6,11 +6,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-cloudinary.api.resources((error, result) => {
-  if (error) {
-    console.error('Cloudinary Connection Failed:', error);
-  } else {
-    console.log('Cloudinary Connection Successful:', result);
-  }
-});
-module.exports = cloudinary;
+module.exports = { cloudinary };
