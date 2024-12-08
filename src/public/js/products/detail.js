@@ -1,4 +1,6 @@
-import { showToast, refreshCart, updateQueryParams } from '../common.js';
+import { showToast, updateQueryParams } from '../common.js';
+import { store, updateAmountCart } from "../store/index.js";
+
 
 document.addEventListener('DOMContentLoaded', function () {
   // Lắng nghe sự kiện click vào tab
@@ -12,9 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'POST',
       data: { quantity },
       success: function (response) {
-        console.log(response);
-        showToast('Success', 'Added to cart');
-        refreshCart();
+        showToast('Success', 'Added to cart')
+        const amountCart = store.getState().amountCart;
+        updateAmountCart(amountCart + 1);
       },
       error: function (error) {
         console.log(error);

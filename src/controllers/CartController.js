@@ -73,7 +73,7 @@ class CartController {
         const itemProductId = item.productId instanceof Object ? item.productId.toString() : item.productId;
         return itemProductId === productId;
       });
-      console.log('existingItem', existingItem);
+
       if (existingItem) {
         existingItem.quantity += quantity;
         cart.total += existingItem.price * quantity;
