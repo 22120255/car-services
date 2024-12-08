@@ -1,4 +1,5 @@
 import { getFilterConfigProduct } from '../config.js';
+import { updateQueryParams } from '../common.js';
 
 // Load filter
 document.addEventListener('DOMContentLoaded', function () {
@@ -263,7 +264,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-
   // Xử lý sự kiện click pagination
   $('.pagination').on('click', 'a.page-link', async function (e) {
     e.preventDefault();
@@ -304,19 +304,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
-
-  // updateQuery
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   async function refresh() {
     await loadData();

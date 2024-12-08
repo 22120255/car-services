@@ -1,13 +1,13 @@
-const redisClient = require('../config/redis')
+const redisClient = require('../config/redis');
 
 const clearCache = (key) => {
-    redisClient.del(key, (err, response) => {
-        if (err) {
-            console.error('Error clearing cache:', err)
-        }
-    })
-}
+  redisClient.del(key, (err, response) => {
+    if (err) {
+      console.error('Error clearing cache:', err);
+    }
+  });
+};
 
 module.exports = {
-    clearCache
-}
+  clearCache,
+};

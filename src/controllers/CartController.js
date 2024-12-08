@@ -12,13 +12,15 @@ class CartController {
     try {
       let userId = req.user._id;
       const cart = await Cart.findOne({ userId });
-
+      console.log(cart);
       if (!cart) {
         errorLog('CartController.js', 'createQR', 'Cart not found');
         return res.status(400).json({ message: 'Cart not found.' });
       }
 
       const amount = cart.total;
+
+      console.log('amount', amount);
       const cartID = cart._id;
       userId = userId.toString().slice(-4) + 'XXXX';
       const description = `KH ${userId} TT ${cartID}`;

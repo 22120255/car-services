@@ -26,7 +26,7 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal(title, content, btnSubmit = 'OK', callback = () => { }, onShowCallback = () => { }) {
+function showModal(title, content, btnSubmit = 'OK', callback = () => {}, onShowCallback = () => {}) {
   const modal = $('#notify-modal');
 
   // Cập nhật tiêu đề và nội dung của modal
@@ -43,11 +43,9 @@ function showModal(title, content, btnSubmit = 'OK', callback = () => { }, onSho
       modal.modal('hide');
     });
 
-  modal
-    .off('shown.bs.modal')
-    .on('shown.bs.modal', () => {
-      onShowCallback();
-    });
+  modal.off('shown.bs.modal').on('shown.bs.modal', () => {
+    onShowCallback();
+  });
 
   modal.modal('show').css('background-color', 'rgba(0, 0, 0, 0.4)');
 }
@@ -66,8 +64,8 @@ async function loadCartData() {
       },
       500: function () {
         console.log('Server error occurred.');
-      }
-    }
+      },
+    },
   });
   return cart;
 }
@@ -75,10 +73,24 @@ async function loadCartData() {
 const refreshCart = async () => {
   const cart = await loadCartData();
   if (!cart || cart.items?.length === 0) {
-    $('#btn-cart .btn-cart__badge').addClass("d-none");
+    $('#btn-cart .btn-cart__badge').addClass('d-none');
     return;
-  };
-  $('#btn-cart .btn-cart__badge').removeClass("d-none").text(cart.items.length > 9 ? '9+' : cart.items.length);
+  }
+  $('#btn-cart .btn-cart__badge')
+    .removeClass('d-none')
+    .text(cart.items.length > 9 ? '9+' : cart.items.length);
 };
 
-export { showToast, showModal, loadCartData, refreshCart };
+function updateQueryParams(paramsToUpdate) {
+  const params = new URLSearchParams(window.location.search);
+  Object.entries(paramsToUpdate).forEach(([key, value]) => {
+    if (value == null || value === '') {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+  });
+  window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+}
+
+export { showToast, showModal, loadCartData, refreshCart, updateQueryParams };

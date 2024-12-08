@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../../common.js';
+import { showToast, showModal, updateQueryParams } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
@@ -48,7 +48,7 @@ function showModalDetail(product) {
 
   // Cập nhật hình ảnh chính
   $('#mainDetailImage')
-    .attr('src', product.images?.image1 || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
+    .attr('src', product.images?.at(0) || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
   // Cập nhật các hình ảnh thu nhỏ
@@ -506,19 +506,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
-
-  // updateQuery
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   async function refresh() {
     await loadData();

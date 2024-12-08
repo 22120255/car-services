@@ -229,6 +229,15 @@ class UserController {
     }
   }
 
+  // [PATCH] /api/user/product/store
+  async storeProduct(req, res) {
+    if (req.file) {
+      console.log(req.file);
+      return res.json({ secure_url: req.file.path }); // Sử dụng secure_url thay vì path
+    }
+    return res.status(400).json({ message: 'Failed to upload image' });
+  }
+
   // [GET] /admin/orders
   async orders(req, res) {
     try {
@@ -301,8 +310,8 @@ class UserController {
     try {
       const pathFile = req.file.path;
       const userId = req.body.userId;
-
       const result = await UserService.updateAvatar(userId, pathFile);
+      clearCache(`/profile/${userId}`);
       res.status(200).json(result);
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
