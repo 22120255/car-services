@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../../common.js';
+import { showToast, showModal, updateQueryParams } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
@@ -506,19 +506,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
-
-  // updateQuery
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   async function refresh() {
     await loadData();
