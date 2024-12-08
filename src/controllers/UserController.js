@@ -310,8 +310,8 @@ class UserController {
     try {
       const pathFile = req.file.path;
       const userId = req.body.userId;
-
       const result = await UserService.updateAvatar(userId, pathFile);
+      clearCache(`/profile/${userId}`);
       res.status(200).json(result);
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
