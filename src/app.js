@@ -57,6 +57,12 @@ if (process.env.NODE_ENV === 'development') {
 app.use(navigateUser)
 app.use(refreshSession)
 
+// Elasticsearch
+app.use((req, res, next) => {
+    req.elasticsearch = elasticsearchClient
+    next()
+})
+
 // Register the eq helper
 
 // Template engine

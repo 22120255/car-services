@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="header clearfix">
+        <h3 class="text-muted">Kết quả thanh toán</h3>
+    </div>
+    <div class="table-responsive">
+        <div class="form-group">
+            <label>Mã đơn hàng:</label>
+            <label>{{orderId}}</label>
+        </div>    
+        <div class="form-group">
+            <label>Số tiền:</label>
+            <label>{{amount}}</label>
+        </div>  
+        <div class="form-group">
+            <label>Nội dung thanh toán:</label>
+            <label>{{orderInfo}}</label>
+        </div> 
+        <div class="form-group">
+            <label>Mã phản hồi (vnp_ResponseCode):</label>
+            <label>{{vnpResponse}}</label>
+        </div> 
+        <div class="form-group">
+            <label>Mã GD Tại VNPAY:</label>
+            <label>{{transactionNo}}</label>
+        </div> 
+        <div class="form-group">
+            <label>Mã Ngân hàng:</label>
+            <label>{{bankCode}}</label>
+        </div> 
+        <div class="form-group">
+            <label>Thời gian thanh toán:</label>
+            <label>{{payDate}}</label>
+        </div> 
+        <div class="form-group">
+            <label>Kết quả:</label>
+            <label>
+                {{
+#if
+ success}}
+                    <span style="color:blue">GD Thành công</span>
+                {{else}}
+                    <span style="color:red">GD Thất bại</span>
+                {{
+/if
+}}
+            </label>
+        </div> 
+    </div>
+    <p>
+        <a class="btn btn-primary" href="/">Về trang chủ</a>
+    </p>
+</div>

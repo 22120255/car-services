@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="header clearfix">
+        <h3 class="text-muted">Lỗi</h3>
+    </div>
+    <div class="alert alert-danger">
+        <strong>Có lỗi xảy ra!</strong>
+        <p>{{message}}</p>
+        {{
+#if
+ error}}
+            <pre>{{error.stack}}</pre>
+        {{
+/if
+}}
+    </div>
+    <p>
+        <a class="btn btn-primary" href="/">Về trang chủ</a>
+    </p>
+</div>

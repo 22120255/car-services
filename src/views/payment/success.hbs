@@ -1,0 +1,41 @@
+{{> layout}}
+
+{{#block "content"}}
+    <h3>{{title}}</h3>
+    <div class="table-responsive">
+        <form action="refund" method="POST">
+            <div class="form-group">
+                <label>Mã giao dịch (vnp_TxnRef):</label>
+                <input class="form-control" name="orderId" />
+            </div>
+            <div class="form-group">
+                <label>Số tiền hoàn:</label>
+                <input class="form-control" name="amount" />
+            </div>
+            <div class="form-group">
+                <label>Kiểu hoàn tiền (vnp_TransactionType):</label>
+                <select class="form-control" name="transType">
+                    <option value="02">Hoàn toàn phần</option>
+                    <option value="03">Hoàn một phần</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Thời gian tạo giao dịch (vnp_TransactionDate)</label>
+                <input class="form-control" name="transDate" placeholder="yyyyMMddHHmmss" />
+            </div>
+            <div class="form-group">
+                <label>User thực hiện hoàn (vnp_CreateBy)</label>
+                <input class="form-control" name="user" />
+            </div>
+            <button class="btn btn-default" type="submit">Refund</button>
+        </form>
+    </div>
+    {{#if (eq code "00")}}
+        <p style="text-align: center">GD thành công</p>
+    {{else}}
+        <p style="text-align: center; color: red">GD thất bại</p>
+    {{/if}}
+    <p style="text-align: center">
+        <a class="btn btn-default" href="/order">Về danh sách</a>
+    </p>
+{{/block}}
