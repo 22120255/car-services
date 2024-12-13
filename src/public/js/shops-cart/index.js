@@ -5,21 +5,15 @@ document.addEventListener('DOMContentLoaded', async function () {
   try {
     let cart = await loadCartData();
 
-    if (cart && cart.items && cart.items.length > 0) {
+    if (cart && cart.items.length > 0) {
       renderCartTable(cart);
+      const totalAmount = cart.total;
+      const paymentUrl = `/payment/create_payment_url?amount=${totalAmount}`;
       $('#checkout').on('click', function (event) {
-        $.ajax(`/cart/payment/${cart._id}`, {
+        $.ajax(paymentUrl, {
           method: 'GET',
-          success: function (data) {
-            showModal(
-              'Payment',
-              data,
-              'OK',
-              () => {},
-              () => {
-                createQr();
-              }
-            );
+          success: function (response) {
+            window.location.href = paymentUrl;
           },
           error: function (error) {
             console.error('Error:', error);

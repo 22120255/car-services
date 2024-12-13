@@ -25,10 +25,17 @@ const sortObject = (obj) => {
 class PaymentController {
     // Hiển thị form thanh toán
     getCreatePayment(req, res) {
+        console.log('Full request:', {
+            query: req.query,
+            url: req.url,
+            originalUrl: req.originalUrl,
+            params: req.params
+        });
+        const amount = req.query.amount || 0;
         res.render('payment/order', {
             layout: 'payment',
             title: 'Thanh toán',
-            amount: 10000
+            amount,        
         });
     }
 
@@ -67,7 +74,8 @@ class PaymentController {
             vnp_Amount: amount * 100,
             vnp_ReturnUrl: vnpayConfig.vnp_ReturnUrl,
             vnp_IpAddr: ipAddr,
-            vnp_CreateDate: createDate
+            vnp_CreateDate: createDate,
+            vnp_IPNUrl: vnpayConfig.vnp_IPNUrl
         };
 
         if(bankCode) {
