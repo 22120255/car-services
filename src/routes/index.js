@@ -5,6 +5,7 @@ const dashboardRouter = require('./ui/dashboard');
 const cartRouter = require('./ui/cart');
 const userRouter = require('./ui/user');
 const adminRouter = require('./ui/admin');
+const paymentRouter = require('./ui/payment');
 
 const userApiRouter = require('./api/user');
 const authApiRouter = require('./api/auth');
@@ -27,6 +28,7 @@ function route(app) {
   app.use('/cart', cartRouter);
   app.use('/user', userRouter);
   app.use('/admin', adminRouter);
+  app.use('/payment', paymentRouter);
   app.use('/', siteRouter);
 }
 

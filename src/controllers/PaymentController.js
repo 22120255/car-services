@@ -33,12 +33,12 @@ class PaymentController {
     }
 
     // Hiển thị form hoàn tiền
-    getRefund(req, res) {
-        res.render('payment/refund', {
-            layout: 'payment',
-            title: 'Hoàn tiền giao dịch thanh toán'
-        });
-    }
+    // getRefund(req, res) {
+    //     res.render('payment/refund', {
+    //         layout: 'payment',
+    //         title: 'Hoàn tiền giao dịch thanh toán'
+    //     });
+    // }
 
     // Xử lý tạo URL thanh toán
     createPayment(req, res) {
@@ -162,49 +162,49 @@ class PaymentController {
     }
 
     // Hoàn tiền
-    refund(req, res) {
-        process.env.TZ = 'Asia/Ho_Chi_Minh';
-        const date = new Date();
+    // refund(req, res) {
+    //     process.env.TZ = 'Asia/Ho_Chi_Minh';
+    //     const date = new Date();
         
-        const {
-            orderId: vnp_TxnRef,
-            transDate: vnp_TransactionDate,
-            amount,
-            transType: vnp_TransactionType,
-            user: vnp_CreateBy
-        } = req.body;
+    //     const {
+    //         orderId: vnp_TxnRef,
+    //         transDate: vnp_TransactionDate,
+    //         amount,
+    //         transType: vnp_TransactionType,
+    //         user: vnp_CreateBy
+    //     } = req.body;
 
-        const vnp_Amount = amount * 100;
-        const vnp_RequestId = moment(date).format('HHmmss');
-        const vnp_Version = '2.1.0';
-        const vnp_Command = 'refund';
-        const vnp_OrderInfo = 'Hoan tien GD ma:' + vnp_TxnRef;
-        const vnp_IpAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        const vnp_CreateDate = moment(date).format('YYYYMMDDHHmmss');
-        const vnp_TransactionNo = '0';
+    //     const vnp_Amount = amount * 100;
+    //     const vnp_RequestId = moment(date).format('HHmmss');
+    //     const vnp_Version = '2.1.0';
+    //     const vnp_Command = 'refund';
+    //     const vnp_OrderInfo = 'Hoan tien GD ma:' + vnp_TxnRef;
+    //     const vnp_IpAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    //     const vnp_CreateDate = moment(date).format('YYYYMMDDHHmmss');
+    //     const vnp_TransactionNo = '0';
 
-        const data = `${vnp_RequestId}|${vnp_Version}|${vnp_Command}|${vnpayConfig.vnp_TmnCode}|${vnp_TransactionType}|${vnp_TxnRef}|${vnp_Amount}|${vnp_TransactionNo}|${vnp_TransactionDate}|${vnp_CreateBy}|${vnp_CreateDate}|${vnp_IpAddr}|${vnp_OrderInfo}`;
-        const hmac = crypto.createHmac("sha512", vnpayConfig.vnp_HashSecret);
-        const vnp_SecureHash = hmac.update(new Buffer(data, 'utf-8')).digest("hex");
+    //     const data = `${vnp_RequestId}|${vnp_Version}|${vnp_Command}|${vnpayConfig.vnp_TmnCode}|${vnp_TransactionType}|${vnp_TxnRef}|${vnp_Amount}|${vnp_TransactionNo}|${vnp_TransactionDate}|${vnp_CreateBy}|${vnp_CreateDate}|${vnp_IpAddr}|${vnp_OrderInfo}`;
+    //     const hmac = crypto.createHmac("sha512", vnpayConfig.vnp_HashSecret);
+    //     const vnp_SecureHash = hmac.update(new Buffer(data, 'utf-8')).digest("hex");
 
-        const dataObj = {
-            vnp_RequestId, vnp_Version, vnp_Command,
-            vnp_TmnCode: vnpayConfig.vnp_TmnCode,
-            vnp_TransactionType, vnp_TxnRef, vnp_Amount,
-            vnp_TransactionNo, vnp_CreateBy, vnp_OrderInfo,
-            vnp_TransactionDate, vnp_CreateDate, vnp_IpAddr,
-            vnp_SecureHash
-        };
+    //     const dataObj = {
+    //         vnp_RequestId, vnp_Version, vnp_Command,
+    //         vnp_TmnCode: vnpayConfig.vnp_TmnCode,
+    //         vnp_TransactionType, vnp_TxnRef, vnp_Amount,
+    //         vnp_TransactionNo, vnp_CreateBy, vnp_OrderInfo,
+    //         vnp_TransactionDate, vnp_CreateDate, vnp_IpAddr,
+    //         vnp_SecureHash
+    //     };
 
-        request({
-            url: vnpayConfig.vnp_Api,
-            method: "POST",
-            json: true,
-            body: dataObj
-        }, function (error, response, body) {
-            res.json(body || error);
-        });
-    }
+    //     request({
+    //         url: vnpayConfig.vnp_Api,
+    //         method: "POST",
+    //         json: true,
+    //         body: dataObj
+    //     }, function (error, response, body) {
+    //         res.json(body || error);
+    //     });
+    // }
 }
 
 module.exports = new PaymentController();

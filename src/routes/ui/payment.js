@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const PaymentController = require('../../controllers/PaymentController'); // Ensure the correct path
 
-// Tạo URL thanh toán
-router.post('/create_payment_url', PaymentController.createPayment);
+// Form thanh toán
+router.get('/create_payment_url', PaymentController.getCreatePayment);
 
-// IPN URL
-router.get('/vnpay_ipn', PaymentController.vnpayIPN);
+// Kết quả thanh toán
+router.get('/vnpay_return', PaymentController.vnpayReturn);
 
 module.exports = router;
