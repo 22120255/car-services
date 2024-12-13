@@ -1,57 +1,68 @@
 <div class="container">
-    <h3>{{title}}</h3>
+    <h3 class="text-center mb-4" style="color: var(--primary-blue);">{{title}}</h3>
     <div class="table-responsive">
-        <form id="createOrder" action="create_payment_url" method="POST">
-            <div class="form-group">
-                <label>Số tiền</label>
-                <input class="form-control" id="amount" name="amount" placeholder="Số tiền" value="{{amount}}">
-            </div>
-
-            <div class="form-group">
-                <label>Chọn Phương thức thanh toán:</label>
-                <div class="controls">
-                    <label class="radio-inline">
-                        <input type="radio" name="bankCode" id="defaultPaymentMethod" value="" checked="true">
-                        Cổng thanh toán VNPAYQR
-                    </label>
-                </div>
-                <div class="controls">
-                    <label class="radio-inline">
-                        <input type="radio" name="bankCode" id="vnpayqrPaymentMethod" value="VNPAYQR">
-                        Thanh toán qua ứng dụng hỗ trợ VNPAYQR
-                    </label>
-                </div>
-                <div class="controls">
-                    <label class="radio-inline">
-                        <input type="radio" name="bankCode" id="vnbankPaymentMethod" value="VNBANK">
-                        Thanh toán qua ATM-Tài khoản ngân hàng nội địa
-                    </label>
-                </div>
-                <div class="controls">
-                    <label class="radio-inline">
-                        <input type="radio" name="bankCode" id="intcardPaymentMethod" value="INTCARD">
-                        Thanh toán qua thẻ quốc tế
-                    </label>
+        <form id="createOrder" action="create_payment_url" method="POST" class="p-4 bg-white rounded shadow-sm">
+            <div class="form-group mb-4">
+                <label class="form-label fw-bold" style="color: var(--primary-blue);">Số tiền</label>
+                <div class="input-group">
+                    <input class="form-control" id="amount" name="amount" placeholder="Nhập số tiền cần thanh toán" value="{{amount}}" readonly>
+                    <span class="input-group-text" style="background-color: var(--primary-red); color: white;">VNĐ</span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Ngôn ngữ</label>
-                <div class="controls">
-                    <label class="radio-inline">
-                        <input type="radio" name="language" id="vnLanguage" value="vn" checked="true">
-                        Tiếng việt
-                    </label>
-                </div>
-                <div class="controls">
-                    <label class="radio-inline">
-                        <input type="radio" name="language" id="enLanguage" value="en">
-                        Tiếng anh
-                    </label>
+            <div class="form-group mb-4">
+                <label class="form-label fw-bold" style="color: var(--primary-blue);">Chọn Phương thức thanh toán:</label>
+                <div class="payment-methods p-3 border rounded">
+                    <div class="form-check mb-3">
+                        <input type="radio" class="form-check-input" name="bankCode" id="defaultPaymentMethod" value="" checked="true" style="border-color: var(--primary-blue);">
+                        <label class="form-check-label" for="defaultPaymentMethod">
+                            <i class="fas fa-qrcode me-2" style="color: var(--primary-red);"></i>Cổng thanh toán VNPAYQR
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="radio" class="form-check-input" name="bankCode" id="vnpayqrPaymentMethod" value="VNPAYQR" style="border-color: var(--primary-blue);">
+                        <label class="form-check-label" for="vnpayqrPaymentMethod">
+                            <i class="fas fa-mobile-alt me-2" style="color: var(--primary-red);"></i>Thanh toán qua ứng dụng hỗ trợ VNPAYQR
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="radio" class="form-check-input" name="bankCode" id="vnbankPaymentMethod" value="VNBANK" style="border-color: var(--primary-blue);">
+                        <label class="form-check-label" for="vnbankPaymentMethod">
+                            <i class="fas fa-university me-2" style="color: var(--primary-red);"></i>Thanh toán qua ATM-Tài khoản ngân hàng nội địa
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="bankCode" id="intcardPaymentMethod" value="INTCARD" style="border-color: var(--primary-blue);">
+                        <label class="form-check-label" for="intcardPaymentMethod">
+                            <i class="fas fa-credit-card me-2" style="color: var(--primary-red);"></i>Thanh toán qua thẻ quốc tế
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <button class="btn btn-default" id="btnPopup" type="submit">Thanh toán</button>
+            <div class="form-group mb-4">
+                <label class="form-label fw-bold" style="color: var(--primary-blue);">Ngôn ngữ</label>
+                <div class="language-selection p-3 border rounded">
+                    <div class="form-check mb-2">
+                        <input type="radio" class="form-check-input" name="language" id="vnLanguage" value="vn" checked="true" style="border-color: var(--primary-blue);">
+                        <label class="form-check-label" for="vnLanguage">
+                            <i class="fas fa-flag me-2" style="color: var(--primary-red);"></i>Tiếng Việt
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="language" id="enLanguage" value="en" style="border-color: var(--primary-blue);">
+                        <label class="form-check-label" for="enLanguage">
+                            <i class="fas fa-flag me-2" style="color: var(--primary-red);"></i>Tiếng Anh
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-lg px-5" id="btnPopup" type="submit" style="background: linear-gradient(to right, var(--primary-red), var(--primary-blue)); color: white; border: none;">
+                    <i class="fas fa-lock me-2"></i>Thanh toán an toàn
+                </button>
+            </div>
         </form>
     </div>
 </div>

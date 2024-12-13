@@ -12,10 +12,10 @@ router.get('/refund', PaymentController.getRefund);
 router.post('/create_payment_url', PaymentController.createPayment);
 
 // Kết quả thanh toán
-router.get('/VNPay_return', PaymentController.vnpayReturn);
+router.get('/vnpay_return', PaymentController.vnpayReturn);
 
 // IPN URL
-router.get('/VNPay_ipn', PaymentController.vnpayIPN);
+router.get('/vnpay_ipn', PaymentController.vnpayIPN);
 
 // Truy vấn giao dịch
 // Add the corresponding method in PaymentController if needed

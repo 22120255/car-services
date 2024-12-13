@@ -100,18 +100,22 @@ class PaymentController {
         let tmnCode = vnpayConfig.vnp_TmnCode;
         let secretKey = vnpayConfig.vnp_HashSecret;
 
-        let signData = querystring.stringify(vnp_Params, { encode: false });    
+        let signData = qs.stringify(vnp_Params, { encode: false });    
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");    
-        console.log('signed', signed);
-        console.log('secureHash', secureHash); 
-
+        console.log(vnp_Params['vnp_ResponseCode']);
         if(secureHash === signed){
             //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
 
-            res.render('payment/success', {code: vnp_Params['vnp_ResponseCode']})
+            res.render('payment/success', {
+                layout: 'payment',
+                code: vnp_Params['vnp_ResponseCode']
+            })
         } else{
-            res.render('payment/success', {code: '97'})
+            res.render('payment/success', {
+                layout: 'payment',
+                code: '97'
+            })
         }
     }
 
@@ -155,40 +159,6 @@ class PaymentController {
         } else {
             res.status(200).json({RspCode: '97', Message: 'Invalid signature'});
         }
-    }
-
-    // Truy vấn giao dịch
-    queryTransaction(req, res) {
-        process.env.TZ = 'Asia/Ho_Chi_Minh';
-        const date = new Date();
-        const vnp_RequestId = moment(date).format('HHmmss');
-        const vnp_Version = '2.1.0';
-        const vnp_Command = 'querydr';
-        const vnp_TxnRef = req.body.orderId;
-        const vnp_TransactionDate = req.body.transDate;
-        const vnp_CreateDate = moment(date).format('YYYYMMDDHHmmss');
-        const vnp_IpAddr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        const vnp_OrderInfo = 'Truy van GD ma:' + vnp_TxnRef;
-
-        const data = `${vnp_RequestId}|${vnp_Version}|${vnp_Command}|${vnpayConfig.vnp_TmnCode}|${vnp_TxnRef}|${vnp_TransactionDate}|${vnp_CreateDate}|${vnp_IpAddr}|${vnp_OrderInfo}`;
-        const hmac = crypto.createHmac("sha512", vnpayConfig.vnp_HashSecret);
-        const vnp_SecureHash = hmac.update(new Buffer(data, 'utf-8')).digest("hex");
-
-        const dataObj = {
-            vnp_RequestId, vnp_Version, vnp_Command, 
-            vnp_TmnCode: vnpayConfig.vnp_TmnCode,
-            vnp_TxnRef, vnp_OrderInfo, vnp_TransactionDate,
-            vnp_CreateDate, vnp_IpAddr, vnp_SecureHash
-        };
-
-        request({
-            url: vnpayConfig.vnp_Api,
-            method: "POST",
-            json: true,
-            body: dataObj
-        }, function (error, response, body) {
-            res.json(body || error);
-        });
     }
 
     // Hoàn tiền
