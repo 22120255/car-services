@@ -1,5 +1,4 @@
 import { loadCartData, showModal, refreshCart } from '../common.js';
-import { createQr } from './payment.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   try {
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             submitBtn.prop('disabled', true)
               .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
       
-            // Sửa lại cách gửi request
             $.ajax({
               url: '/api/orders/create',
               method: 'POST',
@@ -62,18 +60,29 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
               }),
               success: function(response) {
-                if (response.paymentUrl) {
-                  localStorage.removeItem('cart');
-                  window.location.href = response.paymentUrl;
+                console.log('Order Response:', response);
+                if (response.order) {
+                  // Xóa cart khỏi localStorage
+                  
+                    // Không cần trả focus về nút checkout vì ta sẽ chuyển hướng ngay
+                    const paymentUrl = response.order
+                      ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                      : response.paymentUrl;
+                    window.location.href = paymentUrl;
+                  
+                  
                 } else {
+                  console.log('flag1');
                   showModal('Lỗi', 'Không thể tạo đơn hàng. Vui lòng thử lại.', 'OK');
                 }
               },
+              
               error: function(xhr, status, error) {
                 console.error('Order Error:', error);
                 showModal('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.', 'OK');
               },
               complete: function() {
+                console.log('flag2');
                 submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
               }
             });

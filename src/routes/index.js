@@ -20,7 +20,7 @@ function route(app) {
   app.use('/api/auth', authApiRouter);
   app.use('/api/cart', cartApiRouter);
   app.use('/api/products', productApiRouter);
-  // app.use('/api/payment', paymentApiRouter);
+  app.use('/api/payment', paymentApiRouter);
   app.use('/api/orders', orderApiRouter);
 
   // UI
