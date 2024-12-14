@@ -67,23 +67,25 @@ document.addEventListener('DOMContentLoaded', function () {
   $(document).on('click', '.delete-user', function () {
     const userId = $(this).closest('tr').data('user-id');
 
-    showModal('Xoá tài khoản', 'Bạn có chắc chắn muốn xóa tài khoản này không?', "Delete", () => {
-      $.ajax({
-        url: `/api/user/${userId}`,
-        method: 'DELETE',
-        statusCode: {
-          200(resp) {
-            $(`tr[data-user-id=${userId}]`).remove();
-            showToast('Success', resp.message);
+    showModal({
+      title: 'Xoá tài khoản', content: 'Bạn có chắc chắn muốn xóa tài khoản này không?', btnSubmit: "Delete", callback: () => {
+        $.ajax({
+          url: `/api/user/${userId}`,
+          method: 'DELETE',
+          statusCode: {
+            200(resp) {
+              $(`tr[data-user-id=${userId}]`).remove();
+              showToast('Success', resp.message);
+            },
+            403(resp) {
+              showToast('Error', resp.responseJSON.error);
+            },
+            500(resp) {
+              showToast('Error', resp.responseJSON.error);
+            },
           },
-          403(resp) {
-            showToast('Error', resp.responseJSON.error);
-          },
-          500(resp) {
-            showToast('Error', resp.responseJSON.error);
-          },
-        },
-      });
+        });
+      }
     });
   });
 });

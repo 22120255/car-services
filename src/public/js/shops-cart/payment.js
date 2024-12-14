@@ -55,8 +55,10 @@ async function checkPayment(cartID, cartTotalPrice) {
       });
       if (response.status === 200) {
         console.log('Payment successful!');
-        showModal('Successful', 'Your transaction is successful. Thank you for buying our products', function () {
-          window.location.href = '/';
+        showModal({
+          title: 'Successful', content: 'Your transaction is successful. Thank you for buying our products', callback() {
+            window.location.href = '/';
+          }
         });
       }
     }

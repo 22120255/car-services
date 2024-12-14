@@ -12,15 +12,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         $.ajax(`/cart/payment/${cart._id}`, {
           method: 'GET',
           success: function (data) {
-            showModal(
-              'Payment',
-              data,
-              'OK',
-              () => { },
-              () => {
-                createQr();
-              }
-            );
+            showModal({
+              title: 'Payment',
+              content: data,
+              btnSubmit: 'OK',
+              onShowCallback: createQr
+            });
           },
           error: function (error) {
             console.error('Error:', error);
