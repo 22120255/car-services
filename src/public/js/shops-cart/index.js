@@ -8,17 +8,80 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (cart && cart.items.length > 0) {
       renderCartTable(cart);
       const totalAmount = cart.total;
-      const paymentUrl = `/payment/create_payment_url?amount=${totalAmount}`;
+      
       $('#checkout').on('click', function (event) {
-        $.ajax(paymentUrl, {
-          method: 'GET',
-          success: function (response) {
-            window.location.href = paymentUrl;
+        const modalContent = `
+          <form id="shipping-form">
+            <div class="form-group mb-3">
+              <label for="fullName">Họ và tên</label>
+              <input type="text" class="form-control" id="fullName" required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="phone">Số điện thoại</label>
+              <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="address">Địa chỉ giao hàng</label>
+              <textarea class="form-control" id="address" rows="3" required></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="note">Ghi chú (không bắt buộc)</label>
+              <textarea class="form-control" id="note" rows="2"></textarea>
+            </div>
+          </form>
+        `;
+
+        showModal(
+          'Thông tin giao hàng', 
+          modalContent,
+          'Tiến hành thanh toán',
+          () => {
+            const form = document.getElementById('shipping-form');
+            if (!form.checkValidity()) {
+              form.reportValidity();
+              return;
+            }
+      
+            const submitBtn = $('#notify-modal .btn-submit');
+            submitBtn.prop('disabled', true)
+              .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
+      
+            // Sửa lại cách gửi request
+            $.ajax({
+              url: '/api/orders/create',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              data: JSON.stringify({
+                shippingDetails: {
+                  fullName: $('#fullName').val().trim(),
+                  phone: $('#phone').val().trim(),
+                  address: $('#address').val().trim(),
+                  note: $('#note').val().trim()
+                }
+              }),
+              success: function(response) {
+                if (response.paymentUrl) {
+                  localStorage.removeItem('cart');
+                  window.location.href = response.paymentUrl;
+                } else {
+                  showModal('Lỗi', 'Không thể tạo đơn hàng. Vui lòng thử lại.', 'OK');
+                }
+              },
+              error: function(xhr, status, error) {
+                console.error('Order Error:', error);
+                showModal('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.', 'OK');
+              },
+              complete: function() {
+                submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
+              }
+            });
           },
-          error: function (error) {
-            console.error('Error:', error);
-          },
-        });
+          () => {
+            $('#fullName').focus();
+          }
+        );
       });
     } else {
       console.error('Cart is empty or invalid.');

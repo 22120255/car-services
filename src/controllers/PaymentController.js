@@ -39,13 +39,67 @@ class PaymentController {
         });
     }
 
-    // Hiển thị form hoàn tiền
-    // getRefund(req, res) {
-    //     res.render('payment/refund', {
-    //         layout: 'payment',
-    //         title: 'Hoàn tiền giao dịch thanh toán'
-    //     });
-    // }
+    async createPaymentUrl(orderId, amount) {
+
+        try {
+
+            process.env.TZ = 'Asia/Ho_Chi_Minh';
+
+            const date = new Date();
+
+            const createDate = moment(date).format('YYYYMMDDHHmmss');
+
+            let vnp_Params = {
+
+                vnp_Version: '2.1.0',
+
+                vnp_Command: 'pay',
+
+                vnp_TmnCode: vnpayConfig.vnp_TmnCode,
+
+                vnp_Locale: 'vn',
+
+                vnp_CurrCode: 'VND',
+
+                vnp_TxnRef: orderId,
+
+                vnp_OrderInfo: 'Thanh toan cho ma GD:' + orderId,
+
+                vnp_OrderType: 'other',
+
+                vnp_Amount: amount * 100,
+
+                vnp_ReturnUrl: vnpayConfig.vnp_ReturnUrl,
+
+                vnp_IpAddr: '127.0.0.1',
+
+                vnp_CreateDate: createDate,
+
+                vnp_IPNUrl: vnpayConfig.vnp_IPNUrl
+
+            };
+
+            vnp_Params = sortObject(vnp_Params);
+
+            const signData = qs.stringify(vnp_Params, { encode: false });
+
+            const hmac = crypto.createHmac("sha512", vnpayConfig.vnp_HashSecret);
+
+            const signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
+
+            vnp_Params['vnp_SecureHash'] = signed;
+
+            const vnpUrl = vnpayConfig.vnp_Url + '?' + qs.stringify(vnp_Params, { encode: false });
+
+            return vnpUrl;
+
+        } catch (error) {
+
+            throw error;
+
+        }
+
+    }
 
     // Xử lý tạo URL thanh toán
     createPayment(req, res) {
@@ -53,14 +107,15 @@ class PaymentController {
         
         const date = new Date();
         const createDate = moment(date).format('YYYYMMDDHHmmss');
-        const orderId = moment(date).format('DDHHmmss');
+        // const orderId = moment(date).format('DDHHmmss');
         
         const ipAddr = req.headers['x-forwarded-for'] ||
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
             req.connection.socket.remoteAddress;
 
-        const { amount, bankCode, language = 'vn' } = req.body;
+        const { bankCode, language = 'vn' } = req.body;
+        const { orderId, amount } = req.query;
         
         let vnp_Params = {
             vnp_Version: '2.1.0',
