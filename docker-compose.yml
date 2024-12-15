@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000' # Mở cổng 3000 của container và ánh xạ vào cổng 3000 của máy chủ
+    volumes:
+      - .:/app # Mount thư mục làm việc vào container
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - DOMAIN_URL=${DOMAIN_URL}
+      - MONGO_URI=${MONGO_URI} # Kết nối đến MongoDB Atlas
+      - FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - FIREBASE_APP_ID=${FIREBASE_APP_ID}
+      - FIREBASE_MEASUREMENT_ID=${FIREBASE_MEASUREMENT_ID}
+      - EMAIL=${EMAIL}
+      - PASSWORD=${PASSWORD}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - REDIS_URL=${REDIS_URL}
+      - BANK_ID=${BANK_ID}
+      - ACCOUNT_NO=${ACCOUNT_NO}
+      - ACCOUNT_NAME=${ACCOUNT_NAME}
+    # Không cần khai báo depends_on nữa, vì không sử dụng MongoDB container
