@@ -52,21 +52,25 @@ function showModal(title, content, btnSubmit = 'OK', callback = () => {}, onShow
 
 async function loadCartData() {
   let cart = null;
-  await $.ajax({
-    url: '/api/cart/data',
-    type: 'GET',
-    statusCode: {
-      200: function (data) {
-        cart = data;
+  try {
+    await $.ajax({
+      url: '/api/cart/data',
+      type: 'GET',
+      statusCode: {
+        200: function (data) {
+          cart = data; // Lưu lại dữ liệu cart nếu có
+        },
+        404: function () {
+          console.error('Cart data not found.');
+        },
+        500: function () {
+          console.error('Server error occurred.');
+        },
       },
-      404: function () {
-        console.log('Cart data not found.');
-      },
-      500: function () {
-        console.log('Server error occurred.');
-      },
-    },
-  });
+    });
+  } catch (error) {
+    console.error('Error loading cart data:', error);
+  }
   return cart;
 }
 

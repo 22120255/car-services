@@ -15,7 +15,6 @@ const paymentApiRouter = require('./api/payment');
 const orderApiRouter = require('./api/order');
 
 function route(app) {
-
   // API
   app.use('/api/user', userApiRouter);
   app.use('/api/auth', authApiRouter);

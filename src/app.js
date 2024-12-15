@@ -21,7 +21,7 @@ const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 
 const app = express()
-//const setupNgrok = require('./config/ngrok');
+const setupNgrok = require('./config/ngrok');
 const store = db.createSessionStore(session)
 
 // Session
@@ -52,20 +52,23 @@ app.use(flash())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static('public/css'))
 // HTTP logger
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+// Enable CORS
 app.use(cors())
-app.use(morgan('dev'));
 
 async function startServer() {
         if (process.env.NODE_ENV === 'development') {
-            
+            app.use(morgan('dev'));
             // Setup ngrok
-            // try {
-            //     await setupNgrok();
-            //     console.log('Ngrok setup completed');
-            // } catch (error) {
-            //     console.error('Failed to start server:', error);
-            //     process.exit(1);
-            // }
+            try {
+                await setupNgrok();
+                console.log('Ngrok setup completed');
+            } catch (error) {
+                console.error('Failed to start server:', error);
+                process.exit(1);
+            }
         }
         // Start server
         app.listen(process.env.PORT, () => {
@@ -75,6 +78,7 @@ async function startServer() {
             }
         });    
 }
+
 // Custom middleware
 app.use(navigateUser)
 app.use(refreshSession)
@@ -104,10 +108,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.use('/css', express.static('public/css'))
 
 // Route init
-app.use((req, res, next) => {
-    res.setHeader('ngrok-skip-browser-warning', 'true');
-    next();
-  });
 route(app)
 
 app.use(catch404);

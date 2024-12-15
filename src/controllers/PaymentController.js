@@ -4,7 +4,7 @@ const qs = require('qs');
 const { getConfig } = require('../config/vnpay');
 const vnpayConfig = getConfig();
 const Order = require('../models/Order');
-
+const Cart = require('../models/Cart');
 
 // Hàm sortObject được định nghĩa riêng
 const sortObject = (obj) => {
@@ -85,11 +85,6 @@ class PaymentController {
             vnp_CreateDate: createDate,
             // vnp_IpnUrl: vnpayConfig.vnp_IpnUrl
         };
-        console.log('VNPay Config:', {
-            tmnCode: vnpayConfig.vnp_TmnCode,
-            returnUrl: vnpayConfig.vnp_ReturnUrl,
-            ipnUrl: vnpayConfig.vnp_IpnUrl
-        });
         if (bankCode) {
             vnp_Params['vnp_BankCode'] = bankCode;
         }
@@ -104,12 +99,7 @@ class PaymentController {
 
         // Create full URL
         const vnpUrl = vnpayConfig.vnp_Url + '?' + qs.stringify(vnp_Params, { encode: false });
-        
-        // Log for debugging
-        console.log('Payment URL created:', {
-            params: vnp_Params,
-            url: vnpUrl
-        });
+        console.log('Payment URL:', vnpUrl);
         res.redirect(vnpUrl);
     } catch (error) {
         console.error('Error creating payment:', error);
@@ -215,6 +205,11 @@ class PaymentController {
                 });
     
                 await Order.findByIdAndUpdate(orderId, updateData);
+
+                // Cập nhật trạng thái giỏ hàng
+                if (rspCode === '00') {
+                    await Cart.findOneAndUpdate({ userId: order.userId, isPaid: false }, { isPaid: true });
+                }
     
                 return res.status(200).json({RspCode: '00', Message: 'Success'});
     

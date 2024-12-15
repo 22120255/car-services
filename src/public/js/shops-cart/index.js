@@ -1,12 +1,10 @@
 import { loadCartData, showModal, refreshCart } from '../common.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
-  try {
     let cart = await loadCartData();
-
+    console.log('Cart:', cart);
     if (cart && cart.items.length > 0) {
       renderCartTable(cart);
-      const totalAmount = cart.total;
       
       $('#checkout').on('click', function (event) {
         const modalContent = `
@@ -97,9 +95,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
       $('#total-price').html('');
     }
-  } catch (error) {
-    console.error('Error:', error);
-  }
 });
 
 function renderCartTable(cart) {

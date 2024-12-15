@@ -2,6 +2,7 @@ const ngrok = require("@ngrok/ngrok");
 const path = require('path');
 const fs = require('fs');
 
+// Hàm khởi động ngrok, ghi đè VNP_IPN_URL trong file .env.dev
 async function setupNgrok() {
     try {
         // Kiểm tra authtoken trước khi khởi động
