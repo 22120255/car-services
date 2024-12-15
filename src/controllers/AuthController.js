@@ -3,6 +3,7 @@ const AuthService = require('../services/AuthService');
 const passport = require('passport');
 const User = require('../models/User');
 const { clearCache } = require('../utils/helperCache');
+const { errorLog } = require('../utils/customLog');
 
 class AuthController {
   //[GET] /login
@@ -191,7 +192,7 @@ class AuthController {
         res.redirect('/dashboard');
       });
     } catch (err) {
-      console.log(err);
+      errorLog('AuthController', 'logout', err);
       res.redirect('/dashboard');
     }
   }

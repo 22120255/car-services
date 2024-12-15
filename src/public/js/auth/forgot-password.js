@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             statusCode: {
                 200() {
                     $('.send-code-button').text("Gửi mã").prop('disabled', false);
-                    showModal("Gửi mã thành công", "Mã đã được gửi về email của bạn, vui lòng kiểm tra hộp thư lấy mã!")
+                    showModal({ title: "Gửi mã thành công", content: "Mã đã được gửi về email của bạn, vui lòng kiểm tra hộp thư lấy mã!" })
                     $('#email-availability-message').text('');
                 },
                 404(resp) {
@@ -65,8 +65,10 @@ document.addEventListener('DOMContentLoaded', function () {
             data: JSON.stringify({ email, verificationCode, password }),
             statusCode: {
                 200() {
-                    showModal("Reset Password", "Password changed successfully, please log in again!", function () {
-                        window.location.href = "/auth/login";
+                    showModal({
+                        title: "Reset Password", content: "Password changed successfully, please log in again!", callback: function () {
+                            window.location.href = "/auth/login";
+                        }
                     })
                 },
                 400(resp) {

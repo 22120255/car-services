@@ -1,12 +1,14 @@
 const redisClient = require('../config/redis');
+const { errorLog } = require('./customLog');
 
 const clearCache = (key) => {
-  redisClient.del(key, (err, response) => {
+  const domain = process.env.DOMAIN_URL;
+  redisClient.del(`${domain}/${key}`, (err, response) => {
     if (err) {
-      console.error('Error clearing cache:', err);
+      errorLog("helperCache", "clearCache", err);
     }
-  });
-};
+  })
+}
 
 module.exports = {
   clearCache,

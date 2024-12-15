@@ -108,10 +108,6 @@ class UserService {
     if (!user) {
       throw new Error('User not found');
     }
-
-    return {
-      avatarUrl: pathFile,
-    };
   }
 
   // Lấy danh sách sản phẩm

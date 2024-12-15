@@ -1,4 +1,5 @@
-import { loadCartData, showModal, refreshCart } from '../common.js';
+import { loadCartData, showModal } from '../common.js';
+import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     let cart = await loadCartData();
@@ -28,21 +29,21 @@ document.addEventListener('DOMContentLoaded', async function () {
           </form>
         `;
 
-        showModal(
-          'Thông tin giao hàng', 
-          modalContent,
-          'Tiến hành thanh toán',
-          () => {
+        showModal({
+          title: 'Thông tin giao hàng',
+          content: modalContent,
+          btnSubmit: 'Tiến hành thanh toán',
+          callback: () => {
             const form = document.getElementById('shipping-form');
             if (!form.checkValidity()) {
               form.reportValidity();
               return;
             }
-      
+        
             const submitBtn = $('#notify-modal .btn-submit');
             submitBtn.prop('disabled', true)
               .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
-      
+        
             $.ajax({
               url: '/api/orders/create',
               method: 'POST',
@@ -60,24 +61,26 @@ document.addEventListener('DOMContentLoaded', async function () {
               success: function(response) {
                 console.log('Order Response:', response);
                 if (response.order) {
-                  // Xóa cart khỏi localStorage
-                  
-                    // Không cần trả focus về nút checkout vì ta sẽ chuyển hướng ngay
-                    const paymentUrl = response.order
-                      ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
-                      : response.paymentUrl;
-                    window.location.href = paymentUrl;
-                  
-                  
+                  // Chuyển hướng đến URL thanh toán
+                  const paymentUrl = response.order
+                    ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                    : response.paymentUrl;
+                  window.location.href = paymentUrl;
                 } else {
-                  console.log('flag1');
-                  showModal('Lỗi', 'Không thể tạo đơn hàng. Vui lòng thử lại.', 'OK');
+                  showModal({
+                    title: 'Lỗi',
+                    content: 'Không thể tạo đơn hàng. Vui lòng thử lại.',
+                    btnSubmit: 'OK'
+                  });
                 }
               },
-              
               error: function(xhr, status, error) {
                 console.error('Order Error:', error);
-                showModal('Lỗi', 'Đã có lỗi xảy ra. Vui lòng thử lại sau.', 'OK');
+                showModal({
+                  title: 'Lỗi',
+                  content: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+                  btnSubmit: 'OK'
+                });
               },
               complete: function() {
                 console.log('flag2');
@@ -85,10 +88,10 @@ document.addEventListener('DOMContentLoaded', async function () {
               }
             });
           },
-          () => {
+          onShowCallback: () => {
             $('#fullName').focus();
           }
-        );
+        });        
       });
     } else {
       console.error('Cart is empty or invalid.');
@@ -188,6 +191,7 @@ function attachQuantityEventHandlers(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await updateQuantity(cart, productId, 1);
+      updateAmountCart(store.getState().amountCart + 1)
     });
   });
 
@@ -195,6 +199,7 @@ function attachQuantityEventHandlers(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await updateQuantity(cart, productId, -1);
+      updateAmountCart(store.getState().amountCart - 1)
     });
   });
 }
@@ -205,7 +210,6 @@ function removeItemHandler(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await removeItem(cart, productId);
-      await refreshCart();
     });
   });
 }
@@ -261,6 +265,7 @@ async function removeItem(cart, productId) {
     const data = await response.json();
     if (response.ok && data.cart) {
       renderCartTable(data.cart);
+      updateAmountCart(data.cart.items.reduce((acc, cur) => cur.quantity + acc, 0))
     } else {
       console.error('Error:', data.message || 'Unexpected response');
     }

@@ -26,7 +26,7 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal(title, content, btnSubmit = 'OK', callback = () => {}, onShowCallback = () => {}) {
+function showModal({ title, content, btnSubmit = 'OK', callback = () => { }, onShowCallback = () => { } }) {
   const modal = $('#notify-modal');
 
   // Cập nhật tiêu đề và nội dung của modal
@@ -74,17 +74,6 @@ async function loadCartData() {
   return cart;
 }
 
-const refreshCart = async () => {
-  const cart = await loadCartData();
-  if (!cart || cart.items?.length === 0) {
-    $('#btn-cart .btn-cart__badge').addClass('d-none');
-    return;
-  }
-  $('#btn-cart .btn-cart__badge')
-    .removeClass('d-none')
-    .text(cart.items.length > 9 ? '9+' : cart.items.length);
-};
-
 function updateQueryParams(paramsToUpdate) {
   const params = new URLSearchParams(window.location.search);
   Object.entries(paramsToUpdate).forEach(([key, value]) => {
@@ -97,4 +86,4 @@ function updateQueryParams(paramsToUpdate) {
   window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
 
-export { showToast, showModal, loadCartData, refreshCart, updateQueryParams };
+export { showToast, showModal, loadCartData, updateQueryParams };

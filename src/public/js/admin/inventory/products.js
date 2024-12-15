@@ -219,29 +219,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const productId = $(this).closest('tr').data('product-id');
 
     // Hiển thị modal xác nhận xóa
-    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
-      $.ajax({
-        url: `/api/user/inventory/delete-product/${productId}`,
-        type: 'DELETE',
-        statusCode: {
-          200: function (response) {
-            showToast('success', response.message);
-            refresh();
+    showModal({
+      title: 'Delete Product', content: 'Are you sure you want to delete this product?', btnSubmit: 'Delete', callback: () => {
+        $.ajax({
+          url: `/api/user/inventory/delete-product/${productId}`,
+          type: 'DELETE',
+          statusCode: {
+            200: function (response) {
+              showToast('success', response.message);
+              refresh();
+            },
+            403: function (xhr) {
+              const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+              showToast('error', message);
+            },
+            404: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Product not found!';
+              showToast('error', message);
+            },
+            500: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+              showToast('error', message);
+            },
           },
-          403: function (xhr) {
-            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
-            showToast('error', message);
-          },
-          404: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Product not found!';
-            showToast('error', message);
-          },
-          500: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
-            showToast('error', message);
-          },
-        },
-      });
+        });
+      }
     });
   });
 
