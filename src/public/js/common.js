@@ -56,20 +56,25 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
 
 async function loadCartData() {
   let cart = null;
-  await $.ajax({
-    url: '/api/cart/data',
-    type: 'GET',
-    success(data) {
-      cart = data;
-    },
-    error(xhr) {
-      if (xhr.status === 404) {
-        console.log('Cart data not found.');
-      } else if (xhr.status === 500) {
-        console.log('Server error occurred.');
-      }
-    },
-  });
+  try {
+    await $.ajax({
+      url: '/api/cart/data',
+      type: 'GET',
+      statusCode: {
+        200: function (data) {
+          cart = data; // Lưu lại dữ liệu cart nếu có
+        },
+        404: function () {
+          console.error('Cart data not found.');
+        },
+        500: function () {
+          console.error('Server error occurred.');
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error loading cart data:', error);
+  }
   return cart;
 }
 
