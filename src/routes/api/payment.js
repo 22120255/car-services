@@ -5,7 +5,7 @@ const PaymentController = require('../../controllers/PaymentController'); // Ens
 // Tạo URL thanh toán
 router.post('/create_payment_url', PaymentController.createPayment);
 
-// IPN URL
+// IPN 
 router.get('/vnpay_ipn', PaymentController.vnpayIPN);
 
 module.exports = router;

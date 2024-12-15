@@ -24,11 +24,13 @@
   "description": "",
   "dependencies": {
     "@elastic/elasticsearch": "^8.16.2",
+    "@ngrok/ngrok": "^1.4.1",
     "bcrypt": "^5.1.1",
     "chance": "^1.1.12",
     "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^5.0.0",
+    "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dateformat": "^5.0.3",
     "dotenv": "^16.4.5",
