@@ -2,13 +2,13 @@ import { loadCartData, showModal } from '../common.js';
 import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
-    let cart = await loadCartData();
-    console.log('Cart:', cart);
-    if (cart && cart.items.length > 0) {
-      renderCartTable(cart);
-      
-      $('#checkout').on('click', function (event) {
-        const modalContent = `
+  let cart = await loadCartData();
+  console.log('Cart:', cart);
+  if (cart && cart.items.length > 0) {
+    renderCartTable(cart);
+
+    $('#checkout').on('click', function (event) {
+      const modalContent = `
           <form id="shipping-form">
             <div class="form-group mb-3">
               <label for="fullName">Họ và tên</label>
@@ -29,75 +29,74 @@ document.addEventListener('DOMContentLoaded', async function () {
           </form>
         `;
 
-        showModal({
-          title: 'Thông tin giao hàng',
-          content: modalContent,
-          btnSubmit: 'Tiến hành thanh toán',
-          callback: () => {
-            const form = document.getElementById('shipping-form');
-            if (!form.checkValidity()) {
-              form.reportValidity();
-              return;
-            }
-        
-            const submitBtn = $('#notify-modal .btn-submit');
-            submitBtn.prop('disabled', true)
-              .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
-        
-            $.ajax({
-              url: '/api/orders/create',
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              data: JSON.stringify({
-                shippingDetails: {
-                  fullName: $('#fullName').val().trim(),
-                  phone: $('#phone').val().trim(),
-                  address: $('#address').val().trim(),
-                  note: $('#note').val().trim()
-                }
-              }),
-              success: function(response) {
-                console.log('Order Response:', response);
-                if (response.order) {
-                  // Chuyển hướng đến URL thanh toán
-                  const paymentUrl = response.order
-                    ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
-                    : response.paymentUrl;
-                  window.location.href = paymentUrl;
-                } else {
-                  showModal({
-                    title: 'Lỗi',
-                    content: 'Không thể tạo đơn hàng. Vui lòng thử lại.',
-                    btnSubmit: 'OK'
-                  });
-                }
-              },
-              error: function(xhr, status, error) {
-                console.error('Order Error:', error);
+      showModal({
+        title: 'Thông tin giao hàng',
+        content: modalContent,
+        btnSubmit: 'Tiến hành thanh toán',
+        callback: () => {
+          const form = document.getElementById('shipping-form');
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return false;
+          }
+
+          const submitBtn = $('#notify-modal .btn-submit');
+          submitBtn.prop('disabled', true)
+            .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
+
+          $.ajax({
+            url: '/api/orders/create',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+              shippingDetails: {
+                fullName: $('#fullName').val().trim(),
+                phone: $('#phone').val().trim(),
+                address: $('#address').val().trim(),
+                note: $('#note').val().trim()
+              }
+            }),
+            success: function (response) {
+              console.log('Order Response:', response);
+              if (response.order) {
+                // Chuyển hướng đến URL thanh toán
+                const paymentUrl = response.order
+                  ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                  : response.paymentUrl;
+                window.location.href = paymentUrl;
+              } else {
                 showModal({
                   title: 'Lỗi',
-                  content: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
-                  btnSubmit: 'OK'
+                  content: 'Không thể tạo đơn hàng. Vui lòng thử lại.',
                 });
-              },
-              complete: function() {
-                console.log('flag2');
-                submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
               }
-            });
-          },
-          onShowCallback: () => {
-            $('#fullName').focus();
-          }
-        });        
+            },
+            error: function (xhr, status, error) {
+              console.error('Order Error:', error);
+              showModal({
+                title: 'Lỗi',
+                content: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+              });
+            },
+            complete: function () {
+              console.log('flag2');
+              submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
+            }
+          });
+          return true;
+        },
+        onShowCallback: () => {
+          $('#fullName').focus();
+        }
       });
-    } else {
-      console.error('Cart is empty or invalid.');
-      $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
-      $('#total-price').html('');
-    }
+    });
+  } else {
+    console.error('Cart is empty or invalid.');
+    $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
+    $('#total-price').html('');
+  }
 });
 
 function renderCartTable(cart) {
