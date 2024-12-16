@@ -2,7 +2,8 @@ const redisClient = require('../config/redis');
 const { errorLog } = require('../utils/customLog');
 
 async function cacheMiddleware(req, res, next) {
-  const key = req.originalUrl || req.url;
+  const domain = process.env.DOMAIN_URL;
+  const key = `${domain}/${req.originalUrl || req.url}`;
 
   try {
     const cachedResponse = await redisClient.get(key);

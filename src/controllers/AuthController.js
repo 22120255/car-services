@@ -3,6 +3,7 @@ const AuthService = require('../services/AuthService');
 const passport = require('passport');
 const User = require('../models/User');
 const { clearCache } = require('../utils/helperCache');
+const { errorLog } = require('../utils/customLog');
 
 class AuthController {
   //[GET] /login
@@ -176,6 +177,17 @@ class AuthController {
     }
   }
 
+  async changePassword(req, res) {
+    const { currentPassword, newPassword } = req.body;
+
+    try {
+      await AuthService.changePassword(req.user._id, currentPassword, newPassword);
+      res.status(200).json({ message: 'Password has been changed.' });
+    } catch (err) {
+      res.status(err.statusCode || 400).json({ error: err.message });
+    }
+  }
+
   // [GET] /auth/logout
   async logout(req, res, next) {
     try {
@@ -191,7 +203,7 @@ class AuthController {
         res.redirect('/dashboard');
       });
     } catch (err) {
-      console.log(err);
+      errorLog('AuthController', 'logout', err);
       res.redirect('/dashboard');
     }
   }

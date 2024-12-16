@@ -3,7 +3,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const { sendEmail } = require('../utils/sendEmail');
+const { sendEmail } = require("../utils/sendEmail");
+const CustomError = require("../models/CustomError");
 
 class AuthService {
   async checkEmailAvailability(email) {
@@ -109,7 +110,23 @@ class AuthService {
     } catch (err) {
       throw new Error(err.message);
     }
-  }
+
+    async changePassword(userId, currentPassword, newPassword) {
+        const user = await User.findById(userId).select("+password");
+        if (!user) {
+            throw new CustomError(404, "User not found.");
+        }
+
+        const isMatch = await user.comparePassword(currentPassword);
+        if (!isMatch) {
+            throw new CustomError(400, "Incorrect password.");
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        return user;
+    }
 }
 
 module.exports = new AuthService();
