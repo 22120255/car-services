@@ -26,10 +26,9 @@ function showToast(type, message) {
   }, 3000);
 }
 // callback will be done when modal hidden
-function showModal({ title, content, btnSubmit = 'OK', callback = () => { }, onShowCallback = () => { } }) {
+function showModal({ title, content, btnSubmit = 'OK', callback = () => true, onShowCallback = () => { } }) {
   const modal = $('#notify-modal');
 
-  // Cập nhật tiêu đề và nội dung của modal
   modal.find('.modal-title').text(title);
   modal.find('.modal-body').html(content);
   modal.find('.btn-submit').text(btnSubmit);
@@ -37,10 +36,10 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => { }, onS
   // Override method click of btn submit
   modal
     .find('.btn-submit')
-    .off('click') // Gỡ các sự kiện cũ để tránh lặp callback
-    .on('click', () => {
-      callback();
-      modal.modal('hide');
+    .off('click')
+    .on('click', async () => {
+      if ((await callback()) !== false)
+        modal.modal('hide');
     });
 
   modal.off('shown.bs.modal').on('shown.bs.modal', () => {

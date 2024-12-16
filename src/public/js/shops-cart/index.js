@@ -60,19 +60,19 @@ document.addEventListener('DOMContentLoaded', async function () {
               }),
               success: function(response) {
                 console.log('Order Response:', response);
-                if (response.order) {
-                  // Chuyển hướng đến URL thanh toán
-                  const paymentUrl = response.order
-                    ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
-                    : response.paymentUrl;
-                  window.location.href = paymentUrl;
-                } else {
+                // if (response.order) {
+                //   // Chuyển hướng đến URL thanh toán
+                //   const paymentUrl = response.order
+                //     ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                //     : response.paymentUrl;
+                //   window.location.href = paymentUrl;
+                // } else {
                   showModal({
                     title: 'Lỗi',
                     content: 'Không thể tạo đơn hàng. Vui lòng thử lại.',
                     btnSubmit: 'OK'
                   });
-                }
+                // }
               },
               error: function(xhr, status, error) {
                 console.error('Order Error:', error);
