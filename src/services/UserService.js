@@ -108,10 +108,6 @@ class UserService {
     if (!user) {
       throw new Error('User not found');
     }
-
-    return {
-      avatarUrl: pathFile,
-    };
   }
 
   // Lấy danh sách sản phẩm
@@ -161,7 +157,7 @@ class UserService {
 
   // Tạo sản phẩm
 
-  async createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images) {
+  async createProduct(brand, model, year, style, status, price, mileage, horsepower, transmission, description, images, importPrice, fuelType) {
     try {
       const product = await Product.create({
         brand,
@@ -175,6 +171,8 @@ class UserService {
         transmission,
         description,
         images,
+        importPrice,
+        fuelType,
       });
       return product;
     } catch (error) {
@@ -186,7 +184,20 @@ class UserService {
   // Cập nhật sản phẩm
   async updateProduct(productId, data) {
     try {
-      const allowedFields = ['brand', 'model', 'year', 'style', 'status', 'price', 'mileage', 'horsepower', 'transmission', 'description', 'images'];
+      const allowedFields = [
+        'brand',
+        'model',
+        'year',
+        'style',
+        'status',
+        'price',
+        'mileage',
+        'horsepower',
+        'transmission',
+        'description',
+        'images',
+        'importPrice',
+      ];
       const updateData = Object.keys(data)
         .filter((key) => allowedFields.includes(key))
         .reduce((obj, key) => {
@@ -212,21 +223,54 @@ class UserService {
 
       // Sử dụng phương thức delete của mongoose-delete
       await product.delete(idUser);
-      console.log(`Product with ID ${productId} deleted by user ${idUser}`);
     } catch (error) {
       console.error('Error deleting product:', error);
       throw error;
     }
   }
   // Lấy danh sách sản phẩm đã xoá
-  async trashAndGetProducts(limit, offset) {
+  async trashAndGetProducts(query) {
     try {
-      const products = await Product.findDeleted()
-        .skip(offset * limit - limit)
-        .limit(limit);
-      const total = await Product.countDocuments({ deletedAt: { $ne: null } });
+      const { limit, offset } = query;
+      const allDeletedProducts = await Product.findDeleted();
+
+      const startIndex = (offset - 1) * limit;
+      const endIndex = startIndex + limit;
+
+      const products = allDeletedProducts.slice(startIndex, endIndex);
+
+      const total = allDeletedProducts.length;
+
+      console.log(`Total deleted products: ${total}`);
       return { products, total };
     } catch (error) {
+      console.error('Error fetching deleted products:', error.message);
+      throw error;
+    }
+  }
+
+  // Xoá vĩnh viễn sản phẩm
+  async forceDeleteProduct(productId) {
+    try {
+      const product = await Product.deleteOne({ _id: productId });
+      if (!product.deletedCount) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
+    } catch (error) {
+      console.error('Error force deleting product:', error);
+      throw error;
+    }
+  }
+
+  // Khôi phục sản phẩm
+  async restoreProduct(productId) {
+    try {
+      const product = await Product.restore({ _id: productId });
+      if (!product) {
+        throw new Error(`Product with ID ${productId} not found.`);
+      }
+    } catch (error) {
+      console.error('Error restoring product:', error);
       throw error;
     }
   }

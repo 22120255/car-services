@@ -1,4 +1,5 @@
 const DashboardService = require('../services/DashboardService')
+const { errorLog } = require('../utils/customLog')
 
 class DashboardController {
     // [GET] /home
@@ -15,7 +16,7 @@ class DashboardController {
                 title: 'Home'
             })
         } catch (error) {
-            console.log(error)
+            errorLog('DashboardController', 'index', error)
             next(error)
         }
     }

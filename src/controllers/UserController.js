@@ -17,7 +17,7 @@ class UserController {
         title: 'Account Management',
       });
     } catch (error) {
-      errorLog('UserController', "accounts", error.message);
+      errorLog('UserController', 'accounts', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -37,7 +37,7 @@ class UserController {
       });
       return res.status(200).json({ data: users, total });
     } catch (error) {
-      errorLog('AdminController', "getUsers", error.message);
+      errorLog('AdminController', 'getUsers', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -49,7 +49,7 @@ class UserController {
       await UserService.updateUserRole(userId, role, req.user);
       return res.status(200).json({ message: 'Role update successful!' });
     } catch (error) {
-      errorLog('AdminController', "updateRole", error.message);
+      errorLog('AdminController', 'updateRole', error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -61,7 +61,7 @@ class UserController {
       await UserService.updateUserStatus(userId, status, req.user);
       return res.status(200).json({ message: 'Status update successful!' });
     } catch (error) {
-      errorLog('UserController', "updateStatus", error.message);
+      errorLog('UserController', 'updateStatus', error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -72,7 +72,7 @@ class UserController {
       await UserService.deleteUser(req.params.id, req.user);
       res.status(200).json({ message: 'Account deleted successfully!' });
     } catch (error) {
-      errorLog('UserController', "deleteUser", error.message);
+      errorLog('UserController', 'deleteUser', error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -85,7 +85,7 @@ class UserController {
         title: 'Product Management',
       });
     } catch (error) {
-      errorLog('UserController', "products", error.message);
+      errorLog('UserController', 'products', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -106,7 +106,7 @@ class UserController {
       });
       return res.status(200).json({ products, total });
     } catch (error) {
-      errorLog('UserController', "getProducts", error.message);
+      errorLog('UserController', 'getProducts', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -114,8 +114,7 @@ class UserController {
   // [POST] /api/inventory/create-product
   async createProduct(req, res) {
     try {
-      console.log(req.body);
-      const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images } = req.body;
+      const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images, importPrice, fuelType } = req.body;
       const product = await UserService.createProduct(
         brand,
         model,
@@ -127,11 +126,13 @@ class UserController {
         horsepower,
         transmission,
         description,
-        images
+        images,
+        importPrice,
+        fuelType
       );
       if (product) return res.status(201).json({ message: 'Create product successfully' });
     } catch (error) {
-      errorLog('UserController', "createProduct", error.message);
+      errorLog('UserController', 'createProduct', error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -142,7 +143,7 @@ class UserController {
       const product = await UserService.getProduct(req.params.id);
       return res.status(200).json(product);
     } catch (error) {
-      errorLog('UserController', "getProduct", error.message);
+      errorLog('UserController', 'getProduct', error.message);
       return res.status(404).json({ error: error.message });
     }
   }
@@ -155,7 +156,7 @@ class UserController {
       const product = await UserService.updateProduct(id, data);
       if (product) return res.status(200).json({ message: 'Update product successfully' });
     } catch (error) {
-      errorLog('UserController', "updateProduct", error.message);
+      errorLog('UserController', 'updateProduct', error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -167,7 +168,7 @@ class UserController {
       await UserService.deleteProduct(req.params.id, userId);
       return res.status(200).json({ message: 'Delete product successfully' });
     } catch (error) {
-      errorLog('UserController', "deleteProduct", error.message);
+      errorLog('UserController', 'deleteProduct', error.message);
       return res.status(403).json({ error: error.message });
     }
   }
@@ -183,8 +184,32 @@ class UserController {
         products,
       });
     } catch (error) {
-      errorLog('UserController', "trash", error.message);
+      errorLog('UserController', 'trash', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // [DELETE] /admin/inventory/trash/delete
+  async forceDeleteProduct(req, res) {
+    try {
+      const productId = req.params.id;
+      await UserService.forceDeleteProduct(productId);
+      return res.status(200).json({ message: 'Delete product successfully' });
+    } catch (error) {
+      errorLog('UserController', 74, error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
+  // [PATCH] /admin/inventory/trash/restore
+  async restoreProduct(req, res) {
+    try {
+      const productId = req.params.id;
+      await UserService.restoreProduct(productId);
+      return res.status(200).json({ message: 'Restore product successfully' });
+    } catch (error) {
+      errorLog('UserController', 74, error.message);
+      return res.status(403).json({ error: error.message });
     }
   }
 
@@ -193,14 +218,23 @@ class UserController {
     const { limit, offset } = req.query;
     try {
       const { products, total } = await UserService.trashAndGetProducts({
-        limit: limit || 10,
+        limit: limit || 8,
         offset: offset || 1,
       });
       return res.status(200).json({ products, total });
     } catch (error) {
-      errorLog('UserController', "trashAndGetProducts", error.message);
+      errorLog('UserController', 'trashAndGetProducts', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
+  }
+
+  // [PATCH] /api/user/product/store
+  async storeProduct(req, res) {
+    if (req.file) {
+      console.log(req.file);
+      return res.json({ secure_url: req.file.path }); // Sử dụng secure_url thay vì path
+    }
+    return res.status(400).json({ message: 'Failed to upload image' });
   }
 
   // [GET] /admin/orders
@@ -211,7 +245,7 @@ class UserController {
         title: 'Order Management',
       });
     } catch (error) {
-      errorLog('UserController', "orders", error.message);
+      errorLog('UserController', 'orders', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -224,7 +258,7 @@ class UserController {
         title: 'Statistical report',
       });
     } catch (error) {
-      errorLog('UserController', "reports", error.message);
+      errorLog('UserController', 'reports', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -237,7 +271,7 @@ class UserController {
         title: 'Cài đặt hệ thống',
       });
     } catch (error) {
-      errorLog('UserController', "settings", error.message);
+      errorLog('UserController', 'settings', error.message);
       res.status(500).json({ error: 'Có lỗi, vui lòng thử lại sau!' });
     }
   }
@@ -252,7 +286,7 @@ class UserController {
         layout: false,
       });
     } catch (error) {
-      errorLog('UserController', "getUser", error.message);
+      errorLog('UserController', 'getUser', error.message);
       res.status(404).json({ message: error.message });
     }
   }
@@ -262,10 +296,10 @@ class UserController {
     try {
       const { id } = req.body;
       const user = await UserService.updateProfile(id, req.body);
-      clearCache(`/profile/${id}`);
+      clearCache(`user/profile/${id}`);
       res.status(200).json(user);
     } catch (error) {
-      errorLog('UserController', "updateProfile", error.message);
+      errorLog('UserController', 'updateProfile', error.message);
       res.status(500).json({ message: error.message });
     }
   }
@@ -276,10 +310,11 @@ class UserController {
       const pathFile = req.file.path;
       const userId = req.body.userId;
 
-      const result = await UserService.updateAvatar(userId, pathFile);
-      res.status(200).json(result);
+      await UserService.updateAvatar(userId, pathFile);
+      clearCache(`user/profile/${userId}`);
+      res.status(200).json(pathFile);
     } catch (error) {
-      errorLog('UserController', "updateAvatar", error.message);
+      errorLog('UserController', 'updateAvatar', error.message);
       res.status(500).json({
         error: 'Failed to update avatar',
       });

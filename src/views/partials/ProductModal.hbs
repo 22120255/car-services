@@ -10,44 +10,62 @@
   <div class='modal-dialog modal-lg'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <h5 class='modal-title' id='productModalLabel' value=''>Chi tiết sản phẩm</h5>
+        <h5 class='modal-title' id='productModalLabel'>Chi tiết sản phẩm</h5>
         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
       <div class='modal-body' style='max-height: 550px; overflow-y: auto;'>
         <!-- Form nội dung sản phẩm -->
         <form id='product-form'>
+          <!-- Select options -->
           <div class='mb-3'>
             <label for='product-brand' class='form-label'>Brand</label>
-            <input type='text' class='form-control' id='product-brand' name='brand' value='' />
-            <div class='invalid-feedback'>Please enter Brand!</div>
+            <select
+              id='product-brand'
+              name='brand'
+              class='form-select'
+              style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;'
+            >
+            </select>
+            <div class='invalid-feedback'>Please select a Brand!</div>
           </div>
+          <div class='mb-3'>
+            <label for='product-year' class='form-label'>Year</label>
+            <select id='product-year' name='year' class='form-select' style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;'>
+            </select>
+            <div class='invalid-feedback'>Please select a Year!</div>
+          </div>
+          <div class='mb-3'>
+            <label for='product-style' class='form-label'>Style</label>
+            <select
+              id='product-style'
+              name='style'
+              class='form-select'
+              style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;'
+            >
+            </select>
+            <div class='invalid-feedback'>Please select a Style!</div>
+          </div>
+
+          <!-- Input fields -->
           <div class='mb-3'>
             <label for='product-model' class='form-label'>Model</label>
             <input type='text' class='form-control' id='product-model' name='model' value='' />
             <div class='invalid-feedback'>Please enter Model!</div>
           </div>
           <div class='mb-3'>
-            <label for='product-year' class='form-label'>Year</label>
-            <input type='text' class='form-control' id='product-year' name='year' value='' />
-            <div class='invalid-feedback'>Please enter Year!</div>
-          </div>
-          <div class='mb-3'>
-            <label for='product-style' class='form-label'>Style</label>
-            <input type='text' class='form-control' id='product-style' name='style' value='' />
-            <div class='invalid-feedback'>Please enter Style!</div>
-          </div>
-          <div class='mb-3'>
             <label for='product-status' class='form-label'>Status</label>
-            <select id='product-status' name='status' style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; flex-grow: 1; width: 100%;'>
-              <option value='new'>New</option>
-              <option value='used'>Used</option>
-              <option value='sold'>Sold</option>
+            <select id='product-status' name='status' style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;'>
             </select>
           </div>
           <div class='mb-3'>
-            <label for='product-price' class='form-label'>Price</label>
+            <label for='product-importPrice' class='form-label'>Original Price</label>
+            <input type='number' class='form-control' id='product-importPrice' name='importPrice' value='' />
+            <div class='invalid-feedback'>Please enter Selling Price!</div>
+          </div>
+          <div class='mb-3'>
+            <label for='product-price' class='form-label'>Selling Price</label>
             <input type='number' class='form-control' id='product-price' name='price' value='' />
-            <div class='invalid-feedback'>Please enter Price!</div>
+            <div class='invalid-feedback'>Please enter Original Price!</div>
           </div>
           <div class='mb-3'>
             <label for='product-mileage' class='form-label'>Mileage</label>
@@ -61,13 +79,14 @@
           </div>
           <div class='mb-3'>
             <label for='product-transmission' class='form-label'>Transmission</label>
-            <select
-              id='product-transmission'
-              name='transmission'
-              style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; flex-grow: 1; width: 100%;'
-            >
+            <select id='product-transmission' name='transmission' style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;'>
               <option value='manual'>Manual</option>
               <option value='automatic'>Automatic</option>
+            </select>
+          </div>
+          <div class='mb-3'>
+            <label for='product-fuelType' class='form-label'>Fuel Type</label>
+            <select id='product-fuelType' name='fuelType' style='padding: 8px; border: 1px solid #ddd; border-radius: 5px; width: 100%;'>
             </select>
           </div>
           <div class='mb-3'>
@@ -78,19 +97,41 @@
           <div class='mb-3'>
             <label for='product-images' class='form-label'>Images</label>
             <div id='product-images'>
-              <input type='text' class='form-control mb-2' name='images.image1' placeholder='Link image1' value='' />
-              <input type='text' class='form-control mb-2' name='images.image2' placeholder='Link image2' value='' />
-              <input type='text' class='form-control mb-2' name='images.image3' placeholder='Link image3' value='' />
-              <input type='text' class='form-control mb-2' name='images.image4' placeholder='Link image4' value='' />
-              <input type='text' class='form-control mb-2' name='images.image5' placeholder='Link image5' value='' />
+              <div class='d-flex align-items-center mb-2'>
+                <input type='text' class='form-control me-2' name='images.image1' placeholder='Link image 1' value='' />
+                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image1'>Choose</button>
+              </div>
+              <div class='d-flex align-items-center mb-2'>
+                <input type='text' class='form-control me-2' name='images.image2' placeholder='Link image 2' value='' />
+                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image2'>Choose</button>
+              </div>
+              <div class='d-flex align-items-center mb-2'>
+                <input type='text' class='form-control me-2' name='images.image3' placeholder='Link image 3' value='' />
+                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image3'>Choose</button>
+              </div>
+              <div class='d-flex align-items-center mb-2'>
+                <input type='text' class='form-control me-2' name='images.image4' placeholder='Link image 4' value='' />
+                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image4'>Choose</button>
+              </div>
+              <div class='d-flex align-items-center mb-2'>
+                <input type='text' class='form-control me-2' name='images.image5' placeholder='Link image 5' value='' />
+                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image5'>Choose</button>
+              </div>
             </div>
+            <input type='file' id='image-file-input' accept='image/*' style='display: none;' />
           </div>
+
         </form>
       </div>
       <div class='modal-footer'>
-        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-        <button type='button' id='save-product-btn' class='btn btn-primary'>Save</button>
+        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>
+          Close
+        </button>
+        <button type='button' id='save-product-btn' class='btn btn-primary'>
+          Save
+        </button>
       </div>
     </div>
   </div>
 </div>
+<script type='module' src='\js\admin\inventory\productModal.js'></script>
