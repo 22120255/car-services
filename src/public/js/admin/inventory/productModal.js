@@ -1,3 +1,4 @@
+import { showToast } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -61,15 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
         contentType: false,
         processData: false,
         success: function (response, textStatus, jqXHR) {
-          if (jqXHR.status === 200) {
-            if (response.secure_url) {
-              input.val(response.secure_url); // Gán link ảnh vào ô input
-            } else {
-              alert('Failed to upload image');
-              input.val('');
-            }
+          if (jqXHR.status === 200 && response.secure_url) {
+            input.val(response.secure_url);
           } else {
-            alert('Unexpected response status: ' + jqXHR.status);
+            showToast("Error", 'Failed to upload image')
             input.val('');
           }
         },

@@ -25,7 +25,12 @@ function showToast(type, message) {
     }, 500);
   }, 3000);
 }
-// callback will be done when modal hidden
+/* 
+- callback will be done when modal hidden
+- default callback will return true or undefined -> close modal
+- if callback return false -> modal will not close
+- onShowCallback will be done when modal shown
+*/
 function showModal({ title, content, btnSubmit = 'OK', callback = () => true, onShowCallback = () => { } }) {
   const modal = $('#notify-modal');
 

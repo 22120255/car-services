@@ -83,7 +83,7 @@ class PaymentController {
             vnp_ReturnUrl: vnpayConfig.vnp_ReturnUrl,
             vnp_IpAddr: ipAddr,
             vnp_CreateDate: createDate,
-            // vnp_IpnUrl: vnpayConfig.vnp_IpnUrl
+            vnp_IpnUrl: vnpayConfig.vnp_IpnUrl
         };
         if (bankCode) {
             vnp_Params['vnp_BankCode'] = bankCode;
