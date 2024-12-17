@@ -83,11 +83,12 @@ class PaymentController {
             vnp_ReturnUrl: vnpayConfig.vnp_ReturnUrl,
             vnp_IpAddr: ipAddr,
             vnp_CreateDate: createDate,
-            vnp_IpnUrl: vnpayConfig.vnp_IpnUrl
+            // vnp_IpnUrl: vnpayConfig.vnp_IpnUrl
         };
         if (bankCode) {
             vnp_Params['vnp_BankCode'] = bankCode;
         }
+        console.log(vnpayConfig.vnp_IpnUrl);
 
         // Sort and create signature
         vnp_Params = sortObject(vnp_Params);
