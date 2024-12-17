@@ -59,16 +59,16 @@ if (process.env.NODE_ENV === 'development') {
 app.use(cors())
 
 async function startServer() {
-    if (process.env.NODE_ENV === 'development') {
-        // Setup ngrok
-        try {
-            await setupNgrok();
-            console.log('Ngrok setup completed');
-        } catch (error) {
-            console.error('Failed to start server:', error);
-            process.exit(1);
-        }
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    //     // Setup ngrok
+    //     try {
+    //         await setupNgrok();
+    //         console.log('Ngrok setup completed');
+    //     } catch (error) {
+    //         console.error('Failed to start server:', error);
+    //         process.exit(1);
+    //     }
+    // }
     // Start server
     app.listen(process.env.PORT, () => {
         console.log(`Server is running on port ${process.env.PORT}`);

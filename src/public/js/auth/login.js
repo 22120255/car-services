@@ -51,9 +51,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     },
                     200(resp) {
-                        if (resp.redirect) {
-                            window.location.href = resp.redirect
-                        }
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const returnTo = `/${urlParams.get("returnTo")}` || '/dashboard';
+
+                        window.location.href = returnTo;
                     }
                 }
             });
