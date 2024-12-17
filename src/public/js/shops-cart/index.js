@@ -17,13 +17,13 @@ document.addEventListener('DOMContentLoaded', async function () {
               class="form-control" 
               id="fullName" 
               required
-              pattern="^[a-zA-ZÀ-ỹ ]+$"
-              title="Họ tên chỉ được chứa chữ cái và khoảng trắng"
             >
-            <div class="invalid-feedback">
-              Vui lòng nhập họ tên hợp lệ (ít nhất 2 ký tự, chỉ chứa chữ cái và khoảng trắng)
+            <div class="alert alert-warning mt-2 d-none" role="alert">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Bạn có chắc chắn đã nhập đúng họ và tên?
             </div>
           </div>
+    
           <div class="form-group mb-3">
             <label for="phone">Số điện thoại</label>
             <input 
@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', async function () {
               class="form-control" 
               id="phone" 
               required
-              pattern="^(84|\+84|0)(3|5|7|8|9)[0-9]{8}$"
-              title="Số điện thoại phải bắt đầu bằng 84/+84/0 và có 10 số"
             >
-            <div class="invalid-feedback">
-              Vui lòng nhập số điện thoại hợp lệ (10 số, bắt đầu bằng 0, 84 hoặc +84)
+            <div class="alert alert-warning mt-2 d-none" role="alert">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Hãy nhập số điện thoại hợp lệ
             </div>
           </div>
+    
           <div class="form-group mb-3">
             <label for="address">Địa chỉ giao hàng</label>
             <textarea 
@@ -45,12 +45,13 @@ document.addEventListener('DOMContentLoaded', async function () {
               id="address" 
               rows="3" 
               required
-              title="Địa chỉ phải có ít nhất 10 ký tự"
             ></textarea>
-            <div class="invalid-feedback">
-              Vui lòng nhập địa chỉ chi tiết (ít nhất 10 ký tự)
+            <div class="alert alert-warning mt-2 d-none" role="alert">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Vui lòng nhập địa chỉ chi tiết
             </div>
           </div>
+    
           <div class="form-group mb-3">
             <label for="note">Ghi chú (không bắt buộc)</label>
             <textarea class="form-control" id="note" rows="2"></textarea>
@@ -68,65 +69,29 @@ document.addEventListener('DOMContentLoaded', async function () {
           const phone = $('#phone').val().trim();
           const address = $('#address').val().trim();
     
-          // Reset trước khi validate
-          $('#shipping-form input, #shipping-form textarea').removeClass('is-invalid');
+          // Hide all alerts first
+          $('.alert').addClass('d-none');
     
-          // Validate form
-          if (!form.checkValidity()) {
-            form.reportValidity();
-            return false;
-          }
-    
-          // Additional validation  
           let isValid = true;
     
           if (!/^[a-zA-ZÀ-ỹ ]{2,}$/.test(fullName)) {
-            $('#fullName').addClass('is-invalid');
+            $('#fullName').next('.alert').removeClass('d-none');
             isValid = false;
           }
     
-          if (!/^(84|\+84|0)(3|5|7|8|9)[0-9]{8}$/.test(phone)) {
-            $('#phone').addClass('is-invalid'); 
+          if (!/^(84|\+84|0)[0-9]{9}$/.test(phone)) {
+            $('#phone').next('.alert').removeClass('d-none');
             isValid = false;
           }
     
-          if (address.length < 10) {
-            $('#address').addClass('is-invalid');
+          if (address.length < 5) {
+            $('#address').next('.alert').removeClass('d-none');
             isValid = false;
           }
     
           if (!isValid) {
             return false;
           }
-    
-          const submitBtn = $('#notify-modal .btn-submit');
-          submitBtn.prop('disabled', true)
-            .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
-    
-          // Event handlers cho input fields
-          $('#shipping-form input, #shipping-form textarea').on('input', function() {
-            const $input = $(this);
-            const value = $input.val().trim();
-    
-            // Kiểm tra validation theo từng field
-            switch($input.attr('id')) {
-              case 'fullName':
-                if(/^[a-zA-ZÀ-ỹ ]{2,}$/.test(value)) {
-                  $input.removeClass('is-invalid');
-                }
-                break;
-              case 'phone':
-                if(/^(84|\+84|0)(3|5|7|8|9)[0-9]{8}$/.test(value)) {
-                  $input.removeClass('is-invalid');
-                }
-                break;
-              case 'address':
-                if(value.length >= 10) {
-                  $input.removeClass('is-invalid');
-                }
-                break;
-            }
-          });
 
           $.ajax({
             url: '/api/orders/create',
@@ -172,7 +137,41 @@ document.addEventListener('DOMContentLoaded', async function () {
           return true;
         },
         onShowCallback: () => {
+          // Sửa lại cách ẩn/hiện alert trong JavaScript
+          $('#fullName').on('blur', function() {
+            const value = $(this).val().trim();
+            const alert = $(this).next('.alert');
+            
+            if (/^[a-zA-ZÀ-ỹ ]{2,}$/.test(value)) {
+              alert.addClass('d-none');
+            } else {
+              alert.removeClass('d-none');
+            }
+          });
+
+          $('#phone').on('blur', function() {
+            const value = $(this).val().trim();
+            const alert = $(this).next('.alert');
+            
+            if (/^(84|\+84|0)[0-9]{9}$/.test(value)) {
+              alert.addClass('d-none');
+            } else {
+              alert.removeClass('d-none');
+            }
+          });
+
+          $('#address').on('blur', function() {
+            const value = $(this).val().trim();
+            const alert = $(this).next('.alert');
+            
+            if (value.length >= 5) {
+              alert.addClass('d-none');
+            } else {
+              alert.removeClass('d-none');
+            }
+          });
           $('#fullName').focus();
+
         }
       });
     });
