@@ -108,7 +108,6 @@ document.addEventListener('DOMContentLoaded', async function () {
               }
             }),
             success: function (response) {
-              console.log('Order Response:', response);
               if (response.order) {
                 // Chuyển hướng đến URL thanh toán
                 const paymentUrl = response.order
@@ -130,7 +129,6 @@ document.addEventListener('DOMContentLoaded', async function () {
               });
             },
             complete: function () {
-              console.log('flag2');
               submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
             }
           });

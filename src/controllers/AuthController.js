@@ -42,7 +42,7 @@ class AuthController {
         clearCache('/dashboard');
 
         // Thay vì redirect, trả về một chỉ thị
-        res.status(200).json({ redirect: '/dashboard' });
+        res.status(200).json("Login successfully");
       });
     })(req, res, next);
   }

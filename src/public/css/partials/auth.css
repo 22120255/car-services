@@ -23,6 +23,7 @@
   position: absolute;
   top: 24px;
   left: 28px;
-  color: #fff; }
+  color: #fff;
+  z-index: 99; }
   .btn-back:hover {
     opacity: 0.8; }

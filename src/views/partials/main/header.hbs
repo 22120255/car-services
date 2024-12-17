@@ -46,11 +46,10 @@
                         >Contact</a>
                     </li>
                     <li class='nav-item mx-3'>
-                        <a
+                        <button 
+                        type="button"
                             id="btn-cart"
                             class='nav-link text-white position-relative btn-cart'
-                            href='/cart'
-                            role='button'
                         >
                             <i class='fa-solid fa-cart-shopping'></i>
                             <span
@@ -58,7 +57,7 @@
                             >
                                 {{!-- 99+ --}}
                             </span>
-                        </a>
+                        </button>
                     </li>
                     {{#if (hasUser user)}}
                         <li class='nav-item dropdown'>
@@ -161,7 +160,7 @@
                         </li>
                         <li class='nav-item mx-2'>
                             <button
-                                onclick="window.location.href='/auth/login'"
+                                onclick="window.location.href='/auth/login?returnTo=' + window.location.pathname.slice(1)"
                                 title='Login'
                                 type='button'
                                 class='btn btn-success btn-login'
@@ -177,12 +176,21 @@
 </div>
 <div class='clearfix'></div>
 <script>
-    document.addEventListener("DOMContentLoaded",function () { const links =
-    document.querySelectorAll(".navbar-nav li a"); links.forEach(link => {
-    link.classList.toggle("active", link.getAttribute("href") ===
-    window.location.pathname); }); });
-    document.addEventListener("DOMContentLoaded", function() { const header =
-    document.querySelector(".header-area"); window.addEventListener("scroll",
-    function() { if (window.scrollY > 100) { header.classList.add("scrolled"); }
-    else { header.classList.remove("scrolled"); } }); });
+    document.addEventListener("DOMContentLoaded",function () { 
+        const links = document.querySelectorAll(".navbar-nav li a"); 
+        links.forEach(link => {
+            link.classList.toggle("active", link.getAttribute("href") === window.location.pathname); 
+        }); 
+    });
+    document.addEventListener("DOMContentLoaded", function() { 
+        const header = document.querySelector(".header-area"); 
+        window.addEventListener("scroll",function() { 
+            if (window.scrollY > 100) { 
+                header.classList.add("scrolled"); 
+            }
+            else { 
+                header.classList.remove("scrolled"); 
+            } 
+        }); 
+    });
 </script>
