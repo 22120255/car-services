@@ -26,7 +26,7 @@ function showProductModal(title, productID = null, product = null) {
       $(`input[name="images.at(index)"]`).val(image);
     });
     for (let i = 0; i < product.images.length; i++) {
-      $(`input[name="images.${i + 1}"]`).val(product.images[i]);
+      $(`input[name="images.image${i + 1}"]`).val(product.images[i]);
     }
   } else {
     // Nếu không có sản phẩm, tức là tạo mới
