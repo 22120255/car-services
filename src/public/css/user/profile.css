@@ -177,7 +177,7 @@
   flex-wrap: wrap;
   justify-content: center; }
 
-.btn {
+.btn.btn-custom {
   background-color: #3498db;
   color: white;
   border: none;
@@ -194,12 +194,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center; }
-  .btn:hover {
+  .btn.btn-custom:hover {
     background-color: #217dbb; }
-  .btn.btn-sm {
+  .btn.btn-custom.btn-sm {
     padding: 8px 15px;
     font-size: 14px; }
-  .btn.btn-secondary {
+  .btn.btn-custom.btn-secondary {
     background-color: #2ecc71;
     color: white;
     border: none;
@@ -207,9 +207,9 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease; }
-    .btn.btn-secondary:hover {
+    .btn.btn-custom.btn-secondary:hover {
       background-color: #25a25a; }
-  .btn.btn-warning {
+  .btn.btn-custom.btn-warning {
     background-color: #f39c12;
     color: white;
     border: none;
@@ -217,9 +217,9 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease; }
-    .btn.btn-warning:hover {
+    .btn.btn-custom.btn-warning:hover {
       background-color: #c87f0a; }
-  .btn.btn-danger {
+  .btn.btn-custom.btn-danger {
     background-color: #e74c3c;
     color: white;
     border: none;
@@ -227,9 +227,9 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease; }
-    .btn.btn-danger:hover {
+    .btn.btn-custom.btn-danger:hover {
       background-color: #d62c1a; }
-  .btn i {
+  .btn.btn-custom i {
     margin-right: 8px; }
 
 .admin-dashboard {

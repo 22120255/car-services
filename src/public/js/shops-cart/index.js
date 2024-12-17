@@ -1,38 +1,100 @@
-import { loadCartData, showModal, refreshCart } from '../common.js';
-import { createQr } from './payment.js';
+import { loadCartData, showModal } from '../common.js';
+import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
-  try {
-    let cart = await loadCartData();
+  let cart = await loadCartData();
+  console.log('Cart:', cart);
+  if (cart && cart.items.length > 0) {
+    renderCartTable(cart);
 
-    if (cart && cart.items && cart.items.length > 0) {
-      renderCartTable(cart);
-      $('#checkout').on('click', function (event) {
-        $.ajax(`/cart/payment/${cart._id}`, {
-          method: 'GET',
-          success: function (data) {
-            showModal(
-              'Payment',
-              data,
-              'OK',
-              () => {},
-              () => {
-                createQr();
+    $('#checkout').on('click', function (event) {
+      const modalContent = `
+          <form id="shipping-form">
+            <div class="form-group mb-3">
+              <label for="fullName">Họ và tên</label>
+              <input type="text" class="form-control" id="fullName" required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="phone">Số điện thoại</label>
+              <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="form-group mb-3">
+              <label for="address">Địa chỉ giao hàng</label>
+              <textarea class="form-control" id="address" rows="3" required></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label for="note">Ghi chú (không bắt buộc)</label>
+              <textarea class="form-control" id="note" rows="2"></textarea>
+            </div>
+          </form>
+        `;
+
+      showModal({
+        title: 'Thông tin giao hàng',
+        content: modalContent,
+        btnSubmit: 'Tiến hành thanh toán',
+        callback: () => {
+          const form = document.getElementById('shipping-form');
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return false;
+          }
+
+          const submitBtn = $('#notify-modal .btn-submit');
+          submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
+
+          $.ajax({
+            url: '/api/orders/create',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({
+              shippingDetails: {
+                fullName: $('#fullName').val().trim(),
+                phone: $('#phone').val().trim(),
+                address: $('#address').val().trim(),
+                note: $('#note').val().trim(),
+              },
+            }),
+            success: function (response) {
+              console.log('Order Response:', response);
+              if (response.order) {
+                // Chuyển hướng đến URL thanh toán
+                const paymentUrl = response.order
+                  ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                  : response.paymentUrl;
+                window.location.href = paymentUrl;
+              } else {
+                showModal({
+                  title: 'Lỗi',
+                  content: 'Không thể tạo đơn hàng. Vui lòng thử lại.',
+                });
               }
-            );
-          },
-          error: function (error) {
-            console.error('Error:', error);
-          },
-        });
+            },
+            error: function (xhr, status, error) {
+              console.error('Order Error:', error);
+              showModal({
+                title: 'Lỗi',
+                content: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+              });
+            },
+            complete: function () {
+              console.log('flag2');
+              submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
+            },
+          });
+          return true;
+        },
+        onShowCallback: () => {
+          $('#fullName').focus();
+        },
       });
-    } else {
-      console.error('Cart is empty or invalid.');
-      $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
-      $('#total-price').html('');
-    }
-  } catch (error) {
-    console.error('Error:', error);
+    });
+  } else {
+    console.error('Cart is empty or invalid.');
+    $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
+    $('#total-price').html('');
   }
 });
 
@@ -127,6 +189,7 @@ function attachQuantityEventHandlers(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await updateQuantity(cart, productId, 1);
+      updateAmountCart(store.getState().amountCart + 1);
     });
   });
 
@@ -134,6 +197,7 @@ function attachQuantityEventHandlers(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await updateQuantity(cart, productId, -1);
+      updateAmountCart(store.getState().amountCart - 1);
     });
   });
 }
@@ -144,7 +208,6 @@ function removeItemHandler(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await removeItem(cart, productId);
-      await refreshCart();
     });
   });
 }
@@ -200,6 +263,7 @@ async function removeItem(cart, productId) {
     const data = await response.json();
     if (response.ok && data.cart) {
       renderCartTable(data.cart);
+      updateAmountCart(data.cart.items.reduce((acc, cur) => cur.quantity + acc, 0));
     } else {
       console.error('Error:', data.message || 'Unexpected response');
     }

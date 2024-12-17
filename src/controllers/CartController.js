@@ -8,31 +8,7 @@ class CartController {
       layout: false,
     });
   }
-  async createQR(req, res) {
-    try {
-      let userId = req.user._id;
-      const cart = await Cart.findOne({ userId });
-      console.log(cart);
-      if (!cart) {
-        errorLog('CartController.js', 'createQR', 'Cart not found');
-        return res.status(400).json({ message: 'Cart not found.' });
-      }
-
-      const amount = cart.total;
-
-      console.log('amount', amount);
-      const cartID = cart._id;
-      userId = userId.toString().slice(-4) + 'XXXX';
-      const description = `KH ${userId} TT ${cartID}`;
-      // QR code quick link
-      const QR = `https://img.vietqr.io/image/${process.env.BANK_ID}-${process.env.ACCOUNT_NO}-compact2.png?amount=${amount}&addInfo=${description}&accountName=${process.env.ACCOUNT_NAME}`;
-
-      return res.status(200).json({ QR });
-    } catch (error) {
-      errorLog('CartController.js', 'createQR', error.message);
-      return res.status(500).json({ message: 'Server error occurred.' });
-    }
-  }
+  
   cart(req, res) {
     res.render('shops-cart/index', {
       title: 'Shopping Cart',
@@ -73,7 +49,7 @@ class CartController {
         const itemProductId = item.productId instanceof Object ? item.productId.toString() : item.productId;
         return itemProductId === productId;
       });
-      console.log('existingItem', existingItem);
+
       if (existingItem) {
         existingItem.quantity += quantity;
         cart.total += existingItem.price * quantity;

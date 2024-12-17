@@ -77,11 +77,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     200() {
-                        showModal("Registration successful", "Your account has been created successfully, please check your inbox to activate your account!",
-                            function () {
+                        showModal({
+                            title: "Registration successful", content: "Your account has been created successfully, please check your inbox to activate your account!",
+                            callback: function () {
                                 window.location.href = "/auth/login";
                             }
-                        )
+                        })
                     },
                     400(resp) {
                         console.log(resp.responseJSON);

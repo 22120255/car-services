@@ -1,93 +1,109 @@
-const path = require('path')
+const path = require('path');
 require('dotenv').config({
-    path: path.resolve(
-        process.cwd(),
-        process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
-    ),
-})
-const express = require('express')
-const morgan = require('morgan')
-const methodOverride = require('method-override')
-const { engine } = require('express-handlebars')
-const session = require('express-session')
-const flash = require('connect-flash')
+  path: path.resolve(process.cwd(), process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'),
+});
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const methodOverride = require('method-override');
+const { engine } = require('express-handlebars');
+const session = require('express-session');
+const flash = require('connect-flash');
 
-const route = require('./routes')
-const db = require('./config/db')
-const passport = require('./config/passport')
-const { navigateUser } = require('./middleware/authMiddleware')
-const { catch404, catch500 } = require('./middleware/catchError')
-const refreshSession = require('./middleware/refreshSession')
+const route = require('./routes');
+const db = require('./config/db');
+const passport = require('./config/passport');
+const { navigateUser } = require('./middleware/authMiddleware');
+const { catch404, catch500 } = require('./middleware/catchError');
+const refreshSession = require('./middleware/refreshSession');
 
-const app = express()
-const store = db.createSessionStore(session)
+const app = express();
+const setupNgrok = require('./config/ngrok');
+const store = db.createSessionStore(session);
 
 // Session
 app.use(
-    session({
-        store,
-        name: 'car-servers',
-        secret: 'car.services',
-        resave: false,
-        saveUninitialized: true,
-        cookie: { maxAge: 10000 * 60 * 60 },
-    })
-)
+  session({
+    store,
+    name: 'car-servers',
+    secret: 'car.services',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 10000 * 60 * 60 },
+  })
+);
 
 // Connect to DB
-db.connectDB()
+db.connectDB();
 // Body parser
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // Ghi đè phương thức HTTP
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 // Passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 // Flash
-app.use(flash())
+app.use(flash());
 // Static file
-app.use(express.static(path.join(__dirname, 'public')))
-app.use('/css', express.static('public/css'))
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/css', express.static('public/css'));
 // HTTP logger
 if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'))
+  app.use(morgan('dev'));
 }
+// Enable CORS
+app.use(cors());
+
+async function startServer() {
+  if (process.env.NODE_ENV === 'development') {
+    // Setup ngrok
+    try {
+      await setupNgrok();
+      console.log('Ngrok setup completed');
+    } catch (error) {
+      console.error('Failed to start server:', error);
+      process.exit(1);
+    }
+  }
+  // Start server
+  app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('VNPay IPN URL:', process.env.VNP_IPN_URL);
+    }
+  });
+}
+
 // Custom middleware
-app.use(navigateUser)
-app.use(refreshSession)
+app.use(navigateUser);
+app.use(refreshSession);
 
 // Register the eq helper
 
 // Template engine
 app.engine(
-    'hbs',
-    engine({
-        runtimeOptions: {
-            allowProtoPropertiesByDefault: true,
-            allowProtoMethodsByDefault: true,
-        },
-        extname: '.hbs',
-        defaultLayout: 'main',
-        partialsDir: [
-            path.join(__dirname, 'views/partials/main'),
-            path.join(__dirname, 'views/partials/admin'),
-            path.join(__dirname, 'views/partials'),
-        ],
-        helpers: require('./utils/handlebars'),
-    })
-)
-app.set('view engine', 'hbs')
-app.set('views', path.join(__dirname, 'views'))
-app.use('/css', express.static('public/css'))
+  'hbs',
+  engine({
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true,
+    },
+    extname: '.hbs',
+    defaultLayout: 'main',
+    partialsDir: [path.join(__dirname, 'views/partials/main'), path.join(__dirname, 'views/partials/admin'), path.join(__dirname, 'views/partials')],
+    helpers: require('./utils/handlebars'),
+  })
+);
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+app.use('/css', express.static('public/css'));
 
 // Route init
-route(app)
+route(app);
 
 app.use(catch404);
 app.use(catch500);
 
 // Listen to port
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`)
-})
+startServer();

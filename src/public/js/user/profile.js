@@ -1,4 +1,4 @@
-import { showToast } from '../common.js';
+import { showModal, showToast } from '../common.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Các nút chỉnh sửa thông tin cá nhân
@@ -48,7 +48,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     $(".btn-change-password").on('click', function () {
-        showToast("Error", "This feature is not available yet.");
+        const formChangePassword = `<form id="change-password-form">
+                <div class="mb-3">
+                    <label for="current-password" class="form-label">Current password</label>
+                    <input type="password" class="form-control" id="current-password" name="currentPassword" required>
+                    <span id="current-password-error" class='fs-075 text-danger ml-1'></span>
+                </div>
+                <div class="mb-3">
+                    <label for="new-password" class="form-label">New password</label>
+                    <input type="password" class="form-control" id="new-password" name="newPassword" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm-password" class="form-label">Confirm password</label>
+                    <input type="password" class="form-control" id="confirm-password" name="confirmPassword" required>
+                    <span id="new-password-error" class='fs-075 text-danger ml-1'></span>
+                </div>
+            </form>`
+        const handleChangePassword = async () => {
+            const currentPassword = $('#current-password').val().trim();
+            const newPassword = $('#new-password').val().trim();
+            const confirmPassword = $('#confirm-password').val().trim();
+
+            if (!currentPassword) {
+                $('#current-password-error').text('Please enter current password');
+                return false;
+            }
+
+            if (!newPassword) {
+                $('#new-password-error').text('Please enter new password');
+                return false;
+            }
+
+            if (newPassword !== confirmPassword) {
+                $('#new-password-error').text('Password does not match');
+                return false;
+            }
+            $('#new-password-error').text('');
+
+            try {
+                await $.ajax({
+                    url: '/api/auth/change-password',
+                    type: 'PATCH',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ currentPassword, newPassword }),
+                });
+                showToast('Success', 'Password changed successfully');
+                $('#current-password-error').text('');
+                return true;
+            } catch (error) {
+                if (error.status === 400) {
+                    $('#current-password-error').text(error.responseJSON?.error || 'Invalid current password');
+                } else {
+                    showToast('Error', 'Failed to change password');
+                }
+                return false;
+            }
+        }
+        showModal({ title: "Change password", content: formChangePassword, btnSubmit: "Change", callback: handleChangePassword });
     });
 
     $(".btn-account-settings").on('click', function () {
