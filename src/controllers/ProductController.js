@@ -85,7 +85,7 @@ class ProductController {
   products = async (req, res, next) => {
     try {
       res.render('products/index', {
-        title: 'Sản phẩm',
+        title: 'Products',
       });
     } catch (error) {
       errorLog("ProductController", "products", error);
