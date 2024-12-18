@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!user) {
             showModal({
                 title: "Notify", content: "Please login to view cart", callback: () => {
-                    window.location.href = ` /auth/login?returnTo=cart`
+                    window.location.href = `/auth/login?returnTo=/cart`
                 }
             })
         } else { window.location.href = "/cart" }

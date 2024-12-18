@@ -9,7 +9,14 @@ const clearCache = (key) => {
     }
   })
 }
+const clearAllCache = async () => {
+  try {
+    await redisClient.flushDb();
+  } catch (err) {
+    errorLog("helperCache", "clearAllCache", err);
+  }
+};
 
 module.exports = {
-  clearCache,
+  clearCache, clearAllCache
 };

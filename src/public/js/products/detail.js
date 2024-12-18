@@ -19,8 +19,12 @@ document.addEventListener('DOMContentLoaded', function () {
         updateAmountCart(amountCart + 1);
       },
       error: function (error) {
-        console.log(error);
-        showToast('Error', 'Failed to add to cart');
+        if (error.status === 401) {
+          showToast('Error', 'Please login to add to cart');
+        } else {
+          console.log(error);
+          showToast('Error', 'Failed to add to cart');
+        }
       },
       complete: function () {
         $('#icon-loading').addClass('d-none');

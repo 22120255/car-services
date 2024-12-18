@@ -141,6 +141,7 @@
                                 </li>
                                 <li>
                                     <a
+                                        type="button"
                                         class='dropdown-item'
                                         href='/auth/logout'
                                     >Logout</a>
@@ -160,7 +161,7 @@
                         </li>
                         <li class='nav-item mx-2'>
                             <button
-                                onclick="window.location.href='/auth/login?returnTo=' + window.location.pathname.slice(1)"
+                                onclick="window.location.href='/auth/login?returnTo=' + window.location.pathname"
                                 title='Login'
                                 type='button'
                                 class='btn btn-success btn-login'

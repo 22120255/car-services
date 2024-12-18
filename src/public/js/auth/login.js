@@ -31,10 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
             messageEle.text('Please fill in all information')
             return
         }
+
         try {
             $("#icon-loading").removeClass("d-none");
             await $.ajax({
-                url: '/api/auth/login/email/verify',
+                url: `/api/auth/login/email/verify`,
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ email, password }),
@@ -52,8 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     200(resp) {
                         const urlParams = new URLSearchParams(window.location.search);
-                        const returnTo = `/${urlParams.get("returnTo")}` || '/dashboard';
-
+                        const returnTo = urlParams.get("returnTo") || '/dashboard';
                         window.location.href = returnTo;
                     }
                 }

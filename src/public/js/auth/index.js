@@ -95,8 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('DOMContentLoaded', function () {
     $('.btn-back').on('click', function (e) {
         const urlParams = new URLSearchParams(window.location.search);
-        const returnTo = `/${urlParams.get("returnTo")}` || '/dashboard';
-        console.log("rt", returnTo)
+        const returnTo = urlParams.get("returnTo") || '/dashboard';
+
         window.location.href = returnTo;
     });
 }); 
