@@ -4,6 +4,7 @@ const qs = require('qs');
 const vnpayConfig = require('../config/vnpay');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const User = require('../models/User');
 
 // Hàm sortObject được định nghĩa riêng
 const sortObject = (obj) => {
