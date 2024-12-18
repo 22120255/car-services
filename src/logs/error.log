@@ -1,0 +1,2 @@
+2024-12-18 18:43:15 [ERROR]: File: UserController, func: getUser, error: Cast to ObjectId failed for value "ok" (type string) at path "_id" for model "User"
+2024-12-18 18:49:55 [ERROR]: File: UserController, func: getUser, error: Cast to ObjectId failed for value "prod" (type string) at path "_id" for model "User"

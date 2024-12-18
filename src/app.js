@@ -16,6 +16,7 @@ const passport = require('./config/passport');
 const { navigateUser } = require('./middleware/authMiddleware');
 const { catch404, catch500 } = require('./middleware/catchError');
 const refreshSession = require('./middleware/refreshSession');
+const client = require('./config/elasticsearch');
 
 const app = express();
 const setupNgrok = require('./config/ngrok');

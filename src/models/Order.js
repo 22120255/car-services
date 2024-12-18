@@ -23,7 +23,7 @@ const OrderSchema = new mongoose.Schema(
     reviewStatus: {
       type: String,
       enum: ['not-reviewed', 'reviewed'],
-      default: 'not-reviewed', // Trạng thái review
+      default: 'not-reviewed',
     },
   },
   { timestamps: true }
