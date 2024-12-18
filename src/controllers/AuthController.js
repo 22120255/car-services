@@ -113,7 +113,10 @@ class AuthController {
           return res.status(500).json({ error: 'Login failed.' });
         }
         // Clear cache before redirecting
-        clearCache('/dashboard');
+        if (req.isAuthenticated())
+          clearCache(`dashboard/${req.user._id}`);
+        else
+          clearCache('dashboard');
 
         // Thay vì redirect, trả về một chỉ thị
         res.status(200).json({ redirect: '/dashboard' });
@@ -135,7 +138,10 @@ class AuthController {
           return res.status(500).json({ error: 'Login failed.' });
         }
         // Clear cache before redirecting
-        clearCache('/dashboard');
+        if (req.isAuthenticated())
+          clearCache(`dashboard/${req.user._id}`);
+        else
+          clearCache('dashboard');
 
         // Thay vì redirect, trả về một chỉ thị
         res.status(200).json({ redirect: '/dashboard' });

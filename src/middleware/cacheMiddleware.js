@@ -5,7 +5,7 @@ async function cacheMiddleware(req, res, next) {
   const domain = process.env.DOMAIN_URL;
   let key = `${domain}${req.originalUrl || req.url}`;
   if (req.isAuthenticated()) {
-    key = `${req.user._id}/${key}`;
+    key = `${key}/${req.user._id}`;
   }
   try {
     const cachedResponse = await redisClient.get(key);
