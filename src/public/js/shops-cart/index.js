@@ -9,40 +9,89 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     $('#checkout').on('click', function (event) {
       const modalContent = `
-          <form id="shipping-form">
-            <div class="form-group mb-3">
-              <label for="fullName">Họ và tên</label>
-              <input type="text" class="form-control" id="fullName" required>
+        <form id="shipping-form" class="needs-validation" novalidate>
+          <div class="form-group mb-3">
+            <label for="fullName">Họ và tên</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="fullName" 
+              required
+            >
+            <div class="alert alert-warning mt-2 d-none" role="alert">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Bạn có chắc chắn đã nhập đúng họ và tên?
             </div>
-            <div class="form-group mb-3">
-              <label for="phone">Số điện thoại</label>
-              <input type="tel" class="form-control" id="phone" required>
+          </div>
+    
+          <div class="form-group mb-3">
+            <label for="phone">Số điện thoại</label>
+            <input 
+              type="tel" 
+              class="form-control" 
+              id="phone" 
+              required
+            >
+            <div class="alert alert-warning mt-2 d-none" role="alert">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Hãy nhập số điện thoại hợp lệ
             </div>
-            <div class="form-group mb-3">
-              <label for="address">Địa chỉ giao hàng</label>
-              <textarea class="form-control" id="address" rows="3" required></textarea>
+          </div>
+    
+          <div class="form-group mb-3">
+            <label for="address">Địa chỉ giao hàng</label>
+            <textarea 
+              class="form-control" 
+              id="address" 
+              rows="3" 
+              required
+            ></textarea>
+            <div class="alert alert-warning mt-2 d-none" role="alert">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              Vui lòng nhập địa chỉ chi tiết
             </div>
-            <div class="form-group mb-3">
-              <label for="note">Ghi chú (không bắt buộc)</label>
-              <textarea class="form-control" id="note" rows="2"></textarea>
-            </div>
-          </form>
-        `;
-
+          </div>
+    
+          <div class="form-group mb-3">
+            <label for="note">Ghi chú (không bắt buộc)</label>
+            <textarea class="form-control" id="note" rows="2"></textarea>
+          </div>
+        </form>
+      `;
+    
       showModal({
-        title: 'Thông tin giao hàng',
+        title: 'Thông tin giao hàng', 
         content: modalContent,
         btnSubmit: 'Tiến hành thanh toán',
         callback: () => {
           const form = document.getElementById('shipping-form');
-          if (!form.checkValidity()) {
-            form.reportValidity();
+          const fullName = $('#fullName').val().trim();
+          const phone = $('#phone').val().trim();
+          const address = $('#address').val().trim();
+    
+          // Hide all alerts first
+          $('.alert').addClass('d-none');
+    
+          let isValid = true;
+    
+          if (!/^[a-zA-ZÀ-ỹ ]{2,}$/.test(fullName)) {
+            $('#fullName').next('.alert').removeClass('d-none');
+            isValid = false;
+          }
+    
+          if (!/^(84|\+84|0)[0-9]{9}$/.test(phone)) {
+            $('#phone').next('.alert').removeClass('d-none');
+            isValid = false;
+          }
+    
+          if (address.length < 5) {
+            $('#address').next('.alert').removeClass('d-none');
+            isValid = false;
+          }
+    
+          if (!isValid) {
             return false;
           }
-
-          const submitBtn = $('#notify-modal .btn-submit');
-          submitBtn.prop('disabled', true)
-            .html('<span class="spinner-border spinner-border-sm"></span> Đang xử lý...');
 
           $.ajax({
             url: '/api/orders/create',
@@ -86,7 +135,41 @@ document.addEventListener('DOMContentLoaded', async function () {
           return true;
         },
         onShowCallback: () => {
+          // Sửa lại cách ẩn/hiện alert trong JavaScript
+          $('#fullName').on('blur', function() {
+            const value = $(this).val().trim();
+            const alert = $(this).next('.alert');
+            
+            if (/^[a-zA-ZÀ-ỹ ]{2,}$/.test(value)) {
+              alert.addClass('d-none');
+            } else {
+              alert.removeClass('d-none');
+            }
+          });
+
+          $('#phone').on('blur', function() {
+            const value = $(this).val().trim();
+            const alert = $(this).next('.alert');
+            
+            if (/^(84|\+84|0)[0-9]{9}$/.test(value)) {
+              alert.addClass('d-none');
+            } else {
+              alert.removeClass('d-none');
+            }
+          });
+
+          $('#address').on('blur', function() {
+            const value = $(this).val().trim();
+            const alert = $(this).next('.alert');
+            
+            if (value.length >= 5) {
+              alert.addClass('d-none');
+            } else {
+              alert.removeClass('d-none');
+            }
+          });
           $('#fullName').focus();
+
         }
       });
     });

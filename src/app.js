@@ -21,7 +21,6 @@ const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 
 const app = express()
-const setupNgrok = require('./config/ngrok');
 const store = db.createSessionStore(session)
 
 // Session
@@ -58,26 +57,6 @@ if (process.env.NODE_ENV === 'development') {
 // Enable CORS
 app.use(cors())
 
-async function startServer() {
-    // if (process.env.NODE_ENV === 'development') {
-    //     // Setup ngrok
-    //     try {
-    //         await setupNgrok();
-    //         console.log('Ngrok setup completed');
-    //     } catch (error) {
-    //         console.error('Failed to start server:', error);
-    //         process.exit(1);
-    //     }
-    // }
-    // Start server
-    app.listen(process.env.PORT, () => {
-        console.log(`Server is running on port ${process.env.PORT}`);
-        if (process.env.NODE_ENV === 'development') {
-            console.log('VNPay IPN URL:', process.env.VNP_IPN_URL);
-        }
-    });
-}
-
 // Custom middleware
 app.use(navigateUser)
 app.use(refreshSession)
@@ -113,4 +92,9 @@ app.use(catch404);
 app.use(catch500);
 
 // Listen to port
-startServer()
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('VNPay IPN URL:', process.env.VNP_IPN_URL);
+    }
+});
