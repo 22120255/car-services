@@ -186,6 +186,15 @@ class PaymentController {
                 if (rspCode === '00') {
                     await Cart.findOneAndUpdate({ userId: order.userId, isPaid: false }, { isPaid: true });
                 }
+
+                // Cập nhật danh sách sản phẩm đã mua trong metadata của người dùng
+                const user = await User.findById(order.userId);
+                if (user) {
+                    const purchasedProducts = order.products.map(product => product.productId);
+                    user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
+                    user.metadata.purchasedProducts.push(...purchasedProducts);
+                    await user.save();
+                }
     
                 return res.status(200).json({RspCode: '00', Message: 'Success'});
     

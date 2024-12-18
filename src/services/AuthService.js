@@ -110,23 +110,24 @@ class AuthService {
     } catch (err) {
       throw new Error(err.message);
     }
+  }
 
-    async changePassword(userId, currentPassword, newPassword) {
-        const user = await User.findById(userId).select("+password");
-        if (!user) {
-            throw new CustomError(404, "User not found.");
-        }
+  async changePassword(userId, currentPassword, newPassword) {
+      const user = await User.findById(userId).select("+password");
+      if (!user) {
+          throw new CustomError(404, "User not found.");
+      }
 
-        const isMatch = await user.comparePassword(currentPassword);
-        if (!isMatch) {
-            throw new CustomError(400, "Incorrect password.");
-        }
+      const isMatch = await user.comparePassword(currentPassword);
+      if (!isMatch) {
+          throw new CustomError(400, "Incorrect password.");
+      }
 
-        user.password = newPassword;
-        await user.save();
+      user.password = newPassword;
+      await user.save();
 
-        return user;
-    }
+      return user;
+  }
 }
 
 module.exports = new AuthService();
