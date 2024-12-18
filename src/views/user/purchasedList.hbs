@@ -1,0 +1,137 @@
+<div class="purchased-list-container">
+    <div class="purchased-header">
+        <h1><i class="fas fa-shopping-bag"></i> Danh sách xe đã mua</h1>
+    </div>
+
+    <div class="purchased-content">
+        {{#if user.metadata.purchasedProducts.length}}
+            <div class="car-grid">
+                {{#each user.metadata.purchasedProducts}}
+                    <div class="car-card">
+                        <div class="car-image">
+                            <img src="{{this.images.[0]}}" alt="{{this.brand}} {{this.model}}">
+                        </div>
+                        <div class="car-details">
+                            <h3>{{this.brand}} {{this.model}}</h3>
+                            <div class="car-info">
+                                <p><i class="fas fa-calendar"></i> Năm: {{this.year}}</p>
+                                <p><i class="fas fa-tachometer-alt"></i> Số km: {{formatNumber this.mileage}} km</p>
+                                <p><i class="fas fa-dollar-sign"></i> Giá: {{formatCurrency this.price}}</p>
+                            </div>
+                            <div class="purchase-info">
+                                {{#with (lookup ../user.metadata.recentActivity @index)}}
+                                    <p><i class="fas fa-clock"></i> Ngày mua: {{formatDate this.date}}</p>
+                                {{/with}}
+                                <p><i class="fas fa-check-circle"></i> Trạng thái: Đã mua</p>
+                            </div>
+                            <a href="/products/{{this._id}}" class="btn btn-primary view-details">
+                                <i class="fas fa-eye"></i> Xem chi tiết
+                            </a>
+                            <a href="" class="btn btn-primary view-details">
+                                <i class="fas fa-star"></i> Đánh giá sản phẩm
+                            </a>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        {{else}}
+            <div class="empty-state">
+                <i class="fas fa-car-side empty-icon"></i>
+                <p>Bạn chưa mua xe nào</p>
+                <a href="/products" class="btn btn-primary">Xem danh sách xe</a>
+            </div>
+        {{/if}}
+    </div>
+</div>
+<script type="module" src="/js/user/purchasedList.js"></script>
+
+<style>
+    .purchased-list-container {
+        padding: 2rem;
+    }
+
+    .purchased-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .purchased-header h1 {
+        color: #333;
+        font-size: 2rem;
+    }
+
+    .car-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .car-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .car-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .car-image {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .car-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .car-details {
+        padding: 1rem;
+    }
+
+    .car-details h3 {
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .car-info, .purchase-info {
+        margin-bottom: 1rem;
+    }
+
+    .car-info p, .purchase-info p {
+        margin: 0.5rem 0;
+        color: #666;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>

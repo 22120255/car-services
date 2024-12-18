@@ -4,7 +4,6 @@ require('dotenv').config({
 });
 const express = require('express');
 const morgan = require('morgan');
-const cors = require('cors');
 const methodOverride = require('method-override');
 const { engine } = require('express-handlebars');
 const session = require('express-session');
@@ -53,29 +52,6 @@ app.use('/css', express.static('public/css'));
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-// Enable CORS
-app.use(cors());
-
-async function startServer() {
-  if (process.env.NODE_ENV === 'development') {
-    // Setup ngrok
-    try {
-      await setupNgrok();
-      console.log('Ngrok setup completed');
-    } catch (error) {
-      console.error('Failed to start server:', error);
-      process.exit(1);
-    }
-  }
-  // Start server
-  app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
-    if (process.env.NODE_ENV === 'development') {
-      console.log('VNPay IPN URL:', process.env.VNP_IPN_URL);
-    }
-  });
-}
-
 // Custom middleware
 app.use(navigateUser);
 app.use(refreshSession);
@@ -107,4 +83,6 @@ app.use(catch404);
 app.use(catch500);
 
 // Listen to port
-startServer();
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});

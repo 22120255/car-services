@@ -26,6 +26,8 @@
     "@elastic/elasticsearch": "^7.17.14",
     "@ngrok/ngrok": "^1.4.1",
     "bcryptjs": "^2.4.3",
+    "@elastic/elasticsearch": "^8.16.2",
+    "bcrypt": "^5.1.1",
     "chance": "^1.1.12",
     "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",

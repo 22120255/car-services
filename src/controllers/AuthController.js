@@ -2,7 +2,7 @@
 const AuthService = require('../services/AuthService');
 const passport = require('passport');
 const User = require('../models/User');
-const { clearCache } = require('../utils/helperCache');
+const { clearCache, clearAllCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 
 class AuthController {
@@ -39,10 +39,9 @@ class AuthController {
           return next(err);
         }
         // Clear cache before redirecting
-        clearCache('/dashboard');
+        clearAllCache();
 
-        // Thay vì redirect, trả về một chỉ thị
-        res.status(200).json({ redirect: '/dashboard' });
+        res.status(200).json('Login successfully');
       });
     })(req, res, next);
   }
@@ -199,7 +198,7 @@ class AuthController {
           res.redirect('/dashboard');
         }
         // Clear cache before redirecting
-        clearCache('/dashboard');
+        clearAllCache();
         res.redirect('/dashboard');
       });
     } catch (err) {

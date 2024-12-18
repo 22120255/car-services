@@ -40,7 +40,7 @@ class ProductController {
           break;
 
         case 'price':
-          // Tạm thời mặc định 10000
+          // TODO: Tạm thời mặc định 10000
           const delta = 10000;
           const currentPrice = parseFloat(fieldData);
           if (isNaN(currentPrice)) {
@@ -85,7 +85,7 @@ class ProductController {
   products = async (req, res, next) => {
     try {
       res.render('products/index', {
-        title: 'Sản phẩm',
+        title: 'Products',
       });
     } catch (error) {
       errorLog('ProductController', 'products', error);
@@ -147,7 +147,6 @@ class ProductController {
         return res.status(200).json({
           products: multipleMongooseToObject(products),
           total,
-          title: 'Products',
         });
       }
     } catch (error) {

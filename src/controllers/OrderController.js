@@ -10,10 +10,9 @@ class OrderController {
       const userId = req.user._id;
 
       // Get cart với Mongoose
-      const cart = await Cart.findOne({ userId }).populate('items.productId');
+      const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
 
       if (!cart || !cart.items || cart.items.length === 0) {
-        console.log('Cart is empty');
         return res.status(400).json({ error: 'Cart is empty' });
       }
 
@@ -36,22 +35,8 @@ class OrderController {
         status: 'pending',
       });
 
-      // Tạo URL thanh toán
-      // const vnpayUrl = await PaymentController.createPaymentUrl({
-      //     orderId: order._id.toString(),
-      //     amount: totalAmount
-      // });
-      // console.log('Payment URL:', vnpayUrl);
-
-      // Clear cart sau khi tạo order
-      // await Cart.findOneAndUpdate(
-      //     { userId },
-      //     { $set: { items: [] } }
-      // );
-
       res.status(201).json({ order });
     } catch (error) {
-      console.error('Create Order Error:', error);
       res.status(500).json({
         error: 'Internal Server Error',
         message: error.message,

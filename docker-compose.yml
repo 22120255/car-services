@@ -28,4 +28,10 @@ services:
       - BANK_ID=${BANK_ID}
       - ACCOUNT_NO=${ACCOUNT_NO}
       - ACCOUNT_NAME=${ACCOUNT_NAME}
+      - VNP_TMNCODE=${VNP_TMNCODE}
+      - VNP_HASHSECRET=${VNP_HASHSECRET}
+      - VNP_URL=${VNP_URL}
+      - VNP_RETURN_URL=${VNP_RETURN_URL}
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+      - VNP_IPN_URL=${VNP_IPN_URL}
     # Không cần khai báo depends_on nữa, vì không sử dụng MongoDB container

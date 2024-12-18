@@ -1,0 +1,36 @@
+@charset "UTF-8";
+.star-rating {
+  font-size: 0;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  padding: 5px;
+  font-size: 30px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star-rating label:before {
+  content: '★';
+}
+
+.star-rating input:checked ~ label {
+  color: #ffca08;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-preview img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}

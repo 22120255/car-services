@@ -31,10 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
             messageEle.text('Please fill in all information')
             return
         }
+
         try {
             $("#icon-loading").removeClass("d-none");
             await $.ajax({
-                url: '/api/auth/login/email/verify',
+                url: `/api/auth/login/email/verify`,
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ email, password }),
@@ -51,9 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     },
                     200(resp) {
-                        if (resp.redirect) {
-                            window.location.href = resp.redirect
-                        }
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const returnTo = urlParams.get("returnTo") || '/dashboard';
+                        window.location.href = returnTo;
                     }
                 }
             });

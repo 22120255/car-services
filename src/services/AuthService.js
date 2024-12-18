@@ -111,7 +111,6 @@ class AuthService {
       throw new Error(err.message);
     }
   }
-
   async changePassword(userId, currentPassword, newPassword) {
     const user = await User.findById(userId).select('+password');
     if (!user) {
