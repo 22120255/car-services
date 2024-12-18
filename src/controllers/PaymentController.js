@@ -189,7 +189,8 @@ class PaymentController {
                 }
 
                 // Cập nhật danh sách sản phẩm đã mua trong metadata của người dùng
-                const user = await User.findById(order.userId);
+                const user = await User.findById({ _id: order.userId });
+                console.log('user: ', user);
                 if (user) {
                     const purchasedProducts = order.products.map(product => product.productId);
                     user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
