@@ -1,4 +1,5 @@
 const ProductService = require('../services/ProductService');
+const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
 
 class ProductController {
@@ -39,7 +40,7 @@ class ProductController {
           break;
 
         case 'price':
-          // Tạm thời mặc định 10000
+          // TODO: Tạm thời mặc định 10000
           const delta = 10000;
           const currentPrice = parseFloat(fieldData);
           if (isNaN(currentPrice)) {
@@ -61,8 +62,7 @@ class ProductController {
 
       res.status(200).json({ products, total });
     } catch (error) {
-      console.error('Error fetching related products:', error);
-      next(error);
+      errorLog("ProductController", "getRelatedProducts", error);
     }
   };
 
@@ -76,7 +76,7 @@ class ProductController {
         title: 'Product details',
       });
     } catch (error) {
-      console.log(error);
+      errorLog("ProductController", "getDetail", error);
       next();
     }
   };
@@ -85,10 +85,10 @@ class ProductController {
   products = async (req, res, next) => {
     try {
       res.render('products/index', {
-        title: 'Sản phẩm',
+        title: 'Products',
       });
     } catch (error) {
-      console.error(error);
+      errorLog("ProductController", "products", error);
       next(error);
     }
   };
@@ -147,12 +147,10 @@ class ProductController {
         return res.status(200).json({
           products: multipleMongooseToObject(products),
           total,
-          title: 'Products',
         });
       }
     } catch (error) {
-      console.error(error);
-      next(error);
+      errorLog("ProductController", "productsAndGetProducts", error);
     }
   };
 }

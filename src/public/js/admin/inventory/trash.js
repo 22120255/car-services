@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../../common.js';
+import { showToast, showModal, updateQueryParams } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 function formatDate(date) {
@@ -47,29 +47,31 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#trashTable').on('click', '#btnDelete', function () {
     const productId = $(this).closest('tr').data('product-id');
 
-    showModal('Delete Product', 'Are you sure you want to delete permanently this product?', 'Delete ', () => {
-      $.ajax({
-        url: `/api/user/trash/delete/${productId}`,
-        type: 'DELETE',
-        statusCode: {
-          200: function (response) {
-            showToast('success', response.message);
-            refresh();
+    showModal({
+      title: 'Delete Product', content: 'Are you sure you want to delete permanently this product?', btnSubmit: 'Delete ', callback: () => {
+        $.ajax({
+          url: `/api/user/trash/delete/${productId}`,
+          type: 'DELETE',
+          statusCode: {
+            200: function (response) {
+              showToast('success', response.message);
+              refresh();
+            },
+            403: function (xhr) {
+              const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+              showToast('error', message);
+            },
+            404: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Product not found!';
+              showToast('error', message);
+            },
+            500: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+              showToast('error', message);
+            },
           },
-          403: function (xhr) {
-            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
-            showToast('error', message);
-          },
-          404: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Product not found!';
-            showToast('error', message);
-          },
-          500: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
-            showToast('error', message);
-          },
-        },
-      });
+        });
+      }
     });
   });
 
@@ -287,20 +289,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
-
-  // updateQuery
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
-
   async function refresh() {
     await loadData();
     updatePagination();

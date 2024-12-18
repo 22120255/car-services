@@ -19,13 +19,10 @@
       type="image/icon"
       href="https://th.bing.com/th/id/OIP.SYq1khSGoX8u_8eSDjSFmgHaE_?rs=1&pid=ImgDetMain"
     />
-    {{!-- <link rel="stylesheet" href="/vender/css/linearicons.css" /> --}}
     <link rel="stylesheet" href="/vender/css/flaticon.css" />
     <link rel="stylesheet" href="/vender/css/animate.css" />
     <link rel="stylesheet" href="/vender/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="/vender/css/owl.theme.default.min.css" />
-    {{!-- <link rel="stylesheet" href="/vender/css/bootstrap.min.css" /> --}}
-    {{!-- <link rel="stylesheet" href="/vender/css/bootsnav.css" /> --}}
     <link rel="stylesheet" href="/vender/css/style.css" />
     <link rel="stylesheet" href="/vender/css/responsive.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -68,6 +65,14 @@
             document.head.appendChild(customCss);
         });
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJ1GP1X8G9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-GJ1GP1X8G9');
+    </script>
 </head>
 <body>
 
@@ -81,6 +86,9 @@
 
     {{> Toast}}
     {{> ModalNotify}}
+    <script> 
+        const user = {{{json user}}}
+    </script>
     <script type="module" src="/js/boost.js"></script>
     <script src="/vender/js/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
@@ -89,5 +97,20 @@
     <script src="/vender/js/bootstrap.js"></script>
     <script src="/vender/js/custom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.11.0/lottie.min.js"></script>
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','G-GJ1GP1X8G9');</script>
+
+    {{!-- <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)
+    })(window, document, "clarity", "script", "YOUR_CLARITY_TRACKING_ID");
+    </script> --}}
+
 </body>
 </html> 

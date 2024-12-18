@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../../common.js';
+import { showToast, showModal, updateQueryParams } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
@@ -26,7 +26,7 @@ function showProductModal(title, productID = null, product = null) {
       $(`input[name="images.at(index)"]`).val(image);
     });
     for (let i = 0; i < product.images.length; i++) {
-      $(`input[name="images.${i + 1}"]`).val(product.images[i]);
+      $(`input[name="images.image${i + 1}"]`).val(product.images[i]);
     }
   } else {
     // Nếu không có sản phẩm, tức là tạo mới
@@ -48,7 +48,7 @@ function showModalDetail(product) {
 
   // Cập nhật hình ảnh chính
   $('#mainDetailImage')
-    .attr('src', product.images?.image1 || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
+    .attr('src', product.images?.at(0) || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
   // Cập nhật các hình ảnh thu nhỏ
@@ -219,29 +219,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const productId = $(this).closest('tr').data('product-id');
 
     // Hiển thị modal xác nhận xóa
-    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
-      $.ajax({
-        url: `/api/user/inventory/delete-product/${productId}`,
-        type: 'DELETE',
-        statusCode: {
-          200: function (response) {
-            showToast('success', response.message);
-            refresh();
+    showModal({
+      title: 'Delete Product', content: 'Are you sure you want to delete this product?', btnSubmit: 'Delete', callback: () => {
+        $.ajax({
+          url: `/api/user/inventory/delete-product/${productId}`,
+          type: 'DELETE',
+          statusCode: {
+            200: function (response) {
+              showToast('success', response.message);
+              refresh();
+            },
+            403: function (xhr) {
+              const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+              showToast('error', message);
+            },
+            404: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Product not found!';
+              showToast('error', message);
+            },
+            500: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+              showToast('error', message);
+            },
           },
-          403: function (xhr) {
-            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
-            showToast('error', message);
-          },
-          404: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Product not found!';
-            showToast('error', message);
-          },
-          500: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
-            showToast('error', message);
-          },
-        },
-      });
+        });
+      }
     });
   });
 
@@ -506,19 +508,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
-
-  // updateQuery
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   async function refresh() {
     await loadData();

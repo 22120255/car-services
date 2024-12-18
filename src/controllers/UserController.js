@@ -114,7 +114,6 @@ class UserController {
   // [POST] /api/inventory/create-product
   async createProduct(req, res) {
     try {
-      console.log(req.body);
       const { brand, model, year, style, status, price, mileage, horsepower, transmission, description, images, importPrice, fuelType } = req.body;
       const product = await UserService.createProduct(
         brand,
@@ -229,6 +228,15 @@ class UserController {
     }
   }
 
+  // [PATCH] /api/user/product/store
+  async storeProduct(req, res) {
+    if (req.file) {
+      console.log(req.file);
+      return res.json({ secure_url: req.file.path }); // Sử dụng secure_url thay vì path
+    }
+    return res.status(400).json({ message: 'Failed to upload image' });
+  }
+
   // [GET] /admin/orders
   async orders(req, res) {
     try {
@@ -288,7 +296,7 @@ class UserController {
     try {
       const { id } = req.body;
       const user = await UserService.updateProfile(id, req.body);
-      clearCache(`/profile/${id}`);
+      clearCache(`user/profile/${id}`);
       res.status(200).json(user);
     } catch (error) {
       errorLog('UserController', 'updateProfile', error.message);
@@ -302,8 +310,9 @@ class UserController {
       const pathFile = req.file.path;
       const userId = req.body.userId;
 
-      const result = await UserService.updateAvatar(userId, pathFile);
-      res.status(200).json(result);
+      await UserService.updateAvatar(userId, pathFile);
+      clearCache(`user/profile/${userId}`);
+      res.status(200).json(pathFile);
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
       res.status(500).json({
@@ -321,6 +330,31 @@ class UserController {
       title: 'Personal information',
     });
   }
+
+  async getPurchasedList(req, res) {
+    try {
+        // Lấy thông tin user với populate purchasedProducts
+        const user = await User.findById(req.user._id)
+            .populate({
+                path: 'metadata.purchasedProducts',
+                select: 'brand model year mileage price images'
+            })
+            .lean();
+
+        // Sắp xếp recentActivity theo ngày mua mới nhất
+        if (user.metadata.recentActivity) {
+            user.metadata.recentActivity.sort((a, b) => b.date - a.date);
+        }
+
+        res.render('user/purchasedList', { 
+            layout: 'main',
+            user,
+        });
+    } catch (error) {
+        console.error('Error getting purchased cars:', error);
+        res.status(500).render('error');
+    }
+}
 }
 
 module.exports = new UserController();

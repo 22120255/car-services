@@ -1,7 +1,8 @@
 const Chance = require('chance');
 const mongoose = require('mongoose');
 const Product = require('../../models/Product');
-
+const Cart = require('../../models/Cart');
+const ElasticsearchService = require('../../services/ElasticsearchService'); // Import Elasticsearch service
 require('dotenv').config({ path: process.env.NODE_ENV === 'development' ? `.env.dev` : '.env' });
 
 const chance = new Chance();
@@ -87,21 +88,21 @@ async function generateMockProducts(num = 10) {
       productImages.push(chance.pickone(images));
     }
 
-    products.push({
-      brand: randomBrand.name,
-      description: chance.sentence({ words: 30 }),
-      horsepower: chance.integer({ min: 100, max: 500 }),
+    const product = {
+      brand: randomBrand,
+      status: randomStatus,
+      transmission: randomTransmission,
+      year: randomYear,
+      style: randomStyle,
+      fuelType: randomFuelType,
+      price,
       images: productImages,
-      mileage: chance.integer({ min: 0, max: 500 }),
-      model: chance.word(),
-      price: price,
-      importPrice: price * 0.7,
-      transmission: randomTransmission.value,
-      status: randomStatus.value,
-      fuelType: randomFuelType.value,
-      year: randomYear.value,
-      style: randomStyle.value,
-    });
+    };
+
+    products.push(product);
+
+    // Index product into Elasticsearch
+    await ElasticsearchService.indexDocument('products', `${i}`, product);
   }
 
   return products;
@@ -116,6 +117,10 @@ const seedProducts = async () => {
     // Delete existing products
     await Product.deleteMany({});
     console.log('Deleted existing products');
+
+    // Delete existing carts
+    await Cart.deleteMany({});
+    console.log('Deleted existing carts');
 
     // Generate mock products
     const mockProducts = await generateMockProducts(100);
