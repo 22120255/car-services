@@ -7,53 +7,7 @@
     <link rel="stylesheet" href="/vender/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vender/css/jumbotron-narrow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        :root {
-            --primary-red: #dc3545;
-            --primary-blue: #0d6efd;
-        }
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Roboto', sans-serif;
-        }
-        .container {
-            max-width: 960px;
-            margin: 30px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 2px solid var(--primary-red);
-            background: linear-gradient(to right, var(--primary-red), var(--primary-blue));
-            margin: -20px -20px 20px -20px;
-            border-radius: 6px 6px 0 0;
-        }
-        .header h1 {
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            color: var(--primary-blue);
-            font-size: 0.9em;
-            border-top: 2px solid var(--primary-red);
-            margin: 20px -20px -20px -20px;
-            border-radius: 0 0 6px 6px;
-        }
-        .btn-primary {
-            background-color: var(--primary-blue);
-            border-color: var(--primary-blue);
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-red);
-            border-color: var(--primary-red);
-        }
-    </style>
+    <link rel="stylesheet" href="/css/payment/order.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJ1GP1X8G9"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -65,9 +19,13 @@
 </head>
 <body>
     <div class="container">
-        <header class="header">
+        <div class="header">
+            <a href="/cart" class="back-to-cart">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại giỏ hàng
+            </a>
             <h1><i class="fas fa-shopping-cart"></i> Thanh Toán An Toàn</h1>
-        </header>
+            <div style="width: 135px;"></div>
+        </div>
         {{{body}}}
         <footer class="footer">
             <p>&copy; 2023 Hệ Thống Thanh Toán. Bảo mật bởi VNPay.</p>

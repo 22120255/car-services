@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/app.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "builds": [
+    {
+      "src": "src/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "functions": {
+    "api/**.js": {
+      "maxDuration": 10
+    }
+  }
+}
