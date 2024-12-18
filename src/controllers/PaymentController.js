@@ -4,6 +4,7 @@ const qs = require('qs');
 const vnpayConfig = require('../config/vnpay');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const User = require('../models/User');
 
 // Hàm sortObject được định nghĩa riêng
 const sortObject = (obj) => {
@@ -185,6 +186,29 @@ class PaymentController {
                 // Cập nhật trạng thái giỏ hàng
                 if (rspCode === '00') {
                     await Cart.findOneAndUpdate({ userId: order.userId, isPaid: false }, { isPaid: true });
+                }
+
+                // Cập nhật danh sách sản phẩm đã mua trong metadata của người dùng
+                const user = await User.findById(order.userId);
+
+                if (user) {
+                    // Lấy productIds từ items của order
+                    const purchasedProducts = order.items.map(item => item.productId);
+                    
+                    // Khởi tạo metadata.purchasedProducts nếu chưa có
+                    user.metadata = user.metadata || {};
+                    user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
+                    
+                    // Thêm các sản phẩm mới vào purchasedProducts
+                    user.metadata.purchasedProducts.push(...purchasedProducts);
+
+                    user.metadata.recentActivity.push({
+                        type: 'purchase',
+                        date: new Date(),
+                        description: `Purchased ${purchasedProducts.length} products`
+                    });
+                    
+                    await user.save();
                 }
     
                 return res.status(200).json({RspCode: '00', Message: 'Success'});
