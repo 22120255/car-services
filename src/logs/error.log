@@ -1,3 +1,4 @@
 2024-12-17 21:25:01 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: Connection timeout
 2024-12-17 21:33:13 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: Connection timeout
 2024-12-17 21:33:57 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: The client is closed
+2024-12-18 18:20:10 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: read ECONNRESET

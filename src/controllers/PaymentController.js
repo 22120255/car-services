@@ -189,12 +189,20 @@ class PaymentController {
                 }
 
                 // Cập nhật danh sách sản phẩm đã mua trong metadata của người dùng
-                const user = await User.findById({ _id: order.userId });
+                const user = await User.findById(order.userId);
                 console.log('user: ', user);
+
                 if (user) {
-                    const purchasedProducts = order.products.map(product => product.productId);
+                    // Lấy productIds từ items của order
+                    const purchasedProducts = order.items.map(item => item.productId);
+                    
+                    // Khởi tạo metadata.purchasedProducts nếu chưa có
+                    user.metadata = user.metadata || {};
                     user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
+                    
+                    // Thêm các sản phẩm mới vào purchasedProducts
                     user.metadata.purchasedProducts.push(...purchasedProducts);
+                    
                     console.log('user is updated');
                     await user.save();
                 }
