@@ -88,15 +88,15 @@
                         </div>
                     </div>
                     <div class='action-buttons'>
-                        <button class='btn btn-primary btn-edit-profile'>
+                        <button class='btn btn-custom btn-primary btn-edit-profile'>
                             <i class='fas fa-edit'></i>
                             Edit Profile
                         </button>
-                        <button class='btn btn-secondary btn-change-password'>
+                        <button class='btn btn-custom btn-secondary btn-change-password'>
                             <i class='fas fa-key'></i>
                             Change Password
                         </button>
-                        <button class='btn btn-warning btn-account-settings'>
+                        <button class='btn btn-custom btn-warning btn-account-settings'>
                             <i class='fas fa-cog'></i>
                             Account Settings
                         </button>
@@ -142,12 +142,12 @@
                             value='{{_user.metadata.address}}'
                         />
                     </div>
-                    <div class='d-flex justify-content-end'>
-                        <button type='submit' class='btn btn-primary'>Save
+                    <div class='d-flex justify-content-end gap-2'>
+                        <button type='submit' class='btn btn-custom btn-primary'>Save
                             Changes</button>
                         <button
                             type='button'
-                            class='btn btn-secondary'
+                            class='btn btn-custom btn-secondary'
                             id='cancel-edit'
                         >Cancel</button>
                     </div>
@@ -259,9 +259,9 @@
                         <h2><i class='fas fa-car'></i> My Cars</h2>
                     </div>
                     <div class='card-body'>
-                        {{#if _user.metadata.purchasedCars}}
+                        {{#if _user.metadata.purchasedProducts}}
                             <div class='car-list'>
-                                {{#each _user.metadata.purchasedCars}}
+                                {{#each _user.metadata.purchasedProducts}}
                                     <div class='car-item'>
                                         <img
                                             src='{{this.image}}'
@@ -280,9 +280,10 @@
                                                 ></i>
                                                 {{this.mileage}}
                                                 km</p>
-                                            <button
-                                                class='btn btn-sm btn-primary'
-                                            >View Details</button>
+                                            <a
+                                                href='/user/purchased-list'
+                                                class='btn btn-custom btn-primary'
+                                            >View details</a>
                                         </div>
                                     </div>
                                 {{/each}}
@@ -293,7 +294,7 @@
                                 <p>You haven't purchased any cars yet</p>
                                 <a
                                     href='/product'
-                                    class='btn btn-primary'
+                                    class='btn btn-custom btn-primary'
                                 >Browse Cars</a>
                             </div>
                         {{/if}}

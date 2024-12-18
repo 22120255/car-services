@@ -1,4 +1,4 @@
-import { showToast, showModal } from '../../common.js';
+import { showToast, showModal, updateQueryParams } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
@@ -17,15 +17,16 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-style').val(product.style);
     $('#product-status').val(product.status);
     $('#product-price').val(product.price);
+    $('#product-importPrice').val(product.importPrice);
     $('#product-mileage').val(product.mileage);
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
     $('#product-description').val(product.description);
     product.images.forEach((index, image) => {
-      $(`input[name="images.image${index + 1}"]`).val(image);
+      $(`input[name="images.at(index)"]`).val(image);
     });
     for (let i = 0; i < product.images.length; i++) {
-      $(`input[name="images.${i + 1}"]`).val(product.images[i]);
+      $(`input[name="images.image${i + 1}"]`).val(product.images[i]);
     }
   } else {
     // Nếu không có sản phẩm, tức là tạo mới
@@ -47,7 +48,7 @@ function showModalDetail(product) {
 
   // Cập nhật hình ảnh chính
   $('#mainDetailImage')
-    .attr('src', product.images?.image1 || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
+    .attr('src', product.images?.at(0) || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
   // Cập nhật các hình ảnh thu nhỏ
@@ -71,7 +72,13 @@ function showModalDetail(product) {
 
   // Cập nhật thông tin sản phẩm
   $('#detailProductTitle').text(`${product.brand || 'N/A'} ${product.model || ''}`);
-  $('#detailProductPrice').text(product.price ? `$${product.price}` : 'N/A');
+
+  // Hiển thị giá sản phẩm
+  const sellingPrice = product.price ? `$${product.price}` : 'N/A';
+  const originalPrice = product.importPrice ? `$${product.importPrice}` : 'N/A';
+  $('#detailProductPrice').text(`Original Price: ${originalPrice}`);
+  $('#detailimportPrice').text(`Selling Price: ${sellingPrice}`);
+
   $('#detailProductDescription').text(product.description || 'No description available.');
 
   // Cập nhật thông số kỹ thuật
@@ -80,19 +87,20 @@ function showModalDetail(product) {
   const specs = [
     { label: 'Model Year', value: product.year || 'N/A' },
     { label: 'Mileage', value: product.mileage ? `${product.mileage} mi` : 'N/A' },
-    { label: 'Horsepower', value: product.horsepower ? `${product.horsepower}HP` : 'N/A' },
+    { label: 'Horsepower', value: product.horsepower ? `${product.hhorsepower} HP` : 'N/A' },
     { label: 'Transmission', value: product.transmission || 'N/A' },
     { label: 'Style', value: product.style || 'N/A' },
   ];
 
   specs.forEach((spec) => {
     const $specItem = $('<div>').addClass('detail-spec-item').html(`
-      <span class="detail-spec-label">${spec.label}:</span>
-      <span class="detail-spec-value">${spec.value}</span>
-    `);
+        <span class="detail-spec-label">${spec.label}:</span>
+        <span class="detail-spec-value">${spec.value}</span>
+      `);
     $specsContainer.append($specItem);
   });
 
+  // Hiển thị modal
   $('#productDetailModal').modal('show');
 }
 
@@ -112,11 +120,9 @@ function handleProductAction(action, productId) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
-  const $yearFilter = $('#yearFilter');
-  const $styleFilter = $('#styleFilter');
+  const { brands, statuses, prices, perPages } = getFilterConfigProduct();
+  // TODO: here
   const $brandFilter = $('#brandFilter');
-  const $transmissionFilter = $('#transmissionFilter');
   const $statusFilter = $('#statusFilter');
   const $priceFilter = $('#priceFilter');
   const $limit = $('#limit');
@@ -126,7 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (defaultText !== 'Items per page') {
       element.empty().append(`<option value="">${defaultText}</option>`);
     }
-
     options.forEach((option) => {
       if (defaultText === 'Select price') {
         element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
@@ -134,16 +139,35 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 
-  renderSelectOptions($yearFilter, years, 'Select year');
-  renderSelectOptions($styleFilter, styles, 'Select style');
   renderSelectOptions($brandFilter, brands, 'Select brand');
-  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
   renderSelectOptions($priceFilter, prices, 'Select price');
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------ Declare variables -----------------------------------------------
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+  let products = null;
+  let limit = urlParams.get('limit') || 8;
+  let offset = parseInt(urlParams.get('offset')) || 1;
+  let totalPages = null;
+  let totalItems = null;
+
+  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
+  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
+  let brandFilter = urlParams.get('brand') || null;
+  let statusFilter = urlParams.get('status') || null;
+  let searchText = urlParams.get('search') || '';
+
+  $('#searchInput').val(searchText);
+  $('#limit').val(limit);
+  $('#statusFilter').val(statusFilter);
+  $('#brandFilter').val(brandFilter);
+  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
+
   // ------------------------------------js for CRUD products-----------------------------------------------
 
   // view-trash-btn
@@ -195,29 +219,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const productId = $(this).closest('tr').data('product-id');
 
     // Hiển thị modal xác nhận xóa
-    showModal('Delete Product', 'Are you sure you want to delete this product?', 'Delete', () => {
-      $.ajax({
-        url: `/api/user/inventory/delete-product/${productId}`,
-        type: 'DELETE',
-        statusCode: {
-          200: function (response) {
-            showToast('success', response.message);
-            refresh();
+    showModal({
+      title: 'Delete Product', content: 'Are you sure you want to delete this product?', btnSubmit: 'Delete', callback: () => {
+        $.ajax({
+          url: `/api/user/inventory/delete-product/${productId}`,
+          type: 'DELETE',
+          statusCode: {
+            200: function (response) {
+              showToast('success', response.message);
+              refresh();
+            },
+            403: function (xhr) {
+              const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
+              showToast('error', message);
+            },
+            404: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Product not found!';
+              showToast('error', message);
+            },
+            500: function (xhr) {
+              const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
+              showToast('error', message);
+            },
           },
-          403: function (xhr) {
-            const message = xhr.responseJSON?.error || 'You are not authorized to delete this product!';
-            showToast('error', message);
-          },
-          404: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Product not found!';
-            showToast('error', message);
-          },
-          500: function (xhr) {
-            const message = xhr.responseJSON?.error || 'Server error. Please try again later!';
-            showToast('error', message);
-          },
-        },
-      });
+        });
+      }
     });
   });
 
@@ -230,17 +256,20 @@ document.addEventListener('DOMContentLoaded', function () {
       style: $('#product-style').val(),
       status: $('#product-status').val(),
       price: parseFloat($('#product-price').val()),
+      importPrice: parseFloat($('#product-importPrice').val()),
       mileage: parseInt($('#product-mileage').val()),
       horsepower: parseInt($('#product-horsepower').val()),
       transmission: $('#product-transmission').val(),
       description: $('#product-description').val(),
-      images: {
-        image1: $('input[name="images.image1"]').val(),
-        image2: $('input[name="images.image2"]').val(),
-        image3: $('input[name="images.image3"]').val(),
-        image4: $('input[name="images.image4"]').val(),
-        image5: $('input[name="images.image5"]').val(),
-      },
+      fuelType: $('#product-fuelType').val(),
+      importPrice: parseFloat($('#product-importPrice').val()),
+      images: [
+        $('input[name="images.image1"]').val(),
+        $('input[name="images.image2"]').val(),
+        $('input[name="images.image3"]').val(),
+        $('input[name="images.image4"]').val(),
+        $('input[name="images.image5"]').val(),
+      ],
     };
 
     // Kiểm tra xem có đang chỉnh sửa hay không
@@ -282,25 +311,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --------------------------------------------------js for all pages-------------------------------------------
-  const urlParams = new URLSearchParams(window.location.search);
-
-  let products = null;
-  let limit = urlParams.get('limit') || 10;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
-  let totalItems = null;
-
-  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-  let brandFilter = urlParams.get('brand') || null;
-  let statusFilter = urlParams.get('status') || null;
-  let searchText = urlParams.get('search') || '';
-
-  $('#searchInput').val(searchText);
-  $('#limit').val(limit);
-  $('#statusFilter').val(statusFilter);
-  $('#brandFilter').val(brandFilter);
-  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
@@ -424,35 +434,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     products.forEach((product) => {
-      const { _id, images, status, brand, model, price, year } = product;
+      const { _id, images, status, brand, model, price, year, importPrice } = product; // Lấy giá trị importPrice
       console.log(_id);
+
       const isSelected = status === 'used' || status === 'new';
       const imageSrc = images?.at(0) || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+
       $('#inventoryTable').append(`
-                <tr data-product-id="${_id}">
-                    <td>
-                        <img
-                            src='${imageSrc}'
-                            alt='Toyota Camry'
-                            class='car-image'
-                        />
-                    </td>
-                    <td>${brand} ${model}</td>
-                    <td>${year}</td>
-                    <td>$${price}</td>
-                    <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
-                    <td class='actions'>
-                        <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
-                                class='fa-solid fa-circle-info'
-                            ></i>
-                            Detail</button>
-                        <button class='edit'><i class='fas fa-edit'></i>
-                            Edit</button>
-                        <button class='delete'><i class='fas fa-trash'></i>
-                            Delete</button>
-                    </td>
-                </tr>
-            `);
+        <tr data-product-id="${_id}">
+            <td>
+                <img
+                    src='${imageSrc}'
+                    alt='Toyota Camry'
+                    class='car-image'
+                />
+            </td>
+            <td>${brand} ${model}</td>
+            <td>${year}</td>
+            <td>$${importPrice}</td> <!-- Hiển thị giá nhập khẩu -->
+            <td>$${price}</td>
+            <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
+            <td class='actions'>
+                <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
+                        class='fa-solid fa-circle-info'></i>
+                    Detail</button>
+                <button class='edit'><i class='fas fa-edit'></i>
+                    Edit</button>
+                <button class='delete'><i class='fas fa-trash'></i>
+                    Delete</button>
+            </td>
+        </tr>
+      `);
     });
   }
 
@@ -496,19 +508,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
-
-  // updateQuery
-  function updateQueryParams(paramsToUpdate) {
-    const params = new URLSearchParams(window.location.search);
-    Object.entries(paramsToUpdate).forEach(([key, value]) => {
-      if (value == null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   async function refresh() {
     await loadData();

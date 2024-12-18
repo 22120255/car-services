@@ -1,86 +1,57 @@
 <section id='car-list' class='active-section'>
-    <div class='section-header'>
-        <h2>Car List</h2>
-        <div class='header-actions'>
-            <button class='btn btn-primary' id='add-car-btn'>
-                <i class='fas fa-plus'></i>
-                Add Car
-            </button>
-            <button class='btn btn-secondary' id='view-trash-btn' >
-                <i class='fas fa-trash'></i>
-                View Trash
-            </button>
-        </div>
+  <div class='section-header'>
+    <h2>Car List</h2>
+    <div class='header-actions'>
+      <button class='btn btn-primary' id='add-car-btn'>
+        <i class='fas fa-plus'></i>
+        Add Car
+      </button>
+      <button class='btn btn-secondary' id='view-trash-btn'>
+        <i class='fas fa-trash'></i>
+        View Trash
+      </button>
     </div>
-    <div class='filters'>
-        <input
-            type='text'
-            placeholder='Search by name or code'
-            id='searchInput'
-        />
-        <select id='brandFilter'>
-        </select>
-        <select id='statusFilter'>
-        </select>
-        <select id='priceFilter'>
-        </select>
+  </div>
+  <div class='filters'>
+    <input type='text' placeholder='Search by name or code' id='searchInput' />
+    <select id='brandFilter'>
+    </select>
+    <select id='statusFilter'>
+    </select>
+    <select id='priceFilter'>
+    </select>
+  </div>
+  <div class='container-fluid'>
+    <div class='table-responsive'>
+      <table class='car-table table-striped table-align-middle'>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Import Price</th>
+            <!-- Thêm cột "Import Price" -->
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id='inventoryTable'>
+          <!-- Dữ liệu sản phẩm sẽ được hiển thị ở đây -->
+        </tbody>
+      </table>
     </div>
-    <div class='container-fluid'>
-            <div class='table-responsive'>
-                <table class='car-table table-striped table-align-middle'>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Year</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventoryTable">
-                        
-                        {{!-- <tr>
-                            <td>
-                                <img
-                                    src='https://via.placeholder.com/200x150'
-                                    alt='Honda Civic'
-                                    class='car-image'
-                                />
-                            </td>
-                            <td>Honda Civic</td>
-                            <td>HC001</td>
-                            <td>$22,000</td>
-                            <td><span class='status sold'>Sold</span></td>
-                            <td class='actions'>
-                                <button class='detail'><i
-                                        class='fa-solid fa-circle-info'
-                                    ></i>
-                                    Detail</button>
-                                <button class='edit'><i class='fas fa-edit'></i>
-                                    Edit</button>
-                                <button class='delete'><i class='fas fa-trash'></i>
-                                    Delete</button>
-                            </td>
-                        </tr> --}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-4" style="gap: 1rem;">
-            <div class="d-none d-sm-block" style="width: 100px;"></div> <!-- Spacer for small screens and up -->
-            <nav aria-label="Page navigation" class="flex-grow-1 d-flex justify-content-center">
-                <ul class="pagination" style="margin: 0;">
-                    <!--pagination here-->
-                </ul>
-        <!-- Items per page select -->
-            <select class="form-select" aria-label="Items per page" style="width: auto;" name="limit" id="limit">
-                <option value="5">5 / trang</option>
-                <option value="10">10 / trang</option>
-                <option value="20">20 / trang</option>
-            </select>
-
-        </div>
-
+  </div>
+  <div class='d-flex justify-content-between align-items-center mt-4' style='gap: 1rem;'>
+    <div class='d-none d-sm-block' style='width: 100px;'></div>
+    <!-- Spacer for small screens and up -->
+    <nav aria-label='Page navigation' class='flex-grow-1 d-flex justify-content-center'>
+      <ul class='pagination' style='margin: 0;'>
+        <!--pagination here-->
+      </ul>
+    </nav>
+    <select class='form-select' aria-label='Items per page' style='width: auto;' name='limit' id='limit'>
+    </select>
+  </div>
 </section>
-<script type="module" src='\js\admin\inventory\products.js'></script>
+<script type='module' src='\js\admin\inventory\products.js'></script>

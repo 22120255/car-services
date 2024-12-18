@@ -100,3 +100,35 @@
 
 #checkout.btn.btn-lg {
   padding: 8px 40px !important; }
+
+.wrapper-qr {
+  width: 250px;
+  height: 300px; }
+
+/* Thêm CSS */
+.alert {
+  padding: 8px 12px;
+  margin: 0;
+  border: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  opacity: 1;
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.alert.d-none {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.alert i {
+  margin-right: 8px;
+}

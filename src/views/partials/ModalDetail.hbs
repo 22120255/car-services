@@ -1,10 +1,10 @@
 <!-- Modal Product Detail -->
-<div class='modal fade mt-5' id='productDetailModal' tabindex='-1' aria-hidden='true'>
-  <div class='modal-dialog modal-xl'>
+<div class='modal fade' id='productDetailModal' tabindex='-1' aria-hidden='true' style='padding: 20px 0;'>
+  <div class='modal-dialog modal-xl modal-dialog-scrollable' style='margin: 0 auto; max-height: 90vh;'>
     <div class='modal-content'>
-      <div class='modal-header'>
-        <h5 class='modal-title' id='detailModalTitle'>Product Details</h5>
-        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+      <div class='modal-header sticky-top' style='background-color: #3498db; color: white;'>
+        <h5 class='modal-title fw-bold' id='detailModalTitle'>Product Details</h5>
+        <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
       <div class='modal-body'>
         <div class='detail-product-wrapper'>
@@ -16,7 +16,10 @@
           </div>
           <div class='detail-product-info'>
             <h3 class='detail-product-title' id='detailProductTitle'></h3>
-            <div class='detail-product-price' id='detailProductPrice'></div>
+            <div class='detail-product-prices'>
+              <div class='detail-product-selling-price' id='detailimportPrice'></div>
+              <div class='detail-product-original-price' id='detailProductPrice'></div>
+            </div>
             <p class='detail-product-description' id='detailProductDescription'></p>
             <div class='detail-product-specs' id='detailProductSpecs'></div>
           </div>

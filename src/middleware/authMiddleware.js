@@ -7,6 +7,11 @@ const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
+  const isApiRequest = req.xhr || req.headers['content-type'] === 'application/json' || req.url.startsWith('/api');
+
+  if (isApiRequest) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   res.render('site/error', {
     title: 'Unauthorized',
     statusCode: 401,
@@ -15,10 +20,9 @@ const isAuthenticated = (req, res, next) => {
 };
 const checkRole = (nameRoles) => {
   return async (req, res, next) => {
-    if (nameRoles.some((name) => req.user.role.name === name)) {
+    if (req.isAuthenticated() && nameRoles.some((name) => req.user.role.name === name)) {
       return next();
     }
-
     res.render('site/error', {
       title: 'Unauthorized',
       statusCode: 401,

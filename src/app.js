@@ -7,6 +7,7 @@ require('dotenv').config({
 })
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const methodOverride = require('method-override')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
@@ -51,8 +52,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/css', express.static('public/css'))
 // HTTP logger
 if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'))
+    app.use(morgan('dev'));
 }
+// Enable CORS
+app.use(cors())
+
 // Custom middleware
 app.use(navigateUser)
 app.use(refreshSession)
@@ -89,5 +93,8 @@ app.use(catch500);
 
 // Listen to port
 app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`)
-})
+    console.log(`Server is running on port ${process.env.PORT}`);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('VNPay IPN URL:', process.env.VNP_IPN_URL);
+    }
+});

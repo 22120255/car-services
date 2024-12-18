@@ -27,20 +27,4 @@ const ProductSchema = new mongoose.Schema(
 // Add plugin
 ProductSchema.plugin(mongooseDelete, { deletedBy: true, deletedAt: true, deletedByType: String, overrideMethods: 'all' });
 
-// Hook trước khi xóa mềm
-ProductSchema.pre('softDelete', async function (next, options) {
-  if (options.userDelete) {
-    this.set('userDelete', options.userDelete); // Thêm trường dynamic userDelete
-    await this.save();
-  }
-  next();
-});
-
-// Hook trước khi khôi phục
-ProductSchema.pre('restore', async function (next) {
-  this.unset('userDelete'); // Xóa trường dynamic userDelete
-  await this.save();
-  next();
-});
-
 module.exports = mongoose.model('Product', ProductSchema, 'products');
