@@ -18,7 +18,6 @@ const checkRole = (nameRoles) => {
     if (req.isAuthenticated() && nameRoles.some((name) => req.user.role.name === name)) {
       return next();
     }
-
     res.render('site/error', {
       title: 'Unauthorized',
       statusCode: 401,

@@ -4,27 +4,29 @@
     </div>
 
     <div class="purchased-content">
-        {{#if purchasedCars}}
+        {{#if user.metadata.purchasedProducts.length}}
             <div class="car-grid">
-                {{#each purchasedCars}}
+                {{#each user.metadata.purchasedProducts}}
                     <div class="car-card">
                         <div class="car-image">
-                            <img src="{{this.image}}" alt="{{this.name}}">
+                            <img src="{{this.images.[0]}}" alt="{{this.brand}} {{this.model}}">
                         </div>
                         <div class="car-details">
                             <h3>{{this.brand}} {{this.model}}</h3>
                             <div class="car-info">
                                 <p><i class="fas fa-calendar"></i> Năm: {{this.year}}</p>
-                                <p><i class="fas fa-tachometer-alt"></i> Số km: {{this.mileage}} km</p>
+                                <p><i class="fas fa-tachometer-alt"></i> Số km: {{formatNumber this.mileage}} km</p>
                                 <p><i class="fas fa-dollar-sign"></i> Giá: {{formatCurrency this.price}}</p>
                             </div>
                             <div class="purchase-info">
-                                <p><i class="fas fa-clock"></i> Ngày mua: {{formatDate this.purchaseDate}}</p>
-                                <p><i class="fas fa-check-circle"></i> Trạng thái: {{this.status}}</p>
+                                {{#with (lookup ../user.metadata.recentActivity @index)}}
+                                    <p><i class="fas fa-clock"></i> Ngày mua: {{formatDate this.date}}</p>
+                                {{/with}}
+                                <p><i class="fas fa-check-circle"></i> Trạng thái: Đã mua</p>
                             </div>
-                            <button class="btn btn-primary view-details" data-id="{{this._id}}">
+                            <a href="/products/{{this._id}}" class="btn btn-primary view-details">
                                 <i class="fas fa-eye"></i> Xem chi tiết
-                            </button>
+                            </a>
                         </div>
                     </div>
                 {{/each}}

@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 module.exports = {
     eq(a, b) {
         return a === b
@@ -46,5 +48,19 @@ module.exports = {
     getValueAt(array, index) {
         if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return ''
         return array[index]
+    },
+    formatNumber: function(number) {
+        return number.toLocaleString('vi-VN');
+    },
+
+    formatCurrency: function(number) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(number);
+    },
+
+    formatDate: function(date) {
+        return moment(date).format('DD/MM/YYYY HH:mm');
     },
 }

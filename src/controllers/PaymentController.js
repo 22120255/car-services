@@ -190,7 +190,6 @@ class PaymentController {
 
                 // Cập nhật danh sách sản phẩm đã mua trong metadata của người dùng
                 const user = await User.findById(order.userId);
-                console.log('user: ', user);
 
                 if (user) {
                     // Lấy productIds từ items của order
@@ -202,8 +201,13 @@ class PaymentController {
                     
                     // Thêm các sản phẩm mới vào purchasedProducts
                     user.metadata.purchasedProducts.push(...purchasedProducts);
+
+                    user.metadata.recentActivity.push({
+                        type: 'purchase',
+                        date: new Date(),
+                        description: `Purchased ${purchasedProducts.length} products`
+                    });
                     
-                    console.log('user is updated');
                     await user.save();
                 }
     

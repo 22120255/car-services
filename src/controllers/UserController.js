@@ -330,6 +330,45 @@ class UserController {
       title: 'Personal information',
     });
   }
+
+  async getPurchasedList(req, res) {
+    try {
+        // Lấy thông tin user với populate purchasedProducts
+        const user = await User.findById(req.user._id)
+            .populate({
+                path: 'metadata.purchasedProducts',
+                select: 'brand model year mileage price images'
+            })
+            .lean();
+
+        // Sắp xếp recentActivity theo ngày mua mới nhất
+        if (user.metadata.recentActivity) {
+            user.metadata.recentActivity.sort((a, b) => b.date - a.date);
+        }
+
+        res.render('user/purchasedList', { 
+            layout: 'main',
+            user,
+            helpers: {
+                formatNumber: function(number) {
+                    return number.toLocaleString('vi-VN');
+                },
+                formatCurrency: function(number) {
+                    return new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }).format(number);
+                },
+                formatDate: function(date) {
+                    return moment(date).format('DD/MM/YYYY HH:mm');
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error getting purchased cars:', error);
+        res.status(500).render('error');
+    }
+}
 }
 
 module.exports = new UserController();
