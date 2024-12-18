@@ -1,8 +1,5 @@
 import { showToast, showModal } from '../common.js';
 
-function 
-
-
 document.getElementById('images').addEventListener('change', function (event) {
   var preview = document.getElementById('imagePreview');
   preview.innerHTML = '';
@@ -14,7 +11,4 @@ document.getElementById('images').addEventListener('change', function (event) {
   }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-
-
-});
+document.addEventListener('DOMContentLoaded', function () {});
