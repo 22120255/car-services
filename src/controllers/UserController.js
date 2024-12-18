@@ -349,20 +349,6 @@ class UserController {
         res.render('user/purchasedList', { 
             layout: 'main',
             user,
-            helpers: {
-                formatNumber: function(number) {
-                    return number.toLocaleString('vi-VN');
-                },
-                formatCurrency: function(number) {
-                    return new Intl.NumberFormat('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                    }).format(number);
-                },
-                formatDate: function(date) {
-                    return moment(date).format('DD/MM/YYYY HH:mm');
-                }
-            }
         });
     } catch (error) {
         console.error('Error getting purchased cars:', error);

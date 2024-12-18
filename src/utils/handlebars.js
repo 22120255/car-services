@@ -49,6 +49,7 @@ module.exports = {
         if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return ''
         return array[index]
     },
+
     formatNumber: function(number) {
         return number.toLocaleString('vi-VN');
     },
