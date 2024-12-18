@@ -194,6 +194,7 @@ class PaymentController {
                     const purchasedProducts = order.products.map(product => product.productId);
                     user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
                     user.metadata.purchasedProducts.push(...purchasedProducts);
+                    console.log('user is updated');
                     await user.save();
                 }
     
