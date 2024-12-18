@@ -1,4 +1,5 @@
 import { loadCartData, showModal } from '../common.js';
+import { isPhoneNumberValid, isUsernameValid } from '../helpers.js';
 import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       const modalContent = `
         <form id="shipping-form" class="needs-validation" novalidate>
           <div class="form-group mb-3">
-            <label for="fullName">Họ và tên</label>
+            <label for="fullName">Full name</label>
             <input 
               type="text" 
               class="form-control" 
@@ -20,12 +21,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             >
             <div class="alert alert-warning mt-2 d-none" role="alert">
               <i class="fa-solid fa-triangle-exclamation"></i>
-              Bạn có chắc chắn đã nhập đúng họ và tên?
+              Please enter your full name
             </div>
           </div>
     
           <div class="form-group mb-3">
-            <label for="phone">Số điện thoại</label>
+            <label for="phone">Phone number</label>
             <input 
               type="tel" 
               class="form-control" 
@@ -34,12 +35,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             >
             <div class="alert alert-warning mt-2 d-none" role="alert">
               <i class="fa-solid fa-triangle-exclamation"></i>
-              Hãy nhập số điện thoại hợp lệ
+              Please enter a valid phone number
             </div>
           </div>
     
           <div class="form-group mb-3">
-            <label for="address">Địa chỉ giao hàng</label>
+            <label for="address">Shipping address</label>
             <textarea 
               class="form-control" 
               id="address" 
@@ -48,47 +49,46 @@ document.addEventListener('DOMContentLoaded', async function () {
             ></textarea>
             <div class="alert alert-warning mt-2 d-none" role="alert">
               <i class="fa-solid fa-triangle-exclamation"></i>
-              Vui lòng nhập địa chỉ chi tiết
+              Please enter detailed address
             </div>
           </div>
     
           <div class="form-group mb-3">
-            <label for="note">Ghi chú (không bắt buộc)</label>
+            <label for="note">Notes (optional)</label>
             <textarea class="form-control" id="note" rows="2"></textarea>
           </div>
         </form>
       `;
-    
+
       showModal({
-        title: 'Thông tin giao hàng', 
+        title: 'Delivery information',
         content: modalContent,
-        btnSubmit: 'Tiến hành thanh toán',
+        btnSubmit: 'Payment',
         callback: () => {
-          const form = document.getElementById('shipping-form');
           const fullName = $('#fullName').val().trim();
           const phone = $('#phone').val().trim();
           const address = $('#address').val().trim();
-    
+
           // Hide all alerts first
           $('.alert').addClass('d-none');
-    
+
           let isValid = true;
-    
-          if (!/^[a-zA-ZÀ-ỹ ]{2,}$/.test(fullName)) {
+
+          if (!isUsernameValid(fullName)) {
             $('#fullName').next('.alert').removeClass('d-none');
             isValid = false;
           }
-    
-          if (!/^(84|\+84|0)[0-9]{9}$/.test(phone)) {
+
+          if (!isPhoneNumberValid(phone)) {
             $('#phone').next('.alert').removeClass('d-none');
             isValid = false;
           }
-    
+
           if (address.length < 5) {
             $('#address').next('.alert').removeClass('d-none');
             isValid = false;
           }
-    
+
           if (!isValid) {
             return false;
           }
@@ -116,57 +116,44 @@ document.addEventListener('DOMContentLoaded', async function () {
                 window.location.href = paymentUrl;
               } else {
                 showModal({
-                  title: 'Lỗi',
-                  content: 'Không thể tạo đơn hàng. Vui lòng thử lại.',
+                  title: 'Error',
+                  content: 'Unable to create order. Please try again.',
                 });
               }
             },
             error: function (xhr, status, error) {
-              console.error('Order Error:', error);
               showModal({
-                title: 'Lỗi',
-                content: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.',
+                title: 'Error',
+                content: 'An error occurred. Please try again later.',
               });
             },
             complete: function () {
-              submitBtn.prop('disabled', false).text('Tiến hành thanh toán');
+              submitBtn.prop('disabled', false).text('Payment');
             }
           });
           return true;
         },
         onShowCallback: () => {
           // Sửa lại cách ẩn/hiện alert trong JavaScript
-          $('#fullName').on('blur', function() {
+          $('#fullName').on('blur', function () {
             const value = $(this).val().trim();
             const alert = $(this).next('.alert');
-            
-            if (/^[a-zA-ZÀ-ỹ ]{2,}$/.test(value)) {
-              alert.addClass('d-none');
-            } else {
-              alert.removeClass('d-none');
-            }
+
+            alert.toggleClass('d-none', isUsernameValid(value));
           });
 
-          $('#phone').on('blur', function() {
+          $('#phone').on('blur', function () {
             const value = $(this).val().trim();
             const alert = $(this).next('.alert');
-            
-            if (/^(84|\+84|0)[0-9]{9}$/.test(value)) {
-              alert.addClass('d-none');
-            } else {
-              alert.removeClass('d-none');
-            }
+
+            alert.toggleClass('d-none', isPhoneNumberValid(value));
           });
 
-          $('#address').on('blur', function() {
+          $('#address').on('blur', function () {
             const value = $(this).val().trim();
             const alert = $(this).next('.alert');
-            
-            if (value.length >= 5) {
-              alert.addClass('d-none');
-            } else {
-              alert.removeClass('d-none');
-            }
+
+            alert.toggleClass('d-none', value.length >= 5);
           });
           $('#fullName').focus();
 
