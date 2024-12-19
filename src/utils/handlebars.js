@@ -4,6 +4,9 @@ module.exports = {
   eq(a, b) {
     return a === b;
   },
+  subtract(a, b) {
+    return a - b;
+  },
   hasUser(user) {
     return user && user.email;
   },
@@ -25,6 +28,7 @@ module.exports = {
   json(context) {
     return JSON.stringify(context);
   },
+
   formatDate(date) {
     if (!date) return '';
     const options = {

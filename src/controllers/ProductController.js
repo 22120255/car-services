@@ -1,7 +1,8 @@
 const ProductService = require('../services/ProductService');
-const { updateAverageRating } = require('../services/OrderService');
+const OrderService = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
+const { clearCache, clearAllCache } = require('../utils/helperCache');
 
 class ProductController {
   index(req, res) {
@@ -71,12 +72,14 @@ class ProductController {
   getDetail = async (req, res, next) => {
     try {
       const product = await ProductService.getDetail(req.params.id);
-      const totalRating = await updateAverageRating(req.params.id);
+      const totalRating = (await OrderService.updateAverageRating(req.params.id)) || 0;
+      const reviews = await OrderService.getReviews(req.params.id);
       if (!product) return next();
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
         totalRating,
+        reviews: multipleMongooseToObject(reviews),
       });
     } catch (error) {
       errorLog('ProductController', 'getDetail', error);

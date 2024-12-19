@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     starsHtml += `<span class='rating-text'>${averageRating.toFixed(1)}</span>`;
   } else {
-    starsHtml = `<span class='no-rating'>Chưa có đánh giá</span>`;
+    starsHtml = `<span class='no-rating'>No reviews yet.</span>`;
   }
 
   $('.stars').append(starsHtml);
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         starsHtml += `<span class='rating-text'>${averageRating.toFixed(1)}</span>`;
       } else {
-        starsHtml = `<span class='no-rating'>Chưa có đánh giá</span>`;
+        starsHtml = `<span class='no-rating'>No reviews yet.</span>`;
       }
 
       productList.append(`

@@ -2,20 +2,23 @@ const Review = require('../models/Review');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 
-async function updateAverageRating(productId) {
-  try {
-    const reviews = await Review.find({ productId });
-    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
-    const averageRating = totalRating / reviews.length;
-    const numReviews = reviews.length;
-    await Product.findByIdAndUpdate(productId, { averageRating });
-    return numReviews;
-  } catch (error) {
-    throw new Error(error);
-  }
-}
-
 class OrderService {
+  updateAverageRating = async (productId) => {
+    try {
+      const reviews = await Review.find({ productId });
+      if (reviews.length === 0) {
+        return 0;
+      }
+      const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+      const averageRating = totalRating / reviews.length;
+      const numReviews = reviews.length;
+      await Product.findByIdAndUpdate(productId, { averageRating });
+      return numReviews;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   addReview = async (userId, productId, rating, comment, images) => {
     try {
       // Tìm đơn hàng của người dùng chứa sản phẩm cụ thể với trạng thái "completed"
@@ -59,7 +62,18 @@ class OrderService {
       return { error: true, message: 'Có lỗi xảy ra khi thêm đánh giá.', details: error.message };
     }
   };
+
+  getReviews = async (productId) => {
+    try {
+      const reviews = await Review.find({ productId }).sort({ createdAt: -1 });
+      if (!reviews) {
+        return [];
+      }
+      return reviews;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
 
 module.exports = new OrderService();
-module.exports = { updateAverageRating };

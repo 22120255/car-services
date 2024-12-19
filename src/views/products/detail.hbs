@@ -81,8 +81,30 @@
           <strong>(87 votes)</strong></p>
 
       </div>
+      
+    </div>
+    <div class='col-12 mt-4'>
+      <h4 class='mb-3'>Customer Reviews</h4>
+      <div class='reviews-container'>
+        {{#each reviews}}
+          <div class='review-item mb-3 p-3 border rounded'>
+            <div class='d-flex justify-content-between align-items-center mb-2'>
+              <h5 class='mb-0'>{{this.userId}}</h5>
+              <div class='review-rating'>
+              </div>
+            </div>
+            <p class='review-date text-muted'><small>{{formatDate this.createdAt}}</small></p>
+            <p class='review-text'>{{this.comment}}</p>
+          </div>
+        {{/each}}
+      </div>
+      {{#if (gt reviews.length 3)}}
+        <button class='btn btn-outline-primary mt-3' id='load-more-reviews'>Load More Reviews</button>
+      {{/if}}
     </div>
   </section>
+
+
   <section class='card gap-2'>
     <h2 class='detail-product__title'>
       Related products
