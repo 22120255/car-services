@@ -5,6 +5,7 @@ require('dotenv').config({
         process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
     ),
 })
+const cron = require('node-cron');
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -19,6 +20,8 @@ const passport = require('./config/passport')
 const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
+const { runReport } = require('./config/analytics');
+const { errorLog } = require('./utils/customLog');
 
 const app = express()
 const store = db.createSessionStore(session)
@@ -61,7 +64,14 @@ app.use(cors())
 app.use(navigateUser)
 app.use(refreshSession)
 
-// Register the eq helper
+// Google Analytics - crawl data every 0h
+cron.schedule('0 0 * * *', async () => {
+    try {
+        await runReport();
+    } catch (error) {
+        errorLog("app.js", "crawl data", error);
+    }
+});
 
 // Template engine
 app.engine(
