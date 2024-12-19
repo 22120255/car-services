@@ -4,7 +4,7 @@
 
 .profile-container {
   max-width: 1200px;
-  margin: calc(58px + 32px) auto 32px;
+  margin: calc(72px + 32px) auto 32px;
   padding: 30px;
   background-color: #ffffff;
   border-radius: 15px;
@@ -429,7 +429,7 @@
 @media (max-width: 768px) {
   .profile-container {
     padding: 20px;
-    margin: calc(58px + 20px) 15px 20px; }
+    margin: calc(72px + 20px) 15px 20px; }
   .profile-content .profile-grid {
     grid-template-columns: 1fr;
     gap: 20px; }

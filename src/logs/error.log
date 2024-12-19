@@ -1,0 +1,3 @@
+2024-12-18 23:02:02 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: Connection timeout
+2024-12-18 23:02:02 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: The client is closed
+2024-12-18 23:03:05 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: Connection timeout
