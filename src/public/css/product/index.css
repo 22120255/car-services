@@ -167,10 +167,43 @@
 
 .star {
   color: #fbbf24;
+  /* Màu vàng cho sao đầy */
   font-size: 1.25rem; }
 
 .star-empty {
-  color: #d1d5db; }
+  color: #d1d5db;
+  /* Màu xám cho sao rỗng */
+  font-size: 1.25rem; }
+
+.star-half {
+  position: relative;
+  font-size: 1.25rem;
+  color: #fbbf24;
+  /* Màu vàng cho nửa sao */ }
+
+.star-half::before {
+  content: '★';
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fbbf24;
+  /* Màu vàng cho nửa trái */
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
+
+.star-half::after {
+  content: '★';
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #d1d5db;
+  /* Màu xám cho nửa phải */
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
+
+.no-rating {
+  color: #6b7280;
+  /* Màu xám nhạt */
+  font-size: 1rem;
+  font-style: italic; }
 
 .rating-text {
   margin-left: 0.5rem;

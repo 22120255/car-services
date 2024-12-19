@@ -1,6 +1,8 @@
 const ProductService = require('../services/ProductService');
+const OrderService = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
+const { clearCache, clearAllCache } = require('../utils/helperCache');
 
 class ProductController {
   index(req, res) {
@@ -62,7 +64,7 @@ class ProductController {
 
       res.status(200).json({ products, total });
     } catch (error) {
-      errorLog("ProductController", "getRelatedProducts", error);
+      errorLog('ProductController', 'getRelatedProducts', error);
     }
   };
 
@@ -70,13 +72,17 @@ class ProductController {
   getDetail = async (req, res, next) => {
     try {
       const product = await ProductService.getDetail(req.params.id);
+      const totalRating = (await OrderService.updateAverageRating(req.params.id)) || 0;
+      const reviews = await OrderService.getReviews(req.params.id);
       if (!product) return next();
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
+        totalRating,
+        reviews: multipleMongooseToObject(reviews),
       });
     } catch (error) {
-      errorLog("ProductController", "getDetail", error);
+      errorLog('ProductController', 'getDetail', error);
       next();
     }
   };
@@ -88,7 +94,7 @@ class ProductController {
         title: 'Products',
       });
     } catch (error) {
-      errorLog("ProductController", "products", error);
+      errorLog('ProductController', 'products', error);
       next(error);
     }
   };
@@ -150,7 +156,7 @@ class ProductController {
         });
       }
     } catch (error) {
-      errorLog("ProductController", "productsAndGetProducts", error);
+      errorLog('ProductController', 'productsAndGetProducts', error);
     }
   };
 }

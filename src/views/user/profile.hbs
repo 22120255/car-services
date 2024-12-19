@@ -1,382 +1,302 @@
 <div class='profile-container'>
-    <div class='profile-header'>
-        <div class='header-content'>
-            <div class='avatar-wrapper'>
-                <button
-                    id='avatar-btn'
-                    type='button'
-                    data-bs-toggle='tooltip'
-                    data-bs-placement='right'
-                    data-bs-html='true'
-                    data-bs-container='.avatar-wrapper'
-                    title='<span id="change-avatar-btn"><i class="fa-solid fa-camera me-2"></i>Change avatar</span>'
-                >
-                    <img
-                        src='{{_user.avatar}}'
-                        alt="{{_user.fullName}}'s avatar"
-                        class='profile-avatar'
-                    />
-                </button>
-                <input
-                    type='file'
-                    id='avatar-input'
-                    accept='image/*'
-                    style='display: none'
-                />
-                {{#if (isAdmin _user.role.name)}}
-                    <span class='admin-badge'><i class='fas fa-crown'></i>
-                        Admin</span>
-                {{/if}}
-                {{#if (isSuperAdmin _user.role.name)}}
-                    <span class='admin-badge'><i class='fas fa-crown'></i>Super
-                        Admin</span>
-                {{/if}}
-            </div>
-            <div class='user-info'>
-                <h1 class='profile-name'>{{_user.fullName}}</h1>
-                <p class='profile-email'><i class='fas fa-envelope'></i>
-                    {{_user.email}}</p>
-            </div>
-        </div>
+  <div class='profile-header'>
+    <div class='header-content'>
+      <div class='avatar-wrapper'>
+        <button
+          id='avatar-btn'
+          type='button'
+          data-bs-toggle='tooltip'
+          data-bs-placement='right'
+          data-bs-html='true'
+          data-bs-container='.avatar-wrapper'
+          title='<span id="change-avatar-btn"><i class="fa-solid fa-camera me-2"></i>Change avatar</span>'
+        >
+          <img src='{{_user.avatar}}' alt="{{_user.fullName}}'s avatar" class='profile-avatar' />
+        </button>
+        <input type='file' id='avatar-input' accept='image/*' style='display: none' />
+        {{#if (isAdmin _user.role.name)}}
+          <span class='admin-badge'><i class='fas fa-crown'></i>
+            Admin</span>
+        {{/if}}
+        {{#if (isSuperAdmin _user.role.name)}}
+          <span class='admin-badge'><i class='fas fa-crown'></i>Super Admin</span>
+        {{/if}}
+      </div>
+      <div class='user-info'>
+        <h1 class='profile-name'>{{_user.fullName}}</h1>
+        <p class='profile-email'><i class='fas fa-envelope'></i>
+          {{_user.email}}</p>
+      </div>
     </div>
+  </div>
 
-    <div class='profile-content'>
-        <div class='profile-grid'>
-            <section class='profile-info card'>
-                <div class='card-header'>
-                    <h2><i class='fas fa-user'></i> Personal Information</h2>
+  <div class='profile-content'>
+    <div class='profile-grid'>
+      <section class='profile-info card'>
+        <div class='card-header'>
+          <h2><i class='fas fa-user'></i> Personal Information</h2>
+        </div>
+        <div class='card-body'>
+          <div class='info-grid'>
+            <div class='info-column'>
+              <div class='info-item'>
+                <i class='fas fa-phone'></i>
+                <span><strong>Phone:</strong>
+                  <span id='phone-user'>{{_user.metadata.phone}}</span></span>
+              </div>
+              <div class='info-item'>
+                <i class='fas fa-map-marker-alt'></i>
+                <span><strong>Address:</strong>
+                  <span id='address-user'>{{_user.metadata.address}}</span></span>
+              </div>
+              <div class='info-item'>
+                <i class='fas fa-calendar-alt'></i>
+                <span><strong>Member since:</strong>
+                  {{formatDate _user.createdAt}}</span>
+              </div>
+            </div>
+            <div class='info-column'>
+              <div class='info-item'>
+                <i class='fas fa-car'></i>
+                <span><strong>Cars Owned:</strong>
+                  {{_user.metadata.purchasedProducts.length}}</span>
+              </div>
+              <div class='info-item'>
+                <i class='fas fa-star'></i>
+                <span><strong>Member Status:</strong>
+                  {{_user.status}}</span>
+              </div>
+              <div class='info-item'>
+                <i class='fas fa-clock'></i>
+                <span><strong>Last Active:</strong>
+                  {{formatDate _user.lastLogin}}</span>
+              </div>
+            </div>
+          </div>
+          <div class='action-buttons'>
+            <button class='btn btn-custom btn-primary btn-edit-profile'>
+              <i class='fas fa-edit'></i>
+              Edit Profile
+            </button>
+            <button class='btn btn-custom btn-secondary btn-change-password'>
+              <i class='fas fa-key'></i>
+              Change Password
+            </button>
+            <button class='btn btn-custom btn-warning btn-account-settings'>
+              <i class='fas fa-cog'></i>
+              Account Settings
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class='edit-profile-form card' style='display: none'>
+        <form id='edit-profile-form'>
+          <div class='form-group'>
+            <label for='fullName'>Full Name</label>
+            <input type='text' id='fullName' name='fullName' value='{{_user.fullName}}' />
+          </div>
+          <div class='form-group'>
+            <label for='email'>Email</label>
+            <input type='email' id='email' name='email' value='{{_user.email}}' />
+          </div>
+          <div class='form-group'>
+            <label for='phone'>Phone</label>
+            <input type='text' id='phone' name='phone' value='{{_user.metadata.phone}}' />
+          </div>
+          <div class='form-group'>
+            <label for='address'>Address</label>
+            <input type='text' id='address' name='address' value='{{_user.metadata.address}}' />
+          </div>
+          <div class='d-flex justify-content-end gap-2'>
+            <button type='submit' class='btn btn-custom btn-primary'>Save Changes</button>
+            <button type='button' class='btn btn-custom btn-secondary' id='cancel-edit'>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <section class='account-overview card'>
+        <div class='card-header'>
+          <h2><i class='fas fa-chart-bar'></i> Account Overview</h2>
+        </div>
+        <div class='card-body'>
+          <div class='stats-grid'>
+            <div class='stat-item'>
+              <i class='fas fa-eye'></i>
+              <div class='stat-content'>
+                <h4>Profile Views</h4>
+                <p>{{_user.metadata.profileViews}}</p>
+              </div>
+            </div>
+            <div class='stat-item'>
+              <i class='fas fa-heart'></i>
+              <div class='stat-content'>
+                <h4>Favorite Cars</h4>
+                <p>{{_user.metadata.favoriteProducts.length}}</p>
+              </div>
+            </div>
+            <div class='stat-item'>
+              <i class='fas fa-comments'></i>
+              <div class='stat-content'>
+                <h4>Messages</h4>
+                <p>{{_user.metadata.unreadMessages}}</p>
+              </div>
+            </div>
+            <div class='stat-item'>
+              <i class='fas fa-bell'></i>
+              <div class='stat-content'>
+                <h4>Notifications</h4>
+                <p>{{_user.metadata.notifications.length}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {{#unless (isUser _user.role.name)}}
+        <section class='admin-dashboard card'>
+          <div class='card-header'>
+            <h2><i class='fas fa-chart-line'></i>
+              Car Sales Overview</h2>
+          </div>
+          <div class='card-body'>
+            <div class='admin-stats'>
+              <div class='stat-card'>
+                <i class='fas fa-car'></i>
+                <div class='stat-content'>
+                  <h3>Available Cars</h3>
+                  <p class='stat-number'>{{_user.adminStats.totalCars}}</p>
                 </div>
-                <div class='card-body'>
-                    <div class='info-grid'>
-                        <div class='info-column'>
-                            <div class='info-item'>
-                                <i class='fas fa-phone'></i>
-                                <span><strong>Phone:</strong>
-                                    <span
-                                        id='phone-user'
-                                    >{{_user.metadata.phone}}</span></span>
-                            </div>
-                            <div class='info-item'>
-                                <i class='fas fa-map-marker-alt'></i>
-                                <span><strong>Address:</strong>
-                                    <span
-                                        id='address-user'
-                                    >{{_user.metadata.address}}</span></span>
-                            </div>
-                            <div class='info-item'>
-                                <i class='fas fa-calendar-alt'></i>
-                                <span><strong>Member since:</strong>
-                                    {{formatDate _user.createdAt}}</span>
-                            </div>
-                        </div>
-                        <div class='info-column'>
-                            <div class='info-item'>
-                                <i class='fas fa-car'></i>
-                                <span><strong>Cars Owned:</strong>
-                                    {{_user.metadata.purchasedProducts.length}}</span>
-                            </div>
-                            <div class='info-item'>
-                                <i class='fas fa-star'></i>
-                                <span><strong>Member Status:</strong>
-                                    {{_user.status}}</span>
-                            </div>
-                            <div class='info-item'>
-                                <i class='fas fa-clock'></i>
-                                <span><strong>Last Active:</strong>
-                                    {{formatDate _user.lastLogin}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='action-buttons'>
-                        <button class='btn btn-custom btn-primary btn-edit-profile'>
-                            <i class='fas fa-edit'></i>
-                            Edit Profile
-                        </button>
-                        <button class='btn btn-custom btn-secondary btn-change-password'>
-                            <i class='fas fa-key'></i>
-                            Change Password
-                        </button>
-                        <button class='btn btn-custom btn-warning btn-account-settings'>
-                            <i class='fas fa-cog'></i>
-                            Account Settings
-                        </button>
-                    </div>
+              </div>
+              <div class='stat-card'>
+                <i class='fas fa-shopping-cart'></i>
+                <div class='stat-content'>
+                  <h3>Cars Sold</h3>
+                  <p class='stat-number'>{{_user.adminStats.soldCars}}</p>
                 </div>
-            </section>
-
-            <section class='edit-profile-form card' style='display: none'>
-                <form id='edit-profile-form'>
-                    <div class='form-group'>
-                        <label for='fullName'>Full Name</label>
-                        <input
-                            type='text'
-                            id='fullName'
-                            name='fullName'
-                            value='{{_user.fullName}}'
-                        />
-                    </div>
-                    <div class='form-group'>
-                        <label for='email'>Email</label>
-                        <input
-                            type='email'
-                            id='email'
-                            name='email'
-                            value='{{_user.email}}'
-                        />
-                    </div>
-                    <div class='form-group'>
-                        <label for='phone'>Phone</label>
-                        <input
-                            type='text'
-                            id='phone'
-                            name='phone'
-                            value='{{_user.metadata.phone}}'
-                        />
-                    </div>
-                    <div class='form-group'>
-                        <label for='address'>Address</label>
-                        <input
-                            type='text'
-                            id='address'
-                            name='address'
-                            value='{{_user.metadata.address}}'
-                        />
-                    </div>
-                    <div class='d-flex justify-content-end gap-2'>
-                        <button type='submit' class='btn btn-custom btn-primary'>Save
-                            Changes</button>
-                        <button
-                            type='button'
-                            class='btn btn-custom btn-secondary'
-                            id='cancel-edit'
-                        >Cancel</button>
-                    </div>
-                </form>
-            </section>
-
-            <section class='account-overview card'>
-                <div class='card-header'>
-                    <h2><i class='fas fa-chart-bar'></i> Account Overview</h2>
+              </div>
+              <div class='stat-card'>
+                <i class='fas fa-dollar-sign'></i>
+                <div class='stat-content'>
+                  <h3>Monthly Revenue</h3>
+                  <p class='stat-number'>${{_user.adminStats.monthlyRevenue}}</p>
                 </div>
-                <div class='card-body'>
-                    <div class='stats-grid'>
-                        <div class='stat-item'>
-                            <i class='fas fa-eye'></i>
-                            <div class='stat-content'>
-                                <h4>Profile Views</h4>
-                                <p>{{_user.metadata.profileViews}}</p>
-                            </div>
-                        </div>
-                        <div class='stat-item'>
-                            <i class='fas fa-heart'></i>
-                            <div class='stat-content'>
-                                <h4>Favorite Cars</h4>
-                                <p
-                                >{{_user.metadata.favoriteProducts.length}}</p>
-                            </div>
-                        </div>
-                        <div class='stat-item'>
-                            <i class='fas fa-comments'></i>
-                            <div class='stat-content'>
-                                <h4>Messages</h4>
-                                <p>{{_user.metadata.unreadMessages}}</p>
-                            </div>
-                        </div>
-                        <div class='stat-item'>
-                            <i class='fas fa-bell'></i>
-                            <div class='stat-content'>
-                                <h4>Notifications</h4>
-                                <p>{{_user.metadata.notifications.length}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+              </div>
+            </div>
+          </div>
+        </section>
 
-            {{#unless (isUser _user.role.name)}}
-                <section class='admin-dashboard card'>
-                    <div class='card-header'>
-                        <h2><i class='fas fa-chart-line'></i>
-                            Car Sales Overview</h2>
+        <section class='quick-actions card'>
+          <div class='card-header'>
+            <h2><i class='fas fa-bolt'></i> Car Management</h2>
+          </div>
+          <div class='card-body'>
+            <div class='action-grid'>
+              <button class='action-btn'><i class='fas fa-plus-circle'></i>Add New Car</button>
+              <button class='action-btn'><i class='fas fa-edit'></i>Edit Listings</button>
+              <button class='action-btn'><i class='fas fa-chart-bar'></i>Sales Reports</button>
+              <button class='action-btn'><i class='fas fa-tags'></i>Manage Prices</button>
+            </div>
+          </div>
+        </section>
+      {{else}}
+        <section class='my-cars card'>
+          <div class='card-header'>
+            <h2><i class='fas fa-car'></i> My Cars</h2>
+          </div>
+          <div class='card-body'>
+            {{#if _user.metadata.purchasedProducts}}
+              <div class='car-list'>
+                {{#each _user.metadata.purchasedProducts}}
+                  <div class='car-item'>
+                    <img src='{{this.image}}' alt='{{this.model}}' class='car-thumbnail' />
+                    <div class='car-details'>
+                      <h3>{{this.brand}}
+                        {{this.model}}</h3>
+                      <p class='car-info'><i class='fas fa-calendar'></i>
+                        {{this.year}}</p>
+                      <p class='car-info'><i class='fas fa-tachometer-alt'></i>
+                        {{this.mileage}}
+                        km</p>
+                      <a href='/user/purchased-list' class='btn btn-custom btn-primary'>View details</a>
                     </div>
-                    <div class='card-body'>
-                        <div class='admin-stats'>
-                            <div class='stat-card'>
-                                <i class='fas fa-car'></i>
-                                <div class='stat-content'>
-                                    <h3>Available Cars</h3>
-                                    <p
-                                        class='stat-number'
-                                    >{{_user.adminStats.totalCars}}</p>
-                                </div>
-                            </div>
-                            <div class='stat-card'>
-                                <i class='fas fa-shopping-cart'></i>
-                                <div class='stat-content'>
-                                    <h3>Cars Sold</h3>
-                                    <p
-                                        class='stat-number'
-                                    >{{_user.adminStats.soldCars}}</p>
-                                </div>
-                            </div>
-                            <div class='stat-card'>
-                                <i class='fas fa-dollar-sign'></i>
-                                <div class='stat-content'>
-                                    <h3>Monthly Revenue</h3>
-                                    <p
-                                        class='stat-number'
-                                    >${{_user.adminStats.monthlyRevenue}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class='quick-actions card'>
-                    <div class='card-header'>
-                        <h2><i class='fas fa-bolt'></i> Car Management</h2>
-                    </div>
-                    <div class='card-body'>
-                        <div class='action-grid'>
-                            <button class='action-btn'><i
-                                    class='fas fa-plus-circle'
-                                ></i>Add New Car</button>
-                            <button class='action-btn'><i
-                                    class='fas fa-edit'
-                                ></i>Edit Listings</button>
-                            <button class='action-btn'><i
-                                    class='fas fa-chart-bar'
-                                ></i>Sales Reports</button>
-                            <button class='action-btn'><i
-                                    class='fas fa-tags'
-                                ></i>Manage Prices</button>
-                        </div>
-                    </div>
-                </section>
+                  </div>
+                {{/each}}
+              </div>
             {{else}}
-                <section class='my-cars card'>
-                    <div class='card-header'>
-                        <h2><i class='fas fa-car'></i> My Cars</h2>
-                    </div>
-                    <div class='card-body'>
-                        {{#if _user.metadata.purchasedProducts}}
-                            <div class='car-list'>
-                                {{#each _user.metadata.purchasedProducts}}
-                                    <div class='car-item'>
-                                        <img
-                                            src='{{this.image}}'
-                                            alt='{{this.model}}'
-                                            class='car-thumbnail'
-                                        />
-                                        <div class='car-details'>
-                                            <h3>{{this.brand}}
-                                                {{this.model}}</h3>
-                                            <p class='car-info'><i
-                                                    class='fas fa-calendar'
-                                                ></i>
-                                                {{this.year}}</p>
-                                            <p class='car-info'><i
-                                                    class='fas fa-tachometer-alt'
-                                                ></i>
-                                                {{this.mileage}}
-                                                km</p>
-                                            <a
-                                                href='/user/purchased-list'
-                                                class='btn btn-custom btn-primary'
-                                            >View details</a>
-                                        </div>
-                                    </div>
-                                {{/each}}
-                            </div>
-                        {{else}}
-                            <div class='no-cars'>
-                                <i class='fas fa-car-side empty-icon'></i>
-                                <p>You haven't purchased any cars yet</p>
-                                <a
-                                    href='/product'
-                                    class='btn btn-custom btn-primary'
-                                >Browse Cars</a>
-                            </div>
-                        {{/if}}
-                    </div>
-                </section>
-            {{/unless}}
+              <div class='no-cars'>
+                <i class='fas fa-car-side empty-icon'></i>
+                <p>You haven't purchased any cars yet</p>
+                <a href='/product' class='btn btn-custom btn-primary'>Browse Cars</a>
+              </div>
+            {{/if}}
+          </div>
+        </section>
+      {{/unless}}
 
-            <section class='user-activity card'>
-                <div class='card-header'>
-                    <h2><i class='fas fa-history'></i> Recent Activity</h2>
-                </div>
-                <div class='card-body'>
-                    {{#if _user.metadata.recentActivity}}
-                        <ul class='activity-list'>
-                            {{#each _user.metadata.recentActivity}}
-                                <li class='activity-item'>
-                                    <div class='activity-icon'>
-                                        {{#if this.type}}
-                                            {{#eq this.type 'purchase'}}
-                                                <i
-                                                    class='fas fa-shopping-cart'
-                                                ></i>
-                                            {{else}}
-                                                <i class='fas fa-search'></i>
-                                            {{/eq}}
-                                        {{else}}
-                                            <i class='fas fa-circle'></i>
-                                        {{/if}}
-                                    </div>
-                                    <div class='activity-content'>
-                                        <span class='activity-date'>{{formatDate
-                                                this.date
-                                            }}</span>
-                                        <span
-                                            class='activity-description'
-                                        >{{this.description}}</span>
-                                    </div>
-                                </li>
-                            {{/each}}
-                        </ul>
-                    {{else}}
-                        <p class='no-activity'>No recent activity to display</p>
-                    {{/if}}
-                </div>
-            </section>
-
-            {{#unless (isUser _user.role.name)}}
-                <section class='performance-metrics card'>
-                    <div class='card-header'>
-                        <h2><i class='fas fa-chart-pie'></i>
-                            Sales Performance</h2>
-                    </div>
-                    <div class='card-body'>
-                        <div class='metrics-grid'>
-                            <div class='metric-item'>
-                                <span class='metric-label'>Most Popular Brand</span>
-                                <span
-                                    class='metric-value'
-                                >{{_user.adminStats.popularBrand}}</span>
-                            </div>
-                            <div class='metric-item'>
-                                <span class='metric-label'>Average Sale Price</span>
-                                <span
-                                    class='metric-value'
-                                >${{_user.adminStats.avgSalePrice}}</span>
-                            </div>
-                            <div class='metric-item'>
-                                <span class='metric-label'>Customer Satisfaction</span>
-                                <span
-                                    class='metric-value success'
-                                >{{_user.adminStats.satisfaction}}%</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            {{/unless}}
+      <section class='user-activity card'>
+        <div class='card-header'>
+          <h2><i class='fas fa-history'></i> Recent Activity</h2>
         </div>
+        <div class='card-body'>
+          {{#if _user.metadata.recentActivity}}
+            <ul class='activity-list'>
+              {{#each _user.metadata.recentActivity}}
+                <li class='activity-item'>
+                  <div class='activity-icon'>
+                    {{#if this.type}}
+                      {{#eq this.type 'purchase'}}
+                        <i class='fas fa-shopping-cart'></i>
+                      {{else}}
+                        <i class='fas fa-search'></i>
+                      {{/eq}}
+                    {{else}}
+                      <i class='fas fa-circle'></i>
+                    {{/if}}
+                  </div>
+                  <div class='activity-content'>
+                    <span class='activity-date'>{{formatDate this.date}}</span>
+                    <span class='activity-description'>{{this.description}}</span>
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <p class='no-activity'>No recent activity to display</p>
+          {{/if}}
+        </div>
+      </section>
+
+      {{#unless (isUser _user.role.name)}}
+        <section class='performance-metrics card'>
+          <div class='card-header'>
+            <h2><i class='fas fa-chart-pie'></i>
+              Sales Performance</h2>
+          </div>
+          <div class='card-body'>
+            <div class='metrics-grid'>
+              <div class='metric-item'>
+                <span class='metric-label'>Most Popular Brand</span>
+                <span class='metric-value'>{{_user.adminStats.popularBrand}}</span>
+              </div>
+              <div class='metric-item'>
+                <span class='metric-label'>Average Sale Price</span>
+                <span class='metric-value'>${{_user.adminStats.avgSalePrice}}</span>
+              </div>
+              <div class='metric-item'>
+                <span class='metric-label'>Customer Satisfaction</span>
+                <span class='metric-value success'>{{_user.adminStats.satisfaction}}%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      {{/unless}}
     </div>
+  </div>
 </div>
 
 <script>
-    const user =
-    {{{json _user}}};
+  const user =
+  {{{json _user}}};
 </script>
 <script type='module' src='/js/user/profile.js'></script>

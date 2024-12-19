@@ -8,25 +8,36 @@
             <div class="car-grid">
                 {{#each user.metadata.purchasedProducts}}
                     <div class="car-card">
-                        <div class="car-image">
+                        <div class="car-image" >                            
                             <img src="{{this.images.[0]}}" alt="{{this.brand}} {{this.model}}">
                         </div>
                         <div class="car-details">
                             <h3>{{this.brand}} {{this.model}}</h3>
                             <div class="car-info">
-                                <p><i class="fas fa-calendar"></i> Năm: {{this.year}}</p>
-                                <p><i class="fas fa-tachometer-alt"></i> Số km: {{formatNumber this.mileage}} km</p>
-                                <p><i class="fas fa-dollar-sign"></i> Giá: {{formatCurrency this.price}}</p>
+                                <p><i class="fas fa-calendar"></i> Year: {{this.year}}</p>
+                                <p><i class="fas fa-tachometer-alt"></i> Mileage: {{formatNumber this.mileage}} km</p>
+                                <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.price}}</p>
                             </div>
                             <div class="purchase-info">
                                 {{#with (lookup ../user.metadata.recentActivity @index)}}
-                                    <p><i class="fas fa-clock"></i> Ngày mua: {{formatDate this.date}}</p>
+                                    <p><i class="fas fa-clock"></i> Purchase date: {{formatDate this.date}}</p>
                                 {{/with}}
-                                <p><i class="fas fa-check-circle"></i> Trạng thái: Đã mua</p>
+                                <p><i class="fas fa-check-circle"></i> Status: Bought</p>
                             </div>
-                            <a href="/products/{{this._id}}" class="btn btn-primary view-details">
-                                <i class="fas fa-eye"></i> Xem chi tiết
+                            <a href="/products/{{this._id}}" class="btn btn-primary btn-view-details">
+                                <i class="fas fa-eye"></i> View details
                             </a>
+                            {{#if (eq this.reviewStatus "reviewed")}}
+                                <a class="btn btn-secondary btn-reviewed" disabled>
+                                    <i class="fas fa-check"></i> Already reviewed
+                                </a>
+                            {{else}}
+                                <a  class="btn btn-secondary btn-rate-product" data-id="{{this._id}}">
+                                    <i class="fas fa-star"></i> Leave a review
+                                </a>
+                            {{/if}}
+                            
+
                         </div>
                     </div>
                 {{/each}}
@@ -40,94 +51,132 @@
         {{/if}}
     </div>
 </div>
+<script type="module" src="/js/user/purchasedList.js"></script>
+
 
 <style>
-    .purchased-list-container {
-        padding: 2rem;
-    }
 
-    .purchased-header {
-        margin-bottom: 2rem;
-        text-align: center;
-    }
+/* Purchased List Styles */
+.purchased-list-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 50px auto;
+}
 
-    .purchased-header h1 {
-        color: #333;
-        font-size: 2rem;
-    }
+.purchased-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 1rem;
+}
 
-    .car-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-    }
+.purchased-header h1 {
+    color: #007bff;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
 
-    .car-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        transition: transform 0.2s;
-    }
+.car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
 
-    .car-card:hover {
-        transform: translateY(-5px);
-    }
+.car-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
 
-    .car-image {
-        height: 200px;
-        overflow: hidden;
-    }
+.car-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
 
-    .car-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+.car-image {
+    height: 200px;
+    overflow: hidden;
+}
 
-    .car-details {
-        padding: 1rem;
-    }
+.car-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
 
-    .car-details h3 {
-        margin-bottom: 1rem;
-        color: #333;
-    }
+.car-card:hover .car-image img {
+    transform: scale(1.05);
+}
 
-    .car-info, .purchase-info {
-        margin-bottom: 1rem;
-    }
+.car-details {
+    padding: 1.5rem;
+}
 
-    .car-info p, .purchase-info p {
-        margin: 0.5rem 0;
-        color: #666;
-    }
+.car-details h3 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
 
-    .empty-state {
-        text-align: center;
-        padding: 3rem;
-    }
+.car-info, .purchase-info {
+    margin-bottom: 1rem;
+}
 
-    .empty-icon {
-        font-size: 4rem;
-        color: #ccc;
-        margin-bottom: 1rem;
-    }
+.car-info p, .purchase-info p {
+    margin: 0.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+}
 
-    .btn {
-        width: 100%;
-        padding: 0.75rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+}
 
-    .btn-primary {
-        background-color: #007bff;
+.empty-icon {
+    font-size: 5rem;
+    color: #007bff;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.btn-view-details {
+    background-color: #007bff;
+    color:#212529;
+}
+
+.btn-view-details:hover {
+    background-color: #007bff;
         color: white;
-    }
 
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
+}
+
+.btn-rate-product {
+    background-color: #07ffea;
+    color: #212529;
+}
+
+.btn-rate-product:hover {
+    background-color: #07ffea;
+            color: white;
+
+}
+
 </style>
