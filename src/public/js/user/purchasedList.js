@@ -1,14 +1,11 @@
 import { showToast, showModal } from '../common.js';
 
-document.getElementById('images').addEventListener('change', function (event) {
-  var preview = document.getElementById('imagePreview');
-  preview.innerHTML = '';
-  for (var i = 0; i < event.target.files.length; i++) {
-    var file = event.target.files[i];
-    var img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
-    preview.appendChild(img);
-  }
+document.addEventListener('DOMContentLoaded', function () {
+  $(document).ready(function () {
+    // Lắng nghe sự kiện click vào nút "Đánh giá sản phẩm"
+    $('.view-details').on('click', function (e) {
+      e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+      $('#addReviewModal').modal('show'); // Hiển thị modal
+    });
+  });
 });
-
-document.addEventListener('DOMContentLoaded', function () {});

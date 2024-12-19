@@ -1,42 +1,39 @@
-<!-- Button to trigger modal -->
-<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#addReviewModal'>
-  Add Review
-</button>
-
-<!-- Add Review Modal -->
 <div class='modal fade' id='addReviewModal' tabindex='-1' aria-labelledby='addReviewModalLabel' aria-hidden='true'>
-  <div class='modal-dialog'>
+  <div class='modal-dialog modal-lg'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <h5 class='modal-title' id='addReviewModalLabel'>Add Product Review</h5>
+        <h5 class='modal-title' id='addReviewModalLabel'>Review</h5>
         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
       </div>
       <div class='modal-body'>
-        <form id='reviewForm'>
-          <div class='mb-3'>
-            <label class='form-label'>Rating</label>
-            <div class='star-rating'>
-              <input type='radio' id='star5' name='rating' value='5' required />
-              <label for='star5' title='5 stars'></label>
-              <input type='radio' id='star4' name='rating' value='4' />
-              <label for='star4' title='4 stars'></label>
-              <input type='radio' id='star3' name='rating' value='3' />
-              <label for='star3' title='3 stars'></label>
-              <input type='radio' id='star2' name='rating' value='2' />
-              <label for='star2' title='2 stars'></label>
-              <input type='radio' id='star1' name='rating' value='1' />
-              <label for='star1' title='1 star'></label>
-            </div>
-          </div>
+        <div class="mb-3">
+        <label class="form-label">Rating</label>
+        <div class="star-rating" id="starRating">
+            <i class="fa-regular fa-star" data-value="1"></i>
+            <i class="fa-regular fa-star" data-value="2"></i>
+            <i class="fa-regular fa-star" data-value="3"></i>
+            <i class="fa-regular fa-star" data-value="4"></i>
+            <i class="fa-regular fa-star" data-value="5"></i>
+        </div>
+        </div>
+
+
+
           <div class='mb-3'>
             <label for='comment' class='form-label'>Comment</label>
             <textarea class='form-control' id='comment' rows='3'></textarea>
           </div>
           <div class='mb-3'>
-            <label for='images' class='form-label'>Add Images</label>
-            <input type='file' class='form-control' id='images' multiple accept='image/*' />
-            <div id='imagePreview' class='image-preview'></div>
+            <label class='form-label'>Images</label>
+            <div id='imageContainer' class='d-flex flex-nowrap overflow-auto'>
+              <button type='button' id='addImageBtn' class='btn btn-outline-primary'>
+                <i class='bi bi-plus-lg'></i>
+              </button>
+            </div>
+            <input type='file' id='imageInput' accept='image/*' style='display: none;' />
+            <input type='hidden' id='imagePaths' name='imagePaths' />
           </div>
+
         </form>
       </div>
       <div class='modal-footer'>
@@ -46,3 +43,4 @@
     </div>
   </div>
 </div>
+<script type='module' src='\js\user\reviewModal.js'></script>
