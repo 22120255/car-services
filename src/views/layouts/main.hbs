@@ -34,6 +34,7 @@
             const currentPage = window.location.pathname.split("/").pop();
             const currentPath = window.location.pathname;
 
+            console.log(currentPath)
             let customCss = document.createElement("link");
             customCss.rel = "stylesheet";
 
@@ -56,9 +57,6 @@
                 default:
                     if (currentPath.startsWith("/user/purchased-list")) {
                         customCss.href = "/css/user/purchasedList.css";
-                        document.head.appendChild(customCss);
-                        customCss.href = "/css/user/profile.css"; 
-
                     }
                     else if (currentPath.startsWith("/user/profile/")) {
                         customCss.href = "/css/user/profile.css"; 

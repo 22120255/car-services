@@ -46,7 +46,7 @@ class OrderController {
 
   async addReview(req, res) {
     try {
-      const { productId, rating, comment } = req.body;
+      const { productId, rating, comment, images } = req.body;
       const userId = req.user._id; // Lấy ID người dùng từ middleware xác thực
 
       console.log('Review:', { userId, productId, rating, comment });
