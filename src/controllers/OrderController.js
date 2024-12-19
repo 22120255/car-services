@@ -51,7 +51,7 @@ class OrderController {
 
       console.log('Review:', { userId, productId, rating, comment });
       // Gọi service để thêm review
-      const result = await OrderService.addReview(userId, productId, rating, comment);
+      const result = await OrderService.addReview(userId, productId, rating, comment, images);
 
       console.log(result);
       if (result.error) {

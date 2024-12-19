@@ -5,6 +5,11 @@ const OrderItemSchema = new mongoose.Schema(
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
+    reviewStatus: {
+      type: String,
+      enum: ['not-reviewed', 'reviewed'],
+      default: 'not-reviewed',
+    },
   },
   { timestamps: true }
 );
@@ -19,11 +24,6 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'completed', 'canceled'],
       default: 'pending',
-    },
-    reviewStatus: {
-      type: String,
-      enum: ['not-reviewed', 'reviewed'],
-      default: 'not-reviewed',
     },
   },
   { timestamps: true }

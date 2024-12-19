@@ -15,18 +15,25 @@ async function updateAverageRating(productId) {
 }
 
 class OrderService {
-  addReview = async (userId, productId, rating, comment) => {
+  addReview = async (userId, productId, rating, comment, images) => {
     try {
-      // Kiểm tra xem người dùng đã mua sản phẩm và trạng thái đơn hàng là "completed"
+      // Tìm đơn hàng của người dùng chứa sản phẩm cụ thể với trạng thái "completed"
       const order = await Order.findOne({
         userId,
         'items.productId': productId,
         status: 'completed',
-        reviewStatus: 'not-reviewed',
+        'items.reviewStatus': 'not-reviewed', // Kiểm tra trạng thái review của sản phẩm
       });
 
       if (!order) {
         return { error: true, message: 'Bạn phải hoàn tất đơn hàng và nhận sản phẩm để đánh giá.' };
+      }
+
+      // Tìm sản phẩm trong danh sách items
+      const orderItem = order.items.find((item) => item.productId.toString() === productId && item.reviewStatus === 'not-reviewed');
+
+      if (!orderItem) {
+        return { error: true, message: 'Sản phẩm này đã được đánh giá hoặc không hợp lệ.' };
       }
 
       // Thêm review
@@ -35,13 +42,15 @@ class OrderService {
         productId,
         rating,
         comment,
+        images,
       });
-      console.log('Review:', review);
       await review.save();
 
-      order.reviewStatus = 'reviewed';
+      // Cập nhật trạng thái review của sản phẩm trong đơn hàng
+      orderItem.reviewStatus = 'reviewed';
       await order.save();
 
+      // Cập nhật điểm đánh giá trung bình cho sản phẩm
       await updateAverageRating(productId);
 
       return { error: false, message: 'Đánh giá đã được thêm thành công!' };

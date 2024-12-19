@@ -2,6 +2,7 @@ const UserService = require('../services/UserService');
 const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 const User = require('../models/User');
+const Order = require('../models/Order');
 
 class UserController {
   // [GET] /admin/dashboard
@@ -342,7 +343,6 @@ class UserController {
         })
         .lean();
 
-      console.log(user.metadata.purchasedProducts);
       // Sắp xếp recentActivity theo ngày mua mới nhất
       if (user.metadata.recentActivity) {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);

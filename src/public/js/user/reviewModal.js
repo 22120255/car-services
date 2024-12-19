@@ -3,13 +3,16 @@ import { showToast, showModal } from '../common.js';
 document.addEventListener('DOMContentLoaded', function () {
   const stars = document.querySelectorAll('#starRating i');
   let starRatingValue = 0;
-
+  let productId = null;
   $('.btn-rate-product').on('click', function (e) {
     e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+    productId = $(this).data('id');
+    console.log('Product ID:', productId);
     const stars = document.querySelectorAll('#starRating i');
     stars.forEach((s) => s.classList.remove('selected', 'hover'));
     starRatingValue = 0;
     $('#ratingError').text('');
+    $('#comment').val('');
     $('.image-preview-wrapper').remove();
     $('#addReviewModal').modal('show'); // Hiển thị modal
   });
@@ -121,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Lắng nghe sự kiện click vào nút "Gửi đánh giá"
+  // Lắng nghe sự kiện click vào nút "Gửi đánh giá"
   $('#submitReviewBtn').on('click', function () {
     const rating = starRatingValue;
     if (rating === 0) {
@@ -133,17 +137,21 @@ document.addEventListener('DOMContentLoaded', function () {
       images.push($(this).attr('src')); // Lấy giá trị của thuộc tính 'src' và thêm vào mảng
     });
 
-    const data = { rating, comment, images };
+    const data = { productId, rating, comment, images };
     $.ajax({
       url: '/api/orders/review',
       type: 'POST',
       data: data,
       success: function (response) {
         showToast('success', 'Gửi đánh giá thành công.');
+
         $('#addReviewModal').modal('hide');
+        setTimeout(() => {
+          location.reload();
+        }, 0);
       },
       error: function (xhr, status, error) {
-        showToast('error', 'Có lỗi xảy ra. Vui lòng thử lại sau.');
+        showToast('error', 'You have submitted a review for this product.');
       },
     });
   });
