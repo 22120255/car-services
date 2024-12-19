@@ -7,8 +7,9 @@ async function updateAverageRating(productId) {
     const reviews = await Review.find({ productId });
     const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
     const averageRating = totalRating / reviews.length;
+    const numReviews = reviews.length;
     await Product.findByIdAndUpdate(productId, { averageRating });
-    return averageRating;
+    return numReviews;
   } catch (error) {
     throw new Error(error);
   }
@@ -61,3 +62,4 @@ class OrderService {
 }
 
 module.exports = new OrderService();
+module.exports = { updateAverageRating };

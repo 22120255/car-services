@@ -1,4 +1,5 @@
 const ProductService = require('../services/ProductService');
+const { updateAverageRating } = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
 
@@ -70,10 +71,12 @@ class ProductController {
   getDetail = async (req, res, next) => {
     try {
       const product = await ProductService.getDetail(req.params.id);
+      const totalRating = await updateAverageRating(req.params.id);
       if (!product) return next();
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
+        totalRating,
       });
     } catch (error) {
       errorLog('ProductController', 'getDetail', error);

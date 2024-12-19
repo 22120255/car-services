@@ -29,13 +29,14 @@
 
         <div class='rating'>
           <div class='stars'>
-            <span class='fa fa-star checked'></span>
-            <span class='fa fa-star checked'></span>
-            <span class='fa fa-star checked'></span>
-            <span class='fa fa-star'></span>
-            <span class='fa fa-star'></span>
           </div>
-          <span class='review-no'>41 reviews</span>
+          {{#if (eq totalRating 1)}}
+            <span class='review-no'>{{totalRating}} review</span>
+          {{else}}
+            <span class="review-no" >
+              {{totalRating}} reviews
+            </span>
+          {{/if}}
         </div>
         <p class='product-description'>{{product.description}}</p>
         <p>
@@ -78,11 +79,7 @@
         <p class='vote'><strong>91%</strong>
           of buyers enjoyed this product!
           <strong>(87 votes)</strong></p>
-        <!-- Add hidden fields for brand, year, and price -->
-        <input type='hidden' id='product-id' value='{{product._id}}' />
-        <input type='hidden' id='product-brand' value='{{product.brand}}' />
-        <input type='hidden' id='product-year' value='{{product.year}}' />
-        <input type='hidden' id='product-price' value='{{product.price}}' />
+
       </div>
     </div>
   </section>

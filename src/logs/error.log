@@ -1,0 +1,1 @@
+2024-12-20 00:05:51 [ERROR]: File: ProductController, func: getDetail, error: Error: CastError: Cast to Number failed for value "NaN" (type number) at path "averageRating"

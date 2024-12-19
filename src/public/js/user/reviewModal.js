@@ -148,10 +148,10 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#addReviewModal').modal('hide');
         setTimeout(() => {
           location.reload();
-        }, 0);
+        }, 1000);
       },
       error: function (xhr, status, error) {
-        showToast('error', 'You have submitted a review for this product.');
+        showToast('error', 'You have already reviewed this product.');
       },
     });
   });
