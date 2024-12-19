@@ -1,22 +1,27 @@
 const path = require('path');
 require('dotenv').config({
-  path: path.resolve(process.cwd(), process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'),
-});
-const express = require('express');
-const morgan = require('morgan');
-const methodOverride = require('method-override');
-const { engine } = require('express-handlebars');
-const session = require('express-session');
-const flash = require('connect-flash');
+    path: path.resolve(
+        process.cwd(),
+        process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
+    ),
+})
+const cron = require('node-cron');
+const express = require('express')
+const morgan = require('morgan')
+const cors = require('cors')
+const methodOverride = require('method-override')
+const { engine } = require('express-handlebars')
+const session = require('express-session')
+const flash = require('connect-flash')
 
-const route = require('./routes');
-const db = require('./config/db');
-const passport = require('./config/passport');
-const { navigateUser } = require('./middleware/authMiddleware');
-const { catch404, catch500 } = require('./middleware/catchError');
-const refreshSession = require('./middleware/refreshSession');
-const client = require('./config/elasticsearch');
-
+const route = require('./routes')
+const db = require('./config/db')
+const passport = require('./config/passport')
+const { navigateUser } = require('./middleware/authMiddleware')
+const { catch404, catch500 } = require('./middleware/catchError')
+const refreshSession = require('./middleware/refreshSession')
+const { runReport } = require('./config/analytics');
+const { errorLog } = require('./utils/customLog');
 const app = express();
 const setupNgrok = require('./config/ngrok');
 const store = db.createSessionStore(session);
@@ -56,7 +61,14 @@ if (process.env.NODE_ENV === 'development') {
 app.use(navigateUser);
 app.use(refreshSession);
 
-// Register the eq helper
+// Google Analytics - crawl data every 0h
+cron.schedule('0 0 * * *', async () => {
+    try {
+        await runReport();
+    } catch (error) {
+        errorLog("app.js", "crawl data", error);
+    }
+});
 
 // Template engine
 app.engine(
