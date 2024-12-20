@@ -1,11 +1,11 @@
 /* custom */
 .admin-layout .content-admin {
-  margin-top: 58px; }
+  margin-top: 72px; }
 
 .admin-layout aside {
   width: 260px;
   position: fixed;
-  top: 58px;
+  top: 72px;
   left: 0;
   bottom: 0; }
 
@@ -16,7 +16,7 @@
   height: 100%; }
 
 .header-area {
-  height: 58px;
+  height: 72px;
   background-color: #666; }
 
 .navbar-nav .nav-link.active {

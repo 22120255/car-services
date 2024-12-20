@@ -1,6 +1,30 @@
 import { showToast, updateQueryParams } from '../common.js';
-import { store, updateAmountCart } from "../store/index.js";
+import { store, updateAmountCart } from '../store/index.js';
 
+document.addEventListener('DOMContentLoaded', function () {
+  const { averageRating = 0 } = product;
+
+  let starsHtml = '';
+  if (averageRating > 0) {
+    const fullStars = Math.floor(averageRating); // Số sao đầy
+    const hasHalfStar = averageRating % 1 >= 0.5; // Xác định có nửa sao không
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        starsHtml += `<span class='star'>★</span>`; // Sao đầy
+      } else if (i === fullStars + 1 && hasHalfStar) {
+        starsHtml += `<span class='star-half'>★</span>`; // Nửa sao
+      } else {
+        starsHtml += `<span class='star-empty'>★</span>`; // Sao rỗng
+      }
+    }
+    starsHtml += `<span class='rating-text'>${averageRating.toFixed(1)}</span>`;
+  } else {
+    starsHtml = `<span class='no-rating'>No reviews yet.</span>`;
+  }
+
+  $('.stars').append(starsHtml);
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   // Lắng nghe sự kiện click vào tab
@@ -14,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'POST',
       data: { quantity },
       success: function (response) {
-        showToast('Success', 'Added to cart')
+        showToast('Success', 'Added to cart');
         const amountCart = store.getState().amountCart;
         updateAmountCart(amountCart + 1);
       },
@@ -124,8 +148,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     products.forEach((product) => {
-      const { _id, images, status, brand, price, year } = product;
-      const imageSrc = images[0] || '/default-image.jpg';
+      const { _id, images, status, brand, price, year, averageRating = 0 } = product;
+      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+
+      let starsHtml = '';
+      if (averageRating > 0) {
+        const fullStars = Math.floor(averageRating); // Số sao đầy
+        const hasHalfStar = averageRating % 1 >= 0.5; // Xác định có nửa sao không
+
+        for (let i = 1; i <= 5; i++) {
+          if (i <= fullStars) {
+            starsHtml += `<span class='star'>★</span>`; // Sao đầy
+          } else if (i === fullStars + 1 && hasHalfStar) {
+            starsHtml += `<span class='star-half'>★</span>`; // Nửa sao
+          } else {
+            starsHtml += `<span class='star-empty'>★</span>`; // Sao rỗng
+          }
+        }
+        starsHtml += `<span class='rating-text'>${averageRating.toFixed(1)}</span>`;
+      } else {
+        starsHtml = `<span class='no-rating'>No reviews yet.</span>`;
+      }
 
       productList.append(`
           <div class='col-lg-3 col-md-6 col-sm-12'>
@@ -142,12 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
                           <h3 class='card-product__price'>$${price || '0.00'}</h3>
                       </div>
                       <div class='star-rating'>
-                          <span class='star'>★</span>
-                          <span class='star'>★</span>
-                          <span class='star'>★</span>
-                          <span class='star'>★</span>
-                          <span class='star star-empty'>★</span>
-                          <span class='rating-text'>(4.0)</span>
+                       ${starsHtml}
                       </div>
                   </div>
                   <div class='card-product__footer'>

@@ -1,0 +1,148 @@
+@charset "UTF-8";
+.star-rating {
+  display: flex;
+  justify-content: flex-start;
+  /* Đặt thứ tự từ trái sang phải */ }
+
+.star-rating i {
+  font-size: 30px;
+  color: #ddd;
+  /* Màu mặc định */
+  margin-right: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease; }
+
+.star-rating i.hover,
+.star-rating i.selected {
+  color: #f1c40f;
+  /* Màu vàng khi hover hoặc chọn */ }
+
+/* Image Container Styles */
+#imageContainer {
+  display: flex;
+  flex-wrap: wrap;
+  /* Cho phép hình ảnh xuống dòng khi không đủ không gian */
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+  justify-content: flex-start;
+  /* Đảm bảo các hình ảnh căn trái */ }
+
+#imageContainer::-webkit-scrollbar {
+  height: 6px; }
+
+#imageContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px; }
+
+#imageContainer::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px; }
+
+#imageContainer::-webkit-scrollbar-thumb:hover {
+  background: #555; }
+
+.image-preview-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  /* Căn chỉnh hình ảnh vào giữa */
+  justify-content: center;
+  /* Căn chỉnh hình ảnh vào giữa */ }
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; }
+
+#addImageBtn {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  border: 2px dashed #ced4da;
+  border-radius: 8px;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease-in-out; }
+
+#addImageBtn:hover {
+  background-color: #e9ecef;
+  color: #495057; }
+
+.remove-image-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #dc3545;
+  transition: all 0.2s ease-in-out; }
+
+.remove-image-btn:hover {
+  background-color: white;
+  color: #bd2130; }
+
+/* Modal Styles */
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem; }
+
+.modal-body {
+  padding: 1.5rem; }
+
+.modal-footer {
+  justify-content: flex-end;
+  padding: 1rem 1.5rem; }
+
+.modal-footer .btn {
+  min-width: 100px; }
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem; }
+
+.form-control {
+  border-radius: 6px; }
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff; }
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3; }
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  flex-shrink: 0; }

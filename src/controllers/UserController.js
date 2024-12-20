@@ -2,6 +2,7 @@ const UserService = require('../services/UserService');
 const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 const User = require('../models/User');
+const Order = require('../models/Order');
 
 class UserController {
   // [GET] /admin/dashboard
@@ -296,10 +297,8 @@ class UserController {
     try {
       const { id } = req.body;
       const user = await UserService.updateProfile(id, req.body);
-      if (req.isAuthenticated())
-        clearCache(`user/profile/${id}/${req.user._id}`);
-      else
-        clearCache(`user/profile/${id}`);
+      if (req.isAuthenticated()) clearCache(`user/profile/${id}/${req.user._id}`);
+      else clearCache(`user/profile/${id}`);
       res.status(200).json(user);
     } catch (error) {
       errorLog('UserController', 'updateProfile', error.message);
@@ -340,7 +339,7 @@ class UserController {
       const user = await User.findById(req.user._id)
         .populate({
           path: 'metadata.purchasedProducts',
-          select: 'brand model year mileage price images'
+          select: 'brand model year mileage price images',
         })
         .lean();
 
@@ -357,6 +356,15 @@ class UserController {
       console.error('Error getting purchased cars:', error);
       res.status(500).render('error');
     }
+  }
+
+  // [POST] /api/user/review/store
+  async storeReview(req, res) {
+    if (req.file) {
+      console.log(req.file);
+      return res.json({ secure_url: req.file.path });
+    }
+    return res.status(400).json({ message: 'Failed to upload image' });
   }
 }
 
