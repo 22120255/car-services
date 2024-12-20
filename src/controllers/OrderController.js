@@ -1,7 +1,7 @@
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const PaymentController = require('./PaymentController');
-const OrderService = require('../services/orderService');
+const OrderService = require('../services/OrderService');
 
 class OrderController {
   async createOrder(req, res) {

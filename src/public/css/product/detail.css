@@ -1,9 +1,9 @@
 @charset "UTF-8";
 /* custom */
 .detail-product__wrapper {
-  margin-top: 72px;
-  padding: 0 20px;
-background-color: #f8f9fa;}
+  margin-top: 30px;
+  padding: 2rem;
+  background-color: #f8f9fa; }
 
 .header-area {
   background-color: #666; }
@@ -25,7 +25,9 @@ background-color: #f8f9fa;}
   color: white;
   border: none;
   padding: 10px 20px;
-  margin-top: 20px; }
+  margin-top: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; }
 
 .add-to-cart-btn:hover {
   background-color: #ff4040; }
@@ -40,14 +42,7 @@ background-color: #f8f9fa;}
 .preview {
   margin-top: 10px;
   padding-left: 20px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
   flex-direction: column; }
 
 .preview-pic {
@@ -55,7 +50,7 @@ background-color: #f8f9fa;}
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  margin: 0px 10px 0 10px; }
+  margin: 0 10px; }
 
 .preview-thumbnail {
   display: flex;
@@ -64,11 +59,16 @@ background-color: #f8f9fa;}
   margin-top: 1rem; }
 
 .preview-thumbnail li {
-  width: 100%;
-  height: 100%;
+  flex: 1;
   overflow: hidden;
   border-radius: 4px;
-  cursor: pointer; }
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  transition: transform 0.3s ease; }
 
 .preview-thumbnail img {
   width: 100%;
@@ -81,104 +81,65 @@ background-color: #f8f9fa;}
   transform: scale(1.1);
   border: 2px solid #ff9f1a; }
 
-@media screen and (max-width: 996px) {
-  .preview {
-    margin-bottom: 20px; } }
-
-.preview-pic {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1; }
-
 .preview-thumbnail.nav-tabs {
-  display: flex;
-  /* Align thumbnails horizontally */
   justify-content: center;
-  /* Center thumbnails */
-  border: none;
-  /* No border around the container */
   margin-top: 15px;
-  /* Top margin for spacing */ }
+  border: none; }
 
 .preview-thumbnail.nav-tabs li {
-  width: 18%;
-  /* Set the width of each thumbnail */
+  width: auto;
+  /* Đặt width tự động */
   margin-right: 2.5%;
-  /* Add space between thumbnails */
+  /* Khoảng cách giữa các thumbnail */
   list-style: none;
-  /* Remove default list bullet */
+  /* Xóa bullet */
   display: flex;
-  /* Use flex to center the image */
+  /* Canh giữa ảnh */
   justify-content: center;
-  /* Center horizontally */
+  /* Canh ngang */
   align-items: center;
-  /* Center vertically */
-  aspect-ratio: 1 / 1;
-  /* Make the thumbnail square */
+  /* Canh dọc */
   overflow: hidden;
-  /* Hide overflowing image content */ }
+  /* Ẩn phần thừa của ảnh */ }
 
-.preview-thumbnail.nav-tabs li a {
-  padding: 0;
-  /* Remove padding */
-  margin: 0;
-  /* Remove margin */
-  display: block;
-  /* Make the link fill the li container */
-  height: 50%;
-  /* Ensure the link fills the entire li */
-  width: 80%;
-  /* Ensure the link fills the entire li */ }
-
-.preview-thumbnail.nav-tabs li img {
-  width: 100%;
-  /* Make image fill the width of the li */
-  height: 100%;
-  /* Make image fill the height of the li */
-  object-fit: cover;
-  /* Ensure image covers the square frame without distortion */
-  cursor: pointer;
-  /* Change cursor on hover */
-  transition: transform 0.2s ease;
-  /* Add smooth hover effect */ }
-
-.preview-thumbnail.nav-tabs li.active img {
-  border: 2px solid #ff9f1a;
-  /* Orange border for active image */
-  transform: scale(1.05);
-  /* Scale up the image slightly */ }
-
-/* Remove the margin for the last li */
 .preview-thumbnail.nav-tabs li:last-child {
   margin-right: 0; }
 
-/* Style the tab content */
+.preview-thumbnail.nav-tabs li img {
+  max-width: 100%;
+  /* Ảnh không vượt quá kích thước thumbnail */
+  max-height: 100%;
+  /* Ảnh không vượt quá chiều cao thumbnail */
+  object-fit: contain;
+  /* Đảm bảo giữ nguyên tỉ lệ gốc của ảnh */
+  cursor: pointer;
+  /* Con trỏ đổi khi hover */
+  transition: transform 0.2s ease;
+  /* Hiệu ứng hover */ }
+
+.preview-thumbnail.nav-tabs li.active img {
+  border: 2px solid #ff9f1a;
+  /* Viền cho ảnh được chọn */
+  transform: scale(1.05);
+  /* Phóng to ảnh nhẹ khi chọn */ }
+
 .tab-content {
   position: relative;
-  /* Ensures the container is positioned for absolute children */
   width: 100%;
-  /* Full width of the parent container */
-  overflow: hidden;
-  /* Prevents images from spilling out */ }
+  overflow: hidden; }
 
 .preview-pic img {
   position: absolute;
-  /* Absolutely position the images */
   top: 0;
-  /* Align to the top of the container */
   left: 0;
-  /* Align to the left of the container */
   width: 100%;
-  /* Stretch to fill the container */
   height: 100%;
-  /* Ensure the image fills the container */
   object-fit: cover;
-  /* Ensures the image covers the container without distortion */
-  -webkit-animation-name: opacity;
-  animation-name: opacity;
-  -webkit-animation-duration: 0.3s;
-  animation-duration: 0.3s; }
+  animation: opacity 0.3s; }
+
+@media screen and (max-width: 996px) {
+  .preview {
+    margin-bottom: 20px; } }
 
 .card {
   margin: 20px 0;
@@ -462,42 +423,101 @@ background-color: #f8f9fa;}
   border-radius: 2px;
   background-color: #f0f0f0; }
 
+.product-tabs {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border-bottom: 2px solid #dee2e6; }
+
+.product-tab-item {
+  margin-right: 5px; }
+
+.product-tab-link {
+  border: none;
+  background: none;
+  color: #495057;
+  font-weight: 500;
+  padding: 10px 15px;
+  transition: color 0.3s ease;
+  cursor: pointer; }
+
+.product-tab-link:hover {
+  color: #007bff; }
+
+.product-tab-link.active {
+  color: #007bff;
+  border-bottom: 2px solid #007bff; }
+
 .reviews-container {
   max-height: 400px;
-  overflow-y: auto;
-  padding-right: 10px; }
+  overflow-y: auto; }
 
 .review-item {
-  background-color: #f8f9fa;
-  transition: background-color 0.3s ease; }
+  border-bottom: 1px solid #eee;
+  padding: 15px 0; }
 
-.review-item:hover {
-  background-color: #e9ecef; }
+.review-item:last-child {
+  border-bottom: none; }
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; }
+
+.review-author {
+  font-weight: bold; }
 
 .review-rating {
-  font-size: 0.9rem; }
+  color: #ffc107; }
+
+.review-content {
+  margin-bottom: 5px; }
 
 .review-date {
-  font-size: 0.8rem; }
+  font-size: 0.8em;
+  color: #6c757d; }
 
-.review-text {
-  font-size: 0.95rem;
-  line-height: 1.5; }
+.no-reviews {
+  font-size: 1.5rem;
+  /* Kích thước chữ lớn hơn */
+  color: #555;
+  /* Màu chữ nhẹ nhàng */
+  text-align: center;
+  /* Căn giữa nội dung */
+  font-family: 'Arial', sans-serif;
+  /* Font chữ đẹp */
+  margin: 20px 0;
+  /* Khoảng cách trên dưới */
+  line-height: 1.6;
+  /* Khoảng cách giữa các dòng */ }
 
-#load-more-reviews {
-  display: block;
-  margin: 0 auto; }
-
-/* Scrollbar styling for webkit browsers */
-.reviews-container::-webkit-scrollbar {
-  width: 8px; }
-
-.reviews-container::-webkit-scrollbar-track {
-  background: #f1f1f1; }
-
-.reviews-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px; }
-
-.reviews-container::-webkit-scrollbar-thumb:hover {
-  background: #555; }
+/* Dùng flexbox để căn giữa toàn bộ thẻ */
+.reviews-container {
+  width: 100%;
+  /* Độ rộng tự động co dãn */
+  max-width: 80%;
+  /* Giới hạn độ rộng tối đa */
+  margin: auto;
+  /* Canh giữa theo chiều ngang */
+  margin-top: 20px;
+  /* Khoảng cách trên */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  /* Cải thiện độ bo góc */
+  padding: 20px;
+  box-sizing: border-box;
+  /* Bao gồm padding và border trong tổng chiều rộng và chiều cao */
+  overflow-y: auto;
+  /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
+  max-height: 70vh;
+  /* Giới hạn chiều cao tối đa theo tỷ lệ của chiều cao viewport */
+  min-height: 200px;
+  /* Đảm bảo chiều cao tối thiểu */
+  display: flex;
+  flex-direction: column;
+  /* Sắp xếp các phần tử con theo chiều dọc */
+  gap: 16px;
+  /* Tạo khoảng cách giữa các phần tử con */ }

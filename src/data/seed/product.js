@@ -69,6 +69,8 @@ const images = [
   'https://th.bing.com/th/id/OIP.3Brdwh_2i_ebzbLYpzNHqAHaEo?w=277&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7',
 ];
 
+const DEFAULT_IMAGE = 'https://via.placeholder.com/300x200.png?text=Default+Image';
+
 // Generate mock product data
 async function generateMockProducts(num = 10) {
   const products = [];
@@ -82,9 +84,16 @@ async function generateMockProducts(num = 10) {
     const randomFuelType = chance.pickone(fuelTypes);
     const price = chance.integer({ min: 20000, max: 200000 });
     const numImages = chance.integer({ min: 1, max: 5 });
-    const productImages = [];
+    let productImages = [];
+
+    // Randomly select images
     for (let j = 0; j < numImages; j++) {
       productImages.push(chance.pickone(images));
+    }
+
+    // Add default images if not enough
+    while (productImages.length < 5) {
+      productImages.push(DEFAULT_IMAGE);
     }
 
     products.push({

@@ -73,13 +73,12 @@ class ProductController {
     try {
       const product = await ProductService.getDetail(req.params.id);
       const totalRating = (await OrderService.updateAverageRating(req.params.id)) || 0;
-      const reviews = await OrderService.getReviews(req.params.id);
       if (!product) return next();
+      clearCache(`products/${req.params.id}`);
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
         totalRating,
-        reviews: multipleMongooseToObject(reviews),
       });
     } catch (error) {
       errorLog('ProductController', 'getDetail', error);
@@ -157,6 +156,28 @@ class ProductController {
       }
     } catch (error) {
       errorLog('ProductController', 'productsAndGetProducts', error);
+    }
+  };
+
+  // [GET] /api/products/reviews/:id
+  getReviews = async (req, res) => {
+    try {
+      const reviews = await OrderService.getReviews(req.params.id);
+
+      if (!reviews || reviews.length === 0) {
+        return res.status(404).json({ message: 'Không tìm thấy đánh giá nào cho sản phẩm này.' });
+      }
+      console.log(reviews);
+      return res.status(200).json({ reviews });
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        res.status(400).json({ message: 'Dữ liệu yêu cầu không hợp lệ.' });
+      } else if (error.name === 'NotFoundError') {
+        res.status(404).json({ message: 'Sản phẩm không tồn tại.' });
+      } else {
+        errorLog('ProductController', 'getReviews', error);
+        res.status(500).json({ message: 'Có lỗi xảy ra khi lấy đánh giá sản phẩm.' });
+      }
     }
   };
 }

@@ -8,6 +8,10 @@ const productController = require('../../controllers/ProductController');
 
 // /api/products/related/:by
 router.get('/related/:id/', productController.getRelatedProducts);
+
+// /api/products/reviews/:id
+router.get('/reviews/:id', productController.getReviews);
+
 router.get('/', productController.productsAndGetProducts);
 
 module.exports = router;

@@ -3,7 +3,7 @@ const Product = require('../models/Product');
 const Order = require('../models/Order');
 
 class OrderService {
-  updateAverageRating = async (productId) => {
+  async updateAverageRating(productId) {
     try {
       const reviews = await Review.find({ productId });
       if (reviews.length === 0) {
@@ -15,9 +15,9 @@ class OrderService {
       await Product.findByIdAndUpdate(productId, { averageRating });
       return numReviews;
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
-  };
+  }
 
   addReview = async (userId, productId, rating, comment, images) => {
     try {
@@ -55,7 +55,7 @@ class OrderService {
       await order.save();
 
       // Cập nhật điểm đánh giá trung bình cho sản phẩm
-      await updateAverageRating(productId);
+      await this.updateAverageRating(productId);
 
       return { error: false, message: 'Đánh giá đã được thêm thành công!' };
     } catch (error) {
