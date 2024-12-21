@@ -6,65 +6,104 @@ document.addEventListener('DOMContentLoaded', function () {
   const productId = product._id;
   let username = '';
   let createAt = '';
-  let rating = 0;
-  let comment = '';
   let images = [];
   let reviews = [];
   let currentIndex = 0;
+  let stats = {};
+
+  let activeFilter = null;
 
   // ----------------- Event listeners -----------------
 
-  // Hiển thị modal khi click vào thumbnail
-  $(document).on('click', '.image-thumbnail img', function () {
-    const reviewImages = $(this).closest('.review-images').find('img');
-    images = reviewImages
-      .map(function () {
-        return $(this).attr('src');
-      })
-      .get();
+  $(document).ready(function () {
+    // Hiển thị modal khi click vào thumbnail
+    $(document).on('click', '.image-thumbnail img', function () {
+      const reviewImages = $(this).closest('.review-images').find('img');
+      images = reviewImages
+        .map(function () {
+          return $(this).attr('src');
+        })
+        .get();
 
-    currentIndex = images.indexOf($(this).attr('src'));
-    $('#modalImage').attr('src', images[currentIndex]);
-    $('#imageModal').fadeIn();
-  });
+      currentIndex = images.indexOf($(this).attr('src'));
+      $('#modalImage').attr('src', images[currentIndex]);
+      $('#imageModal').fadeIn();
+    });
 
-  // Đóng modal khi click nút đóng hoặc nhấn ESC
-  $('.close, .modal').click(function () {
-    $('#imageModal').fadeOut();
-  });
-
-  $(document).on('keydown', function (e) {
-    if (e.key === 'Escape') {
+    // Đóng modal khi click nút đóng hoặc nhấn ESC
+    $('.close, .modal').click(function () {
       $('#imageModal').fadeOut();
-    }
+    });
+
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Escape') {
+        $('#imageModal').fadeOut();
+      }
+    });
+
+    // Chuyển sang ảnh trước
+    $('.prev').click(function (e) {
+      e.stopPropagation();
+      if (currentIndex > 0) {
+        currentIndex--;
+        $('#modalImage').attr('src', images[currentIndex]);
+      }
+    });
+
+    // Chuyển sang ảnh tiếp theo
+    $('.next').click(function (e) {
+      e.stopPropagation();
+      if (currentIndex < images.length - 1) {
+        currentIndex++;
+        $('#modalImage').attr('src', images[currentIndex]);
+      }
+    });
+
+    $('#reviews-tab').on('click', function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: `/api/products/reviews/filter/${productId}`,
+        type: 'GET',
+        success: function (response) {
+          stats = response.stats;
+          renderFilter(stats);
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          $('.reviews-container').html('<p class="error">Unable to fetch reviews. Please check your connection.</p>');
+        },
+      });
+      refresh();
+    });
+
+    // Filter reviews
+    $('.reviews-container').on('click', '.filter-btn', function (e) {
+      e.preventDefault();
+      const filterType = $(this).data('value') || $(this).attr('id');
+      if ($(this).hasClass('active')) {
+        return;
+      }
+
+      $('.filter-btn').removeClass('active');
+      $(this).addClass('active');
+      activeFilter = filterType;
+
+      const query = activeFilter ? `filter=${activeFilter}` : '';
+      console.log(query);
+      refresh(query);
+    });
   });
 
-  // Chuyển sang ảnh trước
-  $('.prev').click(function (e) {
-    e.stopPropagation();
-    if (currentIndex > 0) {
-      currentIndex--;
-      $('#modalImage').attr('src', images[currentIndex]);
-    }
-  });
+  // ----------------- Functions -----------------
 
-  // Chuyển sang ảnh tiếp theo
-  $('.next').click(function (e) {
-    e.stopPropagation();
-    if (currentIndex < images.length - 1) {
-      currentIndex++;
-      $('#modalImage').attr('src', images[currentIndex]);
-    }
-  });
-
-  $('#reviews-tab').on('click', function (e) {
-    e.preventDefault();
+  async function loadData(apiQuery = '') {
     $.ajax({
-      url: `/api/products/reviews/${productId}`,
+      url: `/api/products/reviews/${productId}?${apiQuery}`,
       type: 'GET',
       statusCode: {
         200: function (response) {
           reviews = response.reviews;
+          stats = response.stats;
           if (!reviews || reviews.length === 0) {
             $('.reviews-container').html('<p class="no-reviews">No reviews yet</p>');
           } else {
@@ -83,12 +122,13 @@ document.addEventListener('DOMContentLoaded', function () {
         $('.reviews-container').html('<p class="error">Unable to fetch reviews. Please check your connection.</p>');
       },
     });
-  });
+  }
 
-  // ----------------- Functions -----------------
   function renderReviews(reviews) {
     const reviewList = $('.review-list');
     reviewList.empty();
+
+    // Render the reviews
     reviews.forEach((review) => {
       const { avatar, userName, createdAt, rating, comment, images, likes } = review; // Destructure the review
       let starsHtml = '';
@@ -171,6 +211,28 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  async function renderFilter(stats) {
+    const filters = $('.rating-filters');
+    filters.empty();
+
+    filters.append(`
+      <div class="filter-row">
+        <button class="filter-btn active" id="all">All (${stats.totalReviews})</button>
+        <button class="filter-btn" id="fivestars" data-value="5">5 Star (${stats.starCounts[5]})</button>
+        <button class="filter-btn" id="fourstars" data-value="4">4 Star (${stats.starCounts[4]})</button>
+        <button class="filter-btn" id="threestars" data-value="3">3 Star (${stats.starCounts[3]})</button>
+        <button class="filter-btn" id="twostars" data-value="2">2 Star (${stats.starCounts[2]})</button>
+        <button class="filter-btn" id="onestar" data-value="1">1 Star (${stats.starCounts[1]})</button>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn" id="comments">Có Bình Luận (${stats.withComment})</button>
+        <button class="filter-btn" id="images-videos">Có Hình Ảnh / Video (${stats.withMedia})</button>
+      </div>
+    `);
+  }
+
+  async function updatePagination() {}
+
   // Helper function to format the date
   function formatDate(dateString) {
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
@@ -182,5 +244,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const minutes = String(date.getMinutes()).padStart(2, '0');
 
     return `${formattedDate} ${hours}:${minutes}`;
+  }
+  async function refresh(query = '') {
+    await loadData(query);
+    updatePagination();
   }
 });

@@ -601,6 +601,7 @@
 }
 
 .user-avatar {
+  margin-bottom: auto;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -785,7 +786,8 @@
   max-height: 80%; /* Giới hạn chiều dọc */
   object-fit: contain; /* Giữ tỷ lệ ảnh */
   border-radius: 10px; /* Bo góc cho ảnh */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Hiệu ứng bóng */
+  box-shadow: none;
+  background-color: transparent; /* Nền trong suốt */
 }
 
 .close {

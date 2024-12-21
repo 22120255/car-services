@@ -162,11 +162,12 @@ class ProductController {
   // [GET] /api/products/reviews/:id
   getReviews = async (req, res) => {
     try {
-      const reviews = await OrderService.getReviews(req.params.id);
+      const { filter } = req.query;
+      const { reviews } = await OrderService.getReviews(req.params.id, filter);
       if (!reviews || reviews.length === 0) {
         return res.status(404).json({ message: 'Không tìm thấy đánh giá nào cho sản phẩm này.' });
       }
-      console.log(reviews);
+      console.log('filter:', filter, typeof filter);
       return res.status(200).json({ reviews });
     } catch (error) {
       if (error.name === 'ValidationError') {
@@ -177,6 +178,18 @@ class ProductController {
         errorLog('ProductController', 'getReviews', error);
         res.status(500).json({ message: 'Có lỗi xảy ra khi lấy đánh giá sản phẩm.' });
       }
+    }
+  };
+
+  // [GET] /api/products/reviews/filter/:id
+  statsReviews = async (req, res) => {
+    try {
+      const stats = await OrderService.getAllReviewStats(req.params.id);
+      console.log('stats:', stats);
+      res.status(200).json({ stats });
+    } catch (error) {
+      errorLog('ProductController', 'statsReviews', error);
+      res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số lượng đánh giá sản phẩm.' });
     }
   };
 }

@@ -63,23 +63,70 @@ class OrderService {
     }
   };
 
-  getReviews = async (productId) => {
+  getReviews = async (productId, filter) => {
     try {
-      const reviews = await Review.find({ productId })
+      const queryConditions = { productId };
+      const filterValue = Number(filter);
+
+      if (Number.isFinite(filterValue)) {
+        queryConditions.rating = Number(filterValue);
+      } else if (filter === 'comment') {
+        queryConditions.comment = { $exists: true, $ne: '' };
+      } else if (filter === 'images-videos') {
+        queryConditions.images = { $exists: true, $ne: [] };
+      }
+      const reviews = await Review.find(queryConditions)
         .populate({
           path: 'userId',
-          select: 'fullName',
+          select: 'fullName avatar',
         })
         .sort({ likes: -1, createdAt: -1 });
 
-      if (!reviews) {
-        return [];
+      return {
+        reviews: reviews.map((review) => ({
+          ...review._doc,
+          userName: review.userId.fullName,
+          avatar: review.userId.avatar,
+        })),
+      };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  getAllReviewStats = async (productId) => {
+    try {
+      const reviews = await Review.find({ productId });
+      if (!reviews || reviews.length === 0) {
+        return {
+          totalReviews: 0,
+          starCounts: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+          withComment: 0,
+          withMedia: 0,
+          totalLikes: 0,
+        };
       }
 
-      return reviews.map((review) => ({
-        ...review._doc,
-        userName: review.userId.fullName,
-      }));
+      const stats = {
+        totalReviews: reviews.length,
+        starCounts: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+        withComment: 0,
+        withMedia: 0,
+      };
+
+      reviews.forEach((review) => {
+        if (review.rating) {
+          stats.starCounts[review.rating] = (stats.starCounts[review.rating] || 0) + 1;
+        }
+        if (review.comment) {
+          stats.withComment++;
+        }
+        if (review.images && review.images.length > 0) {
+          stats.withMedia++;
+        }
+      });
+
+      return stats;
     } catch (error) {
       throw new Error(error.message);
     }
