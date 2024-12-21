@@ -5,11 +5,17 @@ class FunctionApi {
     error = null;
     data = null;
 
-    constructor(url, method, body, options = { showToast: true }) {
+    constructor(url, { method = "GET", query = {}, body = {}, options = { showToast: true } }) {
         this.url = url;
         this.method = method;
         this.body = body;
+        this.query = query;
         this.options = options;
+    }
+
+    buildQueryParams() {
+        const queryString = new URLSearchParams(this.query).toString();
+        return queryString ? `${this.url}?${queryString}` : this.url;
     }
 
     async call() {
@@ -20,7 +26,7 @@ class FunctionApi {
         try {
             this.data = await new Promise((resolve, reject) => {
                 $.ajax({
-                    url: this.url,
+                    url: this.buildQueryParams(),
                     type: this.method,
                     data: this.body,
                     success(response) {
@@ -29,7 +35,7 @@ class FunctionApi {
                     error(err) {
                         reject(err);
                         if (this.options.showToast) {
-                            showToast('error', err.responseJSON.message);
+                            showToast('error', err.responseJSON?.message || 'Request failed');
                         }
                     }
                 });
@@ -43,6 +49,5 @@ class FunctionApi {
         }
     }
 }
-
 
 export default FunctionApi;
