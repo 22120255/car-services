@@ -97,15 +97,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             url: '/api/orders/create',
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
             },
             data: JSON.stringify({
               shippingDetails: {
                 fullName: $('#fullName').val().trim(),
                 phone: $('#phone').val().trim(),
                 address: $('#address').val().trim(),
-                note: $('#note').val().trim()
-              }
+                note: $('#note').val().trim(),
+              },
             }),
             success: function (response) {
               if (response.order) {
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             },
             complete: function () {
               submitBtn.prop('disabled', false).text('Payment');
-            }
+            },
           });
           return true;
         },
@@ -156,8 +156,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             alert.toggleClass('d-none', value.length >= 5);
           });
           $('#fullName').focus();
-
-        }
+        },
       });
     });
   } else {
@@ -258,7 +257,7 @@ function attachQuantityEventHandlers(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await updateQuantity(cart, productId, 1);
-      updateAmountCart(store.getState().amountCart + 1)
+      updateAmountCart(store.getState().amountCart + 1);
     });
   });
 
@@ -266,7 +265,7 @@ function attachQuantityEventHandlers(cart) {
     button.addEventListener('click', async (event) => {
       const productId = event.target.getAttribute('data-id');
       await updateQuantity(cart, productId, -1);
-      updateAmountCart(store.getState().amountCart - 1)
+      updateAmountCart(store.getState().amountCart - 1);
     });
   });
 }
@@ -332,7 +331,7 @@ async function removeItem(cart, productId) {
     const data = await response.json();
     if (response.ok && data.cart) {
       renderCartTable(data.cart);
-      updateAmountCart(data.cart.items.reduce((acc, cur) => cur.quantity + acc, 0))
+      updateAmountCart(data.cart.items.reduce((acc, cur) => cur.quantity + acc, 0));
     } else {
       console.error('Error:', data.message || 'Unexpected response');
     }

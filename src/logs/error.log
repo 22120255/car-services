@@ -1,3 +1,2 @@
-2024-12-18 23:02:02 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: Connection timeout
-2024-12-18 23:02:02 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: The client is closed
-2024-12-18 23:03:05 [ERROR]: File: cacheMiddleware, func: cacheMiddleware, error: Error: Connection timeout
+2024-12-21 11:28:00 [ERROR]: File: analytics.js, func: runReport, message: Start running report
+2024-12-21 11:28:02 [ERROR]: File: app.js, func: crawl data, message: Crawl data successfully

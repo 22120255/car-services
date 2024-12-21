@@ -22,8 +22,19 @@ const productStorage = new CloudinaryStorage({
   },
 });
 
+// Cấu hình storage cho ảnh đánh giá
+const reviewImageStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'reviews',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'],
+    transformation: [{ width: 800, height: 800, crop: 'fill' }],
+  },
+});
+
 // Khởi tạo multer với avatarStorage và productStorage
 const uploadAvatar = multer({ storage: avatarStorage });
 const uploadProductImage = multer({ storage: productStorage });
+const uploadReviewImage = multer({ storage: reviewImageStorage });
 
-module.exports = { uploadAvatar, uploadProductImage };
+module.exports = { uploadAvatar, uploadProductImage, uploadReviewImage };

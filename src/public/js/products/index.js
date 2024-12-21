@@ -226,41 +226,56 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     products.forEach((product) => {
-      const { _id, images, status, brand, price, year } = product;
+      const { _id, images, status, brand, price, year, averageRating = 0 } = product;
       const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+
+      let starsHtml = '';
+      if (averageRating > 0) {
+        const fullStars = Math.floor(averageRating); // Số sao đầy
+        const hasHalfStar = averageRating % 1 >= 0.5; // Xác định có nửa sao không
+
+        for (let i = 1; i <= 5; i++) {
+          if (i <= fullStars) {
+            starsHtml += `<span class='star'>★</span>`; // Sao đầy
+          } else if (i === fullStars + 1 && hasHalfStar) {
+            starsHtml += `<span class='star-half'>★</span>`; // Nửa sao
+          } else {
+            starsHtml += `<span class='star-empty'>★</span>`; // Sao rỗng
+          }
+        }
+        starsHtml += `<span class='rating-text'>${averageRating.toFixed(1)}</span>`;
+      } else {
+        starsHtml = `<span class='no-rating'>No reviews yet.</span>`;
+      }
+
       $('#product-list').append(`
-                <div class='col-lg-3 col-md-4 col-sm-6'>
-                <div class='card-product__container'>
-                    <div class='card-product__header'>
-                        <a href='/products/${_id}'>
-                            <img src='${imageSrc}' alt='car' />
-                            ${status === 'new' ? `<div class='new-arrival-badge'>New Arrival</div>` : ''}
-                        </a>
-                    </div>
-                    <div class='card-product__body'>
-                        <div class='product-header'>
-                            <a href='/products/${_id}' class='card-product__brand'>${brand || 'Unknown'}</a>
-                            <h3 class='card-product__price'>$${price || '0.00'}</h3>
-                        </div>
-                        <div class='star-rating'>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star'>★</span>
-                            <span class='star star-empty'>★</span>
-                            <span class='rating-text'>(4.0)</span>
-                        </div>
-                    </div>
-                    <div class='card-product__footer'>
-                        <p>
-                            <span class='car-spec-label'>Model: </span>
-                            <span class='car-spec-value'>${year || 'N/A'}</span>
-                        </p>
-                        <a href='/products/${_id}' class='view-details-btn'>View Details</a>
-                    </div>
-                </div>
-                </div>
-            `);
+        <div class='col-lg-3 col-md-4 col-sm-6'>
+          <div class='card-product__container'>
+            <div class='card-product__header'>
+              <a href='/products/${_id}'>
+                <img src='${imageSrc}' alt='car' />
+                ${status === 'new' ? `<div class='new-arrival-badge'>New Arrival</div>` : ''}
+              </a>
+            </div>
+            <div class='card-product__body'>
+              <div class='product-header'>
+                <a href='/products/${_id}' class='card-product__brand'>${brand || 'Unknown'}</a>
+                <h3 class='card-product__price'>$${price || '0.00'}</h3>
+              </div>
+              <div class='star-rating'>
+                ${starsHtml}
+              </div>
+            </div>
+            <div class='card-product__footer'>
+              <p>
+                <span class='car-spec-label'>Model: </span>
+                <span class='car-spec-value'>${year || 'N/A'}</span>
+              </p>
+              <a href='/products/${_id}' class='view-details-btn'>View Details</a>
+            </div>
+          </div>
+        </div>
+      `);
     });
   }
 
