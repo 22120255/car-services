@@ -24,7 +24,7 @@ const clearFileLogs = (type) => {
     const logFilePath = path.join(__dirname, '../logs', `${type}.log`);
 
     if (fs.existsSync(logFilePath)) {
-        fs.unlinkSync(logFilePath);
+        fs.writeFileSync(logFilePath, '', 'utf8');
     }
 }
 
