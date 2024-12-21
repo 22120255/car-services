@@ -16,7 +16,7 @@ async function cacheMiddleware(req, res, next) {
       res.sendResponse = res.send;
       res.send = async (body) => {
         await redisClient.set(key, JSON.stringify(body), {
-          EX: 100, // Set expiration time in seconds
+          EX: 100,
         });
         res.sendResponse(body);
       };

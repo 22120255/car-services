@@ -1,5 +1,9 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
+const DataAnalytics = require('../models/DataAnalytics');
+const { getDataReport } = require('../config/analytics');
+const Formatter = require('../utils/formatter');
+const { mongooseToObject } = require('../utils/mongoose');
 
 class UserService {
   async getUsers({ limit, offset, key, direction, search, status, role }) {
@@ -271,6 +275,29 @@ class UserService {
       }
     } catch (error) {
       console.error('Error restoring product:', error);
+      throw error;
+    }
+  }
+
+  // Lấy dữ liệu thống kê
+
+  async getAnalytics(options = { refresh: false }) {
+    if (options.refresh) {
+      await getDataReport();
+    }
+    try {
+      const analytics = await DataAnalytics.findOne({}).sort({ createdAt: -1 });
+      let result = null;
+
+      if (analytics) {
+        result = {
+          ...mongooseToObject(analytics),
+          createdAtStr: Formatter.formatDate(analytics.createdAt),
+        }
+      }
+      return result;
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
       throw error;
     }
   }

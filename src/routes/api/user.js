@@ -6,6 +6,7 @@ const userController = require('../../controllers/UserController');
 const { checkRole } = require('../../middleware/authMiddleware');
 const { uploadAvatar, uploadProductImage, uploadReviewImage } = require('../../config/multer');
 const productController = require('../../controllers/ProductController');
+const cacheMiddleware = require('../../middleware/cacheMiddleware');
 
 router.patch('/update-role', checkRole(['admin', 'sadmin']), userController.updateRole);
 router.patch('/update-status', checkRole(['admin', 'sadmin']), userController.updateStatus);
@@ -29,5 +30,8 @@ router.get('/inventory', checkRole(['admin', 'sadmin']), productController.produ
 router.delete('/trash/delete/:id', checkRole(['admin', 'sadmin']), userController.forceDeleteProduct);
 router.patch('/trash/restore/:id', checkRole(['admin', 'sadmin']), userController.restoreProduct);
 router.get('/trash', checkRole(['admin', 'sadmin']), userController.trashAndGetProducts);
+
+// dashboard 
+router.get('/data/analytics', cacheMiddleware, checkRole(['admin', 'sadmin']), userController.getAnalytics);
 
 module.exports = router;

@@ -1,3 +1,5 @@
+import FunctionApi from '../FunctionApi.js';
+
 document.addEventListener("DOMContentLoaded", function () {
     var options = {
         series: [{
@@ -80,4 +82,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var chart = new ApexCharts(document.querySelector("#segments-chart"), options);
     chart.render();
+})
+
+//Render data 
+const fetchData = async (options = { refresh: false }) => {
+    try {
+        const getDataAnalytics = new FunctionApi(`/api/user/data/analytics?refresh=${options.refresh}`, 'GET');
+        await getDataAnalytics.call();
+
+        return getDataAnalytics.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const renderData = (data) => {
+    $('.views').children('.skeleton-text').toggleClass('hidden', !!data);
+    $('#last-update-time').children('.skeleton-text').toggleClass('hidden', !!data);
+    if (!data) return;
+
+    const { views, createdAtStr } = data;
+
+    $('.views').children('.value').text(views);
+    $('#last-update-time').children('.value').text(createdAtStr);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    let dataAnalytics = null;
+    // Call fetchData function to get data when page loaded
+
+    try {
+        renderData(dataAnalytics);
+        dataAnalytics = await fetchData();
+
+        renderData(dataAnalytics);
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    $("#refresh-btn").on("click", async () => {
+        try {
+            dataAnalytics = await fetchData({ refresh: true });
+            renderData(dataAnalytics);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    })
 })

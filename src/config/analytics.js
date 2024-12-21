@@ -1,13 +1,11 @@
 const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const DataAnalytics = require("../models/DataAnalytics");
-const { infoLog } = require('../utils/customLog');
 
 const propertyId = "465737102";
 
 const analyticsDataClient = new BetaAnalyticsDataClient();
 
-async function runReport() {
-    infoLog("analytics.js", "runReport", "Start running report");
+async function getDataReport() {
     const [response] = await analyticsDataClient.runReport({
         property: `properties/${propertyId}`,
         dateRanges: [
@@ -32,4 +30,4 @@ async function runReport() {
     }
 }
 
-module.exports = { runReport };
+module.exports = { getDataReport };

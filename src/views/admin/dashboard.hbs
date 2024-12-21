@@ -5,7 +5,18 @@
       <h1 class='h3 mb-1'>Dashboard</h1>
       <p class='text-muted'>Sales overview & summary</p>
     </div>
-    <div class='d-flex gap-3'>
+    <div class='d-flex align-items-center gap-3'>
+      <div class='text-muted small'>
+        <i class="fa-regular fa-clock me-1"></i>
+        <span class="text-danger">Last updated:</span> 
+        <class id="last-update-time">
+            <span class="value"></span>
+            {{> SkeletonText size='sm'}}
+        </class>
+      </div>
+      <button id="refresh-btn" class='btn btn-sm btn-primary'>
+        <i class="fa-solid fa-arrows-rotate me-1"></i>
+      </button>
       <select class='form-select' style='width: 200px;'>
         <option>Order type</option>
       </select>
@@ -20,17 +31,20 @@
     <div class='col-md-3'>
       <div class='card metric-card b-l-purple'>
         <div class='card-body'>
-          <div class='d-flex justify-content-between align-items-start'>
+          <div class='d-flex justify-content-between align-items-start h-100'>
             <div>
-              <h3 class='h2 mb-2'>101.1K</h3>
-              <p class='text-muted mb-0'>Downloads</p>
+              <div class="views">
+                <h3 class='h2 mb-2 value'></h3>
+                {{> SkeletonText size='lg'}}
+              </div>
+                <p class='text-muted mb-0'>Views</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
                 3% from last month
               </small>
             </div>
             <div class='metric-icon bg-purple'>
-             <i class="fa-solid fa-download"></i>
+             <i class="fa-regular fa-eye"></i>
             </div>
           </div>
         </div>
@@ -41,7 +55,10 @@
         <div class='card-body'>
           <div class='d-flex justify-content-between align-items-start'>
             <div>
-              <h3 class='h2 mb-2'>12.2K</h3>
+              <div>
+                <h3 class='h2 mb-2'>12.2K</h3>
+                 {{> SkeletonText size='lg'}}
+              </div>
               <p class='text-muted mb-0'>Purchases</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
@@ -60,7 +77,10 @@
         <div class='card-body'>
           <div class='d-flex justify-content-between align-items-start'>
             <div>
-              <h3 class='h2 mb-2'>5.3K</h3>
+              <div>
+                <h3 class='h2 mb-2'>5.3K</h3>
+                  {{> SkeletonText size='lg'}}
+              </div>
               <p class='text-muted mb-0'>Customers</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
@@ -79,7 +99,10 @@
         <div class='card-body'>
           <div class='d-flex justify-content-between align-items-start'>
             <div>
-              <h3 class='h2 mb-2'>7</h3>
+              <div>
+                <h3 class='h2 mb-2'>7</h3>
+                  {{> SkeletonText size='lg'}}
+              </div>
               <p class='text-muted mb-0'>Channels</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
@@ -202,4 +225,4 @@
     </div>
   </div>
 </div>
-<script src='/js/admin/dashboard.js'></script>
+<script type="module" src='/js/admin/dashboard.js'></script>
