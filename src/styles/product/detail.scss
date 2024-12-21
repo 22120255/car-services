@@ -655,10 +655,13 @@
   border-left: 4px solid #4caf50; /* Green left border for emphasis */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
   border-radius: 5px; /* Rounded corners */
+  display: flex;
+  flex-direction: column; /* Aligns content vertically */
+  justify-content: flex-start; /* Ensures the text starts at the top */
 }
 
 .review-text {
-  margin-bottom: 15px;
+  flex: 1; /* Makes the text area take up remaining space */
   line-height: 1.5;
   font-size: 1.1em; /* Slightly larger text for readability */
   font-weight: 500; /* Make the text bold for better emphasis */
@@ -667,6 +670,9 @@
   padding: 10px;
   border-radius: 5px; /* Rounded corners to match the review container */
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Soft inner shadow */
+  margin: 0; /* Remove default margin */
+  box-sizing: border-box; /* Ensures padding is included in the height */
+  overflow: hidden; /* Prevents overflow */
 }
 
 .review-images {
@@ -753,9 +759,9 @@
   padding: 20px;
   box-sizing: border-box; /* Bao gồm padding và border trong tổng chiều rộng và chiều cao */
   overflow-y: auto; /* Cho phép cuộn dọc nếu nội dung vượt quá chiều cao */
-  max-height: 70vh; /* Giới hạn chiều cao tối đa theo tỷ lệ của chiều cao viewport */
   min-height: 200px; /* Đảm bảo chiều cao tối thiểu */
   display: flex;
   flex-direction: column; /* Sắp xếp các phần tử con theo chiều dọc */
   gap: 16px; /* Tạo khoảng cách giữa các phần tử con */
+  height: auto;
 }

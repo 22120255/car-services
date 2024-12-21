@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function renderReviews(reviews) {
-    const reviewList = $('.reviews-container');
+    const reviewList = $('.review-list');
     reviewList.empty();
     reviews.forEach((review) => {
       const { avatar, userName, createdAt, rating, comment, images, likes } = review; // Destructure the review
@@ -66,6 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
         avatarHtml = `<div class="default-avatar"><i class="fas fa-user"></i></div>`;
       }
 
+      let contentHtml = '';
+      if (comment) {
+        contentHtml = ` <div class="review-content">
+            <p class="review-text">${comment}</p>
+          </div>`;
+      }
+
       reviewList.append(`
         <div class="review-item">
           <div class="review-body">
@@ -83,19 +90,16 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
           </div>
     
-          <div class="review-content">
-            <p class="review-text">${comment}</p>
-            
-            ${
-              images.length > 0
-                ? `
-              <div class="review-images">
-                ${images.map((image) => `<div class="image-thumbnail"><img src="${image}" alt="Review image" loading="lazy"></div>`).join('')}
-              </div>
-            `
-                : ''
-            }
-          </div>
+          ${contentHtml}
+          ${
+            images.length > 0
+              ? `
+            <div class="review-images">
+              ${images.map((image) => `<div class="image-thumbnail"><img src="${image}" alt="Review image" loading="lazy"></div>`).join('')}
+            </div>
+          `
+              : ''
+          }
     
           <div class="review-footer">
             ${
