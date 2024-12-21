@@ -1,0 +1,1 @@
+2024-12-21 00:00:00 [ERROR]: File: app.js, func: crawl data, error: Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.

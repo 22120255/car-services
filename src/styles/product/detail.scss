@@ -491,42 +491,246 @@
   border-bottom: 2px solid #007bff;
 }
 
-.reviews-container {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
 .review-item {
-  border-bottom: 1px solid #eee;
-  padding: 15px 0;
+  border-bottom: 1.5px solid #ccc; /* Đổi độ đậm từ 1px sang 2px, và màu sắc từ #eee sang #ccc */
+  padding: 20px 0;
 }
-
-.review-item:last-child {
-  border-bottom: none;
-}
-
+// review header
 .review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
-.review-author {
+.review-title {
+  font-size: 24px;
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.review-rating {
+.rating-overview {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.rating-score {
+  min-width: 150px;
+  text-align: center;
+}
+
+.average-rating {
+  font-size: 48px;
+  font-weight: bold;
+  color: #ee4d2d;
+  line-height: 1;
+}
+
+.rating-scale {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.star-display {
+  color: #ee4d2d;
+  font-size: 20px;
+}
+
+.rating-filters {
+  flex-grow: 1;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: #ee4d2d;
+  color: #ee4d2d;
+}
+
+.filter-btn.active {
+  background: #ee4d2d;
+  color: white;
+  border-color: #ee4d2d;
+}
+
+@media (max-width: 768px) {
+  .rating-overview {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .rating-score {
+    width: 100%;
+  }
+
+  .filter-row {
+    justify-content: center;
+  }
+}
+
+// review body
+.review-body {
+  margin-bottom: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center; /* Căn giữa avatar và tên */
+  gap: 15px; /* Khoảng cách giữa avatar và tên */
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  margin-bottom: auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+}
+
+.default-avatar i {
+  font-size: 20px;
+}
+
+.user-details {
+  flex-grow: 1;
+}
+
+.username {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.rating-date {
+  display: flex;
+  flex-direction: column; /* Sắp xếp theo chiều dọc */
+  gap: 10px; /* Khoảng cách giữa sao và ngày */
+}
+
+.stars {
   color: #ffc107;
 }
 
+.review-date {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 0; /* Đảm bảo không có khoảng cách dư thừa */
+}
 .review-content {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9; /* Light background color */
+  border-left: 4px solid #4caf50; /* Green left border for emphasis */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  border-radius: 5px; /* Rounded corners */
 }
 
-.review-date {
-  font-size: 0.8em;
-  color: #6c757d;
+.review-text {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  font-size: 1.1em; /* Slightly larger text for readability */
+  font-weight: 500; /* Make the text bold for better emphasis */
+  color: #333; /* Darker text color for readability */
+  background-color: #fff; /* White background to contrast with the container */
+  padding: 10px;
+  border-radius: 5px; /* Rounded corners to match the review container */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Soft inner shadow */
+}
+
+.review-images {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.image-thumbnail {
+  flex: 0 0 100px;
+  height: 100px;
+}
+
+.image-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.image-thumbnail img:hover {
+  opacity: 0.8;
+}
+
+.review-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.like-button {
+  border: none;
+  background: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.like-button:hover {
+  color: #007bff;
+}
+
+/* Hide scrollbar but keep functionality */
+.review-images::-webkit-scrollbar {
+  height: 6px;
+}
+
+.review-images::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.review-images::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.review-images::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .no-reviews {
@@ -543,7 +747,6 @@
   width: 100%; /* Độ rộng tự động co dãn */
   max-width: 80%; /* Giới hạn độ rộng tối đa */
   margin: auto; /* Canh giữa theo chiều ngang */
-  margin-top: 20px; /* Khoảng cách trên */
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 12px; /* Cải thiện độ bo góc */

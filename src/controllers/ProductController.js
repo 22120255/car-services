@@ -73,12 +73,14 @@ class ProductController {
     try {
       const product = await ProductService.getDetail(req.params.id);
       const totalRating = (await OrderService.updateAverageRating(req.params.id)) || 0;
+      const reviews = await OrderService.getReviews(req.params.id);
       if (!product) return next();
       clearCache(`products/${req.params.id}`);
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
         totalRating,
+        reviews,
       });
     } catch (error) {
       errorLog('ProductController', 'getDetail', error);
@@ -146,9 +148,7 @@ class ProductController {
       const { products, total } = await ProductService.getPaginatedProducts(query, page, limit);
 
       const isAjax = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest';
-      // Kiểm tra header X-Requested-With để phân biệt yêu cầu Ajax
       if (isAjax && req.headers.referer?.includes('/products')) {
-        // Trả về JSON cho yêu cầu Ajax
         return res.status(200).json({
           products: multipleMongooseToObject(products),
           total,
@@ -163,7 +163,6 @@ class ProductController {
   getReviews = async (req, res) => {
     try {
       const reviews = await OrderService.getReviews(req.params.id);
-
       if (!reviews || reviews.length === 0) {
         return res.status(404).json({ message: 'Không tìm thấy đánh giá nào cho sản phẩm này.' });
       }

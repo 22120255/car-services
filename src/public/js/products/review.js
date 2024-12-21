@@ -37,100 +37,98 @@ document.addEventListener('DOMContentLoaded', function () {
       },
     });
   });
+
   function renderReviews(reviews) {
-    const reviewsContainer = document.querySelector('.reviews-container');
-    reviewsContainer.innerHTML = ''; // Clear previous content
+    const reviewList = $('.reviews-container');
+    reviewList.empty();
+    reviews.forEach((review) => {
+      const { avatar, userName, createdAt, rating, comment, images, likes } = review; // Destructure the review
+      let starsHtml = '';
 
-    if (!reviews || reviews.length === 0) {
-      reviewsContainer.innerHTML = '<p class="no-reviews">No reviews yet</p>';
-      return;
-    }
-
-    reviews.forEach((review, reviewIndex) => {
-      // Tạo thẻ chứa từng review
-      const reviewItem = document.createElement('div');
-      reviewItem.classList.add('review-item', 'mb-4', 'pb-3', 'border-bottom');
-
-      // Rating và ngày tạo
-      const reviewHeader = document.createElement('div');
-      reviewHeader.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'mb-2');
-      const ratingDiv = document.createElement('div');
-      ratingDiv.classList.add('rating');
-      const createdAt = document.createElement('small');
-      createdAt.classList.add('text-muted');
-      createdAt.textContent = formatDate(review.createdAt);
-
-      reviewHeader.appendChild(ratingDiv);
-      reviewHeader.appendChild(createdAt);
-
-      // Comment
-      const comment = document.createElement('p');
-      comment.classList.add('mb-2');
-      comment.textContent = review.comment;
-
-      // Review images
-      if (review.images && review.images.length > 0) {
-        const reviewImages = document.createElement('div');
-        reviewImages.classList.add('review-images', 'row', 'g-2', 'mb-2');
-
-        review.images.forEach((image, imageIndex) => {
-          // Thumbnail
-          const imageCol = document.createElement('div');
-          imageCol.classList.add('col-3', 'col-md-2');
-          const thumbnail = document.createElement('img');
-          thumbnail.src = image;
-          thumbnail.alt = 'Review image';
-          thumbnail.classList.add('img-thumbnail', 'review-thumbnail');
-          thumbnail.dataset.bsToggle = 'modal';
-          thumbnail.dataset.bsTarget = `#imageModal${reviewIndex}-${imageIndex}`;
-          imageCol.appendChild(thumbnail);
-          reviewImages.appendChild(imageCol);
-
-          // Modal
-          const modal = document.createElement('div');
-          modal.classList.add('modal', 'fade');
-          modal.id = `imageModal${reviewIndex}-${imageIndex}`;
-          modal.tabIndex = -1;
-          modal.setAttribute('aria-hidden', 'true');
-
-          const modalDialog = document.createElement('div');
-          modalDialog.classList.add('modal-dialog', 'modal-dialog-centered', 'modal-lg');
-
-          const modalContent = document.createElement('div');
-          modalContent.classList.add('modal-content');
-
-          const modalBody = document.createElement('div');
-          modalBody.classList.add('modal-body', 'p-0');
-
-          const modalImage = document.createElement('img');
-          modalImage.src = image;
-          modalImage.alt = 'Review image full size';
-          modalImage.classList.add('img-fluid', 'w-100');
-
-          modalBody.appendChild(modalImage);
-          modalContent.appendChild(modalBody);
-          modalDialog.appendChild(modalContent);
-          modal.appendChild(modalDialog);
-
-          // Append modal to the container
-          reviewsContainer.appendChild(modal);
-        });
-
-        reviewItem.appendChild(reviewImages);
+      if (rating > 0) {
+        const fullStars = Math.floor(rating);
+        for (let i = 1; i <= 5; i++) {
+          if (i <= fullStars) {
+            starsHtml += `<span class="star">★</span>`; // Full star
+          } else {
+            starsHtml += `<span class="star-empty">★</span>`; // Empty star
+          }
+        }
+        starsHtml += `<span class="rating-text">${rating.toFixed(1)}</span>`;
+      } else {
+        starsHtml = `<span class="no-rating">No reviews yet.</span>`;
       }
 
-      // Append header and comment to review item
-      reviewItem.appendChild(reviewHeader);
-      reviewItem.appendChild(comment);
+      let avatarHtml = '';
+      if (avatar) {
+        avatarHtml = `<img src="${avatar}" alt="${userName}" class="user-avatar">`;
+      } else {
+        avatarHtml = `<div class="default-avatar"><i class="fas fa-user"></i></div>`;
+      }
 
-      // Append review item to container
-      reviewsContainer.appendChild(reviewItem);
+      reviewList.append(`
+        <div class="review-item">
+          <div class="review-body">
+            <div class="user-info">
+              ${avatarHtml}
+              <div class="user-details">
+                <span class="username">${userName}</span>
+                <div class="rating-date">
+                  <div class="stars">
+                    ${starsHtml}
+                  </div>
+                  <span class="review-date">${formatDate(createdAt)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <div class="review-content">
+            <p class="review-text">${comment}</p>
+            
+            ${
+              images.length > 0
+                ? `
+              <div class="review-images">
+                ${images.map((image) => `<div class="image-thumbnail"><img src="${image}" alt="Review image" loading="lazy"></div>`).join('')}
+              </div>
+            `
+                : ''
+            }
+          </div>
+    
+          <div class="review-footer">
+            ${
+              likes === 0
+                ? `
+              <button class="like-button">
+                <i class="far fa-thumbs-up"></i>
+                <span>Hữu ích?</span>
+              </button>
+            `
+                : `
+              <button class="like-button liked">
+                <i class="fas fa-thumbs-up"></i>
+                <span>${likes.length}</span>
+              </button>
+            `
+            }
+          </div>
+        </div>
+      `);
     });
   }
 
   // Helper function to format the date
   function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
+
+    // Get hours and minutes manually for better formatting
+    const date = new Date(dateString);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${formattedDate} ${hours}:${minutes}`;
   }
 });

@@ -65,13 +65,23 @@ class OrderService {
 
   getReviews = async (productId) => {
     try {
-      const reviews = await Review.find({ productId }).sort({ createdAt: -1 });
+      const reviews = await Review.find({ productId })
+        .populate({
+          path: 'userId',
+          select: 'fullName',
+        })
+        .sort({ likes: -1, createdAt: -1 });
+
       if (!reviews) {
         return [];
       }
-      return reviews;
+
+      return reviews.map((review) => ({
+        ...review._doc,
+        userName: review.userId.fullName,
+      }));
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
   };
 }
