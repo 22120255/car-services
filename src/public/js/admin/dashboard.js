@@ -81,3 +81,32 @@ document.addEventListener("DOMContentLoaded", function () {
     var chart = new ApexCharts(document.querySelector("#segments-chart"), options);
     chart.render();
 })
+
+//Render data 
+document.addEventListener("DOMContentLoaded", async () => {
+    await $.ajax({
+        url: "/api/user/data/analytics",
+        type: "GET",
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
+})
+
+document.addEventListener("DOMContentLoaded", function () {
+    $("#refresh-btn").on("click", () => {
+        $.ajax({
+            url: "/api/user/data/analytics?refresh=true",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    })
+})

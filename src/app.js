@@ -20,7 +20,7 @@ const passport = require('./config/passport')
 const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
-const { runReport } = require('./config/analytics');
+const { getDataReport } = require('./config/analytics');
 const { errorLog } = require('./utils/customLog');
 
 const app = express()
@@ -67,7 +67,7 @@ app.use(refreshSession)
 // Google Analytics - crawl data every 0h
 cron.schedule('* * * * *', async () => {
     try {
-        await runReport();
+        await getDataReport();
     } catch (error) {
         errorLog("app.js", "crawl data", error);
     }

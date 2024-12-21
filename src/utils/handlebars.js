@@ -52,5 +52,5 @@ module.exports = {
     },
     formatNumber: (number, shorten = false) => Formatter.formatNumber(number, options = { shorten: shorten }),
     formatCurrency: Formatter.formatCurrency,
-    formatDate: Formatter.formatDate,
+    formatDate: (value) => Formatter.formatDate(value),
 }

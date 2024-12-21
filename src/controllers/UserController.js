@@ -366,6 +366,17 @@ class UserController {
       res.status(500).render('error');
     }
   }
+
+  async getAnalytics(req, res) {
+    const refresh = req.query.refresh;
+    try {
+      const analytics = await UserService.getAnalytics({ refresh });
+      res.status(200).json(analytics);
+    } catch (error) {
+      errorLog('UserController', 'getAnalytics', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
 }
 
 module.exports = new UserController();

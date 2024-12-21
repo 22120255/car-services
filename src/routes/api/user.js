@@ -27,4 +27,7 @@ router.delete('/trash/delete/:id', checkRole(['admin', 'sadmin']), userControlle
 router.patch('/trash/restore/:id', checkRole(['admin', 'sadmin']), userController.restoreProduct);
 router.get('/trash', checkRole(['admin', 'sadmin']), userController.trashAndGetProducts);
 
+// dashboard 
+router.get('/data/analytics', checkRole(['admin', 'sadmin']), userController.getAnalytics);
+
 module.exports = router;

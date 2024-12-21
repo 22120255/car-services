@@ -1,8 +1,6 @@
 class Formatter {
     static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'vi-VN' }) {
         const formattedValue = value.toLocaleString(options.locale);
-        console.log('formattedValue', formattedValue);
-        console.log('shorten', options.shorten);
 
         if (!options.shorten) {
             return formattedValue;
@@ -26,13 +24,22 @@ class Formatter {
         }).format(value);
     }
 
-    static formatDate(date) {
-        return new Date(date).toLocaleDateString('vi-VN', {
+    static formatDate(date, options = { showTime: true }) {
+        const dateOptions = {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
-        });
+        };
+
+        if (options.showTime) {
+            dateOptions.hour = '2-digit';
+            dateOptions.minute = '2-digit';
+            dateOptions.second = '2-digit';
+        }
+
+        return new Date(date).toLocaleDateString('vi-VN', dateOptions);
     }
+
 
     static capitalize(text) {
         return text.charAt(0).toUpperCase() + text.slice(1);
