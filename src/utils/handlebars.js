@@ -68,4 +68,8 @@ module.exports = {
   formatDate: function (date) {
     return moment(date).format('DD/MM/YYYY HH:mm');
   },
+
+  roundUp: function (value) {
+    return (Math.ceil(value * 10) / 10).toFixed(1);
+  },
 };

@@ -2,6 +2,7 @@ import { showToast, updateQueryParams } from '../common.js';
 import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ----------------- Declaration -----------------
   const productId = product._id;
   let username = '';
   let createAt = '';
@@ -9,6 +10,52 @@ document.addEventListener('DOMContentLoaded', function () {
   let comment = '';
   let images = [];
   let reviews = [];
+  let currentIndex = 0;
+
+  // ----------------- Event listeners -----------------
+
+  // Hiển thị modal khi click vào thumbnail
+  $(document).on('click', '.image-thumbnail img', function () {
+    const reviewImages = $(this).closest('.review-images').find('img');
+    images = reviewImages
+      .map(function () {
+        return $(this).attr('src');
+      })
+      .get();
+
+    currentIndex = images.indexOf($(this).attr('src'));
+    $('#modalImage').attr('src', images[currentIndex]);
+    $('#imageModal').fadeIn();
+  });
+
+  // Đóng modal khi click nút đóng hoặc nhấn ESC
+  $('.close, .modal').click(function () {
+    $('#imageModal').fadeOut();
+  });
+
+  $(document).on('keydown', function (e) {
+    if (e.key === 'Escape') {
+      $('#imageModal').fadeOut();
+    }
+  });
+
+  // Chuyển sang ảnh trước
+  $('.prev').click(function (e) {
+    e.stopPropagation();
+    if (currentIndex > 0) {
+      currentIndex--;
+      $('#modalImage').attr('src', images[currentIndex]);
+    }
+  });
+
+  // Chuyển sang ảnh tiếp theo
+  $('.next').click(function (e) {
+    e.stopPropagation();
+    if (currentIndex < images.length - 1) {
+      currentIndex++;
+      $('#modalImage').attr('src', images[currentIndex]);
+    }
+  });
 
   $('#reviews-tab').on('click', function (e) {
     e.preventDefault();
@@ -38,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // ----------------- Functions -----------------
   function renderReviews(reviews) {
     const reviewList = $('.review-list');
     reviewList.empty();

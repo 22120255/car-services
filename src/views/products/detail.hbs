@@ -87,8 +87,7 @@
               
               <div class="rating-overview">
                 <div class="rating-score">
-                  <div class="average-rating">{{product.averageRating}}</div>
-                  <div class="rating-scale">on 5</div>
+                  <div class="average-rating">{{roundUp product.averageRating}} <span class="rating-scale">on 5</span></div>
                   <div class="stars">
                   </div>
                 </div>
@@ -192,6 +191,15 @@
     </div>
   </section>
 </div>
+
+<div id="imageModal" class="modal" >
+  <span class="close">&times;</span>
+  <button class="prev">&lt;</button>
+  <img class="modal-content" id="modalImage">
+  <button class="next">&gt;</button>
+</div>
+
+
 <script>
   const product = {{{json product}}};
   const user = {{{json user}}};
