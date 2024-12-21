@@ -1,12 +1,20 @@
 const UserService = require('../services/UserService');
+const DataAnalytics = require('../models/DataAnalytics');
 const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
+const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
 
 class UserController {
   // [GET] /admin/dashboard
-  index(req, res) {
-    res.render('admin/dashboard', { layout: 'admin', title: 'Dashboard' });
+  async index(req, res) {
+    const analyticLatest = await DataAnalytics.findOne().sort({ createdAt: -1 });
+
+    res.render('admin/dashboard', {
+      analyticData: mongooseToObject(analyticLatest),
+      layout: 'admin',
+      title: 'Dashboard'
+    })
   }
 
   // [GET] /admin/users/accounts

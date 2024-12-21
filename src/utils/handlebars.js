@@ -1,4 +1,5 @@
 const moment = require('moment')
+const Formatter = require('./formatter')
 
 module.exports = {
     eq(a, b) {
@@ -49,19 +50,7 @@ module.exports = {
         if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return ''
         return array[index]
     },
-
-    formatNumber: function(number) {
-        return number.toLocaleString('vi-VN');
-    },
-
-    formatCurrency: function(number) {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-        }).format(number);
-    },
-
-    formatDate: function(date) {
-        return moment(date).format('DD/MM/YYYY HH:mm');
-    },
+    formatNumber: (number, shorten = false) => Formatter.formatNumber(number, options = { shorten: shorten }),
+    formatCurrency: Formatter.formatCurrency,
+    formatDate: Formatter.formatDate,
 }
