@@ -63,7 +63,7 @@ app.use(refreshSession);
 // Google Analytics - crawl data every 0h
 cron.schedule('0 * * * *', async () => {
   try {
-    await runReport();
+    // await runReport();
     infoLog("app.js", "crawl data", "Crawl data successfully");
   } catch (error) {
     errorLog("app.js", "crawl data", error);
