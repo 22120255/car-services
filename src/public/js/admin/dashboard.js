@@ -1,3 +1,4 @@
+
 import FunctionApi from '../FunctionApi.js';
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -87,7 +88,10 @@ document.addEventListener("DOMContentLoaded", function () {
 //Render data 
 const fetchData = async (options = { refresh: false }) => {
     try {
-        const getDataAnalytics = new FunctionApi(`/api/user/data/analytics?refresh=${options.refresh}`, 'GET');
+        const getDataAnalytics = new FunctionApi(`/api/user/data/analytics`,
+            {
+                query: { refresh: options.refresh }
+            });
         await getDataAnalytics.call();
 
         return getDataAnalytics.data;
