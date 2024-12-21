@@ -41,7 +41,7 @@ class AuthController {
         // Clear cache before redirecting
         clearAllCache();
 
-        res.status(200).json("Login successfully");
+        res.status(200).json('Login successfully');
       });
     })(req, res, next);
   }

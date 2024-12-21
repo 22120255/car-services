@@ -1,0 +1,46 @@
+<div class='modal fade' id='addReviewModal' tabindex='-1' aria-labelledby='addReviewModalLabel' aria-hidden='true'>
+  <div class='modal-dialog modal-lg'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='addReviewModalLabel'>Write a Review</h5>
+        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+      </div>
+      <div class='modal-body'>
+        <form id='reviewForm'>
+          <div class='mb-4'>
+            <label class='form-label'>Rating</label>
+            <div class='star-rating' id='starRating'>
+              <i class='fa-solid fa-star' data-value='1'></i>
+              <i class='fa-solid fa-star' data-value='2'></i>
+              <i class='fa-solid fa-star' data-value='3'></i>
+              <i class='fa-solid fa-star' data-value='4'></i>
+              <i class='fa-solid fa-star' data-value='5'></i>
+            </div>
+            <p id='ratingError' class='text-danger'></p>
+          </div>
+
+          <div class='mb-4'>
+            <label for='comment' class='form-label'>Your Review</label>
+            <textarea class='form-control' id='comment' rows='4' placeholder='Share your thoughts about the product...'></textarea>
+          </div>
+
+          <div class='mb-4'>
+            <label class='form-label'>Photos</label>
+            <div id='imageContainer' class='d-flex flex-nowrap overflow-auto'>
+              <button type='button' id='addImageBtn' class='btn btn-outline-secondary'>
+                <i class='fas fa-plus'></i>
+              </button>
+            </div>
+            <input type='file' id='imageInput' accept='image/*' style='display: none;' />
+            <input type='hidden' id='imagePaths' name='imagePaths' />
+          </div>
+        </form>
+      </div>
+      <div class='modal-footer justify-content-end'>
+        <button type='button' class='btn btn-secondary me-2' data-bs-dismiss='modal'>Close</button>
+        <button type='button' class='btn btn-primary' id='submitReviewBtn'>Submit Review</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type='module' src='\js\user\reviewModal.js'></script>

@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (jqXHR.status === 200 && response.secure_url) {
             input.val(response.secure_url);
           } else {
-            showToast("Error", 'Failed to upload image')
+            showToast('Error', 'Failed to upload image');
             input.val('');
           }
         },

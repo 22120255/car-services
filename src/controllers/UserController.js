@@ -4,6 +4,7 @@ const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
+const Order = require('../models/Order');
 
 class UserController {
   // [GET] /admin/dashboard
@@ -304,10 +305,8 @@ class UserController {
     try {
       const { id } = req.body;
       const user = await UserService.updateProfile(id, req.body);
-      if (req.isAuthenticated())
-        clearCache(`user/profile/${id}/${req.user._id}`);
-      else
-        clearCache(`user/profile/${id}`);
+      if (req.isAuthenticated()) clearCache(`user/profile/${id}/${req.user._id}`);
+      else clearCache(`user/profile/${id}`);
       res.status(200).json(user);
     } catch (error) {
       errorLog('UserController', 'updateProfile', error.message);
@@ -348,7 +347,7 @@ class UserController {
       const user = await User.findById(req.user._id)
         .populate({
           path: 'metadata.purchasedProducts',
-          select: 'brand model year mileage price images'
+          select: 'brand model year mileage price images',
         })
         .lean();
 
@@ -367,8 +366,9 @@ class UserController {
     }
   }
 
+  // [GET] /api/user/data/analytics
   async getAnalytics(req, res) {
-    const refresh = req.query.refresh;
+    const refresh = req.query.refresh === 'true';
     try {
       const analytics = await UserService.getAnalytics({ refresh });
       res.status(200).json(analytics);
@@ -376,6 +376,14 @@ class UserController {
       errorLog('UserController', 'getAnalytics', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
+  }
+  // [POST] /api/user/review/store
+  async storeReview(req, res) {
+    if (req.file) {
+      // console.log(req.file);
+      return res.json({ secure_url: req.file.path });
+    }
+    return res.status(400).json({ message: 'Failed to upload image' });
   }
 }
 

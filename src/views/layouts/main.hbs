@@ -34,6 +34,7 @@
             const currentPage = window.location.pathname.split("/").pop();
             const currentPath = window.location.pathname;
 
+            console.log(currentPath)
             let customCss = document.createElement("link");
             customCss.rel = "stylesheet";
 
@@ -54,9 +55,13 @@
                     customCss.href = "/css/shops-cart/index.css";
                     break;
                 default:
-                    if (currentPath.startsWith("/user/profile/")) {
+                    if (currentPath.startsWith("/user/purchased-list")) {
+                        customCss.href = "/css/user/purchasedList.css";
+                    }
+                    else if (currentPath.startsWith("/user/profile/")) {
                         customCss.href = "/css/user/profile.css"; 
-                    } else {
+                    } 
+                    else {
                         customCss.href = "/css/product/detail.css";
                     }
                     break;
@@ -86,6 +91,7 @@
 
     {{> Toast}}
     {{> ModalNotify}}
+    {{> ModalReview}}
     <script> 
         const user = {{{json user}}}
     </script>

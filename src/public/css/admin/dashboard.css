@@ -11,13 +11,15 @@ body {
   padding: 1.5rem; }
 
 /* Metric cards */
-.metric-card .metric-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center; }
+.metric-card {
+  min-height: 147px; }
+  .metric-card .metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
 
 .b-l-purple {
   border-left: 4px solid #7c3aed; }

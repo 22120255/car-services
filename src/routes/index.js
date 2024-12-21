@@ -13,6 +13,7 @@ const cartApiRouter = require('./api/cart');
 const productApiRouter = require('./api/product');
 const paymentApiRouter = require('./api/payment');
 const orderApiRouter = require('./api/order');
+const siteApiRouter = require('./api/site');
 
 function route(app) {
   // API
@@ -22,6 +23,7 @@ function route(app) {
   app.use('/api/products', productApiRouter);
   app.use('/api/payment', paymentApiRouter);
   app.use('/api/orders', orderApiRouter);
+  app.use('/api/', siteApiRouter);
 
   // UI
   app.use('/products', productRouter);
