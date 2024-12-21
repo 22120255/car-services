@@ -1,9 +1,9 @@
 const path = require('path');
 require('dotenv').config({
-    path: path.resolve(
-        process.cwd(),
-        process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
-    ),
+  path: path.resolve(
+    process.cwd(),
+    process.env.NODE_ENV === 'production' ? '.env' : '.env.dev'
+  ),
 })
 const cron = require('node-cron');
 const express = require('express')
@@ -21,9 +21,8 @@ const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 const { runReport } = require('./config/analytics');
-const { errorLog } = require('./utils/customLog');
+const { errorLog, infoLog } = require('./utils/customLog');
 const app = express();
-const setupNgrok = require('./config/ngrok');
 const store = db.createSessionStore(session);
 
 // Session
@@ -62,12 +61,13 @@ app.use(navigateUser);
 app.use(refreshSession);
 
 // Google Analytics - crawl data every 0h
-cron.schedule('0 0 * * *', async () => {
-    try {
-        await runReport();
-    } catch (error) {
-        errorLog("app.js", "crawl data", error);
-    }
+cron.schedule('0 * * * *', async () => {
+  try {
+    await runReport();
+    infoLog("app.js", "crawl data", "Crawl data successfully");
+  } catch (error) {
+    errorLog("app.js", "crawl data", error);
+  }
 });
 
 // Template engine
