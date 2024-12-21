@@ -21,7 +21,7 @@ const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 const { runReport } = require('./config/analytics');
-const { errorLog, infoLog } = require('./utils/customLog');
+const { errorLog, infoLog, clearFileLogs } = require('./utils/customLog');
 const app = express();
 const store = db.createSessionStore(session);
 
@@ -93,6 +93,10 @@ route(app);
 
 app.use(catch404);
 app.use(catch500);
+
+// Clear file log
+clearFileLogs('error');
+clearFileLogs('info');
 
 // Listen to port
 app.listen(process.env.PORT, () => {
