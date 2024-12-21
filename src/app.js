@@ -61,7 +61,7 @@ app.use(navigateUser);
 app.use(refreshSession);
 
 // Google Analytics - crawl data every 0h
-cron.schedule('* * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   try {
     await runReport();
     infoLog("app.js", "crawl data", "Crawl data successfully");
