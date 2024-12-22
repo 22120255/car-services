@@ -192,3 +192,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 })
+
+document.addEventListener("DOMContentLoaded", function () {
+    $(".btn-browse-car").on('click', () => {
+        showModal({
+            title: "Notify", content: "You haven't bought anything yet, buy now to see your car", callback: () => {
+                window.location.href = '/products';
+            }
+        });
+    })
+});

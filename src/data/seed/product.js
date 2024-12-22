@@ -2,6 +2,7 @@ const Chance = require('chance');
 const mongoose = require('mongoose');
 const Product = require('../../models/Product');
 const Cart = require('../../models/Cart');
+const Order = require('../../models/Order');
 require('dotenv').config({ path: process.env.NODE_ENV === 'development' ? `.env.dev` : '.env' });
 
 const chance = new Chance();
@@ -128,6 +129,9 @@ const seedProducts = async () => {
 
     // Delete existing carts
     await Cart.deleteMany({});
+    console.log('Deleted existing carts');
+
+    await Order.deleteMany({});
     console.log('Deleted existing carts');
 
     // Generate mock products

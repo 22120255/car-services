@@ -417,6 +417,7 @@ class UserController {
     const refresh = req.query.refresh === 'true';
     try {
       const analytics = await UserService.getAnalytics({ refresh });
+
       res.status(200).json(analytics);
     } catch (error) {
       errorLog('UserController', 'getAnalytics', error.message);

@@ -64,15 +64,15 @@ async function loadCartData() {
           cart = data; // Lưu lại dữ liệu cart nếu có
         },
         404: function () {
-          console.error('Cart data not found.');
+          // console.error('Cart data not found.');
         },
         500: function () {
-          console.error('Server error occurred.');
+          // console.error('Server error occurred.');
         },
       },
     });
   } catch (error) {
-    console.error('Error loading cart data:', error);
+    // console.error('Error loading cart data:', error);
   }
   return cart;
 }
@@ -88,5 +88,6 @@ function updateQueryParams(paramsToUpdate) {
   });
   window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
+
 
 export { showToast, showModal, loadCartData, updateQueryParams };
