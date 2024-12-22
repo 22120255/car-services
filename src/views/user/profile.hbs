@@ -207,27 +207,30 @@
           <div class='card-body'>
             {{#if _user.metadata.purchasedProducts}}
               <div class='car-list'>
-                {{#each _user.metadata.purchasedProducts}}
-                  <div class='car-item'>
-                    <img src='{{this.image}}' alt='{{this.model}}' class='car-thumbnail' />
-                    <div class='car-details'>
-                      <h3>{{this.brand}}
-                        {{this.model}}</h3>
-                      <p class='car-info'><i class='fas fa-calendar'></i>
-                        {{this.year}}</p>
-                      <p class='car-info'><i class='fas fa-tachometer-alt'></i>
-                        {{this.mileage}}
-                        km</p>
-                      <a href='/user/purchased-list' class='btn btn-custom btn-primary'>View details</a>
+                  {{#each _user.metadata.purchasedProducts}}
+                    {{#if @first}}
+                    <div class='car-item'>
+                      <img src='{{this.product.images.[0]}}' alt='{{this.product.model}}' class='car-thumbnail' />
+                      <div class='car-details'>
+                      <h3>{{this.product.brand}} {{this.product.model}}</h3>
+                      <p class='car-info'><i class='fas fa-calendar'></i> {{this.product.year}}</p>
+                      <p class='car-info'><i class='fas fa-tachometer-alt'></i> {{this.product.mileage}} km</p>
+                      </div>
                     </div>
-                  </div>
+                    <div class="text-center">
+                      <div>Click view details to see the list of cars you've bought</div>
+                      <div>
+                        <a href='/user/purchased-list' class='btn btn-custom btn-primary'>View details</a>
+                      </div>
+                    </div>
+                    {{/if}}
                 {{/each}}
               </div>
             {{else}}
               <div class='no-cars'>
                 <i class='fas fa-car-side empty-icon'></i>
                 <p>You haven't purchased any cars yet</p>
-                <a href='/product' class='btn btn-custom btn-primary'>Browse Cars</a>
+                <a href='/products' class='btn btn-custom btn-primary'>Browse Cars</a>
               </div>
             {{/if}}
           </div>

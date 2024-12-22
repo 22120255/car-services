@@ -93,7 +93,6 @@ const fetchData = async (options = { refresh: false }) => {
                 query: { refresh: options.refresh }
             });
         await getDataAnalytics.call();
-        console.log(getDataAnalytics.data);
 
         return getDataAnalytics.data;
     } catch (error) {

@@ -11,6 +11,9 @@ class Formatter {
     };
 
     static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'en-US' }) {
+        if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
+            return '0';
+        }
         const formattedValue = value.toLocaleString(Formatter.mapping[options.locale].locale);
 
         if (!options.shorten) {
@@ -27,8 +30,13 @@ class Formatter {
             return (value / 1_000_000_000).toFixed(options.decimal) + 'B';
         }
     }
-
     static formatCurrency(value, locale = 'en-US') {
+        if (value === undefined || value === null || isNaN(Number(value))) {
+            value = 0;
+        } else {
+            value = Number(value);
+        }
+
         return new Intl.NumberFormat(Formatter.mapping[locale].locale, {
             style: 'currency',
             currency: Formatter.mapping[locale].currency,

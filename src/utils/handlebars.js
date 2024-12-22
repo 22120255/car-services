@@ -56,6 +56,4 @@ module.exports = {
   roundUp: function (value) {
     return (Math.ceil(value * 10) / 10).toFixed(1);
   },
-};
-
-
+}
