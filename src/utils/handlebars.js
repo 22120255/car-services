@@ -50,7 +50,15 @@ module.exports = {
     if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return ''
     return array[index]
   },
+
+
+  roundUp: function (value) {
+    return (Math.ceil(value * 10) / 10).toFixed(1);
+  },
+};
+
   formatNumber: (number, shorten = false) => Formatter.formatNumber(number, options = { shorten: shorten }),
   formatCurrency: Formatter.formatCurrency,
   formatDate: (value) => Formatter.formatDate(value),
 }
+

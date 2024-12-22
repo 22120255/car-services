@@ -1,66 +1,69 @@
-<div class="purchased-list-container">
-    <div class="purchased-header">
-        <h1><i class="fas fa-shopping-bag"></i> Danh sách xe đã mua</h1>
-    </div>
+<div class="purchased-list-wrapper">
+    <div class="purchased-list-container">
+        <div class="purchased-header">
+            <h1><i class="fas fa-shopping-bag"></i> Danh sách xe đã mua</h1>
+        </div>
 
-    <div class="purchased-content">
-        {{#if user.metadata.purchasedProducts.length}}
-            <div class="car-grid">
-                {{#each user.metadata.purchasedProducts}}
-                    <div class="car-card">
-                        <div class="car-image" >                            
-                            <img src="{{this.images.[0]}}" alt="{{this.brand}} {{this.model}}">
-                        </div>
-                        <div class="car-details">
-                            <h3>{{this.brand}} {{this.model}}</h3>
-                            <div class="car-info">
-                                <p><i class="fas fa-calendar"></i> Year: {{this.year}}</p>
-                                <p><i class="fas fa-tachometer-alt"></i> Mileage: {{formatNumber this.mileage}} km</p>
-                                <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.price}}</p>
+        <div class="purchased-content">
+            {{#if user.metadata.purchasedProducts.length}}
+                <div class="car-grid">
+                    {{#each user.metadata.purchasedProducts}}
+                        <div class="car-card">
+                            <div class="car-image">                            
+                                <img src="{{this.images.[0]}}" alt="{{this.brand}} {{this.model}}">
                             </div>
-                            <div class="purchase-info">
-                                {{#with (lookup ../user.metadata.recentActivity @index)}}
-                                    <p><i class="fas fa-clock"></i> Purchase date: {{formatDate this.date}}</p>
-                                {{/with}}
-                                <p><i class="fas fa-check-circle"></i> Status: Bought</p>
+                            <div class="car-details">
+                                <h3>{{this.brand}} {{this.model}}</h3>
+                                <div class="car-info">
+                                    <p><i class="fas fa-calendar"></i> Year: {{this.year}}</p>
+                                    <p><i class="fas fa-tachometer-alt"></i> Mileage: {{formatNumber this.mileage}} km</p>
+                                    <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.price}}</p>
+                                </div>
+                                <div class="purchase-info">
+                                    {{#with (lookup ../user.metadata.recentActivity @index)}}
+                                        <p><i class="fas fa-clock"></i> Purchase date: {{formatDate this.date}}</p>
+                                    {{/with}}
+                                    <p><i class="fas fa-check-circle"></i> Status: Bought</p>
+                                </div>
+                                <a href="/products/{{this._id}}" class="btn btn-primary btn-view-details">
+                                    <i class="fas fa-eye"></i> View details
+                                </a>
+                                {{#if (eq this.reviewStatus "reviewed")}}
+                                    <a class="btn btn-secondary btn-reviewed" disabled>
+                                        <i class="fas fa-check"></i> Already reviewed
+                                    </a>
+                                {{else}}
+                                    <a class="btn btn-secondary btn-rate-product" data-id="{{this._id}}">
+                                        <i class="fas fa-star"></i> Leave a review
+                                    </a>
+                                {{/if}}
                             </div>
-                            <a href="/products/{{this._id}}" class="btn btn-primary btn-view-details">
-                                <i class="fas fa-eye"></i> View details
-                            </a>
-                            {{#if (eq this.reviewStatus "reviewed")}}
-                                <a class="btn btn-secondary btn-reviewed" disabled>
-                                    <i class="fas fa-check"></i> Already reviewed
-                                </a>
-                            {{else}}
-                                <a  class="btn btn-secondary btn-rate-product" data-id="{{this._id}}">
-                                    <i class="fas fa-star"></i> Leave a review
-                                </a>
-                            {{/if}}
-                            
-
                         </div>
-                    </div>
-                {{/each}}
-            </div>
-        {{else}}
-            <div class="empty-state">
-                <i class="fas fa-car-side empty-icon"></i>
-                <p>Bạn chưa mua xe nào</p>
-                <a href="/products" class="btn btn-primary">Xem danh sách xe</a>
-            </div>
-        {{/if}}
+                    {{/each}}
+                </div>
+            {{else}}
+                <div class="empty-state">
+                    <i class="fas fa-car-side empty-icon"></i>
+                    <p>Bạn chưa mua xe nào</p>
+                    <a href="/products" class="btn btn-primary">Xem danh sách xe</a>
+                </div>
+            {{/if}}
+        </div>
     </div>
 </div>
 <script type="module" src="/js/user/purchasedList.js"></script>
 
-
 <style>
-
 /* Purchased List Styles */
+.purchased-list-wrapper {
+    background-color: #f8f9fa;
+    padding: 50px 0;
+}
+
 .purchased-list-container {
-    padding: 2rem;
     max-width: 1200px;
-    margin: 50px auto;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
 .purchased-header {
@@ -78,8 +81,8 @@
 
 .car-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
 }
 
 .car-card {
@@ -89,6 +92,8 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 .car-card:hover {
@@ -114,12 +119,15 @@
 
 .car-details {
     padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .car-details h3 {
     margin-bottom: 1rem;
     color: #333;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
@@ -136,8 +144,9 @@
 .empty-state {
     text-align: center;
     padding: 4rem;
-    background-color: #f8f9fa;
+    background-color: #fff;
     border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .empty-icon {
@@ -153,19 +162,17 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
     margin-top: 0.5rem;
 }
 
 .btn-view-details {
     background-color: #007bff;
-    color:#212529;
+    color: #fff;
 }
 
 .btn-view-details:hover {
-    background-color: #007bff;
-        color: white;
-
+    background-color: #0056b3;
 }
 
 .btn-rate-product {
@@ -174,9 +181,33 @@
 }
 
 .btn-rate-product:hover {
-    background-color: #07ffea;
-            color: white;
-
+    background-color: #06e6d3;
+    color: #fff;
 }
 
+.btn-reviewed {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+@media (max-width: 1200px) {
+    .car-details h3 {
+        font-size: 1.1rem;
+    }
+    .car-info p, .purchase-info p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .car-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .car-grid {
+        grid-template-columns: 1fr;
+    }
+}
 </style>

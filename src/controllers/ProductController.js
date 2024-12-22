@@ -75,11 +75,12 @@ class ProductController {
       const totalRating = (await OrderService.updateAverageRating(req.params.id)) || 0;
       const reviews = await OrderService.getReviews(req.params.id);
       if (!product) return next();
+      clearCache(`products/${req.params.id}`);
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
         totalRating,
-        reviews: multipleMongooseToObject(reviews),
+        reviews,
       });
     } catch (error) {
       errorLog('ProductController', 'getDetail', error);
@@ -147,9 +148,7 @@ class ProductController {
       const { products, total } = await ProductService.getPaginatedProducts(query, page, limit);
 
       const isAjax = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest';
-      // Kiểm tra header X-Requested-With để phân biệt yêu cầu Ajax
       if (isAjax && req.headers.referer?.includes('/products')) {
-        // Trả về JSON cho yêu cầu Ajax
         return res.status(200).json({
           products: multipleMongooseToObject(products),
           total,
@@ -157,6 +156,40 @@ class ProductController {
       }
     } catch (error) {
       errorLog('ProductController', 'productsAndGetProducts', error);
+    }
+  };
+
+  // [GET] /api/products/reviews/:id
+  getReviews = async (req, res) => {
+    try {
+      const { filter } = req.query;
+      const { reviews } = await OrderService.getReviews(req.params.id, filter);
+      if (!reviews || reviews.length === 0) {
+        return res.status(404).json({ message: 'Không tìm thấy đánh giá nào cho sản phẩm này.' });
+      }
+      console.log('filter:', filter, typeof filter);
+      return res.status(200).json({ reviews });
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        res.status(400).json({ message: 'Dữ liệu yêu cầu không hợp lệ.' });
+      } else if (error.name === 'NotFoundError') {
+        res.status(404).json({ message: 'Sản phẩm không tồn tại.' });
+      } else {
+        errorLog('ProductController', 'getReviews', error);
+        res.status(500).json({ message: 'Có lỗi xảy ra khi lấy đánh giá sản phẩm.' });
+      }
+    }
+  };
+
+  // [GET] /api/products/reviews/filter/:id
+  statsReviews = async (req, res) => {
+    try {
+      const stats = await OrderService.getAllReviewStats(req.params.id);
+      console.log('stats:', stats);
+      res.status(200).json({ stats });
+    } catch (error) {
+      errorLog('ProductController', 'statsReviews', error);
+      res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số lượng đánh giá sản phẩm.' });
     }
   };
 }
