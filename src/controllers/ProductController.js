@@ -3,6 +3,7 @@ const OrderService = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
 const { clearCache, clearAllCache } = require('../utils/helperCache');
+const { error } = require('winston');
 
 class ProductController {
   index(req, res) {
@@ -164,20 +165,11 @@ class ProductController {
     try {
       const { filter } = req.query;
       const { reviews } = await OrderService.getReviews(req.params.id, filter);
-      if (!reviews || reviews.length === 0) {
-        return res.status(404).json({ message: 'Không tìm thấy đánh giá nào cho sản phẩm này.' });
-      }
-      console.log('filter:', filter, typeof filter);
+      console.log('reviews:', reviews);
       return res.status(200).json({ reviews });
     } catch (error) {
-      if (error.name === 'ValidationError') {
-        res.status(400).json({ message: 'Dữ liệu yêu cầu không hợp lệ.' });
-      } else if (error.name === 'NotFoundError') {
-        res.status(404).json({ message: 'Sản phẩm không tồn tại.' });
-      } else {
-        errorLog('ProductController', 'getReviews', error);
-        res.status(500).json({ message: 'Có lỗi xảy ra khi lấy đánh giá sản phẩm.' });
-      }
+      console.error('Error in getReviews:', error);
+      return res.status(500).json({ message: 'Có lỗi xảy ra khi lấy đánh giá sản phẩm.' });
     }
   };
 
@@ -188,7 +180,6 @@ class ProductController {
       console.log('stats:', stats);
       res.status(200).json({ stats });
     } catch (error) {
-      errorLog('ProductController', 'statsReviews', error);
       res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số lượng đánh giá sản phẩm.' });
     }
   };

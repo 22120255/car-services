@@ -1,6 +1,7 @@
 const Review = require('../models/Review');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const { error } = require('winston');
 
 class OrderService {
   async updateAverageRating(productId) {
@@ -33,7 +34,6 @@ class OrderService {
         return { error: true, message: 'Bạn phải hoàn tất đơn hàng và nhận sản phẩm để đánh giá.' };
       }
 
-      // Tìm sản phẩm trong danh sách items
       const orderItem = order.items.find((item) => item.productId.toString() === productId && item.reviewStatus === 'not-reviewed');
 
       if (!orderItem) {
@@ -70,7 +70,7 @@ class OrderService {
 
       if (Number.isFinite(filterValue)) {
         queryConditions.rating = Number(filterValue);
-      } else if (filter === 'comment') {
+      } else if (filter === 'comments') {
         queryConditions.comment = { $exists: true, $ne: '' };
       } else if (filter === 'images-videos') {
         queryConditions.images = { $exists: true, $ne: [] };
@@ -81,7 +81,9 @@ class OrderService {
           select: 'fullName avatar',
         })
         .sort({ likes: -1, createdAt: -1 });
-
+      if (!reviews || reviews.length === 0) {
+        return { reviews: [] };
+      }
       return {
         reviews: reviews.map((review) => ({
           ...review._doc,
