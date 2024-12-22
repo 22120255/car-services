@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
   $('.btn-rate-product').on('click', function (e) {
     e.preventDefault();
     productId = $(this).data('id');
-    console.log('Product ID:', productId);
     const stars = document.querySelectorAll('#starRating i');
     stars.forEach((s) => s.classList.remove('selected', 'hover'));
     starRatingValue = 0;
@@ -130,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const data = { productId, rating, comment, images };
+    console.log('Data:', data);
     $.ajax({
       url: '/api/orders/review',
       type: 'POST',

@@ -40,6 +40,8 @@ class OrderService {
         return { error: true, message: 'Sản phẩm này đã được đánh giá hoặc không hợp lệ.' };
       }
 
+      console.log('Order item:', orderItem);
+      console.log(userId, productId, rating, comment, images);
       // Thêm review
       const review = new Review({
         userId,
@@ -48,7 +50,11 @@ class OrderService {
         comment,
         images,
       });
+
+      console.log('Review:', review);
       await review.save();
+
+      console.log('Order item:', orderItem);
 
       // Cập nhật trạng thái review của sản phẩm trong đơn hàng
       orderItem.reviewStatus = 'reviewed';
