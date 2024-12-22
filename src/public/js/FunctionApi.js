@@ -1,7 +1,6 @@
 import { showToast } from './common.js';
 
 class FunctionApi {
-    loading = false;
     error = null;
     data = null;
 
@@ -19,7 +18,6 @@ class FunctionApi {
     }
 
     async call() {
-        this.loading = true;
         this.error = null;
         this.data = null;
 
@@ -44,8 +42,6 @@ class FunctionApi {
         } catch (err) {
             this.error = err;
             throw err;
-        } finally {
-            this.loading = false;
         }
     }
 }

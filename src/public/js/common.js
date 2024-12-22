@@ -90,4 +90,5 @@ function updateQueryParams(paramsToUpdate) {
   window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
 
+
 export { showToast, showModal, loadCartData, updateQueryParams };
