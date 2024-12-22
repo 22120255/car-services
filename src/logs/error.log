@@ -1,8 +1,0 @@
-2024-12-21 00:00:00 [ERROR]: File: app.js, func: crawl data, error: Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
-2024-12-22 00:00:00 [ERROR]: File: app.js, func: crawl data, error: Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
-2024-12-22 01:57:17 [ERROR]: File: ProductController, func: getDetail, error: Error: Cannot read properties of undefined (reading 'likes')
-2024-12-22 02:00:28 [ERROR]: File: ProductController, func: getDetail, error: Error: Cannot read properties of undefined (reading 'likes')
-2024-12-22 02:02:27 [ERROR]: File: ProductController, func: getDetail, error: Error: Cannot read properties of undefined (reading 'likes')
-2024-12-22 02:05:55 [ERROR]: File: ProductController, func: getDetail, error: Error: Cannot read properties of undefined (reading 'likes')
-2024-12-22 02:08:15 [ERROR]: File: ProductController, func: getDetail, error: Error: Cannot read properties of undefined (reading 'rating')
-2024-12-22 02:17:43 [ERROR]: File: ProductController, func: getReviews, error: Error: isNumeric is not defined

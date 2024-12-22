@@ -1,5 +1,9 @@
 class Formatter {
     static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'vi-VN' }) {
+        if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
+            return '0';
+        }
+
         const formattedValue = value.toLocaleString(options.locale);
 
         if (!options.shorten) {
@@ -18,6 +22,16 @@ class Formatter {
     }
 
     static formatCurrency(value, currency = 'VND') {
+        if (value === undefined || value === null || isNaN(Number(value))) {
+            value = 0;
+        } else {
+            value = Number(value);
+        }
+
+        if (typeof currency !== 'string') {
+            throw new RangeError('Invalid currency code');
+        }
+        
         return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
             currency,
