@@ -31,7 +31,7 @@ function showToast(type, message) {
 - if callback return false -> modal will not close
 - onShowCallback will be done when modal shown
 */
-function showModal({ title, content, btnSubmit = 'OK', callback = () => true, onShowCallback = () => { } }) {
+function showModal({ title, content, btnSubmit = 'OK', callback = () => true, onShowCallback = () => {} }) {
   const modal = $('#notify-modal');
 
   modal.find('.modal-title').text(title);
@@ -43,8 +43,7 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
     .find('.btn-submit')
     .off('click')
     .on('click', async () => {
-      if ((await callback()) !== false)
-        modal.modal('hide');
+      if ((await callback()) !== false) modal.modal('hide');
     });
 
   modal.off('shown.bs.modal').on('shown.bs.modal', () => {
