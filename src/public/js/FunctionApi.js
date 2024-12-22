@@ -34,7 +34,7 @@ class FunctionApi {
                     },
                     error(err) {
                         reject(err);
-                        if (this.options.showToast) {
+                        if (this.options?.showToast) {
                             showToast('error', err.responseJSON?.message || 'Request failed');
                         }
                     }

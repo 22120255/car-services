@@ -23,7 +23,7 @@ class AuthController {
       }
 
       if (!user) {
-        return res.status(400).json({ message: 'Login failed' });
+        return res.status(400).json({ message: 'Incorrect email or password' });
       }
 
       // Check if the user's account is verified

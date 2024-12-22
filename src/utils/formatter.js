@@ -1,6 +1,17 @@
 class Formatter {
-    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'vi-VN' }) {
-        const formattedValue = value.toLocaleString(options.locale);
+    static mapping = {
+        'en-US': {
+            currency: 'USD',
+            locale: 'en-US',
+        },
+        'vi-VN': {
+            currency: 'VND',
+            locale: 'vi-VN',
+        },
+    };
+
+    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'en-US' }) {
+        const formattedValue = value.toLocaleString(Formatter.mapping[options.locale].locale);
 
         if (!options.shorten) {
             return formattedValue;
@@ -17,14 +28,14 @@ class Formatter {
         }
     }
 
-    static formatCurrency(value, currency = 'VND') {
-        return new Intl.NumberFormat('vi-VN', {
+    static formatCurrency(value, locale = 'en-US') {
+        return new Intl.NumberFormat(Formatter.mapping[locale].locale, {
             style: 'currency',
-            currency,
+            currency: Formatter.mapping[locale].currency,
         }).format(value);
     }
 
-    static formatDate(date, options = { showTime: true }) {
+    static formatDate(date, options = { showTime: true, locale: 'en-US' }) {
         const dateOptions = {
             year: 'numeric',
             month: 'long',
@@ -37,7 +48,7 @@ class Formatter {
             dateOptions.second = '2-digit';
         }
 
-        return new Date(date).toLocaleDateString('vi-VN', dateOptions);
+        return new Date(date).toLocaleDateString(Formatter.mapping[options.locale].locale, dateOptions);
     }
 
 
