@@ -335,7 +335,6 @@ class UserController {
 
   async getPurchasedList(req, res) {
     try {
-      // Lấy thông tin user với populate purchasedProducts từ bảng Product
       const user = await User.findById(req.user._id)
         .populate({
           path: 'metadata.purchasedProducts',
@@ -343,7 +342,6 @@ class UserController {
         })
         .lean();
 
-      // Lấy các đơn hàng của người dùng, populate các sản phẩm trong order
       const orders = await Order.find({ userId: req.user._id })
         .select('items')
         .populate({
@@ -352,7 +350,6 @@ class UserController {
         })
         .lean();
 
-      // Tạo một mảng lưu trữ reviewStatus cho từng purchasedProduct
       const productReviewStatuses = {};
 
       // Duyệt qua từng đơn hàng và tạo một mapping giữa productId và reviewStatus
@@ -382,7 +379,7 @@ class UserController {
       });
     } catch (error) {
       console.error('Error getting purchased cars:', error);
-      res.status(500).render('error'); // Lỗi render view
+      res.status(500).render('error');
     }
   }
 
