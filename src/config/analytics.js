@@ -5,7 +5,7 @@ const propertyId = "465737102";
 
 const analyticsDataClient = new BetaAnalyticsDataClient();
 
-async function runReport() {
+async function getDataReport() {
     const [response] = await analyticsDataClient.runReport({
         property: `properties/${propertyId}`,
         dateRanges: [
@@ -30,4 +30,4 @@ async function runReport() {
     }
 }
 
-module.exports = { runReport };
+module.exports = { getDataReport };

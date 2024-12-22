@@ -176,7 +176,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // render products
   function renderProducts(products) {
-    console.log(1);
     $('#trashTable').empty();
     let count = 0;
     if (!products || products.length === 0) {
