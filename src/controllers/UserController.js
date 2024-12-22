@@ -335,13 +335,41 @@ class UserController {
 
   async getPurchasedList(req, res) {
     try {
-      // Lấy thông tin user với populate purchasedProducts
+      // Lấy thông tin user với populate purchasedProducts từ bảng Product
       const user = await User.findById(req.user._id)
         .populate({
           path: 'metadata.purchasedProducts',
           select: 'brand model year mileage price images',
         })
         .lean();
+
+      // Lấy các đơn hàng của người dùng, populate các sản phẩm trong order
+      const orders = await Order.find({ userId: req.user._id })
+        .select('items')
+        .populate({
+          path: 'items.productId',
+          select: 'reviewStatus',
+        })
+        .lean();
+
+      // Tạo một mảng lưu trữ reviewStatus cho từng purchasedProduct
+      const productReviewStatuses = {};
+
+      // Duyệt qua từng đơn hàng và tạo một mapping giữa productId và reviewStatus
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          console.log(item);
+          const productId = item.productId._id.toString();
+          const reviewStatus = item.reviewStatus;
+          productReviewStatuses[productId] = reviewStatus;
+        });
+      });
+
+      // Thêm reviewStatus vào metadata.purchasedProducts
+      user.metadata.purchasedProducts.forEach((product) => {
+        const reviewStatus = productReviewStatuses[product._id.toString()];
+        product.reviewStatus = reviewStatus || 'not-reviewed';
+      });
 
       // Sắp xếp recentActivity theo ngày mua mới nhất
       if (user.metadata.recentActivity) {
@@ -354,7 +382,7 @@ class UserController {
       });
     } catch (error) {
       console.error('Error getting purchased cars:', error);
-      res.status(500).render('error');
+      res.status(500).render('error'); // Lỗi render view
     }
   }
 
