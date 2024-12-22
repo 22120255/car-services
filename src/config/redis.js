@@ -4,25 +4,25 @@ const client = redis.createClient({
     url: process.env.REDIS_URL,
     socket: {
         reconnectStrategy: (retries) => {
-            // Cố gắng kết nối lại sau 1 giây
             if (retries >= 5) {
                 console.error('Không thể kết nối tới Redis sau 5 lần thử.')
                 return new Error('Redis reconnect failed')
             }
-            return 1000 // 1 giây
+            return 1000
         },
-        timeout: 10000, // Tăng thời gian chờ kết nối (10 giây)
+        timeout: 10000,
     },
 })
 
-client.on('connect', () => {
-    console.log('Connected to Redis server')
-})
+async function connectToRedis() {
+    try {
+        await client.connect();
+        console.log('Redis connected successfully');
+    } catch (error) {
+        console.error('Failed to connect to Redis:', error);
+    }
+}
 
-client.on('error', (err) => {
-    console.error('Redis error:', err)
-})
-
-client.connect().catch(console.error)
+connectToRedis();
 
 module.exports = client

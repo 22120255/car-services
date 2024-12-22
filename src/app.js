@@ -21,9 +21,11 @@ const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 const { runReport } = require('./config/analytics');
-const { errorLog, infoLog, clearFileLogs } = require('./utils/customLog');
-const app = express();
-const store = db.createSessionStore(session);
+const { errorLog, clearFileLogs } = require('./utils/customLog');
+const limiter = require('./middleware/limiterMiddleware');
+
+const app = express()
+const store = db.createSessionStore(session)
 
 // Session
 app.use(
@@ -59,12 +61,12 @@ if (process.env.NODE_ENV === 'development') {
 // Custom middleware
 app.use(navigateUser);
 app.use(refreshSession);
+app.use('/api/', limiter)
 
 // Google Analytics - crawl data every 0h
-cron.schedule('0 * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   try {
     await runReport();
-    infoLog("app.js", "crawl data", "Crawl data successfully");
   } catch (error) {
     errorLog("app.js", "crawl data", error);
   }
