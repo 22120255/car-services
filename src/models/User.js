@@ -35,9 +35,15 @@ const UserSchema = new mongoose.Schema(
       address: { type: String },
       purchasedProducts: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
-        },
+          product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+          },
+          purchaseDate:{
+            type: Date,
+            default: Date.now,
+          },
+        }
       ],
       favoriteProducts: [
         {

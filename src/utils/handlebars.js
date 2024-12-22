@@ -55,7 +55,6 @@ module.exports = {
   roundUp: function (value) {
     return (Math.ceil(value * 10) / 10).toFixed(1);
   },
-};
 
   formatNumber: (number, shorten = false) => Formatter.formatNumber(number, options = { shorten: shorten }),
   formatCurrency: Formatter.formatCurrency,

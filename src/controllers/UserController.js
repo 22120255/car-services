@@ -344,11 +344,12 @@ class UserController {
   async getPurchasedList(req, res) {
     try {
       const user = await User.findById(req.user._id)
-        .populate({
-          path: 'metadata.purchasedProducts',
-          select: 'brand model year mileage price images',
-        })
-        .lean();
+      .populate({
+        path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
+        select: 'brand model year mileage price images reviewStatus'
+      })
+      .lean()
+      .exec();
 
       const orders = await Order.find({ userId: req.user._id })
         .select('items')

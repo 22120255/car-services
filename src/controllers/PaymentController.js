@@ -195,11 +195,18 @@ class PaymentController {
           user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
 
           // Thêm các sản phẩm mới vào purchasedProducts
-          user.metadata.purchasedProducts.push(...purchasedProducts);
+          const purchaseDate = new Date();
+          const purchasedProductsData = purchasedProducts.map(product => ({
+            product: product._id,  // Lưu ID của sản phẩm
+            purchaseDate: purchaseDate,
+          }));
+
+          // Push data vào mảng purchasedProducts
+          user.metadata.purchasedProducts.push(...purchasedProductsData);
 
           user.metadata.recentActivity.push({
             type: 'purchase',
-            date: new Date(),
+            date: purchaseDate,
             description: `Purchased ${purchasedProducts.length} products`,
           });
 

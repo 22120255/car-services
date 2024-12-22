@@ -1,28 +1,26 @@
 <div class="purchased-list-wrapper">
     <div class="purchased-list-container">
         <div class="purchased-header">
-            <h1><i class="fas fa-shopping-bag"></i> Danh sách xe đã mua</h1>
+            <h1><i class="fas fa-shopping-bag"></i> List of cars you've bought</h1>
         </div>
 
         <div class="purchased-content">
             {{#if user.metadata.purchasedProducts.length}}
                 <div class="car-grid">
                     {{#each user.metadata.purchasedProducts}}
-                        <div class="car-card">
-                            <div class="car-image">                            
-                                <img src="{{this.images.[0]}}" alt="{{this.brand}} {{this.model}}">
+                    <div class="car-card">
+                            <div class="car-image">
+                                <img src="{{this.product.images.[0]}}" alt="{{this.product.brand}} {{this.product.model}}">
                             </div>
                             <div class="car-details">
-                                <h3>{{this.brand}} {{this.model}}</h3>
+                                <h3>{{this.product.brand}} {{this.product.model}}</h3>
                                 <div class="car-info">
-                                    <p><i class="fas fa-calendar"></i> Year: {{this.year}}</p>
-                                    <p><i class="fas fa-tachometer-alt"></i> Mileage: {{formatNumber this.mileage}} km</p>
-                                    <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.price}}</p>
+                                    <p><i class="fas fa-calendar"></i> Year: {{this.product.year}}</p>
+                                    <p><i class="fas fa-tachometer-alt"></i> Mileage: {{formatNumber this.product.mileage}} km</p>
+                                    <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.purchasePrice}}</p>
                                 </div>
                                 <div class="purchase-info">
-                                    {{#with (lookup ../user.metadata.recentActivity @index)}}
-                                        <p><i class="fas fa-clock"></i> Purchase date: {{formatDate this.date}}</p>
-                                    {{/with}}
+                                    <p><i class="fas fa-clock"></i> Purchase date: {{formatDate this.purchaseDate}}</p>
                                     <p><i class="fas fa-check-circle"></i> Status: Bought</p>
                                 </div>
                                 <a href="/products/{{this._id}}" class="btn btn-primary btn-view-details">
@@ -44,8 +42,8 @@
             {{else}}
                 <div class="empty-state">
                     <i class="fas fa-car-side empty-icon"></i>
-                    <p>Bạn chưa mua xe nào</p>
-                    <a href="/products" class="btn btn-primary">Xem danh sách xe</a>
+                    <p>You haven't bought any cars</p>
+                    <a href="/products" class="btn btn-primary">See cars list</a>
                 </div>
             {{/if}}
         </div>
