@@ -343,13 +343,38 @@ class UserController {
 
   async getPurchasedList(req, res) {
     try {
-      // Lấy thông tin user với populate purchasedProducts
       const user = await User.findById(req.user._id)
         .populate({
           path: 'metadata.purchasedProducts',
           select: 'brand model year mileage price images',
         })
         .lean();
+
+      const orders = await Order.find({ userId: req.user._id })
+        .select('items')
+        .populate({
+          path: 'items.productId',
+          select: 'reviewStatus',
+        })
+        .lean();
+
+      const productReviewStatuses = {};
+
+      // Duyệt qua từng đơn hàng và tạo một mapping giữa productId và reviewStatus
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          console.log(item);
+          const productId = item.productId._id.toString();
+          const reviewStatus = item.reviewStatus;
+          productReviewStatuses[productId] = reviewStatus;
+        });
+      });
+
+      // Thêm reviewStatus vào metadata.purchasedProducts
+      user.metadata.purchasedProducts.forEach((product) => {
+        const reviewStatus = productReviewStatuses[product._id.toString()];
+        product.reviewStatus = reviewStatus || 'not-reviewed';
+      });
 
       // Sắp xếp recentActivity theo ngày mua mới nhất
       if (user.metadata.recentActivity) {

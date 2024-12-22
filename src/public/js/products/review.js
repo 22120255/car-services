@@ -97,31 +97,30 @@ document.addEventListener('DOMContentLoaded', function () {
   // ----------------- Functions -----------------
 
   async function loadData(apiQuery = '') {
-    $.ajax({
-      url: `/api/products/reviews/${productId}?${apiQuery}`,
-      type: 'GET',
-      statusCode: {
-        200: function (response) {
-          reviews = response.reviews;
-          stats = response.stats;
-          if (!reviews || reviews.length === 0) {
-            $('.reviews-container').html('<p class="no-reviews">No reviews yet</p>');
-          } else {
+    try {
+      const reviewsList = $('.reviews-list');
+      $.ajax({
+        url: `/api/products/reviews/${productId}?${apiQuery}`,
+        type: 'GET',
+        statusCode: {
+          200: function (response) {
+            reviews = response.reviews;
+            stats = response.stats;
+            console.log(reviews);
             renderReviews(reviews);
-          }
+          },
         },
-        404: function () {
-          $('.reviews-container').html('<p class="no-reviews">No reviews for this product.</p>');
+        error: function (error) {
+          console.error('Error:', error);
+          $('.reviews-list').empty();
+          $('.reviews-list').html('<p class="error">Unable to fetch reviews. Please check your connection.</p>');
         },
-        500: function () {
-          $('.reviews-container').html('<p class="error">An error occurred. Please try again later.</p>');
-        },
-      },
-      error: function (error) {
-        console.error('Error:', error);
-        $('.reviews-container').html('<p class="error">Unable to fetch reviews. Please check your connection.</p>');
-      },
-    });
+      });
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      $('.reviews-list').empty();
+      $('.reviews-list').html('<p class="error">An unexpected error occurred. Please try again later.</p>');
+    }
   }
 
   function renderReviews(reviews) {
@@ -130,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Render the reviews
     reviews.forEach((review) => {
-      const { avatar, userName, createdAt, rating, comment, images, likes } = review; // Destructure the review
+      const { avatar, userName, createdAt, rating, comment, images, likes } = review;
       let starsHtml = '';
 
       if (rating > 0) {
@@ -209,12 +208,17 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `);
     });
+    if (!reviews || reviews.length === 0) {
+      reviewList.empty();
+      reviewList.append(`<h5 class="no-reviews">No reviews found.</h5>`);
+    }
   }
 
   async function renderFilter(stats) {
     const filters = $('.rating-filters');
     filters.empty();
 
+    $('.rating-score .stars .rating-text').remove();
     filters.append(`
       <div class="filter-row">
         <button class="filter-btn active" id="all">All (${stats.totalReviews})</button>
