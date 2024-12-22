@@ -25,9 +25,11 @@
 
    - Hướng dẫn test thanh toán:
 
-   1. Số thẻ: 9704198526191432198
-      . Checkout --> Tiến hành thanh toán --> Thẻ nội địa và TKNH --> Chọn NCB
+   1. Các bước tiến hành:
+      Checkout --> Nhập thông tin giao hàng --> Tiến hành thanh toán --> Thẻ nội địa và TKNH --> Chọn NCB
    2. Số thẻ: 9704198526191432198
       Tên chủ thẻ: NGUYEN VAN A
       Ngày phát hành: 07/15
       Mật khẩu OTP: 123456
+
+- Sau khi mua hàng, vào profile kéo xuống dưới để check hàng đã mua
