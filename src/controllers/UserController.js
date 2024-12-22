@@ -333,12 +333,24 @@ class UserController {
 
   // [GET] /profile/:id
   async profile(req, res) {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
-    res.render('user/profile', {
-      _user: user,
-      title: 'Personal information',
-    });
+    try {
+      const userId = req.params.id;
+      const user = await User.findById(userId)
+      .populate({
+        path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
+        select: 'brand model year mileage price images reviewStatus'
+      })
+      .lean()
+      .exec();
+      res.render('user/profile', {
+        _user: user,
+        title: 'Personal information',
+      });
+    }
+    catch (error) {
+      errorLog('UserController', 'profile', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
   }
 
   async getPurchasedList(req, res) {

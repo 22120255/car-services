@@ -1,7 +1,7 @@
 <div class="purchased-list-wrapper">
     <div class="purchased-list-container">
         <div class="purchased-header">
-            <h1><i class="fas fa-shopping-bag"></i> List of cars you've bought</h1>
+            <h1><i class="fas fa-shopping-bag"></i> List of cars</h1>
         </div>
 
         <div class="purchased-content">
@@ -17,10 +17,11 @@
                                 <div class="car-info">
                                     <p><i class="fas fa-calendar"></i> Year: {{this.product.year}}</p>
                                     <p><i class="fas fa-tachometer-alt"></i> Mileage: {{formatNumber this.product.mileage}} km</p>
-                                    <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.purchasePrice}}</p>
+                                    <p><i class="fas fa-dollar-sign"></i> Price: {{formatCurrency this.product.price 'VND'}}</p>
                                 </div>
                                 <div class="purchase-info">
                                     <p><i class="fas fa-clock"></i> Purchase date: {{formatDate this.purchaseDate}}</p>
+                                    <p><i class="fas fa-box"></i> Quantity: {{this.quantity}}</p>
                                     <p><i class="fas fa-check-circle"></i> Status: Bought</p>
                                 </div>
                                 <a href="/products/{{this._id}}" class="btn btn-primary btn-view-details">

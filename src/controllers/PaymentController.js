@@ -188,18 +188,22 @@ class PaymentController {
 
         if (user) {
           // Lấy productIds từ items của order
-          const purchasedProducts = order.items.map((item) => item.productId);
+            const purchasedProducts = order.items.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+            }));
 
-          // Khởi tạo metadata.purchasedProducts nếu chưa có
-          user.metadata = user.metadata || {};
-          user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
+            // Khởi tạo metadata.purchasedProducts nếu chưa có
+            user.metadata = user.metadata || {};
+            user.metadata.purchasedProducts = user.metadata.purchasedProducts || [];
 
-          // Thêm các sản phẩm mới vào purchasedProducts
-          const purchaseDate = new Date();
-          const purchasedProductsData = purchasedProducts.map(product => ({
-            product: product._id,  // Lưu ID của sản phẩm
-            purchaseDate: purchaseDate,
-          }));
+            // Thêm các sản phẩm mới vào purchasedProducts
+            const purchaseDate = new Date();
+            const purchasedProductsData = purchasedProducts.map(product => ({
+              product: product.productId,  
+              quantity: product.quantity, 
+              purchaseDate: purchaseDate,
+            }));
 
           // Push data vào mảng purchasedProducts
           user.metadata.purchasedProducts.push(...purchasedProductsData);
