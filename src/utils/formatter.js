@@ -1,19 +1,21 @@
 class Formatter {
-    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'vi-VN' }) {
-        const formattedValue = value.toLocaleString(options.locale);
+    static formatNumber(value, options = {}) {
+        const { decimal = 2, shorten = true, locale = 'vi-VN' } = options;
 
-        if (!options.shorten) {
+        const formattedValue = value.toLocaleString(locale);
+
+        if (!shorten) {
             return formattedValue;
         }
 
         if (value < 1_000) {
             return formattedValue;
         } else if (value >= 1_000 && value < 1_000_000) {
-            return (value / 1_000).toFixed(options.decimal) + 'K';
+            return (value / 1_000).toFixed(decimal) + 'K';
         } else if (value >= 1_000_000 && value < 1_000_000_000) {
-            return (value / 1_000_000).toFixed(options.decimal) + 'M';
+            return (value / 1_000_000).toFixed(decimal) + 'M';
         } else {
-            return (value / 1_000_000_000).toFixed(options.decimal) + 'B';
+            return (value / 1_000_000_000).toFixed(decimal) + 'B';
         }
     }
 
@@ -24,14 +26,15 @@ class Formatter {
         }).format(value);
     }
 
-    static formatDate(date, options = { showTime: true }) {
+    static formatDate(date, options = {}) {
+        const { showTime = true } = options;
         const dateOptions = {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
         };
 
-        if (options.showTime) {
+        if (showTime) {
             dateOptions.hour = '2-digit';
             dateOptions.minute = '2-digit';
             dateOptions.second = '2-digit';

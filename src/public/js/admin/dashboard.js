@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 //Render data 
 const fetchData = async (options = { refresh: false }) => {
     try {
-        const getDataAnalytics = new FunctionApi(`/api/user/data/analytics`,
+        const getDataAnalytics = new FunctionApi(`/api/data/analytics`,
             {
                 query: { refresh: options.refresh }
             });

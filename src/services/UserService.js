@@ -279,28 +279,6 @@ class UserService {
     }
   }
 
-  // Lấy dữ liệu thống kê
-
-  async getAnalytics(options = { refresh: false }) {
-    if (options.refresh) {
-      await getDataReport();
-    }
-    try {
-      const analytics = await DataAnalytics.findOne({}).sort({ createdAt: -1 });
-      let result = null;
-
-      if (analytics) {
-        result = {
-          ...mongooseToObject(analytics),
-          createdAtStr: Formatter.formatDate(analytics.createdAt),
-        }
-      }
-      return result;
-    } catch (error) {
-      console.error('Error fetching analytics:', error);
-      throw error;
-    }
-  }
 }
 
 module.exports = new UserService();
