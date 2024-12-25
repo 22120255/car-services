@@ -57,4 +57,25 @@ const getFilterConfigProduct = () => ({
   ],
 });
 
-export { getFilterConfigProduct };
+const getFilterConfigOrder = () => ({
+  statuses: [
+    { value: 'pending', name: 'Pending' },
+    { value: 'completed', name: 'Completed' },
+    { value: 'cancelled', name: 'Cancelled' },
+  ],
+  prices: [
+    { priceMin: 0, priceMax: 50000, label: '0 - 50000' },
+    { priceMin: 50000, priceMax: 100000, label: '50000 - 100000' },
+    { priceMin: 100000, priceMax: 200000, label: '100000 - 200000' },
+    { priceMin: 200000, priceMax: 5000000, label: '200000+' },
+  ],
+  perPages: [
+    { value: 4, name: '4' },
+    { value: 8, name: '8' },
+    { value: 12, name: '12' },
+    { value: 16, name: '16' },
+    { value: 20, name: '20' },
+  ],
+});
+
+export { getFilterConfigProduct, getFilterConfigOrder };

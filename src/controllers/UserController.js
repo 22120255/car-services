@@ -259,6 +259,25 @@ class UserController {
     }
   }
 
+  // [GET] /admin/orders
+  async getOrders(req, res) {
+    const { limit, offset, search, status, priceMin, priceMax } = req.query;
+    try {
+      const { orders, total } = await UserService.getOrders({
+        limit: limit || 10,
+        offset: offset || 1,
+        search,
+        status,
+        priceMin,
+        priceMax,
+      });
+      return res.status(200).json({ orders, total });
+    } catch (error) {
+      errorLog('UserController', 'getOrders', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
   // [GET] /admin/reports
   async reports(req, res) {
     try {
