@@ -3,6 +3,7 @@ const OrderService = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
 const { clearCache, clearAllCache } = require('../utils/helperCache');
+const { error } = require('winston');
 
 class ProductController {
   index(req, res) {
@@ -75,11 +76,12 @@ class ProductController {
       const totalRating = (await OrderService.updateAverageRating(req.params.id)) || 0;
       const reviews = await OrderService.getReviews(req.params.id);
       if (!product) return next();
+      clearCache(`products/${req.params.id}`);
       res.render('products/detail', {
         product: mongooseToObject(product),
         title: 'Product details',
         totalRating,
-        reviews: multipleMongooseToObject(reviews),
+        reviews,
       });
     } catch (error) {
       errorLog('ProductController', 'getDetail', error);
@@ -147,9 +149,7 @@ class ProductController {
       const { products, total } = await ProductService.getPaginatedProducts(query, page, limit);
 
       const isAjax = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest';
-      // Kiểm tra header X-Requested-With để phân biệt yêu cầu Ajax
       if (isAjax && req.headers.referer?.includes('/products')) {
-        // Trả về JSON cho yêu cầu Ajax
         return res.status(200).json({
           products: multipleMongooseToObject(products),
           total,
@@ -157,6 +157,28 @@ class ProductController {
       }
     } catch (error) {
       errorLog('ProductController', 'productsAndGetProducts', error);
+    }
+  };
+
+  // [GET] /api/products/reviews/:id
+  getReviews = async (req, res) => {
+    try {
+      const { filter } = req.query;
+      const { reviews } = await OrderService.getReviews(req.params.id, filter);
+      return res.status(200).json({ reviews });
+    } catch (error) {
+      console.error('Error in getReviews:', error);
+      return res.status(500).json({ message: 'Có lỗi xảy ra khi lấy đánh giá sản phẩm.' });
+    }
+  };
+
+  // [GET] /api/products/reviews/filter/:id
+  statsReviews = async (req, res) => {
+    try {
+      const stats = await OrderService.getAllReviewStats(req.params.id);
+      res.status(200).json({ stats });
+    } catch (error) {
+      res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số lượng đánh giá sản phẩm.' });
     }
   };
 }

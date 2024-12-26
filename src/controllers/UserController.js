@@ -11,8 +11,8 @@ class UserController {
   async index(req, res) {
     res.render('admin/dashboard', {
       layout: 'admin',
-      title: 'Dashboard'
-    })
+      title: 'Dashboard',
+    });
   }
 
   // [GET] /admin/users/accounts
@@ -237,7 +237,6 @@ class UserController {
   // [PATCH] /api/user/product/store
   async storeProduct(req, res) {
     if (req.file) {
-      console.log(req.file);
       return res.json({ secure_url: req.file.path }); // Sử dụng secure_url thay vì path
     }
     return res.status(400).json({ message: 'Failed to upload image' });
@@ -330,25 +329,72 @@ class UserController {
 
   // [GET] /profile/:id
   async profile(req, res) {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
-    res.render('user/profile', {
-      _user: user,
-      title: 'Personal information',
-    });
+    try {
+      const userId = req.params.id;
+      const user = await User.findById(userId)
+        .populate({
+          path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
+          select: 'brand model year mileage price images reviewStatus',
+        })
+        .lean()
+        .exec();
+      res.render('user/profile', {
+        _user: user,
+        title: 'Personal information',
+      });
+    } catch (error) {
+      errorLog('UserController', 'profile', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
   }
-
   async getPurchasedList(req, res) {
     try {
-      // Lấy thông tin user với populate purchasedProducts
+      // Lấy thông tin người dùng và populate sản phẩm đã mua
       const user = await User.findById(req.user._id)
         .populate({
-          path: 'metadata.purchasedProducts',
-          select: 'brand model year mileage price images',
+          path: 'metadata.purchasedProducts.product',
+          select: 'brand model year mileage price images reviewStatus',
+        })
+        .lean()
+        .exec();
+
+      const orders = await Order.find({ userId: req.user._id })
+        .select('items')
+        .populate({
+          path: 'items.productId',
+          select: 'reviewStatus',
         })
         .lean();
 
-      // Sắp xếp recentActivity theo ngày mua mới nhất
+      const productReviewStatuses = {};
+
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          const productId = item.productId._id.toString();
+          const reviewStatus = item.reviewStatus;
+
+          if (!productReviewStatuses[productId]) {
+            productReviewStatuses[productId] = 'not-reviewed';
+          }
+
+          if (reviewStatus === 'reviewed') {
+            productReviewStatuses[productId] = 'reviewed';
+          }
+        });
+      });
+
+      user.metadata.purchasedProducts.forEach((purchasedProduct) => {
+        const productId = purchasedProduct.product._id.toString();
+
+        if (productReviewStatuses[productId] === 'reviewed') {
+          if (purchasedProduct.reviewStatus !== 'reviewed') {
+            purchasedProduct.reviewStatus = 'reviewed';
+          }
+        } else {
+          purchasedProduct.reviewStatus = 'not-reviewed';
+        }
+      });
+
       if (user.metadata.recentActivity) {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);
       }

@@ -53,4 +53,7 @@ module.exports = {
   formatNumber: (number, shorten = false) => Formatter.formatNumber(number, options = { shorten: shorten }),
   formatCurrency: Formatter.formatCurrency,
   formatDate: (value) => Formatter.formatDate(value),
+  roundUp: function (value) {
+    return (Math.ceil(value * 10) / 10).toFixed(1);
+  },
 }

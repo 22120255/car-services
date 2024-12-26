@@ -43,8 +43,7 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
     .find('.btn-submit')
     .off('click')
     .on('click', async () => {
-      if ((await callback()) !== false)
-        modal.modal('hide');
+      if ((await callback()) !== false) modal.modal('hide');
     });
 
   modal.off('shown.bs.modal').on('shown.bs.modal', () => {
@@ -65,15 +64,15 @@ async function loadCartData() {
           cart = data; // Lưu lại dữ liệu cart nếu có
         },
         404: function () {
-          console.error('Cart data not found.');
+          // console.error('Cart data not found.');
         },
         500: function () {
-          console.error('Server error occurred.');
+          // console.error('Server error occurred.');
         },
       },
     });
   } catch (error) {
-    console.error('Error loading cart data:', error);
+    // console.error('Error loading cart data:', error);
   }
   return cart;
 }

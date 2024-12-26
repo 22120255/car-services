@@ -5,16 +5,15 @@ document.addEventListener('DOMContentLoaded', function () {
   let starRatingValue = 0;
   let productId = null;
   $('.btn-rate-product').on('click', function (e) {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+    e.preventDefault();
     productId = $(this).data('id');
-    console.log('Product ID:', productId);
     const stars = document.querySelectorAll('#starRating i');
     stars.forEach((s) => s.classList.remove('selected', 'hover'));
     starRatingValue = 0;
     $('#ratingError').text('');
     $('#comment').val('');
     $('.image-preview-wrapper').remove();
-    $('#addReviewModal').modal('show'); // Hiển thị modal
+    $('#addReviewModal').modal('show');
   });
 
   stars.forEach((star) => {
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const addImageBtn = $('#addImageBtn');
 
     addImageBtn.on('click', function () {
-      imageInput.click(); // Kích hoạt chọn file
+      imageInput.click();
     });
 
     imageInput.on('change', function () {
@@ -69,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = new FormData();
         formData.append('review', file);
 
-        // Tạo phần tử loading
         const loadingSpinner = $(`
           <div class="loading-spinner" style="margin-top: auto;">
             <div class="spinner-border text-primary" role="status">
@@ -78,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
         `);
 
-        // Thêm loading spinner vào container
         addImageBtn.before(loadingSpinner);
 
         $.ajax({
@@ -90,10 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
           success: function (response) {
             console.log('Upload thành công:', response);
 
-            // Xóa spinner khi upload thành công
             loadingSpinner.remove();
 
-            // Tạo ô hiển thị hình ảnh sau khi upload thành công
             const imageWrapper = $(`
               <div class="image-preview-wrapper" style="margin-top: auto;">
                 <img src="${response.secure_url}" alt="Preview" class="image-preview">
@@ -101,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
               </div>
             `);
 
-            // Thêm ô hiển thị vào container
             addImageBtn.before(imageWrapper);
 
             imageWrapper.find('.remove-image-btn').on('click', function () {
@@ -112,18 +106,15 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Upload thất bại:', error);
             alert('Có lỗi xảy ra khi upload file.');
 
-            // Xóa spinner khi có lỗi
             loadingSpinner.remove();
           },
         });
 
-        // Reset input để chọn lại file mới
         imageInput.val('');
       }
     });
   });
 
-  // Lắng nghe sự kiện click vào nút "Gửi đánh giá"
   // Lắng nghe sự kiện click vào nút "Gửi đánh giá"
   $('#submitReviewBtn').on('click', function () {
     const rating = starRatingValue;
@@ -134,10 +125,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const comment = $('#comment').val();
     const images = [];
     $('#imageContainer .image-preview-wrapper img').each(function () {
-      images.push($(this).attr('src')); // Lấy giá trị của thuộc tính 'src' và thêm vào mảng
+      images.push($(this).attr('src'));
     });
 
     const data = { productId, rating, comment, images };
+    console.log('Data:', data);
     $.ajax({
       url: '/api/orders/review',
       type: 'POST',

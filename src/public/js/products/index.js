@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let offset = parseInt(urlParams.get('offset')) || 1;
   let totalPages = null;
   let totalItems = null;
-  let filters = null;
 
   let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
   let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;

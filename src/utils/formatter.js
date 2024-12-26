@@ -1,8 +1,21 @@
 class Formatter {
-    static formatNumber(value, options = {}) {
-        const { decimal = 2, shorten = true, locale = 'vi-VN' } = options;
+    static mapping = {
+        'en-US': {
+            currency: 'USD',
+            locale: 'en-US',
+        },
+        'vi-VN': {
+            currency: 'VND',
+            locale: 'vi-VN',
+        },
+    };
 
-        const formattedValue = value.toLocaleString(locale);
+    static formatNumber(value, options = {}) {
+        const { decimal = 2, shorten = true, locale = 'en-US' } = options
+        if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
+            return '0';
+        }
+        const formattedValue = value.toLocaleString(Formatter.mapping[locale].locale);
 
         if (!shorten) {
             return formattedValue;
@@ -18,29 +31,33 @@ class Formatter {
             return (value / 1_000_000_000).toFixed(decimal) + 'B';
         }
     }
+    static formatCurrency(value, locale = 'vi-VN') {
+        if (value === undefined || value === null || isNaN(Number(value))) {
+            value = 0;
+        } else {
+            value = Number(value);
+        }
 
-    static formatCurrency(value, currency = 'VND') {
-        return new Intl.NumberFormat('vi-VN', {
+        return new Intl.NumberFormat(Formatter.mapping[locale].locale, {
             style: 'currency',
-            currency,
+            currency: Formatter.mapping[locale].currency,
         }).format(value);
     }
 
-    static formatDate(date, options = {}) {
-        const { showTime = true } = options;
+    static formatDate(date, options = { showTime: true, locale: 'en-US' }) {
         const dateOptions = {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
         };
 
-        if (showTime) {
+        if (options.showTime) {
             dateOptions.hour = '2-digit';
             dateOptions.minute = '2-digit';
             dateOptions.second = '2-digit';
         }
 
-        return new Date(date).toLocaleDateString('vi-VN', dateOptions);
+        return new Date(date).toLocaleDateString(Formatter.mapping[options.locale].locale, dateOptions);
     }
 
 

@@ -404,7 +404,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // render products
   function renderProducts(products) {
-    console.log(1);
     $('#inventoryTable').empty();
 
     if (!products || products.length === 0) {
