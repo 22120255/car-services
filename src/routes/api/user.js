@@ -34,4 +34,6 @@ router.get('/trash', checkRole(['admin', 'sadmin']), userController.trashAndGetP
 // dashboard 
 router.get('/data/analytics', cacheMiddleware, checkRole(['admin', 'sadmin']), userController.getAnalytics);
 
+// order
+router.get('/orders', checkRole(['admin', 'sadmin']), userController.getOrders);
 module.exports = router;
