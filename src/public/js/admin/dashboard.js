@@ -144,8 +144,9 @@ function renderTopProducts(selector, topProducts) {
     var $container = $(selector);
     $container.empty();  // Xóa nội dung cũ (nếu có)
 
-    $.each(topProducts, function (index, product) {
-        var productHTML = `
+    if (topProducts.length > 0) {
+        $.each(topProducts, function (index, product) {
+            var productHTML = `
                 <a href="/products/${product._id}" class="product-item">
                     <div class="d-flex align-items-center gap-3 rounded hover-bg">
                         <div class="product-rank">${index + 1}</div>
@@ -172,6 +173,9 @@ function renderTopProducts(selector, topProducts) {
                     </div>
                 </a>
             `;
-        $container.append(productHTML);
-    });
+            $container.append(productHTML);
+        });
+    } else {
+        $container.append('<span style="text-align: center;">No products</span>');
+    }
 }

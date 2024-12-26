@@ -90,4 +90,10 @@ function updateQueryParams(paramsToUpdate) {
   window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
 
-export { showToast, showModal, loadCartData, updateQueryParams };
+const renderSelectOptions = (element, options) => {
+  options.forEach((option) => {
+    element.append(`<option value="${option.value}">${option.label}</option>`);
+  });
+};
+
+export { showToast, showModal, loadCartData, updateQueryParams, renderSelectOptions };

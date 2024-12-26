@@ -95,7 +95,8 @@ body {
 .top-view-products,
 .top-purchased-products {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  padding-top: 12px; }
   .top-view-products .product-item,
   .top-purchased-products .product-item {
     text-decoration: none;

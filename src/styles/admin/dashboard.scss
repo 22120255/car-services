@@ -119,6 +119,7 @@ body {
 .top-purchased-products {
   display: flex;
   flex-direction: column;
+  padding-top: 12px;
   .product-item {
     text-decoration: none;
     color: inherit;

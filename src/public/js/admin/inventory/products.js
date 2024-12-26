@@ -1,4 +1,4 @@
-import { showToast, showModal, updateQueryParams } from '../../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
@@ -121,28 +121,11 @@ function handleProductAction(action, productId) {
 
 document.addEventListener('DOMContentLoaded', function () {
   const { brands, statuses, prices, perPages } = getFilterConfigProduct();
-  // TODO: here
-  const $brandFilter = $('#brandFilter');
-  const $statusFilter = $('#statusFilter');
-  const $priceFilter = $('#priceFilter');
-  const $limit = $('#limit');
 
-  // Render options
-  const renderSelectOptions = (element, options, defaultText) => {
-    if (defaultText !== 'Items per page') {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-    }
-    options.forEach((option) => {
-      if (defaultText === 'Select price') {
-        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
-      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
-    });
-  };
-
-  renderSelectOptions($brandFilter, brands, 'Select brand');
-  renderSelectOptions($statusFilter, statuses, 'Select status');
-  renderSelectOptions($limit, perPages, 'Items per page');
-  renderSelectOptions($priceFilter, prices, 'Select price');
+  renderSelectOptions($('#brandFilter'), brands);
+  renderSelectOptions($('#statusFilter'), statuses);
+  renderSelectOptions($('#limit'), perPage);
+  renderSelectOptions($('#priceFilter'), prices);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
