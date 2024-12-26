@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const schedule = require('node-schedule');
 
 const OrderItemSchema = new mongoose.Schema(
   {
@@ -29,20 +28,5 @@ const OrderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// Middleware to set the status of an order to 'canceled' after 15 minutes
-OrderSchema.pre('save', function(next) {
-  if (this.isNew && this.status === 'pending') {
-    schedule.scheduleJob(new Date(Date.now() + 15 * 60 * 1000), async () => {
-      const order = await mongoose.model('Order').findById(this._id);
-      if (order && order.status === 'pending') {
-        order.status = 'canceled';
-        console.log(`Order ${order._id} has been canceled`);
-        await order.save();
-      }
-    });
-  }
-  next();
-});
 
 module.exports = mongoose.model('Order', OrderSchema, 'orders');
