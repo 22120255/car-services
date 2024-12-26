@@ -61,7 +61,7 @@ const getFilterConfigOrder = () => ({
   statuses: [
     { value: 'pending', name: 'Pending' },
     { value: 'completed', name: 'Completed' },
-    { value: 'cancelled', name: 'Cancelled' },
+    { value: 'canceled', name: 'Canceled' },
   ],
   prices: [
     { priceMin: 0, priceMax: 50000, label: '0 - 50000' },

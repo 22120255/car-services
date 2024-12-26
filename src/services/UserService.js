@@ -321,9 +321,9 @@ class UserService {
         filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
       }
   
-      // Price range filter on totalPrice
+      // Price range filter on totalAmount
       if (priceMin && priceMax) {
-        filter.totalPrice = { $gte: parseFloat(priceMin), $lte: parseFloat(priceMax) };
+        filter.totalAmount = { $gte: parseFloat(priceMin), $lte: parseFloat(priceMax) };
       }
   
       // Query with pagination

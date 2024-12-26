@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const productsList = items?.map(item => {
         const product = item.productId;
         return product ? `${product.brand} ${product.model} (x${item.quantity})` : 'Unknown Product';
-      }).join(', ') || 'No products';
+      }).join('<br>') || 'No products';
       
       $ordersTable.append(`
         <tr data-order-id="${_id}">

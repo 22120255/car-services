@@ -37,6 +37,7 @@ OrderSchema.pre('save', function(next) {
       const order = await mongoose.model('Order').findById(this._id);
       if (order && order.status === 'pending') {
         order.status = 'canceled';
+        console.log(`Order ${order._id} has been canceled`);
         await order.save();
       }
     });
