@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
-const Order = require('../models/Order');
 const DataAnalytics = require('../models/DataAnalytics');
 const { getDataReport } = require('../config/analytics');
 const Formatter = require('../utils/formatter');
@@ -299,51 +298,6 @@ class UserService {
       return result;
     } catch (error) {
       console.error('Error fetching analytics:', error);
-      throw error;
-    }
-  }
-
-  // Lấy danh sách đơn hàng
-  async getOrders({ limit, offset, search, status, priceMin, priceMax }) {
-    try {
-      let filter = {};
-  
-      // Search in customer name or order ID
-      if (search) {
-        filter.$or = [
-          { '_id': { $regex: search, $options: 'i' } },
-          { 'users.fullName': { $regex: search, $options: 'i' } }
-        ];
-      }
-  
-      // Status filter - case insensitive exact match
-      if (status) {
-        filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
-      }
-  
-      // Price range filter on totalAmount
-      if (priceMin && priceMax) {
-        filter.totalAmount = { $gte: parseFloat(priceMin), $lte: parseFloat(priceMax) };
-      }
-  
-      // Query with pagination
-      const orders = await Order.find(filter)
-        .populate({
-          path: 'userId',
-          select: 'fullName email phone'
-        })
-        .populate({
-          path: 'items.productId',
-          select: 'brand model price images'
-        })
-        .skip(offset * limit - limit)
-        .limit(limit)
-        .sort({ orderDate: -1 }); // Most recent orders first
-  
-      const total = await Order.countDocuments(filter);
-  
-      return { orders, total };
-    } catch (error) {
       throw error;
     }
   }
