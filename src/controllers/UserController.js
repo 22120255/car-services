@@ -14,8 +14,8 @@ class UserController {
     res.render('admin/dashboard', {
       analyticData: mongooseToObject(analyticLatest),
       layout: 'admin',
-      title: 'Dashboard'
-    })
+      title: 'Dashboard',
+    });
   }
 
   // [GET] /admin/users/accounts
@@ -240,7 +240,6 @@ class UserController {
   // [PATCH] /api/user/product/store
   async storeProduct(req, res) {
     if (req.file) {
-      console.log(req.file);
       return res.json({ secure_url: req.file.path }); // Sử dụng secure_url thay vì path
     }
     return res.status(400).json({ message: 'Failed to upload image' });
@@ -255,25 +254,6 @@ class UserController {
       });
     } catch (error) {
       errorLog('UserController', 'orders', error.message);
-      res.status(500).json({ error: 'An error occurred, please try again later!' });
-    }
-  }
-
-  // [GET] /admin/orders
-  async getOrders(req, res) {
-    const { limit, offset, search, status, priceMin, priceMax } = req.query;
-    try {
-      const { orders, total } = await UserService.getOrders({
-        limit: limit || 10,
-        offset: offset || 1,
-        search,
-        status,
-        priceMin,
-        priceMax,
-      });
-      return res.status(200).json({ orders, total });
-    } catch (error) {
-      errorLog('UserController', 'getOrders', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
@@ -355,32 +335,31 @@ class UserController {
     try {
       const userId = req.params.id;
       const user = await User.findById(userId)
-      .populate({
-        path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
-        select: 'brand model year mileage price images reviewStatus'
-      })
-      .lean()
-      .exec();
+        .populate({
+          path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
+          select: 'brand model year mileage price images reviewStatus',
+        })
+        .lean()
+        .exec();
       res.render('user/profile', {
         _user: user,
         title: 'Personal information',
       });
-    }
-    catch (error) {
+    } catch (error) {
       errorLog('UserController', 'profile', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
-
   async getPurchasedList(req, res) {
     try {
+      // Lấy thông tin người dùng và populate sản phẩm đã mua
       const user = await User.findById(req.user._id)
-      .populate({
-        path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
-        select: 'brand model year mileage price images reviewStatus'
-      })
-      .lean()
-      .exec();
+        .populate({
+          path: 'metadata.purchasedProducts.product',
+          select: 'brand model year mileage price images reviewStatus',
+        })
+        .lean()
+        .exec();
 
       const orders = await Order.find({ userId: req.user._id })
         .select('items')
@@ -392,23 +371,33 @@ class UserController {
 
       const productReviewStatuses = {};
 
-      // Duyệt qua từng đơn hàng và tạo một mapping giữa productId và reviewStatus
       orders.forEach((order) => {
         order.items.forEach((item) => {
-          console.log(item);
           const productId = item.productId._id.toString();
           const reviewStatus = item.reviewStatus;
-          productReviewStatuses[productId] = reviewStatus;
+
+          if (!productReviewStatuses[productId]) {
+            productReviewStatuses[productId] = 'not-reviewed';
+          }
+
+          if (reviewStatus === 'reviewed') {
+            productReviewStatuses[productId] = 'reviewed';
+          }
         });
       });
 
-      // Thêm reviewStatus vào metadata.purchasedProducts
-      user.metadata.purchasedProducts.forEach((product) => {
-        const reviewStatus = productReviewStatuses[product._id.toString()];
-        product.reviewStatus = reviewStatus || 'not-reviewed';
+      user.metadata.purchasedProducts.forEach((purchasedProduct) => {
+        const productId = purchasedProduct.product._id.toString();
+
+        if (productReviewStatuses[productId] === 'reviewed') {
+          if (purchasedProduct.reviewStatus !== 'reviewed') {
+            purchasedProduct.reviewStatus = 'reviewed';
+          }
+        } else {
+          purchasedProduct.reviewStatus = 'not-reviewed';
+        }
       });
 
-      // Sắp xếp recentActivity theo ngày mua mới nhất
       if (user.metadata.recentActivity) {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);
       }
@@ -428,6 +417,7 @@ class UserController {
     const refresh = req.query.refresh === 'true';
     try {
       const analytics = await UserService.getAnalytics({ refresh });
+
       res.status(200).json(analytics);
     } catch (error) {
       errorLog('UserController', 'getAnalytics', error.message);

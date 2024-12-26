@@ -165,7 +165,6 @@ class ProductController {
     try {
       const { filter } = req.query;
       const { reviews } = await OrderService.getReviews(req.params.id, filter);
-      console.log('reviews:', reviews);
       return res.status(200).json({ reviews });
     } catch (error) {
       console.error('Error in getReviews:', error);
@@ -177,7 +176,6 @@ class ProductController {
   statsReviews = async (req, res) => {
     try {
       const stats = await OrderService.getAllReviewStats(req.params.id);
-      console.log('stats:', stats);
       res.status(200).json({ stats });
     } catch (error) {
       res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số lượng đánh giá sản phẩm.' });
