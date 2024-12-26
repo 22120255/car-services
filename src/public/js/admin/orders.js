@@ -204,12 +204,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const productsList = items?.map(item => {
         const product = item.productId;
-        return product ? `${product.brand} ${product.model} (x${item.quantity})` : 'Unknown Product';
+        const imageSrc = product?.images[0] || '/default-image.jpg';
+        return product ? `<div> <img
+                              src='${imageSrc}'
+                              alt='Toyota Camry'
+                              class='car-image'
+                          /> ${product.brand} ${product.model} (x${item.quantity}) </div>` : 'Unknown Product';
       }).join('<br>') || 'No products';
       
       $ordersTable.append(`
         <tr data-order-id="${_id}">
-          <td>${_id}</td>
           <td>${userId?.fullName || 'Unknown User'}</td>
           <td>${productsList}</td>
           <td>${totalAmount?.toLocaleString('vi-VN') || 0}</td>
