@@ -4,12 +4,13 @@ class FunctionApi {
     error = null;
     data = null;
 
-    constructor(url, { method = "GET", query = {}, body = {}, options = { showToast: true } }) {
+    constructor(url, { method = "GET", query = {}, body = {}, options = {} }) {
+        const { showToast = true } = options;
         this.url = url;
         this.method = method;
         this.body = body;
         this.query = query;
-        this.options = options;
+        this.options = { showToast }
     }
 
     buildQueryParams() {

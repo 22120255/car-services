@@ -1,37 +1,18 @@
 import { getFilterConfigProduct } from '../config.js';
-import { updateQueryParams } from '../common.js';
+import { renderSelectOptions, updateQueryParams } from '../common.js';
 
 // Load filter
 document.addEventListener('DOMContentLoaded', function () {
   const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
-  const $yearFilter = $('#yearFilter');
-  const $styleFilter = $('#styleFilter');
-  const $brandFilter = $('#brandFilter');
-  const $transmissionFilter = $('#transmissionFilter');
-  const $statusFilter = $('#statusFilter');
-  const $priceFilter = $('#priceFilter');
-  const $limit = $('#limit');
 
   // Render options
-  const renderSelectOptions = (element, options, defaultText) => {
-    if (defaultText !== 'Items per page') {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-    }
-
-    options.forEach((option) => {
-      if (defaultText === 'Select price') {
-        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
-      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
-    });
-  };
-
-  renderSelectOptions($yearFilter, years, 'Select year');
-  renderSelectOptions($styleFilter, styles, 'Select style');
-  renderSelectOptions($brandFilter, brands, 'Select brand');
-  renderSelectOptions($transmissionFilter, transmissions, 'Select transmission');
-  renderSelectOptions($statusFilter, statuses, 'Select status');
-  renderSelectOptions($limit, perPages, 'Items per page');
-  renderSelectOptions($priceFilter, prices, 'Select price');
+  renderSelectOptions($('#yearFilter'), years);
+  renderSelectOptions($('#styleFilter'), styles);
+  renderSelectOptions($('#brandFilter'), brands);
+  renderSelectOptions($('#transmissionFilter'), transmissions);
+  renderSelectOptions($('#statusFilter'), statuses);
+  renderSelectOptions($('#limit'), perPages);
+  renderSelectOptions($('#priceFilter'), prices);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -42,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let offset = parseInt(urlParams.get('offset')) || 1;
   let totalPages = null;
   let totalItems = null;
-  let filters = null;
 
   let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
   let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;

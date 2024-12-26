@@ -4,15 +4,12 @@ const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
-const Order = require('../models/Order');
+const Formatter = require('../utils/formatter');
 
 class UserController {
   // [GET] /admin/dashboard
   async index(req, res) {
-    const analyticLatest = await DataAnalytics.findOne().sort({ createdAt: -1 });
-
     res.render('admin/dashboard', {
-      analyticData: mongooseToObject(analyticLatest),
       layout: 'admin',
       title: 'Dashboard',
     });
@@ -412,18 +409,6 @@ class UserController {
     }
   }
 
-  // [GET] /api/user/data/analytics
-  async getAnalytics(req, res) {
-    const refresh = req.query.refresh === 'true';
-    try {
-      const analytics = await UserService.getAnalytics({ refresh });
-
-      res.status(200).json(analytics);
-    } catch (error) {
-      errorLog('UserController', 'getAnalytics', error.message);
-      res.status(500).json({ error: 'An error occurred, please try again later!' });
-    }
-  }
   // [POST] /api/user/review/store
   async storeReview(req, res) {
     if (req.file) {

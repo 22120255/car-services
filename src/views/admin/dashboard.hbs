@@ -18,10 +18,10 @@
         <i class="fa-solid fa-arrows-rotate me-1"></i>
       </button>
       <select class='form-select' style='width: 200px;'>
-        <option>Order type</option>
-      </select>
-      <select class='form-select' style='width: 200px;'>
-        <option>Last year</option>
+        <option>Last month</option>
+        <option>3 months ago</option>
+        <option>6 months ago</option>
+        <option>12 months ago</option>
       </select>
     </div>
   </div>
@@ -192,34 +192,28 @@
     <div class='col-md-6'>
       <div class='card'>
         <div class='card-body'>
-          <div class='d-flex align-items-center gap-4'>
-            <div class='feature-icon bg-purple'>
-              <i class="fa-solid fa-shield"></i>
-            </div>
-            <div>
-              <h5 class='card-title'>Privacy Suggestions</h5>
-              <p class='card-text text-muted mb-0'>Take our privacy checkup to choose which settings are right for you.</p>
-            </div>
+          <div class='d-flex align-items-center border-bottom justify-content-between'>
+            <h5 class='card-title'>Top 10 products with the highest views</h5>
+            <a href="/products" class="btn btn-sm gap-3">
+              More
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           </div>
+          <div class="top-view-products"></div>
         </div>
       </div>
     </div>
     <div class='col-md-6'>
       <div class='card'>
-        <div class='card-body'>
-          <div class='d-flex align-items-center gap-4'>
-            <div class='feature-icon bg-purple'>
-              <i class="fa-solid fa-cloud"></i>
-            </div>
-            <div>
-              <h5 class='card-title'>Account Storage</h5>
-              <p class='card-text text-muted mb-0'>Your account storage is shared across all devices.</p>
-              <div class='progress mt-2' style='height: 6px;'>
-                <div class='progress-bar bg-purple' style='width: 33%'></div>
-              </div>
-              <small class='text-muted'>10 GB of 30 GB used</small>
-            </div>
+         <div class='card-body'>
+          <div class='d-flex align-items-center border-bottom justify-content-between'>
+            <h5 class='card-title'>Top 10 most purchased products</h5>
+            <a href="/products" class="btn btn-sm gap-3">
+              More
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           </div>
+          <div class="top-purchased-products"></div>
         </div>
       </div>
     </div>

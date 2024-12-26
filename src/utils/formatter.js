@@ -10,27 +10,28 @@ class Formatter {
         },
     };
 
-    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'en-US' }) {
+    static formatNumber(value, options = {}) {
+        const { decimal = 2, shorten = true, locale = 'en-US' } = options
         if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
             return '0';
         }
-        const formattedValue = value.toLocaleString(Formatter.mapping[options.locale].locale);
+        const formattedValue = value.toLocaleString(Formatter.mapping[locale].locale);
 
-        if (!options.shorten) {
+        if (!shorten) {
             return formattedValue;
         }
 
         if (value < 1_000) {
             return formattedValue;
         } else if (value >= 1_000 && value < 1_000_000) {
-            return (value / 1_000).toFixed(options.decimal) + 'K';
+            return (value / 1_000).toFixed(decimal) + 'K';
         } else if (value >= 1_000_000 && value < 1_000_000_000) {
-            return (value / 1_000_000).toFixed(options.decimal) + 'M';
+            return (value / 1_000_000).toFixed(decimal) + 'M';
         } else {
-            return (value / 1_000_000_000).toFixed(options.decimal) + 'B';
+            return (value / 1_000_000_000).toFixed(decimal) + 'B';
         }
     }
-    static formatCurrency(value, locale = 'en-US') {
+    static formatCurrency(value, locale = 'vi-VN') {
         if (value === undefined || value === null || isNaN(Number(value))) {
             value = 0;
         } else {

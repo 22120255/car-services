@@ -31,7 +31,7 @@ function showToast(type, message) {
 - if callback return false -> modal will not close
 - onShowCallback will be done when modal shown
 */
-function showModal({ title, content, btnSubmit = 'OK', callback = () => true, onShowCallback = () => {} }) {
+function showModal({ title, content, btnSubmit = 'OK', callback = () => true, onShowCallback = () => { } }) {
   const modal = $('#notify-modal');
 
   modal.find('.modal-title').text(title);
@@ -89,5 +89,10 @@ function updateQueryParams(paramsToUpdate) {
   window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
 
+const renderSelectOptions = (element, options) => {
+  options.forEach((option) => {
+    element.append(`<option value="${option.value}">${option.label}</option>`);
+  });
+};
 
-export { showToast, showModal, loadCartData, updateQueryParams };
+export { showToast, showModal, loadCartData, updateQueryParams, renderSelectOptions };

@@ -20,7 +20,7 @@ const passport = require('./config/passport')
 const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
-const { runReport } = require('./config/analytics');
+const { getDataReport } = require('./config/analytics');
 const { errorLog, clearFileLogs } = require('./utils/customLog');
 const limiter = require('./middleware/limiterMiddleware');
 
@@ -65,11 +65,7 @@ app.use('/api/', limiter)
 
 // Google Analytics - crawl data every 0h
 cron.schedule('0 0 * * *', async () => {
-  try {
-    await runReport();
-  } catch (error) {
-    errorLog("app.js", "crawl data", error);
-  }
+  await getDataReport();
 });
 
 // Template engine
