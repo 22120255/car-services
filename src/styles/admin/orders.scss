@@ -154,14 +154,19 @@
   display: inline-block;
 }
 
-.status.available {
+.status.status-completed {
   background-color: #e3fcef;
   color: #2ecc71;
 }
 
-.status.sold {
+.status.status-cancelled {
   background-color: #fee2e2;
   color: #ef4444;
+}
+
+.status.status-pending {
+  background-color: #fef2c2;
+  color: #f59e0b;
 }
 
 /* Actions */
