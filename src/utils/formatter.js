@@ -1,10 +1,20 @@
 class Formatter {
-    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'vi-VN' }) {
+    static mapping = {
+        'en-US': {
+            currency: 'USD',
+            locale: 'en-US',
+        },
+        'vi-VN': {
+            currency: 'VND',
+            locale: 'vi-VN',
+        },
+    };
+
+    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'en-US' }) {
         if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
             return '0';
         }
-
-        const formattedValue = value.toLocaleString(options.locale);
+        const formattedValue = value.toLocaleString(Formatter.mapping[options.locale].locale);
 
         if (!options.shorten) {
             return formattedValue;
@@ -20,25 +30,20 @@ class Formatter {
             return (value / 1_000_000_000).toFixed(options.decimal) + 'B';
         }
     }
-
-    static formatCurrency(value, currency = 'VND') {
+    static formatCurrency(value, locale = 'en-US') {
         if (value === undefined || value === null || isNaN(Number(value))) {
             value = 0;
         } else {
             value = Number(value);
         }
 
-        if (typeof currency !== 'string') {
-            throw new RangeError('Invalid currency code');
-        }
-        
-        return new Intl.NumberFormat('vi-VN', {
+        return new Intl.NumberFormat(Formatter.mapping[locale].locale, {
             style: 'currency',
-            currency,
+            currency: Formatter.mapping[locale].currency,
         }).format(value);
     }
 
-    static formatDate(date, options = { showTime: true }) {
+    static formatDate(date, options = { showTime: true, locale: 'en-US' }) {
         const dateOptions = {
             year: 'numeric',
             month: 'long',
@@ -51,7 +56,7 @@ class Formatter {
             dateOptions.second = '2-digit';
         }
 
-        return new Date(date).toLocaleDateString('vi-VN', dateOptions);
+        return new Date(date).toLocaleDateString(Formatter.mapping[options.locale].locale, dateOptions);
     }
 
 

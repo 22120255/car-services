@@ -1,18 +1,25 @@
-const CartService = require('../services/CartService');
+const Product = require('../models/Product');
+const Cart = require('../models/Cart');
 const { errorLog } = require('../utils/customLog');
 
 class CartController {
   payment(req, res) {
-    res.render('shops-cart/payment', { layout: false });
+    res.render('shops-cart/payment', {
+      layout: false,
+    });
   }
-
+  
   cart(req, res) {
-    res.render('shops-cart/index', { title: 'Shopping Cart' });
+    res.render('shops-cart/index', {
+      title: 'Shopping Cart',
+    });
   }
 
   async getCartData(req, res) {
     try {
-      const cart = await CartService.getCart(req.user._id);
+      const userId = req.user._id;
+      const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
+
       if (!cart) {
         return res.status(404).json({ message: 'Cart not found' });
       }
@@ -25,11 +32,38 @@ class CartController {
 
   async addToCart(req, res) {
     try {
-      await CartService.addItem(
-        req.user._id, 
-        req.params.productId,
-        parseInt(req.body.quantity)
-      );
+      const userId = req.user._id;
+      const { productId } = req.params;
+      const quantity = parseInt(req.body.quantity);
+
+      let cart = await Cart.findOne({ userId, isPaid: false });
+      if (!cart) {
+        cart = new Cart({
+          userId,
+          items: [],
+          total: 0,
+        });
+      }
+
+      const existingItem = cart.items.find((item) => {
+        const itemProductId = item.productId instanceof Object ? item.productId.toString() : item.productId;
+        return itemProductId === productId;
+      });
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+        cart.total += existingItem.price * quantity;
+      } else {
+        const product = await Product.findById(productId);
+
+        cart.items.push({
+          productId,
+          quantity: quantity,
+          price: product.price,
+        });
+        cart.total += product.price * quantity;
+      }
+      await cart.save();
       req.flash('success', 'Added to cart');
       res.redirect('back');
     } catch (error) {
@@ -40,16 +74,38 @@ class CartController {
 
   async updateQuantity(req, res) {
     try {
-      if (req.body.newQuantity <= 0) {
+      const { cartId, newQuantity } = req.body;
+      const { productId } = req.params;
+
+      // Ensure the quantity is valid
+      if (newQuantity <= 0) {
         return res.status(400).json({ message: 'Quantity must be greater than 0' });
       }
 
-      const cart = await CartService.updateQuantity(
-        req.body.cartId,
-        req.params.productId, 
-        req.body.newQuantity
-      );
+      // Find the cart
+      let cart = await Cart.findOne({ _id: cartId }).populate('items.productId');
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
 
+      // Find the product in the cart items
+      const item = cart.items.find((item) => item.productId._id.toString() === productId);
+      if (!item) {
+        return res.status(404).json({ message: 'Product not found in cart' });
+      }
+
+      // Update the quantity and recalculate the total
+      item.quantity = newQuantity;
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+
+      // Recalculate the total price
+      cart.total = cart.items.reduce((total, item) => total + item.quantity * item.price, 0);
+
+      // Save the updated cart
+      await cart.save();
       return res.status(200).json({ message: 'Cart updated successfully', cart });
     } catch (error) {
       errorLog('CartController.js', 'updateQuantity', error.message);
@@ -59,11 +115,28 @@ class CartController {
 
   async removeItemFromCart(req, res) {
     try {
-      if (!req.query.cartId || !req.params.productId) {
+      const { productId } = req.params;
+      const { cartId } = req.query;
+
+      if (!cartId || !productId) {
         return res.status(400).json({ message: 'Invalid request data: cartId or productId missing' });
       }
 
-      const cart = await CartService.removeItem(req.query.cartId, req.params.productId);
+      const cart = await Cart.findOne({ _id: cartId }).populate('items.productId');
+      if (!cart) {
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+
+      const removedItemIndex = cart.items.findIndex((item) => item.productId._id.toString() === productId);
+      if (removedItemIndex === -1) {
+        return res.status(404).json({ message: 'Product not found in cart' });
+      }
+
+      const removedItem = cart.items[removedItemIndex];
+      cart.total -= removedItem.price * removedItem.quantity;
+      cart.items.splice(removedItemIndex, 1);
+
+      await cart.save();
       return res.status(200).json({ message: 'Item removed from cart successfully', cart });
     } catch (error) {
       errorLog('cartController.js', 'removeItemFromCart', error.message);
@@ -73,11 +146,22 @@ class CartController {
 
   async updatePaymentStatus(req, res) {
     try {
-      await CartService.updatePayment(req.params.cartId, req.body.isPaid);
+      const { cartId } = req.params;
+      const { isPaid } = req.body;
+
+      const cart = await Cart.findOne({ _id: cartId });
+
+      if (!cart) {
+        errorLog('CartController.js', 'updatePaymentStatus', error.message);
+        return res.status(404).json({ message: 'Cart not found' });
+      }
+
+      cart.isPaid = isPaid;
+      await cart.save();
       return res.status(200).json({ message: 'Update cart payment status successful' });
     } catch (error) {
       errorLog('CartController.js', 'updatePaymentStatus', error.message);
-      return res.status(500).json({ message: 'Internal server error' }); 
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 }
