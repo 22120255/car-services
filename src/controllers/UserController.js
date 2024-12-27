@@ -255,7 +255,7 @@ class UserController {
     }
   }
 
-  // [GET] /api/admin/orders
+  // [GET] /api/user/orders
   async getOrders(req, res) {
     const { limit, offset, search, status, priceMin, priceMax } = req.query;
     try {
@@ -271,6 +271,23 @@ class UserController {
     } catch (error) {
       errorLog('UserController', 'getOrders', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // [PATCH] /api/user/orders/status/:id
+  async updateOrderStatus(req, res) {
+    try {
+      const orderId  = req.params.id;
+      const { status } = req.body;
+
+      if (!orderId || !status) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      await UserService.updateOrderStatus(orderId, status);
+      return res.status(200).json({ message: 'Update order status successfully' });
+    } catch (error) {
+      errorLog('UserController', 'updateOrderStatus', error.message);
+      return res.status(403).json({ error: error.message });
     }
   }
 

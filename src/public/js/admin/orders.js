@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
-  renderSelectOptions($priceFilter, prices, 'Select price');
+  renderSelectOptions($priceFilter, prices, 'Select price'); 
 
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
@@ -177,6 +177,20 @@ document.addEventListener('DOMContentLoaded', function () {
     return statusClasses[status.toLowerCase()] || '';
   }
 
+  async function updateOrderStatus(orderId, newStatus) {
+    try {
+      await $.ajax({
+        url: `/api/user/orders/update-status/${orderId}`,
+        type: 'PATCH',
+        data: { status: newStatus }
+      });
+      await refresh();
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      showToast('error', 'Failed to update order status');
+    }
+  }
+
   function renderOrders(orders) {
     const $ordersTable = $('#ordersTable');
     $ordersTable.empty();
@@ -205,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const productsList = items?.map(item => {
         const product = item.productId;
         const imageSrc = product?.images[0] || '/default-image.jpg';
-        return product ? `<div> <img
+        return product ? `<div class="product-cell"> <img
                               src='${imageSrc}'
                               alt='Toyota Camry'
                               class='car-image'
@@ -218,11 +232,38 @@ document.addEventListener('DOMContentLoaded', function () {
           <td>${productsList}</td>
           <td>${totalAmount?.toLocaleString('vi-VN') || 0}</td>
           <td>${formatDate(createdAt)}</td>
-          <td><span class="status ${getStatusClass(status)}">${status}</span></td>
+          <td class='status-cell'>
+            <span class="status ${getStatusClass(status)}">${status}</span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class='btn btn-custom btn-primary btn-edit-status' data-order-id="${_id}">
+                <i class='fas fa-edit'></i>
+              </button>
+              <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
+                <i class="fas fa-eye"></i>
+              </button>
+          </td>
         </tr>
       `);
-      console.debug('Order rendered:', order);
     });
+
+    // Sử dụng event delegation 
+    $('#ordersTable').off('click change')
+  .on('click', '.btn-edit-status', function() {
+    const orderId = $(this).data('order-id');
+    const $statusCell = $('#ordersTable').find(`tr[data-order-id='${orderId}'] .status-cell`);
+    const statusSelect = `<select class='status-select' data-order-id='${orderId}'></select>`;
+    $statusCell.find('.status').remove();
+    $statusCell.append(statusSelect);
+    renderSelectOptions($statusCell.find('.status-select'), statuses, 'Select status');
+  })
+  .on('change', '.status-select', function() {
+    console.log('Status select changed:', $(this).val());
+    const orderId = $(this).data('order-id');
+    const newStatus = $(this).val();
+    updateOrderStatus(orderId, newStatus);
+  });
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------

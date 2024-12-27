@@ -367,6 +367,24 @@ class UserService {
     }
 
   }
+
+  async updateOrderStatus(orderId, status) {
+    try {
+      if (!status) {
+        throw new Error('Status is required');
+      }
+      if (!orderId) {
+        throw new Error('Order ID is required');
+      }
+
+      await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+      console.log("Successfully updated order status");
+    }
+    catch (error) {
+      console.error('Error updating order status:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = new UserService();

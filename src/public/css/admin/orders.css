@@ -115,8 +115,14 @@
 .car-table tbody tr:hover {
   background-color: #f8f9fa; }
 
+.product-cell {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px; }
+
 .car-image {
-  width: 100px;
+  width: 80px;
   height: 60px;
   object-fit: cover;
   border-radius: 4px; }
@@ -221,6 +227,11 @@
 .btn-close:hover {
   opacity: 1; }
 
+.btn-edit-status {
+  border-radius: 50%;
+  width: 50%;
+  height: 50%; }
+
 .modal-body {
   padding: 20px;
   background-color: #f8f9fa; }
@@ -323,7 +334,7 @@ select {
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
   .detail-main-image img {
-    width: 100%;
+    width: 80%;
     height: 400px;
     object-fit: cover;
     transition: transform 0.4s ease; }
