@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const statusClasses = {
       'pending': 'status-pending',
       'completed': 'status-completed',
-      'cancelled': 'status-cancelled'
+      'canceled': 'status-canceled'
     };
     return statusClasses[status.toLowerCase()] || '';
   }
