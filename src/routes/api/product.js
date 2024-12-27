@@ -15,6 +15,6 @@ router.get('/reviews/filter/:id', productController.statsReviews);
 // /api/products/reviews/:id
 router.get('/reviews/:id', productController.getReviews);
 
-router.get('/', productController.productsAndGetProducts);
+router.get('/', productController.getProducts);
 
 module.exports = router;

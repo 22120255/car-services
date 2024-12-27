@@ -24,7 +24,7 @@ router.get('/inventory/:id', checkRole(['admin', 'sadmin']), userController.getP
 router.post('/inventory/create-product', checkRole(['admin', 'sadmin']), userController.createProduct);
 router.put('/inventory/update-product/:id', checkRole(['admin', 'sadmin']), userController.updateProduct);
 router.delete('/inventory/delete-product/:id', checkRole(['admin', 'sadmin']), userController.deleteProduct);
-router.get('/inventory', checkRole(['admin', 'sadmin']), productController.productsAndGetProducts);
+router.get('/inventory', checkRole(['admin', 'sadmin']), productController.getProducts);
 
 // trash
 router.delete('/trash/delete/:id', checkRole(['admin', 'sadmin']), userController.forceDeleteProduct);

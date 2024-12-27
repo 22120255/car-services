@@ -4,13 +4,24 @@ class FunctionApi {
     error = null;
     data = null;
 
-    constructor(url, { method = "GET", query = {}, body = {}, options = {} }) {
+    constructor(url, params = {}) {
+        const {
+            method = "GET",
+            query = {},
+            body = {},
+            options = {},
+            onSuccess = null,
+            onError = null
+        } = params;
+
         const { showToast = true } = options;
         this.url = url;
         this.method = method;
         this.body = body;
         this.query = query;
         this.options = { showToast }
+        this.onSuccess = onSuccess;
+        this.onError = onError;
     }
 
     buildQueryParams() {
@@ -28,21 +39,24 @@ class FunctionApi {
                     url: this.buildQueryParams(),
                     type: this.method,
                     data: this.body,
-                    success(response) {
+                    success: (response) => {
                         resolve(response);
+                        this.onSuccess?.();
                     },
-                    error(err) {
+                    error: (err) => {
                         reject(err);
                         if (this.options?.showToast) {
                             showToast('error', err.responseJSON?.message || 'Request failed');
                         }
+                        this.onError?.();
                     }
                 });
             });
-            return this.data;
         } catch (err) {
             this.error = err;
-            throw err;
+            // throw err;
+        } finally {
+            return this.data;
         }
     }
 }

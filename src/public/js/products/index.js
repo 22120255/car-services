@@ -1,5 +1,6 @@
 import { getFilterConfigProduct } from '../config.js';
 import { renderSelectOptions, updateQueryParams } from '../common.js';
+import FunctionApi from '../FunctionApi.js';
 
 // Load filter
 document.addEventListener('DOMContentLoaded', function () {
@@ -24,63 +25,37 @@ document.addEventListener('DOMContentLoaded', function () {
   let totalPages = null;
   let totalItems = null;
 
-  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-  let styleFilter = urlParams.get('style') || null;
-  let brandFilter = urlParams.get('brand') || null;
-  let statusFilter = urlParams.get('status') || null;
-  let transmissionFilter = urlParams.get('transmission') || null;
-  let searchText = urlParams.get('search') || '';
-  let yearFilter = parseInt(urlParams.get('year')) || '';
-
-  let priceValue = `${priceMinFilter}-${priceMaxFilter}`;
-  if (priceMinFilter === null && priceMaxFilter === null) {
-    priceValue = '';
-  }
-
-  $('#searchInput').val(searchText);
-  $('#limit').val(limit);
-  $('#statusFilter').val(statusFilter);
-  $('#brandFilter').val(brandFilter);
-  $('#styleFilter').val(styleFilter);
-  $('#transmissionFilter').val(transmissionFilter);
-  $('#yearFilter').val(yearFilter);
-  $('#priceFilter').val(`${priceValue}`);
-
+  // TODO: Chưa xử lí trường hợp chỉ nhập một giá trị min trên url
   function syncFiltersFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     limit = parseInt(urlParams.get('limit')) || 8;
     offset = parseInt(urlParams.get('offset')) || 1;
-    priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-    priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-    styleFilter = urlParams.get('style') || null;
-    brandFilter = urlParams.get('brand') || null;
-    statusFilter = urlParams.get('status') || null;
-    transmissionFilter = urlParams.get('transmission') || null;
-    searchText = urlParams.get('search') || null;
-    yearFilter = parseInt(urlParams.get('year')) || null;
+    const priceMin = parseFloat(urlParams.get('priceMin') || "");
+    const priceMax = parseFloat(urlParams.get('priceMax') || "");
+    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : "";
 
     // Đồng bộ với giao diện
-    $('#searchInput').val(searchText);
     $('#limit').val(limit);
-    $('#statusFilter').val(statusFilter);
-    $('#brandFilter').val(brandFilter);
-    $('#styleFilter').val(styleFilter);
-    $('#transmissionFilter').val(transmissionFilter);
-    $('#yearFilter').val(yearFilter);
-    $('#priceFilter').val(`${priceValue}`);
+    $('#searchInput').val(urlParams.get('search') || "");
+    $('#statusFilter').val(urlParams.get('status') || "");
+    $('#brandFilter').val(urlParams.get('brand') || "");
+    $('#styleFilter').val(urlParams.get('style') || "");
+    $('#transmissionFilter').val(urlParams.get('transmission') || "");
+    $('#yearFilter').val(parseInt(urlParams.get('year')) || "");
+    $('#priceFilter').val(price);
   }
 
   // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
   window.addEventListener('popstate', async function () {
-    syncFiltersFromURL(); // Đồng bộ lại bộ lọc từ URL
+    syncFiltersFromURL();
     await refresh(); // Tải lại dữ liệu
   });
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
       offset = 1;
-      updateQueryParams({ [paramKey]: $(this).val(), offset: offset });
+      limit = parseInt(urlParams.get('limit')) || 8
+      updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
   }
@@ -97,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const search = $('#searchInput').val();
       offset = 1;
-      updateQueryParams({ search: search, offset: offset });
+      limit = parseInt(urlParams.get('limit')) || 8
+      updateQueryParams({ search, offset, limit });
       await refresh();
     }
   });
@@ -106,15 +82,17 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     const search = $('#searchInput').val();
     offset = 1;
-    updateQueryParams({ search: search, offset: offset });
+    limit = parseInt(urlParams.get('limit')) || 8
+    updateQueryParams({ search, offset, limit });
     await refresh();
   });
 
   $('#priceFilter').on('change', async function () {
     const price = $(this).val();
-    const [min, max] = price ? price.split('-') : ['', ''];
+    const [priceMin, priceMax] = price ? price.split('-') : ['', ''];
     offset = 1;
-    updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    limit = parseInt(urlParams.get('limit')) || 8
+    updateQueryParams({ priceMin: priceMin.trim(), priceMax: priceMax.trim(), offset });
     refresh();
   });
 
@@ -131,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="prevPage">&lsaquo;</a>
             </li>
-        `);
+    `);
 
     // Vòng lặp hiển thị trang
     for (let i = firstPage; i <= lastPage; i++) {
@@ -169,25 +147,16 @@ document.addEventListener('DOMContentLoaded', function () {
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
-    const apiQuery = $.param(params);
-    await $.ajax({
-      url: `/api/products?${apiQuery}`,
-      type: 'GET',
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest', // Thêm header Ajax
-      },
-      statusCode: {
-        200(resp) {
-          products = resp.products;
-          totalItems = resp.total;
-          totalPages = Math.ceil(totalItems / limit);
-          // filters = resp.filters;
-        },
-        500(resp) {
-          console.error('Lỗi khi tải dữ liệu:', resp);
-        },
-      },
+
+    const getProductsApi = new FunctionApi(`/api/products`, {
+      query: params,
     });
+    const data = await getProductsApi.call();
+    if (data) {
+      products = data.products;
+      totalItems = data.total;
+      totalPages = Math.ceil(totalItems / limit);
+    }
 
     renderProducts(products);
   }
@@ -198,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!products || products.length === 0) {
       $('#product-list').append(`<div class='col-lg-12'>
-                    <div class='find-nothing text-center' >
+                    <div class='find-nothing d-flex align-items-center justify-content-center' >
                             <h2 style = "font-size: large; color: #978e8e">Find nothing!</h2>
                     </div>
                 </div>`);
@@ -286,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Cập nhật query params và tải lại dữ liệu
-    updateQueryParams({ offset: offset });
+    updateQueryParams({ offset });
     await refresh();
   });
 
@@ -296,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
     totalPages = Math.ceil(totalItems / limit);
     offset = 1;
     // updatePagination();
-    updateQueryParams({ limit: limit, offset: offset });
+    updateQueryParams({ limit, offset });
     await refresh();
   });
 
@@ -305,5 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePagination();
   }
 
+  syncFiltersFromURL();
   refresh();
 });

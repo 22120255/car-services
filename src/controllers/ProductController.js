@@ -102,7 +102,7 @@ class ProductController {
   };
 
   // [GET] /api/products
-  productsAndGetProducts = async (req, res, next) => {
+  getProducts = async (req, res, next) => {
     const page = parseInt(req.query.offset) || 1;
     const limit = parseInt(req.query.limit) || 8;
     const query = {};
@@ -156,7 +156,7 @@ class ProductController {
         });
       }
     } catch (error) {
-      errorLog('ProductController', 'productsAndGetProducts', error);
+      errorLog('ProductController', 'getProducts', error);
     }
   };
 
