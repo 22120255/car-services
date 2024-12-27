@@ -38,25 +38,30 @@ class FunctionApi {
                 $.ajax({
                     url: this.buildQueryParams(),
                     type: this.method,
-                    data: this.body,
+                    contentType: 'application/json',
+                    data: this.body
+                        ? JSON.stringify(this.body)
+                        : null,
+                    dataType: 'json',
                     success: (response) => {
                         resolve(response);
-                        this.onSuccess?.();
+                        this.onSuccess?.(response);
                     },
                     error: (err) => {
-                        reject(err);
-                        if (this.options?.showToast) {
-                            showToast('error', err.responseJSON?.message || 'Request failed');
-                        }
-                        this.onError?.();
+                        const errorMessage = err.responseJSON?.message || 'Request failed';
+                        reject(errorMessage);
+                        this.onError?.(err);
                     }
                 });
             });
+            return this.data;
         } catch (err) {
             this.error = err;
+            if (this.options?.showToast) {
+                showToast('error', err);
+            }
+            return null;
             // throw err;
-        } finally {
-            return this.data;
         }
     }
 }

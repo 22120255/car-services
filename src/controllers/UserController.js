@@ -318,7 +318,9 @@ class UserController {
 
       await UserService.updateAvatar(userId, pathFile);
       clearCache(`user/profile/${userId}`);
-      res.status(200).json(pathFile);
+      res.status(200).json({
+        avatar: pathFile,
+      });
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
       res.status(500).json({
