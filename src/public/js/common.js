@@ -77,6 +77,7 @@ async function loadCartData() {
   return cart;
 }
 
+// Update query params in URL when filter change
 function updateQueryParams(paramsToUpdate) {
   const params = new URLSearchParams(window.location.search);
   Object.entries(paramsToUpdate).forEach(([key, value]) => {

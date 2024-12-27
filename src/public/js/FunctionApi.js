@@ -4,13 +4,24 @@ class FunctionApi {
     error = null;
     data = null;
 
-    constructor(url, { method = "GET", query = {}, body = {}, options = {} }) {
+    constructor(url, params = {}) {
+        const {
+            method = "GET",
+            query = {},
+            body = {},
+            options = {},
+            onSuccess = null,
+            onError = null
+        } = params;
+
         const { showToast = true } = options;
         this.url = url;
         this.method = method;
         this.body = body;
         this.query = query;
         this.options = { showToast }
+        this.onSuccess = onSuccess;
+        this.onError = onError;
     }
 
     buildQueryParams() {
@@ -27,22 +38,30 @@ class FunctionApi {
                 $.ajax({
                     url: this.buildQueryParams(),
                     type: this.method,
-                    data: this.body,
-                    success(response) {
+                    contentType: 'application/json',
+                    data: this.body
+                        ? JSON.stringify(this.body)
+                        : null,
+                    dataType: 'json',
+                    success: (response) => {
                         resolve(response);
+                        this.onSuccess?.(response);
                     },
-                    error(err) {
-                        reject(err);
-                        if (this.options?.showToast) {
-                            showToast('error', err.responseJSON?.message || 'Request failed');
-                        }
+                    error: (err) => {
+                        const errorMessage = err.responseJSON?.message || 'Request failed';
+                        reject(errorMessage);
+                        this.onError?.(err);
                     }
                 });
             });
             return this.data;
         } catch (err) {
             this.error = err;
-            throw err;
+            if (this.options?.showToast) {
+                showToast('error', err);
+            }
+            return null;
+            // throw err;
         }
     }
 }
