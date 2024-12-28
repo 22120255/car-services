@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
   let statusFilter = urlParams.get('status') || null;
   let searchText = urlParams.get('search') || '';
+  let sortBy = urlParams.get('key') || '';
 
   // Initialize filters with URL params
   $('#searchInput').val(searchText);
@@ -22,11 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
   if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
 
   // ------------------------------------ Setup Filters -----------------------------------------------
-  const { statuses, prices, perPages } = getFilterConfigOrder();
+  const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
 
   const $statusFilter = $('#statusFilter');
   const $priceFilter = $('#priceFilter');
   const $limit = $('#limit');
+  const $sortBy = $('#sortBy');
 
   // Render options
   const renderSelectOptions = (element, options, defaultText) => {
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
   renderSelectOptions($priceFilter, prices, 'Select price'); 
+  renderSelectOptions($sortBy, createdTime, 'Sort by time created');
 
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
@@ -83,6 +86,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const [min, max] = price ? price.split('-') : ['', ''];
     offset = 1;
     updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    await refresh();
+  });
+
+  // Sort by handler
+  $('#sortBy').on('change', async function () {
+    const key = 'createdAt';
+    const direction = $(this).val();
+    offset = 1;
+    updateQueryParams({ key: key, direction: direction });
     await refresh();
   });
 

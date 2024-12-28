@@ -76,6 +76,10 @@ const getFilterConfigOrder = () => ({
     { value: 16, name: '16' },
     { value: 20, name: '20' },
   ],
+  createdTime: [
+    { value: 'asc', name: 'Ascending' },
+    { value: 'desc', name: 'Descending' },
+  ],
 });
 
 export { getFilterConfigProduct, getFilterConfigOrder };

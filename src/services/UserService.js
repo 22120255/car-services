@@ -25,7 +25,9 @@ class UserService {
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
       }
-      console.log('filter:', filter);
+      console.log(typeof key);
+      console.log('sort', sort, typeof sort);
+      
       const users = await User.find(filter)
         .skip(offset * limit)
         .limit(limit)
@@ -283,7 +285,7 @@ class UserService {
 
   // Lấy danh sách đơn hàng
 
-  async getOrders({ limit = 10, offset = 0, key, direction, search, status }) {
+  async getOrders({ limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax }) {
     try {
       let filter = {};
       
@@ -323,11 +325,7 @@ class UserService {
         direction ||= 'asc';
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
-      } else {
-        // Mặc định sort theo createdAt giảm dần
-        sort.createdAt = -1;
       }
-      // console.log('filter:', JSON.stringify(filter));
       // Query orders với populate
       const orders = await Order.find(filter)
         .populate({
