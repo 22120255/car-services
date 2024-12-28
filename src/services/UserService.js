@@ -25,6 +25,7 @@ class UserService {
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
       }
+      console.log('filter:', filter);
       const users = await User.find(filter)
         .skip(offset * limit)
         .limit(limit)
@@ -288,12 +289,13 @@ class UserService {
       
       // Xử lý search
       if (search) {
+        //console.log('search:', search);
         // Tìm users có tên match với search term
         const users = await User.find({
           fullName: { $regex: search, $options: 'i' }
         }).select('_id');
         const userIds = users.map(user => user._id);
-  
+        //console.log('userIds:', userIds);
         // Tìm products có brand hoặc model match với search term
         const products = await Product.find({
           $or: [
@@ -302,7 +304,7 @@ class UserService {
           ]
         }).select('_id');
         const productIds = products.map(product => product._id);
-  
+        //console.log('productIds:', productIds);
         // Build filter cho orders
         filter.$or = [
           { userId: { $in: userIds } },  // Orders của users match
@@ -325,7 +327,7 @@ class UserService {
         // Mặc định sort theo createdAt giảm dần
         sort.createdAt = -1;
       }
-  
+      // console.log('filter:', JSON.stringify(filter));
       // Query orders với populate
       const orders = await Order.find(filter)
         .populate({
@@ -340,8 +342,10 @@ class UserService {
         .limit(limit)
         .sort(sort)
         .lean();
-  
+      
+      //console.log('orders:', orders);
       const total = await Order.countDocuments(filter);
+      //console.log('total:', total);
   
       return { orders, total };
     } catch (error) {
