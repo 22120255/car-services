@@ -410,6 +410,73 @@ select {
     color: #666;
     font-size: 1.1rem; }
 
+.order-details {
+  padding: 20px; }
+
+.order-details h6 {
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: 600; }
+
+.order-details .car-image {
+  width: 60px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 4px; }
+
+.order-info {
+  padding: 20px; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; }
+
+.info-grid p {
+  margin-bottom: 0.5rem; }
+
+.customer-info,
+.order-details {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px; }
+
+.order-details table {
+  margin-bottom: 0; }
+
+.order-summary {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px; }
+
+#userDetailsModal .modal-body {
+  padding: 0; }
+
+#userDetailsModal .car-image {
+  border-radius: 4px; }
+
+.table > :not(caption) > * > * {
+  padding: 1rem 0.5rem;
+  vertical-align: middle; }
+
+.info-list {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px; }
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap; }
+
+.info-item strong {
+  color: #6c757d; }
+
 @media (max-width: 1024px) {
   .detail-product-wrapper {
     gap: 2rem; }

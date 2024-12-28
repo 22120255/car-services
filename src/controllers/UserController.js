@@ -274,6 +274,19 @@ class UserController {
     }
   }
 
+  // [GET] /api/user/orders/:id
+  async getOrder(req, res) {
+    try {
+      const order = await UserService.getOrder(req.params.id);
+      res.status(200).json({ order });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Internal Server Error',
+        message: error.message
+      });
+    }
+  }
+
   // [PATCH] /api/user/orders/status/:id
   async updateOrderStatus(req, res) {
     try {
