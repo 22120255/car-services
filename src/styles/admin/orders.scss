@@ -6,6 +6,7 @@
   background-color: #ffffff;
   height: 100%;
   padding: 20px;
+  transition: all 0.3s ease;
 }
 
 /* Section Header */
@@ -14,6 +15,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  transition: margin 0.2s ease;
 }
 
 /* Filters */
@@ -22,6 +24,7 @@
   gap: 10px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  transition: all 0.3s ease;
 }
 
 .filters input,
@@ -31,6 +34,18 @@
   border-radius: 5px;
   flex-grow: 1;
   min-width: 150px;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 8px rgba(41, 128, 185, 0.4);
+  }
 }
 
 /* Table */
@@ -38,6 +53,25 @@
   overflow-y: auto;
   margin-top: 20px;
   max-height: 516px;
+  transition: all 0.3s ease;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #555;
+    }
+  }
 }
 
 .table-responsive thead {
@@ -52,6 +86,11 @@
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .car-table th,
@@ -62,6 +101,7 @@
   vertical-align: middle;
   height: 85px;
   line-height: 1.5;
+  transition: background-color 0.2s ease;
 }
 
 .car-table th {
@@ -70,8 +110,13 @@
   color: #2c3e50;
 }
 
-.car-table tbody tr:hover {
-  background-color: #f8f9fa;
+.car-table tbody tr {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  
+  &:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+  }
 }
 
 /* Product Cell */
@@ -80,6 +125,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  transition: all 0.2s ease;
 }
 
 .car-image {
@@ -87,6 +133,11 @@
   height: 60px;
   object-fit: cover;
   border-radius: 4px;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 /* Status */
@@ -97,21 +148,38 @@
   font-weight: 600;
   text-transform: uppercase;
   display: inline-block;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
 }
 
 .status.status-completed {
   background-color: #e3fcef;
   color: #2ecc71;
+  
+  &:hover {
+    background-color: #d4f7e6;
+  }
 }
 
 .status.status-canceled {
   background-color: #fee2e2;
   color: #ef4444;
+  
+  &:hover {
+    background-color: #fdd5d5;
+  }
 }
 
 .status.status-pending {
   background-color: #fef2c2;
   color: #f59e0b;
+  
+  &:hover {
+    background-color: #fdeeb5;
+  }
 }
 
 /* Modal */
@@ -119,6 +187,11 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.01);
+  }
 }
 
 .modal-header {
@@ -126,21 +199,29 @@
   color: #fff;
   padding: 15px 20px;
   border-bottom: none;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #2980b9;
+  }
 }
 
 .modal-title {
   font-size: 1.5rem;
   font-weight: 600;
+  transition: color 0.2s ease;
 }
 
 .modal-body {
   padding: 20px;
   background-color: #f8f9fa;
+  transition: all 0.3s ease;
 }
 
 /* Order Details */
 .order-info {
   padding: 20px;
+  transition: padding 0.3s ease;
 }
 
 .info-list {
@@ -151,6 +232,12 @@
   padding: 1rem;
   background-color: #f8f9fa;
   border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #f1f3f5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .info-item {
@@ -158,10 +245,20 @@
   align-items: center;
   gap: 0.5rem;
   white-space: nowrap;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: translateX(5px);
+  }
 }
 
 .info-item strong {
   color: #6c757d;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: #495057;
+  }
 }
 
 .customer-info,
@@ -169,12 +266,24 @@
   background-color: #f8f9fa;
   padding: 1rem;
   border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #f1f3f5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .order-summary {
   padding: 1rem;
   background-color: #f8f9fa;
   border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #f1f3f5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
 }
 
 /* Responsive */
