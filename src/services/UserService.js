@@ -282,90 +282,72 @@ class UserService {
 
   // Lấy danh sách đơn hàng
 
-  async getOrders({ limit, offset, search, status, priceMin, priceMax }) {
-
+  async getOrders({ limit = 10, offset = 0, key, direction, search, status }) {
     try {
-
       let filter = {};
-
-  
-
-      // Search in customer name or order ID
-
+      
+      // Xử lý search
       if (search) {
-
+        // Tìm users có tên match với search term
+        const users = await User.find({
+          fullName: { $regex: search, $options: 'i' }
+        }).select('_id');
+        const userIds = users.map(user => user._id);
+  
+        // Tìm products có brand hoặc model match với search term
+        const products = await Product.find({
+          $or: [
+            { brand: { $regex: search, $options: 'i' } },
+            { model: { $regex: search, $options: 'i' } }
+          ]
+        }).select('_id');
+        const productIds = products.map(product => product._id);
+  
+        // Build filter cho orders
         filter.$or = [
-
-          { '_id': { $regex: search, $options: 'i' } },
-
-          { 'users.fullName': { $regex: search, $options: 'i' } }
-
+          { userId: { $in: userIds } },  // Orders của users match
+          { 'items.productId': { $in: productIds } }  // Orders có products match
         ];
-
       }
-
   
-
-      // Status filter - case insensitive exact match
-
+      // Filter theo status
       if (status) {
-
-        filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
-
+        filter.status = status;
       }
-
   
-
-      // Price range filter on totalAmount
-
-      if (priceMin && priceMax) {
-
-        filter.totalAmount = { $gte: parseFloat(priceMin), $lte: parseFloat(priceMax) };
-
+      // Xử lý sort
+      let sort = {};
+      if (key) {
+        direction ||= 'asc';
+        const sortDirection = direction === 'asc' ? 1 : -1;
+        sort[key] = sortDirection;
+      } else {
+        // Mặc định sort theo createdAt giảm dần
+        sort.createdAt = -1;
       }
-
   
-
-      // Query with pagination
-
+      // Query orders với populate
       const orders = await Order.find(filter)
-
         .populate({
-
           path: 'userId',
-
           select: 'fullName email phone'
-
         })
-
         .populate({
-
           path: 'items.productId',
-
           select: 'brand model price images'
-
         })
-
-        .skip(offset * limit - limit)
-
+        .skip(offset * limit)
         .limit(limit)
-
-        .sort({ orderDate: -1 }); // Most recent orders first
-
+        .sort(sort)
+        .lean();
   
-
       const total = await Order.countDocuments(filter);
-
   
-
       return { orders, total };
-
     } catch (error) {
-
+      console.error('Error in getOrders:', error);
       throw error;
-
     }
-
   }
 
   async getOrder(orderId) {
