@@ -5,8 +5,9 @@ const Order = require("../models/Order");
 
 class SiteService {
     // Lấy dữ liệu thống kê
-    async getAnalytics(options = { refresh: false, time, type }) {
-        if (options.refresh) {
+    async getAnalytics(options = {}) {
+        const { refresh = false, time, interval } = options;
+        if (refresh) {
             await getDataReport();
         }
         try {
@@ -33,9 +34,9 @@ class SiteService {
                 }
             }
 
-            if(interval == 1) {
+            if (interval == 1) {
                 // trả về mảng doanh thu từng ngày của tháng time 
-            }else {
+            } else {
                 // trả về 
             }
 

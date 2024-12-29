@@ -27,7 +27,7 @@ class UserService {
       }
       console.log(typeof key);
       console.log('sort', sort, typeof sort);
-      
+
       const users = await User.find(filter)
         .skip(offset * limit)
         .limit(limit)
@@ -288,7 +288,7 @@ class UserService {
   async getOrders({ limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax }) {
     try {
       let filter = {};
-      
+
       // Xử lý search
       if (search) {
         //console.log('search:', search);
@@ -313,12 +313,12 @@ class UserService {
           { 'items.productId': { $in: productIds } }  // Orders có products match
         ];
       }
-  
+
       // Filter theo status
       if (status) {
         filter.status = status;
       }
-  
+
       // Xử lý sort
       let sort = {};
       if (key) {
@@ -341,11 +341,11 @@ class UserService {
         .limit(limit)
         .sort(sort)
         .lean();
-      
+
       //console.log('orders:', orders);
       const total = await Order.countDocuments(filter);
       //console.log('total:', total);
-  
+
       return { orders, total };
     } catch (error) {
       console.error('Error in getOrders:', error);
@@ -360,17 +360,17 @@ class UserService {
 
     try {
       const order = await Order.findById(orderId)
-      .populate({
-        path: 'userId',
-        select: 'fullName email phone'
-      })
-      .populate({
-        path: 'items.productId',
-        select: 'brand model price images'
-      })
-      .lean()
-      .exec();
-      
+        .populate({
+          path: 'userId',
+          select: 'fullName email phone'
+        })
+        .populate({
+          path: 'items.productId',
+          select: 'brand model price images'
+        })
+        .lean()
+        .exec();
+
       if (!order) {
         throw new Error(`Order with ID ${orderId} not found`);
       }
@@ -382,7 +382,7 @@ class UserService {
       throw error;
     }
   }
-  
+
   async updateOrderStatus(orderId, status) {
     try {
       if (!status) {

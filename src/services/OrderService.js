@@ -10,13 +10,11 @@ class OrderService {
     if (!cart?.items?.length) {
       throw new Error('Cart is empty');
     }
-
     const orderItems = cart.items.map(item => ({
       productId: item.productId._id,
-      quantity: item.quantity, 
+      quantity: item.quantity,
       price: item.productId.price
     }));
-
     return Order.create({
       userId,
       items: orderItems,
@@ -25,7 +23,7 @@ class OrderService {
       status: 'pending'
     });
   }
-  
+
   async updateAverageRating(productId) {
     try {
       const reviews = await Review.find({ productId });
