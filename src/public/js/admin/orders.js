@@ -1,4 +1,4 @@
-import { showToast, showModal, updateQueryParams } from '../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,33 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Setup Filters -----------------------------------------------
   const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
 
-  const $statusFilter = $('#statusFilter');
-  const $priceFilter = $('#priceFilter');
-  const $limit = $('#limit');
-  const $sortBy = $('#sortBy');
-
-  // Render options
-  const renderSelectOptions = (element, options, defaultText) => {
-    if (defaultText !== 'Items per page') {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-    }
-    options.forEach((option) => {
-      if (defaultText === 'Select price') {
-        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
-      } else {
-        element.append(`<option value="${option.value}">${option.name}${defaultText === 'Items per page' ? ' /page' : ''}</option>`);
-      }
-    });
-  };
-
-  renderSelectOptions($statusFilter, statuses, 'Select status');
-  renderSelectOptions($limit, perPages, 'Items per page');
-<<<<<<< HEAD
-  renderSelectOptions($priceFilter, prices, 'Select price'); 
-=======
-  renderSelectOptions($priceFilter, prices, 'Select price');
->>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
-  renderSelectOptions($sortBy, createdTime, 'Sort by time created');
+  renderSelectOptions($('#statusFilter'), statuses);
+  renderSelectOptions($('#limit'), perPages);
+  renderSelectOptions($('#priceFilter'), prices);
+  renderSelectOptions($('#sortBy'), createdTime);
 
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
@@ -70,8 +47,10 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter') {
       const search = $(this).val();
+      const urlParams = new URLSearchParams(window.location.search);
+      limit = parseInt(urlParams.get('limit')) || 8
       offset = 1;
-      updateQueryParams({ search: search, offset: offset });
+      updateQueryParams({ search, offset, limit });
       await refresh();
     }
   });
@@ -79,8 +58,10 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#btn-search').on('click', async function (event) {
     event.preventDefault();
     const search = $('#searchInput').val();
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8
     offset = 1;
-    updateQueryParams({ search: search, offset: offset });
+    updateQueryParams({ search, offset, limit });
     await refresh();
   });
 
@@ -89,7 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
     offset = 1;
-    updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8
+    updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
     await refresh();
   });
 
@@ -98,7 +81,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const key = 'createdAt';
     const direction = $(this).val();
     offset = 0;
-    updateQueryParams({ key: key, direction: direction, offset: offset });
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8
+    updateQueryParams({ key, direction, offset, limit });
     await refresh();
   });
 
@@ -260,19 +245,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Sử dụng event delegation 
-<<<<<<< HEAD
-    $('#ordersTable').off('click change').on('click', '.btn-edit-status', function() {
-      const orderId = $(this).data('order-id');
-      const currentStatus = $(this).closest('tr').find('.status').text();
-      const $statusCell = $(`tr[data-order-id='${orderId}'] .status-cell`);
-      
-=======
     $('#ordersTable').off('click change').on('click', '.btn-edit-status', function () {
       const orderId = $(this).data('order-id');
       const currentStatus = $(this).closest('tr').find('.status').text();
       const $statusCell = $(`tr[data-order-id='${orderId}'] .status-cell`);
 
->>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
       // Only create select if it doesn't exist
       if (!$statusCell.find('.status-select').length) {
         const statusSelect = $('<select>').addClass('status-select').attr('data-order-id', orderId);
@@ -285,20 +262,11 @@ document.addEventListener('DOMContentLoaded', function () {
         $statusCell.find('.status-select').remove();
         $statusCell.find('.status').show();
       }
-<<<<<<< HEAD
-    }).on('change', '.status-select', function() {
-=======
     }).on('change', '.status-select', function () {
->>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
       const orderId = $(this).data('order-id');
       const newStatus = $(this).val();
       updateOrderStatus(orderId, newStatus);
     });
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------
@@ -341,53 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Tách event handler ra khỏi renderOrders()
-<<<<<<< HEAD
-$(document).ready(function() {
-  // View order details handler
-  $(document).on('click', '.view-details', async function() {
-      const orderId = $(this).data('order-id');
-      console.debug('View details clicked for order ID:', orderId);
-      
-      // Hiển thị loading 
-      const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
-      modal.show();
-
-      // Gọi API
-      const response = await $.ajax({
-        url: `/api/user/orders/${orderId}`,
-        method: 'GET'
-      });
-      console.debug('Order details response:', response);
-
-      if (!response || !response.order) {
-        throw new Error('Order not found');
-      }
-
-      const order = response.order;
-      console.debug('Order details:', order);
-      // Render customer info
-      $('#customerName').text(order.userId?.fullName || 'N/A');
-      $('#customerEmail').text(order.userId?.email || 'N/A');
-      $('#customerPhone').text(order.userId?.phone || 'N/A');
-
-      // Render order info
-      const shippingDetails = JSON.parse(order.shippingDetails);
-      $('#shippingAddress').text(shippingDetails.address || 'N/A');
-      $('#dateCreated').text(new Date(order.createdAt).toLocaleDateString('vi-VN') || 'N/A');
-      $('#orderStatus').text(order.status || 'N/A');
-
-      // Render order items
-      if (!order.items || order.items.length === 0) {
-        $('#orderItemsList').html('<tr><td colspan="4" class="text-center">No items found</td></tr>');
-      } else {
-        console.debug('Order items:', order.items);
-        const itemsHtml = order.items
-          .map(item => {
-            const product = item.productId;
-            if (!product) return null;
-            
-            return `
-=======
 $(document).ready(function () {
   // View order details handler
   $(document).on('click', '.view-details', async function () {
@@ -433,7 +354,6 @@ $(document).ready(function () {
           if (!product) return null;
 
           return `
->>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
               <tr>
                 <td>
                   <div class="d-flex align-items-center">
@@ -449,20 +369,6 @@ $(document).ready(function () {
                 <td class="text-start">${((item.quantity || 0) * (product.price || 0)).toLocaleString('vi-VN')} đ</td>
               </tr>
             `;
-<<<<<<< HEAD
-          })
-          .filter(Boolean)
-          .join('');
-        console.log('Order items list:', itemsHtml);
-        $('#orderItemsList').html(itemsHtml || '<tr><td colspan="4" class="text-center">No valid items found</td></tr>');
-      }
-
-      // Show total
-      const totalAmount = order.totalAmount || 0;
-      $('#totalAmount').text(totalAmount.toLocaleString('vi-VN') + ' đ');
-
-    
-=======
         })
         .filter(Boolean)
         .join('');
@@ -475,6 +381,5 @@ $(document).ready(function () {
     $('#totalAmount').text(totalAmount.toLocaleString('vi-VN') + ' đ');
 
 
->>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
   });
 });

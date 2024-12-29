@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
+      const urlParams = new URLSearchParams(window.location.search);
       offset = 1;
       limit = parseInt(urlParams.get('limit')) || 8
       updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
+      const urlParams = new URLSearchParams(window.location.search);
       const search = $('#searchInput').val();
       offset = 1;
       limit = parseInt(urlParams.get('limit')) || 8
@@ -79,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   $('#btn-search').on('click', async function (event) {
+    const urlParams = new URLSearchParams(window.location.search);
     event.preventDefault();
     const search = $('#searchInput').val();
     offset = 1;
@@ -88,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   $('#priceFilter').on('change', async function () {
+    const urlParams = new URLSearchParams(window.location.search);
     const price = $(this).val();
     const [priceMin, priceMax] = price ? price.split('-') : ['', ''];
     offset = 1;

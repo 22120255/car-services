@@ -18,33 +18,18 @@
             <div class='row mb-3'>
                 <div class='col'>
                     <select id='statusFilter' class='form-select'>
-                        <option value=''>All statuses</option>
-                        <option value='active'>Active</option>
-                        <option value='inactive'>Inactive</option>
-                        <option value='suspended'>Suspended</option>
                     </select>
                 </div>
                 <div class='col'>
                     <select id='roleFilter' class='form-select'>
-                        <option value=''>All roles</option>
-                        <option value='user'>User</option>
-                        <option value='admin'>Admin</option>
-                        <option value='sadmin'>Super Admin</option>
                     </select>
                 </div>
                 <div class='col'>
                     <select id='sortBy' class='form-select'>
-                        <option value=''>Sort by</option>
-                        <option value='fullName'>Full Name</option>
-                        <option value='email'>Email</option>
-                        <option value='createdAt'>Registration Time</option>
-                        <option value='lastLogin'>Last Login</option>
                     </select>
                 </div>
                 <div class='col'>
                     <select id='sortOrder' class='form-select'>
-                        <option value='asc'>Ascending</option>
-                        <option value='desc'>Descending</option>
                     </select>
                 </div>
             </div>
@@ -56,12 +41,12 @@
             <thead>
                 <tr>
                     <th>Avatar</th>
-                    <th>Full Name</th>
+                    <th>Fullname</th>
                     <th>Email</th>
                     <th>Role</th>
                     <th>Status</th>
-                    <th>Last Login</th>
-                    <th>Actions</th>
+                    <th>Last login</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id='accountsTable'></tbody>
@@ -85,9 +70,9 @@
                 class='form-select form-select-sm'
                 style='width: auto;'
             >
-                <option value='10'>10 / page</option>
-                <option value='15'>15 / page</option>
-                <option value='20'>20 / page</option>
+                {{!-- <option value='10'>10 / trang</option>
+                <option value='15'>15 / trang</option>
+                <option value='20'>20 / trang</option> --}}
             </select>
         </div>
     </div>

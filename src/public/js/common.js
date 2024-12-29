@@ -59,7 +59,9 @@ async function loadCartData() {
   const getCardDataApi = new FunctionApi('/api/cart/data', {
     hideToast: true,
   });
-  return await getCardDataApi.call();
+  const data = await getCardDataApi.call();
+
+  return data;
 }
 
 // Update query params in URL when filter change

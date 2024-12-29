@@ -26,7 +26,7 @@ class CartController {
   async addToCart(req, res) {
     try {
       await CartService.addItem(
-        req.user._id, 
+        req.user._id,
         req.params.productId,
         parseInt(req.body.quantity)
       );
@@ -46,7 +46,7 @@ class CartController {
 
       const cart = await CartService.updateQuantity(
         req.body.cartId,
-        req.params.productId, 
+        req.params.productId,
         req.body.newQuantity
       );
 
@@ -77,7 +77,7 @@ class CartController {
       return res.status(200).json({ message: 'Update cart payment status successful' });
     } catch (error) {
       errorLog('CartController.js', 'updatePaymentStatus', error.message);
-      return res.status(500).json({ message: 'Internal server error' }); 
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 }

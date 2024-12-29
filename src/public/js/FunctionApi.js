@@ -14,12 +14,12 @@ class FunctionApi {
             onError = null
         } = params;
 
-        const { showToast = true } = options;
+        const { hideToast = false } = options;
         this.url = url;
         this.method = method;
         this.body = body;
         this.query = query;
-        this.options = { showToast }
+        this.options = { hideToast }
         this.onSuccess = onSuccess;
         this.onError = onError;
     }
@@ -56,8 +56,10 @@ class FunctionApi {
             });
             return this.data;
         } catch (err) {
+            console.log('err', err);
+
             this.error = err;
-            if (this.options?.showToast) {
+            if (!this.options?.hideToast) {
                 showToast('Error', err);
             }
             return null;

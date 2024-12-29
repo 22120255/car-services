@@ -1,4 +1,15 @@
-import { showModal, showToast } from '../common.js';
+import { renderSelectOptions, showModal, showToast } from '../common.js';
+import { getFilterConfigAdminAccounts } from '../config.js';
+
+document.addEventListener('DOMContentLoaded', function () {
+  const { status, role, sortBy, direction, offset } = getFilterConfigAdminAccounts();
+
+  renderSelectOptions($('#statusFilter'), status);
+  renderSelectOptions($('#roleFilter'), role);
+  renderSelectOptions($('#sortBy'), sortBy);
+  renderSelectOptions($('#sortOrder'), direction);
+  renderSelectOptions($('#itemsPerPage'), offset);
+})
 
 document.addEventListener('DOMContentLoaded', function () {
   // Handle role change
@@ -243,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td>${new Date(user.lastLogin).toLocaleString()}</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" title="View Details" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
+                            <button type="button" title="View detail" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
                             ${!user.isCurrentUser
