@@ -69,7 +69,7 @@ class SiteController {
     async getAnalytics(req, res) {
         const refresh = req.query.refresh === 'true';
         try {
-            const analytics = await SiteService.getAnalytics({ refresh, time: req.query.time, type: req.query.type });
+            const analytics = await SiteService.getAnalytics({ refresh, time: req.query.time, interval: req.query.interval });
             res.status(200).json({
                 data: analytics
             });

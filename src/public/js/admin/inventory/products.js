@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderSelectOptions($('#brandFilter'), brands);
   renderSelectOptions($('#statusFilter'), statuses);
-  renderSelectOptions($('#limit'), perPage);
+  renderSelectOptions($('#limit'), perPages);
   renderSelectOptions($('#priceFilter'), prices);
 });
 

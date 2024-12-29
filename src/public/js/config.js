@@ -1,6 +1,6 @@
 const getFilterConfigProduct = () => ({
   years: [
-    { value: '', label: 'All' },
+    { value: "", label: "All" },
     { value: '2024', label: '2024' },
     { value: '2023', label: '2023' },
     { value: '2022', label: '2022' },
@@ -10,7 +10,7 @@ const getFilterConfigProduct = () => ({
     { value: '2018', label: '2018' },
   ],
   brands: [
-    { value: '', label: 'All' },
+    { value: "", label: "All" },
     { label: 'Audi', value: 'Audi' },
     { label: 'BMW', value: 'BMW' },
     { label: 'Ford', value: 'Ford' },
@@ -24,18 +24,18 @@ const getFilterConfigProduct = () => ({
     { label: 'Vinfast', value: 'Vinfast' },
   ],
   statuses: [
-    { value: '', label: 'All' },
+    { value: "", label: "All" },
     { value: 'new', label: 'New' },
     { value: 'used', label: 'Used' },
     { value: 'sold', label: 'Sold' },
   ],
   transmissions: [
-    { value: '', label: 'All' },
+    { value: "", label: "All" },
     { value: 'manual', label: 'Manual' },
     { value: 'automatic', label: 'Automatic' },
   ],
   styles: [
-    { value: '', label: 'All' },
+    { value: "", label: "All" },
     { value: 'sedan', label: 'Sedan' },
     { value: 'suv', label: 'SUV' },
     { value: 'truck', label: 'Truck' },
@@ -49,14 +49,14 @@ const getFilterConfigProduct = () => ({
     { value: '200000 - 5000000', label: ' > 200000' },
   ],
   perPages: [
-    { value: 4, label: '4 / trang' },
-    { value: 8, label: '8 / trang' },
-    { value: 12, label: '12 / trang' },
-    { value: 16, label: '16 / trang' },
-    { value: 20, label: '20 / trang' },
+    { value: 4, label: '4 / page' },
+    { value: 8, label: '8 / page' },
+    { value: 12, label: '12 / page' },
+    { value: 16, label: '16 / page' },
+    { value: 20, label: '20 / page' },
   ],
   fuelTypes: [
-    { value: '', label: 'All' },
+    { value: "", label: "All" },
     { value: 'petrol', label: 'Petrol' },
     { value: 'diesel', label: 'Diesel' },
     { value: 'electric', label: 'Electric' },
@@ -85,5 +85,62 @@ const getFilterConfigAdminDashboard = () => ({
     },
   ]
 })
+// Admin/accounts 
+const getFilterConfigAdminAccounts = () => ({
+  status: [
+    { value: '', label: 'All' },
+    { value: 'active', label: "Active" },
+    { value: 'inactive', label: "Inactive" },
+    { value: 'suspended', label: "Suspended" },
+  ],
+  role: [
+    { value: '', label: 'All' },
+    { value: 'sadmin', label: "Super Admin" },
+    { value: 'admin', label: "Admin" },
+    { value: 'suspended', label: "Suspended" },
+  ],
+  sortBy: [
+    { value: '', label: 'Sort by' },
+    { value: 'fullName', label: 'Fullname' },
+    { value: 'email', label: 'Email' },
+    { value: 'createdAt', label: 'Created at' },
+    { value: 'lastLogin', label: 'Last login' },
+  ],
+  direction: [
+    { value: 'asc', label: "Ascending" },
+    { value: 'desc', label: "Descending" },
+  ],
+  offset: [
+    { value: "10", label: "10 / page" },
+    { value: "15", label: "15 / page" },
+    { value: "20", label: "20 / page" },
+  ]
+})
 
-export { getFilterConfigProduct, getFilterConfigAdminDashboard };
+const getFilterConfigOrder = () => ({
+  statuses: [
+    { value: '', label: 'All' },
+    { value: 'pending', label: 'Pending' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'canceled', label: 'Canceled' },
+  ],
+  prices: [
+    { value: '0 - 50000', label: '0 - 50000' },
+    { value: '50000 - 100000', label: '50000 - 100000' },
+    { value: '100000 - 200000', label: '100000 - 200000' },
+    { value: '200000 - 5000000', label: ' > 200000' },
+  ],
+  perPages: [
+    { value: 4, label: '4 / page' },
+    { value: 8, label: '8 / page' },
+    { value: 12, label: '12 / page' },
+    { value: 16, label: '16 / page' },
+    { value: 20, label: '20 / page' },
+  ],
+  createdTime: [
+    { value: 'asc', label: 'Ascending' },
+    { value: 'desc', label: 'Descending' },
+  ],
+});
+
+export { getFilterConfigProduct, getFilterConfigOrder, getFilterConfigAdminDashboard, getFilterConfigAdminAccounts };

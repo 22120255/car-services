@@ -1,5 +1,7 @@
 // js for all pages
 
+import FunctionApi from './FunctionApi.js'
+
 function showToast(type, message) {
   const toastContainer = $('#toast-container');
 
@@ -54,27 +56,12 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
 }
 
 async function loadCartData() {
-  let cart = null;
-  try {
-    await $.ajax({
-      url: '/api/cart/data',
-      type: 'GET',
-      statusCode: {
-        200: function (data) {
-          cart = data; // Lưu lại dữ liệu cart nếu có
-        },
-        404: function () {
-          // console.error('Cart data not found.');
-        },
-        500: function () {
-          // console.error('Server error occurred.');
-        },
-      },
-    });
-  } catch (error) {
-    // console.error('Error loading cart data:', error);
-  }
-  return cart;
+  const getCardDataApi = new FunctionApi('/api/cart/data', {
+    hideToast: true,
+  });
+  const data = await getCardDataApi.call();
+
+  return data;
 }
 
 // Update query params in URL when filter change
