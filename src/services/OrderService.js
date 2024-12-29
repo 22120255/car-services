@@ -13,10 +13,10 @@ class OrderService {
 
     const orderItems = cart.items.map(item => ({
       productId: item.productId._id,
-      quantity: item.quantity, 
+      quantity: item.quantity,
       price: item.productId.price
     }));
-
+    
     return Order.create({
       userId,
       items: orderItems,

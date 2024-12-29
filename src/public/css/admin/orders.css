@@ -94,6 +94,17 @@
   .car-table tbody tr:hover {
     background-color: #f8f9fa;
     transform: translateY(-2px); }
+<<<<<<< HEAD
+=======
+
+/* Product Cell */
+.product-cell {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease; }
+>>>>>>> f9c7728ad69d01ef57f566d9947c8b3c735df868
 
 /* Product Cell */
 .product-cell {

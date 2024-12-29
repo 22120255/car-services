@@ -292,7 +292,7 @@ class UserController {
   // [PATCH] /api/user/orders/status/:id
   async updateOrderStatus(req, res) {
     try {
-      const orderId  = req.params.id;
+      const orderId = req.params.id;
       const { status } = req.body;
 
       if (!orderId || !status) {

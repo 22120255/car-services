@@ -57,6 +57,28 @@ const getFilterConfigProduct = () => ({
   ],
 });
 
+// Admin/dashboard
+const getFilterConfigAdminDashboard = () => ({
+  time: [
+    {
+      value: "1",
+      label: "1M"
+    },
+    {
+      value: "3",
+      label: "3M"
+    },
+    {
+      value: "6",
+      label: "6M"
+    },
+    {
+      value: "12",
+      label: "12M"
+    },
+  ]
+})
+
 const getFilterConfigOrder = () => ({
   statuses: [
     { value: 'pending', name: 'Pending' },
@@ -82,4 +104,4 @@ const getFilterConfigOrder = () => ({
   ],
 });
 
-export { getFilterConfigProduct, getFilterConfigOrder };
+export { getFilterConfigProduct, getFilterConfigOrder, getFilterConfigAdminDashboard };
