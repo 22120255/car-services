@@ -49,11 +49,11 @@ const getFilterConfigProduct = () => ({
     { value: '200000 - 5000000', label: ' > 200000' },
   ],
   perPages: [
-    { value: 4, label: '4 / trang' },
-    { value: 8, label: '8 / trang' },
-    { value: 12, label: '12 / trang' },
-    { value: 16, label: '16 / trang' },
-    { value: 20, label: '20 / trang' },
+    { value: 4, label: '4 / page' },
+    { value: 8, label: '8 / page' },
+    { value: 12, label: '12 / page' },
+    { value: 16, label: '16 / page' },
+    { value: 20, label: '20 / page' },
   ],
   fuelTypes: [
     { value: "", label: "All" },
@@ -111,9 +111,9 @@ const getFilterConfigAdminAccounts = () => ({
     { value: 'desc', label: "Descending" },
   ],
   offset: [
-    { value: "10", label: "10 / trang" },
-    { value: "15", label: "15 / trang" },
-    { value: "20", label: "20 / trang" },
+    { value: "10", label: "10 / page" },
+    { value: "15", label: "15 / page" },
+    { value: "20", label: "20 / page" },
   ]
 })
 
@@ -125,17 +125,17 @@ const getFilterConfigOrder = () => ({
     { value: 'canceled', label: 'Canceled' },
   ],
   prices: [
-    { priceMin: 0, priceMax: 50000, label: '0 - 50000' },
-    { priceMin: 50000, priceMax: 100000, label: '50000 - 100000' },
-    { priceMin: 100000, priceMax: 200000, label: '100000 - 200000' },
-    { priceMin: 200000, priceMax: 5000000, label: '200000+' },
+    { value: '0 - 50000', label: '0 - 50000' },
+    { value: '50000 - 100000', label: '50000 - 100000' },
+    { value: '100000 - 200000', label: '100000 - 200000' },
+    { value: '200000 - 5000000', label: ' > 200000' },
   ],
   perPages: [
-    { value: 4, label: '4' },
-    { value: 8, label: '8' },
-    { value: 12, label: '12' },
-    { value: 16, label: '16' },
-    { value: 20, label: '20' },
+    { value: 4, label: '4 / page' },
+    { value: 8, label: '8 / page' },
+    { value: 12, label: '12 / page' },
+    { value: 16, label: '16 / page' },
+    { value: 20, label: '20 / page' },
   ],
   createdTime: [
     { value: 'asc', label: 'Ascending' },

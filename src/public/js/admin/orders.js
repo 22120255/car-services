@@ -1,4 +1,4 @@
-import { showToast, showModal, updateQueryParams } from '../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,29 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Setup Filters -----------------------------------------------
   const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
 
-  const $statusFilter = $('#statusFilter');
-  const $priceFilter = $('#priceFilter');
-  const $limit = $('#limit');
-  const $sortBy = $('#sortBy');
-
-  // Render options
-  const renderSelectOptions = (element, options, defaultText) => {
-    if (defaultText !== 'Items per page') {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-    }
-    options.forEach((option) => {
-      if (defaultText === 'Select price') {
-        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
-      } else {
-        element.append(`<option value="${option.value}">${option.name}${defaultText === 'Items per page' ? ' /page' : ''}</option>`);
-      }
-    });
-  };
-
-  renderSelectOptions($statusFilter, statuses, 'Select status');
-  renderSelectOptions($limit, perPages, 'Items per page');
-  renderSelectOptions($priceFilter, prices, 'Select price');
-  renderSelectOptions($sortBy, createdTime, 'Sort by time created');
+  renderSelectOptions($('#statusFilter'), statuses);
+  renderSelectOptions($('#limit'), perPages);
+  renderSelectOptions($('#priceFilter'), prices);
+  renderSelectOptions($('#sortBy'), createdTime);
 
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
@@ -66,8 +47,10 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter') {
       const search = $(this).val();
+      const urlParams = new URLSearchParams(window.location.search);
+      limit = parseInt(urlParams.get('limit')) || 8
       offset = 1;
-      updateQueryParams({ search: search, offset: offset });
+      updateQueryParams({ search, offset, limit });
       await refresh();
     }
   });
@@ -75,8 +58,10 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#btn-search').on('click', async function (event) {
     event.preventDefault();
     const search = $('#searchInput').val();
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8
     offset = 1;
-    updateQueryParams({ search: search, offset: offset });
+    updateQueryParams({ search, offset, limit });
     await refresh();
   });
 
@@ -85,7 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
     offset = 1;
-    updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8
+    updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
     await refresh();
   });
 
@@ -94,7 +81,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const key = 'createdAt';
     const direction = $(this).val();
     offset = 0;
-    updateQueryParams({ key: key, direction: direction, offset: offset });
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8
+    updateQueryParams({ key, direction, offset, limit });
     await refresh();
   });
 
