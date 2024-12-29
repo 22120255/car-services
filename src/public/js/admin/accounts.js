@@ -1,7 +1,7 @@
 import { showModal, showToast } from '../common.js';
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Xử lý thay đổi role
+  // Handle role change
   $(document).on('change', '.role-select', function () {
     const userId = $(this).closest('tr').data('user-id');
     const newRole = $(this).val();
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Xử lý thay đổi status
+  // Handle status change
   $(document).on('change', '.status-select', function () {
     const userId = $(this).closest('tr').data('user-id');
     const newStatus = $(this).val();
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Xử lý xem chi tiết
+  // Handle view details
   $(document).on('click', '.view-details', function () {
     const userId = $(this).closest('tr').data('user-id');
 
@@ -63,12 +63,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Xử lý xóa user
+  // Handle delete user
   $(document).on('click', '.delete-user', function () {
     const userId = $(this).closest('tr').data('user-id');
 
     showModal({
-      title: 'Xoá tài khoản', content: 'Bạn có chắc chắn muốn xóa tài khoản này không?', btnSubmit: "Delete", callback: () => {
+      title: 'Delete Account', content: 'Are you sure you want to delete this account?', btnSubmit: "Delete", callback: () => {
         $.ajax({
           url: `/api/user/${userId}`,
           method: 'DELETE',
@@ -90,23 +90,23 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 document.addEventListener('DOMContentLoaded', function () {
-  // Đọc các tham số từ URL khi trang được load
+  // Read parameters from URL when the page loads
   const urlParams = new URLSearchParams(window.location.search);
 
   let users = null;
   let totalItems = null;
-  let limit = parseInt(urlParams.get('limit')) || $('#itemsPerPage').val(); // Số item mỗi trang
-  let offset = parseInt(urlParams.get('offset')) || 0; // Số trang hiện tại
+  let limit = parseInt(urlParams.get('limit')) || $('#itemsPerPage').val(); // Items per page
+  let offset = parseInt(urlParams.get('offset')) || 0; // Current page
   let totalPages = null;
 
-  // Khôi phục trạng thái UI từ URL params
+  // Restore UI state from URL params
   const searchText = urlParams.get('search') || '';
   const statusFilter = urlParams.get('status') || '';
   const roleFilter = urlParams.get('role') || '';
   const sortBy = urlParams.get('key') || '';
   const sortOrder = urlParams.get('direction') || 'asc';
 
-  // Set giá trị cho các input từ URL params
+  // Set values for inputs from URL params
   $('#search-input').val(searchText);
   $('#statusFilter').val(statusFilter);
   $('#roleFilter').val(roleFilter);
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#sortOrder').val(sortOrder);
   $('#itemsPerPage').val(limit);
 
-  // Xử lý tìm kiếm
+  // Handle search
   $('#search-input').on('keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       updateQueryParams('search', $(this).val().trim());
@@ -125,19 +125,19 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams('search', $('#search-input').val().trim());
     refresh();
   });
-  // Xử lý lọc theo status
+  // Handle filter by status
   $('#statusFilter').change(async function () {
     updateQueryParams('status', $(this).val());
     refresh();
   });
 
-  // Xử lý lọc theo role
+  // Handle filter by role
   $('#roleFilter').change(async function () {
     updateQueryParams('role', $(this).val());
     refresh();
   });
 
-  // Xử lý sắp xếp
+  // Handle sorting
   $('#sortBy, #sortOrder').change(async function () {
     const sortBy = $('#sortBy').val();
     const sortOrder = $('#sortOrder').val();
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const $pagination = $('.pagination');
     $pagination.empty();
 
-    // Nút First và Previous
+    // First and Previous buttons
     $pagination.append(`
             <li class="page-item ${offset === 0 ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="firstPage">&laquo;&laquo;</a>
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </li>
         `);
 
-    // Các nút số trang
+    // Page number buttons
     for (let i = 1; i <= totalPages; i++) {
       if (i === 1 || i === totalPages || (i >= offset && i <= offset + 2)) {
         $pagination.append(`
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    // Nút Next và Last
+    // Next and Last buttons
     $pagination.append(`
             <li class="page-item ${offset === totalPages - 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" id="nextPage">&raquo;</a>
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `);
   }
 
-  //call API by Ajax and update UI
+  // Call API by Ajax and update UI
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
@@ -235,20 +235,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     </td>
                     <td>
                         <select class="status-select form-select" ${user.isCurrentUser ? 'disabled' : ''}>
-                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Đang hoạt động</option>
-                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Chưa kích hoạt</option>
-                            <option value="suspended" ${user.status === 'suspended' ? 'selected' : ''}>Đã khóa</option>
+                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Active</option>
+                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                            <option value="suspended" ${user.status === 'suspended' ? 'selected' : ''}>Suspended</option>
                         </select>
                     </td>
                     <td>${new Date(user.lastLogin).toLocaleString()}</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
+                            <button type="button" title="View Details" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
                             ${!user.isCurrentUser
           ? `
-                                <button type="button" title="Xóa" class="btn btn-danger btn-sm delete-user">
+                                <button type="button" title="Delete" class="btn btn-danger btn-sm delete-user">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             `
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Xử lý sự kiện click pagination
+  // Handle pagination click event
   $('.pagination').on('click', 'a.page-link', async function (e) {
     e.preventDefault();
     const $this = $(this);
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
     window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
   }
 
-  // Khởi tạo pagination và load data
+  // Initialize pagination and load data
   async function refresh() {
     await loadData();
     updatePagination();
