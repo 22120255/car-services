@@ -1,4 +1,15 @@
-import { showModal, showToast } from '../common.js';
+import { renderSelectOptions, showModal, showToast } from '../common.js';
+import { getFilterConfigAdminAccounts } from '../config.js';
+
+document.addEventListener('DOMContentLoaded', function () {
+  const { status, role, sortBy, direction, offset } = getFilterConfigAdminAccounts();
+
+  renderSelectOptions($('#statusFilter'), status);
+  renderSelectOptions($('#roleFilter'), role);
+  renderSelectOptions($('#sortBy'), sortBy);
+  renderSelectOptions($('#sortOrder'), direction);
+  renderSelectOptions($('#itemsPerPage'), offset);
+})
 
 document.addEventListener('DOMContentLoaded', function () {
   // Xử lý thay đổi role
@@ -235,15 +246,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     </td>
                     <td>
                         <select class="status-select form-select" ${user.isCurrentUser ? 'disabled' : ''}>
-                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Đang hoạt động</option>
-                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Chưa kích hoạt</option>
-                            <option value="suspended" ${user.status === 'suspended' ? 'selected' : ''}>Đã khóa</option>
+                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Active</option>
+                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                            <option value="suspended" ${user.status === 'suspended' ? 'selected' : ''}>Suspended</option>
                         </select>
                     </td>
                     <td>${new Date(user.lastLogin).toLocaleString()}</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
+                            <button type="button" title="View detail" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
                                 <i class="fas fa-eye"></i>
                             </button>
                             ${!user.isCurrentUser

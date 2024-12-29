@@ -85,6 +85,37 @@ const getFilterConfigAdminDashboard = () => ({
     },
   ]
 })
+// Admin/accounts 
+const getFilterConfigAdminAccounts = () => ({
+  status: [
+    { value: '', label: 'All' },
+    { value: 'active', label: "Active" },
+    { value: 'inactive', label: "Inactive" },
+    { value: 'suspended', label: "Suspended" },
+  ],
+  role: [
+    { value: '', label: 'All' },
+    { value: 'sadmin', label: "Super Admin" },
+    { value: 'admin', label: "Admin" },
+    { value: 'suspended', label: "Suspended" },
+  ],
+  sortBy: [
+    { value: '', label: 'Sort by' },
+    { value: 'fullName', label: 'Fullname' },
+    { value: 'email', label: 'Email' },
+    { value: 'createdAt', label: 'Created at' },
+    { value: 'lastLogin', label: 'Last login' },
+  ],
+  direction: [
+    { value: 'asc', label: "Ascending" },
+    { value: 'desc', label: "Descending" },
+  ],
+  offset: [
+    { value: "10", label: "10 / trang" },
+    { value: "15", label: "15 / trang" },
+    { value: "20", label: "20 / trang" },
+  ]
+})
 
 const getFilterConfigOrder = () => ({
   statuses: [
@@ -112,4 +143,4 @@ const getFilterConfigOrder = () => ({
   ],
 });
 
-export { getFilterConfigProduct, getFilterConfigOrder, getFilterConfigAdminDashboard };
+export { getFilterConfigProduct, getFilterConfigOrder, getFilterConfigAdminDashboard, getFilterConfigAdminAccounts };
