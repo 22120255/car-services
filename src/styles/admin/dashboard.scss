@@ -171,3 +171,26 @@ body {
     color: #6c757d;
   }
 }
+// Filter time
+.time-filter {
+  .btn-group .btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  .btn-group .btn.active {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+  }
+  input[type='date'] {
+    width: 140px;
+  }
+  input[type='date']::-webkit-calendar-picker-indicator {
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+  input[type='date']::-webkit-datetime-edit {
+    padding: 0;
+  }
+}

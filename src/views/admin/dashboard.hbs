@@ -17,12 +17,15 @@
       <button id="refresh-btn" class='btn btn-sm btn-primary'>
         <i class="fa-solid fa-arrows-rotate me-1"></i>
       </button>
-      <select class='form-select' style='width: 200px;'>
-        <option>Last month</option>
-        <option>3 months ago</option>
-        <option>6 months ago</option>
-        <option>12 months ago</option>
-      </select>
+        <div class="time-filter d-flex align-items-center gap-2">
+          <input type="date" class="form-control form-control-sm" id="custom-date" />
+          <div class="btn-group" role="group" aria-label="Time period">
+            {{!-- <button type="button" class="btn btn-outline-secondary btn-sm active" data-months="1">1M</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="3">3M</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="6">6M</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="12">12M</button> --}}
+          </div>
+      </div>
     </div>
   </div>
 

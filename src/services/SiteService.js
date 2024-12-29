@@ -1,10 +1,11 @@
 const DataAnalytics = require("../models/DataAnalytics");
 const Formatter = require('../utils/formatter');
 const { getDataReport } = require("../config/analytics");
+const Order = require("../models/Order");
 
 class SiteService {
     // Lấy dữ liệu thống kê
-    async getAnalytics(options = { refresh: false }) {
+    async getAnalytics(options = { refresh: false, time, type }) {
         if (options.refresh) {
             await getDataReport();
         }
@@ -31,6 +32,16 @@ class SiteService {
                     })),
                 }
             }
+
+            if(interval == 1) {
+                // trả về mảng doanh thu từng ngày của tháng time 
+            }else {
+                // trả về 
+            }
+
+            const orders = await Order.find({ status: 'completed' }).lean();
+            console.log('orders', orders);
+
 
             return result;
         } catch (error) {

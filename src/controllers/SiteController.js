@@ -65,12 +65,14 @@ class SiteController {
         });
     }
 
-    // [GET] /api/user/data/analytics
+    // [GET] /api/data/analytics
     async getAnalytics(req, res) {
         const refresh = req.query.refresh === 'true';
         try {
-            const analytics = await SiteService.getAnalytics({ refresh });
-            res.status(200).json(analytics);
+            const analytics = await SiteService.getAnalytics({ refresh, time: req.query.time, type: req.query.type });
+            res.status(200).json({
+                data: analytics
+            });
         } catch (error) {
             errorLog('SiteController', 'getAnalytics', error.message);
             res.status(500).json({ error: 'An error occurred, please try again later!' });
