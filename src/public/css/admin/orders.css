@@ -103,12 +103,6 @@
   gap: 10px;
   transition: all 0.2s ease; }
 
-.product-cell {
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 10px; }
-
 .car-image {
   width: 80px;
   height: 60px;

@@ -1,18 +1,19 @@
 import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
+import FunctionApi from '../FunctionApi.js';
 import { formatDate } from '../helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Declare variables -----------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
   let orders = null;
-  let limit = urlParams.get('limit') || 8;
+  let limit = urlParams.get('limit') || 10;
   let offset = parseInt(urlParams.get('offset')) || 0;
   let totalItems = null;
 
   function syncFiltersFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8;
+    limit = parseInt(urlParams.get('limit')) || 10;
     offset = parseInt(urlParams.get('offset')) || 0;
     const priceMin = parseFloat(urlParams.get('priceMin') || "");
     const priceMax = parseFloat(urlParams.get('priceMax') || "");
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $(filterElement).on('change', async function () {
       offset = 0;
       const urlParams = new URLSearchParams(window.location.search);
-      limit = parseInt(urlParams.get('limit')) || 8
+      limit = parseInt(urlParams.get('limit')) || 10
       updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
@@ -61,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (event.key === 'Enter') {
       const search = $(this).val();
       const urlParams = new URLSearchParams(window.location.search);
-      limit = parseInt(urlParams.get('limit')) || 8
+      limit = parseInt(urlParams.get('limit')) || 10
       offset = 0;
       updateQueryParams({ search, offset, limit });
       await refresh();
@@ -72,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     const search = $('#searchInput').val();
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 10
     offset = 0;
     updateQueryParams({ search, offset, limit });
     await refresh();
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const [min, max] = price ? price.split('-') : ['', ''];
     offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 10
     updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
     await refresh();
   });
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const direction = $(this).val();
     offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 10
     updateQueryParams({ key, direction, offset, limit });
     await refresh();
   });
@@ -104,19 +105,15 @@ document.addEventListener('DOMContentLoaded', function () {
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
-    const apiQuery = $.param(params);
-    try {
-      const response = await $.ajax({
-        url: `/api/user/orders?${apiQuery}`,
-        type: 'GET'
-      });
 
-      orders = response.orders;
-      totalItems = response.total;
+    const getOrdersApi = new FunctionApi(`/api/user/orders`, {
+      query: params,
+    })
+    const data = await getOrdersApi.call();
+    if (data) {
+      orders = data.orders;
+      totalItems = data.total;
       renderOrders(orders);
-    } catch (error) {
-      console.error('Error loading data:', error);
-      showToast('error', 'Failed to load orders. Please try again.');
     }
   }
 
@@ -137,20 +134,6 @@ document.addEventListener('DOMContentLoaded', function () {
     $statusCell.find('.status').attr('class', `status ${getStatusClass(newStatus)}`);
   }
 
-  async function updateOrderStatus(orderId, newStatus) {
-    try {
-      await $.ajax({
-        url: `/api/user/orders/update-status/${orderId}`,
-        type: 'PATCH',
-        data: { status: newStatus }
-      });
-      reloadRow(orderId, newStatus);
-    } catch (error) {
-      console.error('Error updating order status:', error);
-      showToast('error', 'Failed to update order status');
-    }
-  }
-
   function renderOrders(orders) {
     const $ordersTable = $('#ordersTable');
     $ordersTable.empty();
@@ -158,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
       $ordersTable.append(`
         <tr>
           <td colspan="6" class="text-center">
-            <h2 style="font-size: large; color: #978e8e">No orders found!</h2>
+            <h2 style="font-size: large; color: #9710e10e">No orders found!</h2>
           </td>
         </tr>
       `);
@@ -228,9 +211,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }).on('change', '.status-select', function () {
       const orderId = $(this).data('order-id');
       const newStatus = $(this).val();
-      updateOrderStatus(orderId, newStatus);
+      const updateOrderStatusApi = new FunctionApi(`/api/user/orders/update-status/${orderId}`, {
+        method: "PATCH",
+        body: {
+          status: newStatus
+        },
+        onSuccess(data) {
+          reloadRow(orderId, newStatus)
+        }
+      })
+      updateOrderStatusApi.call();
     });
-
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------
@@ -319,7 +310,7 @@ $(document).ready(function () {
           if (!product) return null;
 
           return `
-              <tr>
+            < tr >
                 <td>
                   <div class="d-flex align-items-center">
                     <img src="${product.images?.[0] || '/default-image.jpg'}" 
@@ -332,19 +323,17 @@ $(document).ready(function () {
                 <td class="text-start">${item.quantity || 0}</td>
                 <td class="text-start">${(product.price || 0).toLocaleString('vi-VN')} đ</td>
                 <td class="text-start">${((item.quantity || 0) * (product.price || 0)).toLocaleString('vi-VN')} đ</td>
-              </tr>
-            `;
+              </ >
+        `;
         })
         .filter(Boolean)
         .join('');
-      console.log('Order items list:', itemsHtml);
+      // console.log('Order items list:', itemsHtml);
       $('#orderItemsList').html(itemsHtml || '<tr><td colspan="4" class="text-center">No valid items found</td></tr>');
     }
 
     // Show total
     const totalAmount = order.totalAmount || 0;
     $('#totalAmount').text(totalAmount.toLocaleString('vi-VN') + ' đ');
-
-
   });
 });

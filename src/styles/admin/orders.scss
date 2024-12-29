@@ -35,12 +35,10 @@
   flex-grow: 1;
   min-width: 150px;
   transition: all 0.2s ease-in-out;
-
   &:hover {
     border-color: #3498db;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
   }
-
   &:focus {
     outline: none;
     border-color: #2980b9;
@@ -128,13 +126,6 @@
   align-items: center;
   gap: 10px;
   transition: all 0.2s ease;
-}
-
-.product-cell {
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .car-image {
