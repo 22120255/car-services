@@ -89,12 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
     await refresh();
   });
 
-  // Sort by handler
+  // Sort by time created handler
   $('#sortBy').on('change', async function () {
     const key = 'createdAt';
     const direction = $(this).val();
-    offset = 1;
-    updateQueryParams({ key: key, direction: direction });
+    offset = 0;
+    updateQueryParams({ key: key, direction: direction, offset: offset });
     await refresh();
   });
 
@@ -278,91 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const newStatus = $(this).val();
       updateOrderStatus(orderId, newStatus);
     });
-
-    // // View order details
-    // $(document).on('click', '.view-details', async function() {
-    //   try {
-    //   const orderId = $(this).data('order-id');
-    //   console.debug('View details clicked for order ID:', orderId);
-      
-    //   // Hiển thị loading
-    //   $('#userDetailsModal .modal-body').html('<div class="text-center"><div class="spinner-border" role="status"></div></div>');
-    //   const spinnerTimeout = setTimeout(() => {
-    //     $('.spinner-border').addClass('hide-spinner');
-    //   }, 5000);
-    //   // Khởi tạo modal
-    //   const modal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
-    //   modal.show();
-      
-    //   // Gọi API lấy chi tiết đơn hàng
-    //   const response = await $.ajax({
-    //     url: `/api/user/orders/${orderId}`,
-    //     method: 'GET'
-    //   });
-    //   clearTimeout(spinnerTimeout);
-    //   // Kiểm tra response có tồn tại không
-    //   if (!response || !response.order) {
-    //     throw new Error('Order not found');
-    //   }
-    //   console.debug('Order details:', response);
     
-    //   // Điền thông tin khách hàng
-    //   $('#customerName').text(response.userId?.fullName || 'N/A');
-    //   $('#customerEmail').text(response.userId?.email || 'N/A');
-    //   $('#customerPhone').text(response.userId?.phone || 'N/A');
-    
-    //   // Kiểm tra và render danh sách sản phẩm
-    //   let orderItemsList = '<tr><td colspan="4">No items found</td></tr>';
-    //   const order = response.order;
-
-    //   if (order.items && order.items.length > 0) {
-    //     orderItemsList = order.items.map(item => {
-    //     const product = item.productId;
-    //     console.debug('Product:', product);
-    //     if (!product) return null;
-        
-    //     return `
-    //       <tr>
-    //       <td>
-    //         <div class="d-flex align-items-center">
-    //         <img src="${product.images?.[0] || '/default-image.jpg'}" 
-    //            alt="${product.brand || ''} ${product.model || ''}" 
-    //            class="car-image me-2" 
-    //            style="width: 60px; height: 45px; object-fit: cover;">
-    //         <span>${product.brand || ''} ${product.model || ''}</span>
-    //         </div>
-    //       </td>
-    //       <td>${item.quantity || 0}</td>
-    //       <td>${(product.price || 0).toLocaleString('vi-VN')} đ</td>
-    //       <td>${((item.quantity || 0) * (product.price || 0)).toLocaleString('vi-VN')} đ</td>
-    //       </tr>
-    //     `;
-    //     })
-    //     .filter(item => item !== null) // Lọc bỏ các item null
-    //     .join('');
-    //     console.debug('Order items:', orderItemsList);
-    //     // Nếu không có item nào hợp lệ
-    //     if (!orderItemsList) {
-    //     orderItemsList = '<tr><td colspan="4">No valid items found</td></tr>';
-    //     }
-    //   }
-      
-    //   $('#orderItemsList').html(orderItemsList);
-    //   console.log('Order items list:', orderItemsList)
-    //   // Hiển thị tổng tiền
-    //   const totalAmount = order.totalAmount || 0;
-    //   console.debug('Total amount:', totalAmount);
-    //   $('#totalAmount').text(totalAmount.toLocaleString('vi-VN') + ' đ');
-    
-    //   } catch (error) {
-    //   console.error('Error fetching order details:', error);
-    //   $('#userDetailsModal .modal-body').html(`
-    //     <div class="alert alert-danger">
-    //     Có lỗi xảy ra khi tải thông tin đơn hàng. Vui lòng thử lại sau.
-    //     </div>
-    //   `);
-    //   }
-    // });
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------

@@ -326,6 +326,7 @@ class UserService {
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
       }
+
       // Query orders với populate
       const orders = await Order.find(filter)
         .populate({
@@ -336,7 +337,7 @@ class UserService {
           path: 'items.productId',
           select: 'brand model price images'
         })
-        .skip(offset * limit)
+        .skip(0)
         .limit(limit)
         .sort(sort)
         .lean();
