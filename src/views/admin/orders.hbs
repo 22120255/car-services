@@ -8,6 +8,8 @@
     </select>
     <select id='priceFilter'>
     </select>
+    <select id='sortBy'>
+    </select>
   </div>
   <div class='container-fluid'>
     <div class='table-responsive'>
@@ -19,6 +21,7 @@
             <th>Total Price</th>
             <th>Date</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id='ordersTable'>
@@ -38,5 +41,79 @@
     <select class='form-select' aria-label='Items per page' style='width: auto;' name='limit' id='limit'>
     </select>
   </div>
+    <div class='modal fade' id='orderDetailsModal' tabindex='-1'>
+        <div class='modal-dialog modal-lg'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title'>Order Details</h5>
+                    <button
+                        type='button'
+                        class='btn-close'
+                        data-bs-dismiss='modal'
+                        aria-label='Đóng'
+                    ></button>
+                </div>
+                <div class='modal-body'>
+                    <div class='order-info'>
+                      <div class='customer-info mb-1'>
+                        <h6 class='fw-bold'>Customer Information</h6>
+                        <div class='info-list'>
+                          <div class="info-item">
+                            <strong>Full Name:</strong>
+                            <span id="customerName"></span>
+                          </div>
+                          <div class="info-item">
+                            <strong>Email:</strong>
+                            <span id="customerEmail"></span>
+                          </div>
+                          <div class="info-item">
+                            <strong>Tel Number:</strong>
+                            <span id="customerPhone"></span>
+                          </div>
+                        </div>
+                        <h6 class='fw-bold'>Order Details</h6>
+                        
+                          <div class="info-item mx-3 mb-2 mt-4">
+                            <strong>Address:</strong>
+                            <span id="shippingAddress"></span>
+                          </div>
+                          <div class="info-item mx-3 mb-2">
+                            <strong>Date:</strong>
+                            <span id="dateCreated"></span>
+                          </div>
+                          <div class="info-item mx-3 mb-2">
+                            <strong>Status:</strong>
+                            <span id="orderStatus"></span>
+                          </div>
+                        
+                      </div>
+                    <div class='order-details mb-4'>
+                        <h6 class='fw-bold'>Products' Order</h6>
+                        <div class='table-responsive'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderItemsList">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class='order-summary'>
+                        <div class='d-flex justify-content-between'>
+                            <h6 class='fw-bold'>Total:</h6>
+                            <span id="totalAmount" class='fw-bold'></span>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <script type='module' src='\js\admin\orders.js'></script>

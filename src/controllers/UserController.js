@@ -255,6 +255,57 @@ class UserController {
     }
   }
 
+  // [GET] /api/user/orders
+  async getOrders(req, res) {
+    const { limit, offset, key, direction, search, status, priceMin, priceMax } = req.query;
+    try {
+      const { orders, total } = await UserService.getOrders({
+        limit: limit || 10,
+        offset: offset || 1,
+        key,
+        direction,
+        search,
+        status,
+        priceMin,
+        priceMax,
+      });
+      return res.status(200).json({ orders, total });
+    } catch (error) {
+      errorLog('UserController', 'getOrders', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // [GET] /api/user/orders/:id
+  async getOrder(req, res) {
+    try {
+      const order = await UserService.getOrder(req.params.id);
+      res.status(200).json({ order });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Internal Server Error',
+        message: error.message
+      });
+    }
+  }
+
+  // [PATCH] /api/user/orders/status/:id
+  async updateOrderStatus(req, res) {
+    try {
+      const orderId  = req.params.id;
+      const { status } = req.body;
+
+      if (!orderId || !status) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      await UserService.updateOrderStatus(orderId, status);
+      return res.status(200).json({ message: 'Update order status successfully' });
+    } catch (error) {
+      errorLog('UserController', 'updateOrderStatus', error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
   // [GET] /admin/reports
   async reports(req, res) {
     try {
