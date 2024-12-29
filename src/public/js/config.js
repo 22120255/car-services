@@ -125,6 +125,7 @@ const getFilterConfigOrder = () => ({
     { value: 'canceled', label: 'Canceled' },
   ],
   prices: [
+    { value: '', label: 'All' },
     { value: '0 - 50000', label: '0 - 50000' },
     { value: '50000 - 100000', label: '50000 - 100000' },
     { value: '100000 - 200000', label: '100000 - 200000' },

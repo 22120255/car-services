@@ -337,7 +337,7 @@ class UserService {
           path: 'items.productId',
           select: 'brand model price images'
         })
-        .skip(0)
+        .skip(offset)
         .limit(limit)
         .sort(sort)
         .lean();

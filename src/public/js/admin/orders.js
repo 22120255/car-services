@@ -1,26 +1,37 @@
-import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
+import { formatDate } from '../helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Declare variables -----------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
   let orders = null;
   let limit = urlParams.get('limit') || 8;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
+  let offset = parseInt(urlParams.get('offset')) || 0;
   let totalItems = null;
 
-  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-  let statusFilter = urlParams.get('status') || null;
-  let searchText = urlParams.get('search') || '';
-  let sortBy = urlParams.get('key') || '';
+  function syncFiltersFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 8;
+    offset = parseInt(urlParams.get('offset')) || 0;
+    const priceMin = parseFloat(urlParams.get('priceMin') || "");
+    const priceMax = parseFloat(urlParams.get('priceMax') || "");
+    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : "";
 
-  // Initialize filters with URL params
-  $('#searchInput').val(searchText);
-  $('#limit').val(limit);
-  $('#statusFilter').val(statusFilter);
-  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
+    // Đồng bộ với giao diện
+    $('#limit').val(limit);
+    $('#searchInput').val(urlParams.get('search') || "");
+    $('#statusFilter').val(urlParams.get('status') || "");
+    $('#priceFilter').val(price);
+    $('#sortBy').val(urlParams.get('key') || "asc");
+  }
+
+  // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
+  window.addEventListener('popstate', async function () {
+    syncFiltersFromURL();
+    await refresh(); // Tải lại dữ liệu
+  });
+
 
   // ------------------------------------ Setup Filters -----------------------------------------------
   const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
@@ -33,8 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
-      offset = 1;
-      updateQueryParams({ [paramKey]: $(this).val(), offset: offset });
+      offset = 0;
+      const urlParams = new URLSearchParams(window.location.search);
+      limit = parseInt(urlParams.get('limit')) || 8
+      updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
   }
@@ -49,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const search = $(this).val();
       const urlParams = new URLSearchParams(window.location.search);
       limit = parseInt(urlParams.get('limit')) || 8
-      offset = 1;
+      offset = 0;
       updateQueryParams({ search, offset, limit });
       await refresh();
     }
@@ -60,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const search = $('#searchInput').val();
     const urlParams = new URLSearchParams(window.location.search);
     limit = parseInt(urlParams.get('limit')) || 8
-    offset = 1;
+    offset = 0;
     updateQueryParams({ search, offset, limit });
     await refresh();
   });
@@ -69,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#priceFilter').on('change', async function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
-    offset = 1;
+    offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
     limit = parseInt(urlParams.get('limit')) || 8
     updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
@@ -87,51 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
     await refresh();
   });
 
-  // ------------------------------------ Pagination -----------------------------------------------
-  function updatePagination() {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    const visibleRange = 1;
-    const firstPage = 1;
-    const lastPage = totalPages;
-
-    $pagination.append(`
-      <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-        <a class="page-link" href="#" id="prevPage">&laquo;</a>
-      </li>
-    `);
-
-    for (let i = firstPage; i <= lastPage; i++) {
-      if (
-        i === firstPage ||
-        i === lastPage ||
-        (i >= offset - visibleRange && i <= offset + visibleRange)
-      ) {
-        $pagination.append(`
-          <li class="page-item ${offset === i ? 'active' : ''}">
-            <a class="page-link" href="#" data-page="${i}">${i}</a>
-          </li>
-        `);
-      } else if (
-        (i === offset - visibleRange - 1 && i > firstPage) ||
-        (i === offset + visibleRange + 1 && i < lastPage)
-      ) {
-        $pagination.append(`
-          <li class="page-item disabled">
-            <span class="page-link">...</span>
-          </li>
-        `);
-      }
-    }
-
-    $pagination.append(`
-      <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-        <a class="page-link" href="#" id="nextPage">&raquo;</a>
-      </li>
-    `);
-  }
-
   // ------------------------------------ Data Loading and Rendering -----------------------------------------------
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -145,16 +113,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
       orders = response.orders;
       totalItems = response.total;
-      totalPages = Math.ceil(totalItems / limit);
       renderOrders(orders);
     } catch (error) {
       console.error('Error loading data:', error);
       showToast('error', 'Failed to load orders. Please try again.');
     }
-  }
-
-  function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('vi-VN');
   }
 
   function getStatusClass(status) {
@@ -279,13 +242,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     switch ($this.attr('id')) {
       case 'prevPage':
-        if (offset > 1) offset--;
+        if (offset > 0) offset -= limit;
         break;
       case 'nextPage':
-        if (offset < totalPages) offset++;
+        if (offset < totalItems) offset += limit;
         break;
       default:
-        offset = parseInt($this.data('page'));
+        offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
     updateQueryParams({ offset: offset });
@@ -295,17 +258,18 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#limit').change(async function () {
     limit = $(this).val();
     totalPages = Math.ceil(totalItems / limit);
-    offset = 1;
+    offset = 0;
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
 
   async function refresh() {
     await loadData();
-    updatePagination();
+    updatePagination({ offset, limit, totalItems });
   }
 
   // Initial load
+  syncFiltersFromURL();
   refresh();
 });
 

@@ -19,3 +19,7 @@ export const isValidDate = (dateString) => {
     const timestamp = Date.parse(dateString);
     return !isNaN(timestamp);
 };
+
+export const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('vi-VN');
+}

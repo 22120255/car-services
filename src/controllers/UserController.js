@@ -257,11 +257,11 @@ class UserController {
 
   // [GET] /api/user/orders
   async getOrders(req, res) {
-    const { limit, offset, key, direction, search, status, priceMin, priceMax } = req.query;
+    const { limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax } = req.query;
     try {
       const { orders, total } = await UserService.getOrders({
-        limit: limit || 10,
-        offset: offset || 1,
+        limit,
+        offset,
         key,
         direction,
         search,
