@@ -140,3 +140,23 @@ body {
   .top-purchased-products .product-meta {
     font-size: 12px;
     color: #6c757d; }
+
+.time-filter .btn-group .btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem; }
+
+.time-filter .btn-group .btn.active {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d; }
+
+.time-filter input[type='date'] {
+  width: 140px; }
+
+.time-filter input[type='date']::-webkit-calendar-picker-indicator {
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0; }
+
+.time-filter input[type='date']::-webkit-datetime-edit {
+  padding: 0; }

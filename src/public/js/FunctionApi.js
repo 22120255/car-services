@@ -39,7 +39,7 @@ class FunctionApi {
                     url: this.buildQueryParams(),
                     type: this.method,
                     contentType: 'application/json',
-                    data: this.body
+                    data: Object.keys(this.body || {}).length > 0
                         ? JSON.stringify(this.body)
                         : null,
                     dataType: 'json',
@@ -58,7 +58,7 @@ class FunctionApi {
         } catch (err) {
             this.error = err;
             if (this.options?.showToast) {
-                showToast('error', err);
+                showToast('Error', err);
             }
             return null;
             // throw err;
