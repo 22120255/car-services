@@ -1,5 +1,7 @@
-
+import { renderSelectOptions, showToast, updateQueryParams } from '../common.js';
+import { getFilterConfigAdminDashboard } from '../config.js';
 import FunctionApi from '../FunctionApi.js';
+import { isValidDate } from '../helpers.js';
 
 document.addEventListener("DOMContentLoaded", function () {
     var options = {
@@ -86,15 +88,17 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 //Render data 
-const fetchData = async (options = { refresh: false }) => {
+const fetchData = async (query = {}) => {
     try {
-        const getDataAnalytics = new FunctionApi(`/api/data/analytics`,
-            {
-                query: { refresh: options.refresh }
-            });
-        await getDataAnalytics.call();
+        if (query.time) {
+            query.time = new Date(query.time).toISOString();
+        }
+        const getDataAnalyticsApi = new FunctionApi(`/api/data/analytics`, {
+            query
+        });
+        await getDataAnalyticsApi.call();
 
-        return getDataAnalytics.data;
+        return getDataAnalyticsApi.data.data;
     } catch (error) {
         throw error;
     }
@@ -120,9 +124,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Call fetchData function to get data when page loaded
 
     try {
-        renderData(dataAnalytics);
-        dataAnalytics = await fetchData();
-
+        const urlParams = new URLSearchParams(window.location.search);
+        dataAnalytics = await fetchData({
+            time: urlParams.get('time'),
+            interval: urlParams.get('interval'),
+        });
         renderData(dataAnalytics);
     }
     catch (error) {
@@ -179,3 +185,73 @@ function renderTopProducts(selector, topProducts) {
         $container.append('<span style="text-align: center;">No products</span>');
     }
 }
+
+const renderTimeFilterButtons = () => {
+    const config = getFilterConfigAdminDashboard();
+    const $btnGroup = $('.btn-group[role="group"]');
+    $btnGroup.empty();
+
+    config.time.forEach(item => {
+        const $button = $(`
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="${item.value}">
+                ${item.label}
+            </button>
+        `);
+        $btnGroup.append($button);
+    });
+
+    $btnGroup.find('button').first().addClass('active');
+};
+document.addEventListener('DOMContentLoaded', function () {
+    renderTimeFilterButtons();
+    // Set default date to today
+    $('#custom-date').val(new Date().toISOString().slice(0, 10));
+
+    // Đính filter lên URL
+    $('.time-filter .btn-group .btn').on('click', function () {
+        $('.time-filter .btn-group .btn').removeClass('active');
+        $(this).addClass('active');
+
+        updateQueryParams({
+            interval: parseInt($(this).data('months'))
+        })
+    });
+
+    // Handle date input changes
+    $('#custom-date').on('change', function () {
+        updateQueryParams({
+            interval: $(this).val()
+        })
+    });
+
+    // Update filter khi URL thay đổi
+    const urlParams = new URLSearchParams(window.location.search);
+    const interval = urlParams.get('interval');
+    const timeFilter = urlParams.get('time');
+
+    const { time } = getFilterConfigAdminDashboard();
+
+    if (time.some(item => item.value == interval)) {
+        $('.time-filter .btn-group .btn').removeClass('active');
+        $(`.time-filter .btn-group .btn[data-months="${interval}"]`).addClass('active');
+    } else {
+        $('.time-filter .btn-group .btn').removeClass('active');
+        $(`.time-filter .btn-group .btn`).first().addClass('active');
+        urlParams.set('interval', '1');
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+        if (interval != null)
+            showToast("Error", "Invalid params");
+    }
+
+    if (timeFilter && isValidDate(timeFilter)) {
+        $('#custom-date').val(timeFilter);
+    } else {
+        const today = new Date().toISOString().split('T')[0];
+        $('#custom-date').val(today);
+        urlParams.set('time', today);
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+        if (timeFilter != null) {
+            showToast("Error", "Invalid time param");
+        }
+    }
+});

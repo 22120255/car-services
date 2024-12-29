@@ -1,6 +1,7 @@
 const Review = require('../models/Review');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const Cart = require('../models/Cart');
 const { error } = require('winston');
 
 class OrderService {
@@ -9,13 +10,11 @@ class OrderService {
     if (!cart?.items?.length) {
       throw new Error('Cart is empty');
     }
- 
     const orderItems = cart.items.map(item => ({
       productId: item.productId._id,
-      quantity: item.quantity, 
+      quantity: item.quantity,
       price: item.productId.price
     }));
- 
     return Order.create({
       userId,
       items: orderItems,

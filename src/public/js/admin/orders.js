@@ -4,7 +4,6 @@ import { getFilterConfigOrder } from '../config.js';
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Declare variables -----------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
-  console.debug('URL Parameters:', urlParams.toString());
   let orders = null;
   let limit = urlParams.get('limit') || 8;
   let offset = parseInt(urlParams.get('offset')) || 1;
@@ -15,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
   let statusFilter = urlParams.get('status') || null;
   let searchText = urlParams.get('search') || '';
+  let sortBy = urlParams.get('key') || '';
 
   // Initialize filters with URL params
   $('#searchInput').val(searchText);
@@ -23,15 +23,15 @@ document.addEventListener('DOMContentLoaded', function () {
   if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
 
   // ------------------------------------ Setup Filters -----------------------------------------------
-  const { statuses, prices, perPages } = getFilterConfigOrder();
+  const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
 
   const $statusFilter = $('#statusFilter');
   const $priceFilter = $('#priceFilter');
   const $limit = $('#limit');
+  const $sortBy = $('#sortBy');
 
   // Render options
   const renderSelectOptions = (element, options, defaultText) => {
-    console.debug(`Rendering options for ${defaultText}`);
     if (defaultText !== 'Items per page') {
       element.empty().append(`<option value="">${defaultText}</option>`);
     }
@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderSelectOptions($statusFilter, statuses, 'Select status');
   renderSelectOptions($limit, perPages, 'Items per page');
-  renderSelectOptions($priceFilter, prices, 'Select price'); 
+  renderSelectOptions($priceFilter, prices, 'Select price');
+  renderSelectOptions($sortBy, createdTime, 'Sort by time created');
 
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
-      console.debug(`Filter changed: ${paramKey} = ${$(this).val()}`);
       offset = 1;
       updateQueryParams({ [paramKey]: $(this).val(), offset: offset });
       await refresh();
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter') {
       const search = $(this).val();
-      console.debug('Search input:', search);
       offset = 1;
       updateQueryParams({ search: search, offset: offset });
       await refresh();
@@ -76,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#btn-search').on('click', async function (event) {
     event.preventDefault();
     const search = $('#searchInput').val();
-    console.debug('Search button clicked:', search);
     offset = 1;
     updateQueryParams({ search: search, offset: offset });
     await refresh();
@@ -86,9 +84,17 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#priceFilter').on('change', async function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
-    console.debug('Price filter changed:', { min, max });
     offset = 1;
     updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    await refresh();
+  });
+
+  // Sort by time created handler
+  $('#sortBy').on('change', async function () {
+    const key = 'createdAt';
+    const direction = $(this).val();
+    offset = 0;
+    updateQueryParams({ key: key, direction: direction, offset: offset });
     await refresh();
   });
 
@@ -142,17 +148,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
     const apiQuery = $.param(params);
-    console.debug('Loading data with query:', apiQuery);
     try {
       const response = await $.ajax({
         url: `/api/user/orders?${apiQuery}`,
         type: 'GET'
       });
-      
+
       orders = response.orders;
       totalItems = response.total;
       totalPages = Math.ceil(totalItems / limit);
-      console.debug('Data loaded:', { orders, totalItems, totalPages });
       renderOrders(orders);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -161,11 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    return new Date(dateString).toLocaleDateString('vi-VN');
   }
 
   function getStatusClass(status) {
@@ -177,6 +177,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return statusClasses[status.toLowerCase()] || '';
   }
 
+  function reloadRow(orderId, newStatus) {
+    const $row = $(`tr[data-order-id='${orderId}']`);
+    const $statusCell = $row.find('.status-cell');
+    $statusCell.find('.status-select').remove();
+    $statusCell.find('.status').text(newStatus).show();
+    $statusCell.find('.status').attr('class', `status ${getStatusClass(newStatus)}`);
+  }
+
   async function updateOrderStatus(orderId, newStatus) {
     try {
       await $.ajax({
@@ -184,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
         type: 'PATCH',
         data: { status: newStatus }
       });
-      await refresh();
+      reloadRow(orderId, newStatus);
     } catch (error) {
       console.error('Error updating order status:', error);
       showToast('error', 'Failed to update order status');
@@ -194,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function renderOrders(orders) {
     const $ordersTable = $('#ordersTable');
     $ordersTable.empty();
-    console.debug('Rendering orders:', orders);
     if (!orders || orders.length === 0) {
       $ordersTable.append(`
         <tr>
@@ -225,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
                               class='car-image'
                           /> ${product.brand} ${product.model} (x${item.quantity}) </div>` : 'Unknown Product';
       }).join('<br>') || 'No products';
-      
+
       $ordersTable.append(`
         <tr data-order-id="${_id}">
           <td>${userId?.fullName || 'Unknown User'}</td>
@@ -240,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <button class='btn btn-custom btn-primary btn-edit-status' data-order-id="${_id}">
                 <i class='fas fa-edit'></i>
               </button>
-              <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-bs-toggle="modal" data-bs-target="#userDetailsModal">
+              <button type="button" title="Xem chi tiết" class="btn btn-info btn-sm view-details" data-order-id="${_id}">
                 <i class="fas fa-eye"></i>
               </button>
           </td>
@@ -249,21 +256,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Sử dụng event delegation 
-    $('#ordersTable').off('click change')
-  .on('click', '.btn-edit-status', function() {
-    const orderId = $(this).data('order-id');
-    const $statusCell = $('#ordersTable').find(`tr[data-order-id='${orderId}'] .status-cell`);
-    const statusSelect = `<select class='status-select' data-order-id='${orderId}'></select>`;
-    $statusCell.find('.status').remove();
-    $statusCell.append(statusSelect);
-    renderSelectOptions($statusCell.find('.status-select'), statuses, 'Select status');
-  })
-  .on('change', '.status-select', function() {
-    console.log('Status select changed:', $(this).val());
-    const orderId = $(this).data('order-id');
-    const newStatus = $(this).val();
-    updateOrderStatus(orderId, newStatus);
-  });
+    $('#ordersTable').off('click change').on('click', '.btn-edit-status', function () {
+      const orderId = $(this).data('order-id');
+      const currentStatus = $(this).closest('tr').find('.status').text();
+      const $statusCell = $(`tr[data-order-id='${orderId}'] .status-cell`);
+
+      // Only create select if it doesn't exist
+      if (!$statusCell.find('.status-select').length) {
+        const statusSelect = $('<select>').addClass('status-select').attr('data-order-id', orderId);
+        $statusCell.find('.status').hide();
+        $statusCell.append(statusSelect);
+        renderSelectOptions(statusSelect, statuses, 'Select status');
+        statusSelect.val(currentStatus.toLowerCase());
+      }
+      else {
+        $statusCell.find('.status-select').remove();
+        $statusCell.find('.status').show();
+      }
+    }).on('change', '.status-select', function () {
+      const orderId = $(this).data('order-id');
+      const newStatus = $(this).val();
+      updateOrderStatus(orderId, newStatus);
+    });
+
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------
@@ -284,7 +299,6 @@ document.addEventListener('DOMContentLoaded', function () {
         offset = parseInt($this.data('page'));
     }
 
-    console.debug('Pagination clicked:', { offset });
     updateQueryParams({ offset: offset });
     await refresh();
   });
@@ -293,17 +307,91 @@ document.addEventListener('DOMContentLoaded', function () {
     limit = $(this).val();
     totalPages = Math.ceil(totalItems / limit);
     offset = 1;
-    console.debug('Limit changed:', { limit, offset });
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
 
   async function refresh() {
-    console.debug('Refreshing data...');
     await loadData();
     updatePagination();
   }
 
   // Initial load
   refresh();
+});
+
+// Tách event handler ra khỏi renderOrders()
+$(document).ready(function () {
+  // View order details handler
+  $(document).on('click', '.view-details', async function () {
+    const orderId = $(this).data('order-id');
+    console.debug('View details clicked for order ID:', orderId);
+
+    // Hiển thị loading 
+    const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+    modal.show();
+
+    // Gọi API
+    const response = await $.ajax({
+      url: `/api/user/orders/${orderId}`,
+      method: 'GET'
+    });
+    console.debug('Order details response:', response);
+
+    if (!response || !response.order) {
+      throw new Error('Order not found');
+    }
+
+    const order = response.order;
+    console.debug('Order details:', order);
+    // Render customer info
+    $('#customerName').text(order.userId?.fullName || 'N/A');
+    $('#customerEmail').text(order.userId?.email || 'N/A');
+    $('#customerPhone').text(order.userId?.phone || 'N/A');
+
+    // Render order info
+    const shippingDetails = JSON.parse(order.shippingDetails);
+    $('#shippingAddress').text(shippingDetails.address || 'N/A');
+    $('#dateCreated').text(new Date(order.createdAt).toLocaleDateString('vi-VN') || 'N/A');
+    $('#orderStatus').text(order.status || 'N/A');
+
+    // Render order items
+    if (!order.items || order.items.length === 0) {
+      $('#orderItemsList').html('<tr><td colspan="4" class="text-center">No items found</td></tr>');
+    } else {
+      console.debug('Order items:', order.items);
+      const itemsHtml = order.items
+        .map(item => {
+          const product = item.productId;
+          if (!product) return null;
+
+          return `
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="${product.images?.[0] || '/default-image.jpg'}" 
+                         alt="${product.brand || ''} ${product.model || ''}" 
+                         class="car-image me-2" 
+                         style="width: 60px; height: 45px; object-fit: cover;">
+                    <span>${product.brand || ''} ${product.model || ''}</span>
+                  </div>
+                </td>
+                <td class="text-start">${item.quantity || 0}</td>
+                <td class="text-start">${(product.price || 0).toLocaleString('vi-VN')} đ</td>
+                <td class="text-start">${((item.quantity || 0) * (product.price || 0)).toLocaleString('vi-VN')} đ</td>
+              </tr>
+            `;
+        })
+        .filter(Boolean)
+        .join('');
+      console.log('Order items list:', itemsHtml);
+      $('#orderItemsList').html(itemsHtml || '<tr><td colspan="4" class="text-center">No valid items found</td></tr>');
+    }
+
+    // Show total
+    const totalAmount = order.totalAmount || 0;
+    $('#totalAmount').text(totalAmount.toLocaleString('vi-VN') + ' đ');
+
+
+  });
 });

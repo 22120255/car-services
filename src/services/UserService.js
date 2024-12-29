@@ -25,6 +25,9 @@ class UserService {
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
       }
+      console.log(typeof key);
+      console.log('sort', sort, typeof sort);
+
       const users = await User.find(filter)
         .skip(offset * limit)
         .limit(limit)
@@ -282,90 +285,102 @@ class UserService {
 
   // Lấy danh sách đơn hàng
 
-  async getOrders({ limit, offset, search, status, priceMin, priceMax }) {
-
+  async getOrders({ limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax }) {
     try {
-
       let filter = {};
 
-  
-
-      // Search in customer name or order ID
-
+      // Xử lý search
       if (search) {
-
+        //console.log('search:', search);
+        // Tìm users có tên match với search term
+        const users = await User.find({
+          fullName: { $regex: search, $options: 'i' }
+        }).select('_id');
+        const userIds = users.map(user => user._id);
+        //console.log('userIds:', userIds);
+        // Tìm products có brand hoặc model match với search term
+        const products = await Product.find({
+          $or: [
+            { brand: { $regex: search, $options: 'i' } },
+            { model: { $regex: search, $options: 'i' } }
+          ]
+        }).select('_id');
+        const productIds = products.map(product => product._id);
+        //console.log('productIds:', productIds);
+        // Build filter cho orders
         filter.$or = [
-
-          { '_id': { $regex: search, $options: 'i' } },
-
-          { 'users.fullName': { $regex: search, $options: 'i' } }
-
+          { userId: { $in: userIds } },  // Orders của users match
+          { 'items.productId': { $in: productIds } }  // Orders có products match
         ];
-
       }
 
-  
-
-      // Status filter - case insensitive exact match
-
+      // Filter theo status
       if (status) {
-
-        filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
-
+        filter.status = status;
       }
 
-  
-
-      // Price range filter on totalAmount
-
-      if (priceMin && priceMax) {
-
-        filter.totalAmount = { $gte: parseFloat(priceMin), $lte: parseFloat(priceMax) };
-
+      // Xử lý sort
+      let sort = {};
+      if (key) {
+        direction ||= 'asc';
+        const sortDirection = direction === 'asc' ? 1 : -1;
+        sort[key] = sortDirection;
       }
 
-  
-
-      // Query with pagination
-
+      // Query orders với populate
       const orders = await Order.find(filter)
-
         .populate({
-
           path: 'userId',
-
           select: 'fullName email phone'
-
         })
-
         .populate({
-
           path: 'items.productId',
-
           select: 'brand model price images'
-
         })
-
-        .skip(offset * limit - limit)
-
+        .skip(0)
         .limit(limit)
+        .sort(sort)
+        .lean();
 
-        .sort({ orderDate: -1 }); // Most recent orders first
-
-  
-
+      //console.log('orders:', orders);
       const total = await Order.countDocuments(filter);
-
-  
+      //console.log('total:', total);
 
       return { orders, total };
-
     } catch (error) {
-
+      console.error('Error in getOrders:', error);
       throw error;
+    }
+  }
 
+  async getOrder(orderId) {
+    if (!orderId) {
+      throw new Error('Order ID is required');
     }
 
+    try {
+      const order = await Order.findById(orderId)
+        .populate({
+          path: 'userId',
+          select: 'fullName email phone'
+        })
+        .populate({
+          path: 'items.productId',
+          select: 'brand model price images'
+        })
+        .lean()
+        .exec();
+
+      if (!order) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      return order;
+    }
+    catch (error) {
+      console.error('Error fetching order:', error);
+      throw error;
+    }
   }
 
   async updateOrderStatus(orderId, status) {
@@ -378,7 +393,6 @@ class UserService {
       }
 
       await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-      console.log("Successfully updated order status");
     }
     catch (error) {
       console.error('Error updating order status:', error);
