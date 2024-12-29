@@ -1,6 +1,6 @@
 <div class='container'>
     <div class='login-container'>
-        <h1>Đăng nhập</h1>
+        <h1>Login</h1>
         <div class='w-100 position-relative'>
             <form id="login-form">
                 <div class='form-group'>
@@ -10,20 +10,20 @@
                         class='form-control'
                         id='email'
                         name='email'
-                        placeholder='Nhập email của bạn' 
+                        placeholder='Enter your email' 
                         value='sadmin@example.com'
                     />
                     <span class='fs-075' id='email-availability-message'></span>
                 </div>
 
                 <div class='form-group position-relative'>
-                    <label for='password'>Nhập mật khẩu</label>
+                    <label for='password'>Enter password</label>
                     <input
                         type='password'
                         class='form-control'
                         id='password'
                         name='password'
-                        placeholder='Nhập mật khẩu của bạn'
+                        placeholder='Enter your password'
                         value="sadmin123"
                     />
                     <button
@@ -36,13 +36,12 @@
                 </div>
                 <span class='fs-075 text-danger' id='message-error'></span>
 
-                <button type='submit' class='btn login-btn'>Đăng nhập</button>
+                <button type='submit' class='btn login-btn'>Login</button>
 
                 <div class='forgot-password'>
-                    <span class='fs-075'>Bạn chưa có tài khoản?
-                        <a class='fs-075' href='/auth/register?returnTo=/auth/login'>Đăng kí</a></span>
-                    <a class='fs-075' href='/auth/forgot-password?returnTo=/auth/login'>Quên mật
-                        khẩu?</a>
+                    <span class='fs-075'>Don't have an account?
+                        <a class='fs-075' href='/auth/register?returnTo=/auth/login'>Register</a></span>
+                    <a class='fs-075' href='/auth/forgot-password?returnTo=/auth/login'>Forgot password?</a>
                 </div>
             </form>
             <i class='fa fa-spinner d-none' id="icon-loading"></i>
