@@ -29,7 +29,7 @@ class UserService {
       console.log('sort', sort, typeof sort);
 
       const users = await User.find(filter)
-        .skip(offset * limit)
+        .skip(offset)
         .limit(limit)
         .sort(sort);
       const total = await User.countDocuments(filter);

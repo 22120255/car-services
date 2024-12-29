@@ -1,5 +1,6 @@
-import { renderSelectOptions, showModal, showToast } from '../common.js';
+import { renderSelectOptions, showModal, showToast, updatePagination, updateQueryParams } from '../common.js';
 import { getFilterConfigAdminAccounts } from '../config.js';
+import FunctionApi from '../FunctionApi.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const { status, role, sortBy, direction, offset } = getFilterConfigAdminAccounts();
@@ -18,25 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const newRole = $(this).val();
     const $select = $(this);
 
-    $.ajax({
-      url: '/api/user/update-role',
-      method: 'PATCH',
-      data: { userId, role: newRole },
-      statusCode: {
-        200(resp) {
-          showToast('Success', resp.message);
-        },
-        403(resp) {
-          showToast('Error', resp.responseJSON.error);
-          console.log('$select', $select);
-          $select.prop('selectedIndex', 1);
-        },
-        500(resp) {
-          showToast('Error', resp.responseJSON.error);
-          $select.prop('selectedIndex', 1);
-        },
+    const updateRoleApi = new FunctionApi('/api/user/update-role', {
+      method: "PATCH",
+      body: {
+        userId, role: newRole
       },
-    });
+      onSuccess(data) {
+        showToast('Success', data.message);
+      },
+      onError(err) {
+        $select.prop('selectedIndex', 1);
+      }
+    })
+    updateRoleApi.call();
   });
 
   // Xử lý thay đổi status
@@ -45,24 +40,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const newStatus = $(this).val();
     const $select = $(this);
 
-    $.ajax({
-      url: '/api/user/update-status',
-      method: 'PATCH',
-      data: { userId, status: newStatus },
-      statusCode: {
-        200(resp) {
-          showToast('Success', resp.message);
-        },
-        403(resp) {
-          showToast('Error', resp.responseJSON.error);
-          $select.prop('selectedIndex', 0);
-        },
-        500(resp) {
-          showToast('Error', resp.responseJSON.error);
-          $select.prop('selectedIndex', 0);
-        },
+    const updateStatusApi = new FunctionApi("/api/user/update-role", {
+      method: "PATCH",
+      body: { userId, status: newStatus },
+      onSuccess(data) {
+        showToast('Success', data.message);
       },
-    });
+      onError(err) {
+        $select.prop('selectedIndex', 0);
+      }
+    })
+    updateStatusApi.call();
   });
 
   // Xử lý xem chi tiết
@@ -77,26 +65,19 @@ document.addEventListener('DOMContentLoaded', function () {
   // Xử lý xóa user
   $(document).on('click', '.delete-user', function () {
     const userId = $(this).closest('tr').data('user-id');
+    const deleteUserApi = new FunctionApi(`/api/user/${userId}`, {
+      method: 'DELETE',
+      onSuccess(data) {
+        $(`tr[data-user-id=${userId}]`).remove();
+        showToast('Success', data.message);
+      }
+    })
 
     showModal({
-      title: 'Xoá tài khoản', content: 'Bạn có chắc chắn muốn xóa tài khoản này không?', btnSubmit: "Delete", callback: () => {
-        $.ajax({
-          url: `/api/user/${userId}`,
-          method: 'DELETE',
-          statusCode: {
-            200(resp) {
-              $(`tr[data-user-id=${userId}]`).remove();
-              showToast('Success', resp.message);
-            },
-            403(resp) {
-              showToast('Error', resp.responseJSON.error);
-            },
-            500(resp) {
-              showToast('Error', resp.responseJSON.error);
-            },
-          },
-        });
-      }
+      title: 'Xoá tài khoản',
+      content: 'Bạn có chắc chắn muốn xóa tài khoản này không?',
+      btnSubmit: "Delete",
+      callback: () => deleteUserApi.call()
     });
   });
 });
@@ -110,41 +91,46 @@ document.addEventListener('DOMContentLoaded', function () {
   let offset = parseInt(urlParams.get('offset')) || 0; // Số trang hiện tại
   let totalPages = null;
 
-  // Khôi phục trạng thái UI từ URL params
-  const searchText = urlParams.get('search') || '';
-  const statusFilter = urlParams.get('status') || '';
-  const roleFilter = urlParams.get('role') || '';
-  const sortBy = urlParams.get('key') || '';
-  const sortOrder = urlParams.get('direction') || 'asc';
-
   // Set giá trị cho các input từ URL params
-  $('#search-input').val(searchText);
-  $('#statusFilter').val(statusFilter);
-  $('#roleFilter').val(roleFilter);
-  $('#sortBy').val(sortBy);
-  $('#sortOrder').val(sortOrder);
+  $('#search-input').val(urlParams.get('search') || '');
+  $('#statusFilter').val(urlParams.get('status') || '');
+  $('#roleFilter').val(urlParams.get('role') || '');
+  $('#sortBy').val(urlParams.get('key') || '');
+  $('#sortOrder').val(urlParams.get('direction') || 'asc');
   $('#itemsPerPage').val(limit);
 
   // Xử lý tìm kiếm
   $('#search-input').on('keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
-      updateQueryParams('search', $(this).val().trim());
+      const search = $(this).val().trim()
+      offset = 0;
+      limit = parseInt(urlParams.get('limit')) || 10;
+      updateQueryParams({ search, limit, offset });
       refresh();
     }
   });
   $('.search-btn').on('click', async function () {
-    updateQueryParams('search', $('#search-input').val().trim());
+    const search = $('#search-input').val().trim();
+    offset = 0;
+    limit = parseInt(urlParams.get('limit')) || 10;
+    updateQueryParams({ search, limit, offset });
     refresh();
   });
   // Xử lý lọc theo status
   $('#statusFilter').change(async function () {
-    updateQueryParams('status', $(this).val());
+    const status = $(this).val();
+    offset = 0;
+    limit = parseInt(urlParams.get('limit')) || 10;
+    updateQueryParams({ status, limit, offset });
     refresh();
   });
 
   // Xử lý lọc theo role
   $('#roleFilter').change(async function () {
-    updateQueryParams('role', $(this).val());
+    const role = $(this).val();
+    offset = 0;
+    limit = parseInt(urlParams.get('limit')) || 10;
+    updateQueryParams({ role, limit, offset });
     refresh();
   });
 
@@ -152,72 +138,27 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#sortBy, #sortOrder').change(async function () {
     const sortBy = $('#sortBy').val();
     const sortOrder = $('#sortOrder').val();
-    updateQueryParams('key', sortBy);
-    updateQueryParams('direction', sortOrder);
+    offset = 0;
+    limit = parseInt(urlParams.get('limit')) || 10;
+    updateQueryParams({ key: sortBy, direction: sortOrder, limit, offset });
     await loadData();
   });
-
-  function updatePagination() {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    // Nút First và Previous
-    $pagination.append(`
-            <li class="page-item ${offset === 0 ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="firstPage">&laquo;&laquo;</a>
-            </li>
-            <li class="page-item ${offset === 0 ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="prevPage">&laquo;</a>
-            </li>
-        `);
-
-    // Các nút số trang
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= offset && i <= offset + 2)) {
-        $pagination.append(`
-                    <li class="page-item ${offset === i - 1 ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i - 1}">${i}</a>
-                    </li>
-                `);
-      } else if (i === offset - 1 || i === offset + 3) {
-        $pagination.append(`
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
-                    </li>
-                `);
-      }
-    }
-
-    // Nút Next và Last
-    $pagination.append(`
-            <li class="page-item ${offset === totalPages - 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="nextPage">&raquo;</a>
-            </li>
-            <li class="page-item ${offset === totalPages - 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="lastPage">&raquo;&raquo;</a>
-            </li>
-        `);
-  }
 
   //call API by Ajax and update UI
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
-    const apiQuery = $.param(params);
-    await $.ajax({
-      url: `/api/user?${apiQuery}`,
-      type: 'GET',
-      statusCode: {
-        200(resp) {
-          users = resp.data;
-          totalItems = resp.total;
-          totalPages = Math.ceil(totalItems / limit);
-        },
-        500(resp) {
-          console.log(resp.responseJSON);
-        },
-      },
-    });
+
+    const getAccountsApi = new FunctionApi('/api/user', {
+      query: params
+    })
+
+    const data = await getAccountsApi.call();
+
+    if (data) {
+      users = data.data;
+      totalItems = data.total;
+    }
 
     // Clear current table data
     $('#accountsTable').empty();
@@ -282,45 +223,31 @@ document.addEventListener('DOMContentLoaded', function () {
     if ($this.attr('id') === 'firstPage') {
       offset = 0;
     } else if ($this.attr('id') === 'prevPage') {
-      offset--;
+      offset -= limit;
     } else if ($this.attr('id') === 'nextPage') {
-      offset++;
+      offset += limit;
     } else if ($this.attr('id') === 'lastPage') {
-      offset = totalPages - 1;
+      offset = (totalPages - 1) * limit;
     } else {
-      offset = parseInt($this.data('page'));
+      offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
-    updateQueryParams('offset', offset);
+    updateQueryParams({ offset });
     await refresh();
   });
 
   // Handle items per page change
   $('#itemsPerPage').change(async function () {
     limit = parseInt($(this).val());
-    totalPages = totalItems / limit;
 
-    // updatePagination();
-    updateQueryParams('limit', limit);
+    updateQueryParams({ limit });
     await refresh();
   });
-
-  function updateQueryParams(key, value) {
-    const params = new URLSearchParams(window.location.search);
-
-    if (!value) {
-      params.delete(key);
-    } else {
-      params.set(key, value);
-    }
-
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-  }
 
   // Khởi tạo pagination và load data
   async function refresh() {
     await loadData();
-    updatePagination();
+    updatePagination({ limit, offset, totalItems });
   }
   refresh();
 });
