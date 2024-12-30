@@ -85,7 +85,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   transition: box-shadow 0.3s ease;
-
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
@@ -134,7 +133,6 @@
   object-fit: cover;
   border-radius: 4px;
   transition: transform 0.3s ease;
-
   &:hover {
     transform: scale(1.1);
   }
@@ -149,7 +147,6 @@
   text-transform: uppercase;
   display: inline-block;
   transition: all 0.3s ease;
-
   &:hover {
     transform: translateY(-2px);
   }
@@ -158,7 +155,6 @@
 .status.status-completed {
   background-color: #e3fcef;
   color: #2ecc71;
-
   &:hover {
     background-color: #d4f7e6;
   }
@@ -167,7 +163,6 @@
 .status.status-canceled {
   background-color: #fee2e2;
   color: #ef4444;
-
   &:hover {
     background-color: #fdd5d5;
   }
@@ -176,7 +171,6 @@
 .status.status-pending {
   background-color: #fef2c2;
   color: #f59e0b;
-
   &:hover {
     background-color: #fdeeb5;
   }
@@ -188,7 +182,6 @@
   overflow: hidden;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease;
-
   &:hover {
     transform: scale(1.01);
   }
@@ -200,7 +193,6 @@
   padding: 15px 20px;
   border-bottom: none;
   transition: background-color 0.3s ease;
-
   &:hover {
     background-color: #2980b9;
   }
@@ -233,7 +225,6 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   transition: all 0.3s ease;
-
   &:hover {
     background-color: #f1f3f5;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -246,7 +237,6 @@
   gap: 0.5rem;
   white-space: nowrap;
   transition: transform 0.2s ease;
-
   &:hover {
     transform: translateX(5px);
   }
@@ -255,7 +245,6 @@
 .info-item strong {
   color: #6c757d;
   transition: color 0.2s ease;
-
   &:hover {
     color: #495057;
   }
@@ -267,7 +256,6 @@
   padding: 1rem;
   border-radius: 8px;
   transition: all 0.3s ease;
-
   &:hover {
     background-color: #f1f3f5;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -279,7 +267,6 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   transition: all 0.3s ease;
-
   &:hover {
     background-color: #f1f3f5;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

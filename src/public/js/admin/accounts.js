@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Xử lý thay đổi role
+  // Handle role change
   $(document).on('change', '.role-select', function () {
     const userId = $(this).closest('tr').data('user-id');
     const newRole = $(this).val();
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateRoleApi.call();
   });
 
-  // Xử lý thay đổi status
+  // Handle status change
   $(document).on('change', '.status-select', function () {
     const userId = $(this).closest('tr').data('user-id');
     const newStatus = $(this).val();
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateStatusApi.call();
   });
 
-  // Xử lý xem chi tiết
+  // Handle view details
   $(document).on('click', '.view-details', function () {
     const userId = $(this).closest('tr').data('user-id');
 
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Xử lý xóa user
+  // Handle delete user
   $(document).on('click', '.delete-user', function () {
     const userId = $(this).closest('tr').data('user-id');
     const deleteUserApi = new FunctionApi(`/api/user/${userId}`, {
@@ -74,24 +74,24 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     showModal({
-      title: 'Xoá tài khoản',
-      content: 'Bạn có chắc chắn muốn xóa tài khoản này không?',
+      title: 'Delete Account',
+      content: 'Are you sure you want to delete this account?',
       btnSubmit: "Delete",
       callback: () => deleteUserApi.call()
     });
   });
 });
 document.addEventListener('DOMContentLoaded', function () {
-  // Đọc các tham số từ URL khi trang được load
+  // Read parameters from URL when the page loads
   const urlParams = new URLSearchParams(window.location.search);
 
   let users = null;
   let totalItems = null;
-  let limit = parseInt(urlParams.get('limit')) || $('#itemsPerPage').val(); // Số item mỗi trang
-  let offset = parseInt(urlParams.get('offset')) || 0; // Số trang hiện tại
+  let limit = parseInt(urlParams.get('limit')) || $('#itemsPerPage').val(); // Items per page
+  let offset = parseInt(urlParams.get('offset')) || 0; // Current page
   let totalPages = null;
 
-  // Set giá trị cho các input từ URL params
+  // Set values for inputs from URL params
   $('#search-input').val(urlParams.get('search') || '');
   $('#statusFilter').val(urlParams.get('status') || '');
   $('#roleFilter').val(urlParams.get('role') || '');
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#sortOrder').val(urlParams.get('direction') || 'asc');
   $('#itemsPerPage').val(limit);
 
-  // Xử lý tìm kiếm
+  // Handle search
   $('#search-input').on('keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const search = $(this).val().trim()
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQueryParams({ search, limit, offset });
     refresh();
   });
-  // Xử lý lọc theo status
+  // Handle filter by status
   $('#statusFilter').change(async function () {
     const status = $(this).val();
     offset = 0;
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
     refresh();
   });
 
-  // Xử lý lọc theo role
+  // Handle filter by role
   $('#roleFilter').change(async function () {
     const role = $(this).val();
     offset = 0;
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     refresh();
   });
 
-  // Xử lý sắp xếp
+  // Handle sorting
   $('#sortBy, #sortOrder').change(async function () {
     const sortBy = $('#sortBy').val();
     const sortOrder = $('#sortOrder').val();
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </button>
                             ${!user.isCurrentUser
           ? `
-                                <button type="button" title="Xóa" class="btn btn-danger btn-sm delete-user">
+                                <button type="button" title="Delete" class="btn btn-danger btn-sm delete-user">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             `
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Xử lý sự kiện click pagination
+  // Handle pagination click event
   $('.pagination').on('click', 'a.page-link', async function (e) {
     e.preventDefault();
     const $this = $(this);

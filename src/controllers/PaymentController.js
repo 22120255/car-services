@@ -189,6 +189,7 @@ class PaymentController {
         if (user) {
           // Lấy productIds từ items của order
             const purchasedProducts = order.items.map((item) => ({
+              orderId,
               productId: item.productId,
               quantity: item.quantity,
             }));
@@ -200,6 +201,7 @@ class PaymentController {
             // Thêm các sản phẩm mới vào purchasedProducts
             const purchaseDate = new Date();
             const purchasedProductsData = purchasedProducts.map(product => ({
+              orderId: product.orderId,
               product: product.productId,  
               quantity: product.quantity, 
               purchaseDate: purchaseDate,

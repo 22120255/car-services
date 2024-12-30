@@ -310,7 +310,7 @@ $(document).ready(function () {
           if (!product) return null;
 
           return `
-            < tr >
+              <tr>
                 <td>
                   <div class="d-flex align-items-center">
                     <img src="${product.images?.[0] || '/default-image.jpg'}" 
@@ -323,8 +323,8 @@ $(document).ready(function () {
                 <td class="text-start">${item.quantity || 0}</td>
                 <td class="text-start">${(product.price || 0).toLocaleString('vi-VN')} đ</td>
                 <td class="text-start">${((item.quantity || 0) * (product.price || 0)).toLocaleString('vi-VN')} đ</td>
-              </ >
-        `;
+              </tr>
+            `;
         })
         .filter(Boolean)
         .join('');

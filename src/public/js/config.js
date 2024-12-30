@@ -140,10 +140,6 @@ const getFilterConfigOrder = () => ({
     { value: 'asc', label: 'Ascending' },
     { value: 'desc', label: 'Descending' },
   ],
-  createdTime: [
-    { value: 'asc', label: 'Ascending' },
-    { value: 'desc', label: 'Descending' },
-  ],
 });
 
 export { getFilterConfigProduct, getFilterConfigOrder, getFilterConfigAdminDashboard, getFilterConfigAdminAccounts };

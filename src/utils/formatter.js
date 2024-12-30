@@ -10,37 +10,50 @@ class Formatter {
         },
     };
 
-    static formatNumber(value, options = {}) {
-        const { decimal = 2, shorten = true, locale = 'en-US' } = options
+    static formatNumber(value, options = { decimal: 2, shorten: true, locale: 'vi-VN' }) {
         if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
             return '0';
         }
-        const formattedValue = value.toLocaleString(Formatter.mapping[locale].locale);
 
-        if (!shorten) {
+        const formatter = new Intl.NumberFormat(options.locale, {
+            minimumFractionDigits: options.decimal,
+            maximumFractionDigits: options.decimal,
+        });
+
+        const formattedValue = formatter.format(value);
+
+        if (!options.shorten) {
             return formattedValue;
         }
 
         if (value < 1_000) {
             return formattedValue;
         } else if (value >= 1_000 && value < 1_000_000) {
-            return (value / 1_000).toFixed(decimal) + 'K';
+            return (value / 1_000).toFixed(options.decimal) + 'K';
         } else if (value >= 1_000_000 && value < 1_000_000_000) {
-            return (value / 1_000_000).toFixed(decimal) + 'M';
+            return (value / 1_000_000).toFixed(options.decimal) + 'M';
         } else {
-            return (value / 1_000_000_000).toFixed(decimal) + 'B';
+            return (value / 1_000_000_000).toFixed(options.decimal) + 'B';
         }
     }
-    static formatCurrency(value, locale = 'vi-VN') {
+
+    static formatCurrency(value, currency = 'VND') {
         if (value === undefined || value === null || isNaN(Number(value))) {
             value = 0;
         } else {
             value = Number(value);
         }
 
-        return new Intl.NumberFormat(Formatter.mapping[locale].locale, {
+        const mapping = Formatter.mapping[currency] || Formatter.mapping['vi-VN'];
+        const locale = mapping.locale;
+
+        if (typeof currency !== 'string') {
+            throw new RangeError('Invalid currency code');
+        }
+
+        return new Intl.NumberFormat(locale, {
             style: 'currency',
-            currency: Formatter.mapping[locale].currency,
+            currency,
         }).format(value);
     }
 

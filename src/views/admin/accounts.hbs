@@ -1,13 +1,13 @@
 <div class='accounts-management'>
     <div class='header'>
         <div class='title d-flex justify-content-between align-items-center'>
-            <h2>Manage accounts</h2>
+            <h2>User Management</h2>
             <div class='search-box d-flex align-items-center'>
                 <input
                     type='text'
                     id='search-input'
                     class='form-control'
-                    placeholder='Enter fullname or email...'
+                    placeholder='Search by name, email...'
                 />
                 <button class='btn btn-primary search-btn'>
                     <i class='fas fa-search'></i>
@@ -53,9 +53,9 @@
         </table>
     </div>
 
-    <!-- Phân trang -->
+    <!-- Pagination -->
     <div class='d-flex justify-content-between align-items-center mt-3'>
-        <!-- Item fake -->
+        <!-- Fake item -->
         <div></div>
 
         <nav aria-label='Page navigation'>
@@ -77,12 +77,12 @@
         </div>
     </div>
 
-    <!-- Modal chi tiết user -->
+    <!-- User details modal -->
     <div class='modal fade' id='userDetailsModal' tabindex='-1'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
                 <div class='modal-header'>
-                    <h5 class='modal-title'>Chi tiết tài khoản</h5>
+                    <h5 class='modal-title'>Account Details</h5>
                     <button
                         type='button'
                         class='btn-close'
