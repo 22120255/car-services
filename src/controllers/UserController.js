@@ -4,6 +4,7 @@ const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
+const Order = require('../models/Order');
 const Formatter = require('../utils/formatter');
 
 class UserController {

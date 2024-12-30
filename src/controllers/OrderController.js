@@ -5,10 +5,10 @@ const OrderService = require('../services/OrderService');
 
 class OrderController {
   async createOrder(req, res) {
-    try {
+    try {  
       const order = await OrderService.createOrder(req.user._id, req.body.shippingDetails);
       res.status(201).json({ order });
-    }
+    } 
     catch (error) {
       res.status(500).json({
         error: 'Internal Server Error',

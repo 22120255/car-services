@@ -34,8 +34,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const currentPage = window.location.pathname.split("/").pop();
-
+            let currentPage = window.location.pathname.split("/").pop();
+            if (currentPage === 'verify') {
+              currentPage = 'verify-email';
+            }
             let customCss = document.createElement("link");
             customCss.rel = "stylesheet";
 
@@ -51,6 +53,9 @@
                       break;
                 case "activate":
                     customCss.href = "/css/auth/activate-account.css";
+                    break;
+                case "verify-email":
+                    customCss.href = "/css/auth/verify-email.css";
                     break;
                 default:
                     break;
@@ -70,9 +75,9 @@
 </head>
 <body>
     <main class="container-fuild wrapper-login position-relative">
-      <button type="button" title="Quay lại" class="btn-back p-2" >
+      <button type="button" title="Go back" class="btn-back p-2" >
         <i class="fa fa-chevron-left"></i>
-        <span>Quay lại</span>
+        <span>Go back</span>
       </button>
 
         {{{body}}}

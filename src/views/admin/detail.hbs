@@ -12,7 +12,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Thông tin cá nhân</h5>
+                    <h5 class="card-title">Personal Information</h5>
                     <hr>
                     
                     <div class="row mb-3">
@@ -26,7 +26,7 @@
 
                     <div class="row mb-3">
                         <div class="col-sm-4">
-                            <strong>Số điện thoại:</strong>
+                            <strong>Phone Number:</strong>
                         </div>
                         <div class="col-sm-8">
                             {{user.metadata.phone}}
@@ -35,7 +35,7 @@
 
                     <div class="row mb-3">
                         <div class="col-sm-4">
-                            <strong>Địa chỉ:</strong>
+                            <strong>Address:</strong>
                         </div>
                         <div class="col-sm-8">
                             {{user.metadata.address}}
@@ -44,13 +44,13 @@
 
                     <div class="row mb-3">
                         <div class="col-sm-4">
-                            <strong>Đăng nhập lần cuối:</strong>
+                            <strong>Last Login:</strong>
                         </div>
                         <div class="col-sm-8">
                             {{#if user.lastLogin}}
                                 {{formatDate user.lastLogin}}
                             {{else}}
-                                Chưa đăng nhập
+                                Never logged in
                             {{/if}}
                         </div>
                     </div>
@@ -60,16 +60,16 @@
             {{#if user.metadata.purchasedProducts.length}}
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">Xe đã mua</h5>
+                    <h5 class="card-title">Purchased Cars</h5>
                     <hr>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Hãng xe</th>
+                                    <th>Brand</th>
                                     <th>Model</th>
-                                    <th>Năm SX</th>
-                                    <th>Số KM</th>
+                                    <th>Year</th>
+                                    <th>Mileage</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,7 +91,7 @@
             {{#if user.metadata.recentActivity.length}}
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5 class="card-title">Hoạt động gần đây</h5>
+                    <h5 class="card-title">Recent Activity</h5>
                     <hr>
                     <ul class="list-group">
                         {{#each user.metadata.recentActivity}}

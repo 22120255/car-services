@@ -25,8 +25,6 @@ class UserService {
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
       }
-      console.log(typeof key);
-      console.log('sort', sort, typeof sort);
 
       const users = await User.find(filter)
         .skip(offset * limit)
@@ -288,7 +286,6 @@ class UserService {
   async getOrders({ limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax }) {
     try {
       let filter = {};
-
       // Xử lý search
       if (search) {
         //console.log('search:', search);
@@ -383,6 +380,36 @@ class UserService {
     }
   }
 
+  async getOrder(orderId) {
+    if (!orderId) {
+      throw new Error('Order ID is required');
+    }
+
+    try {
+      const order = await Order.findById(orderId)
+      .populate({
+        path: 'userId',
+        select: 'fullName email phone'
+      })
+      .populate({
+        path: 'items.productId',
+        select: 'brand model price images'
+      })
+      .lean()
+      .exec();
+      
+      if (!order) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      return order;
+    }
+    catch (error) {
+      console.error('Error fetching order:', error);
+      throw error;
+    }
+  }
+  
   async updateOrderStatus(orderId, status) {
     try {
       if (!status) {

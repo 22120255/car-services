@@ -267,7 +267,6 @@ document.addEventListener('DOMContentLoaded', function () {
       const newStatus = $(this).val();
       updateOrderStatus(orderId, newStatus);
     });
-
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------
