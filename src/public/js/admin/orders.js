@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let orders = null;
   let limit = urlParams.get('limit') || 10;
   let offset = parseInt(urlParams.get('offset')) || 0;
+  let status = urlParams.get('status') || "";
   let totalItems = null;
 
   function syncFiltersFromURL() {
@@ -127,11 +128,18 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function reloadRow(orderId, newStatus) {
+    const urlParams = new URLSearchParams(window.location.search);
+    status = urlParams.get('status') || "";
+    if (status == undefined || status == "") {
     const $row = $(`tr[data-order-id='${orderId}']`);
     const $statusCell = $row.find('.status-cell');
     $statusCell.find('.status-select').remove();
     $statusCell.find('.status').text(newStatus).show();
     $statusCell.find('.status').attr('class', `status ${getStatusClass(newStatus)}`);
+    }
+    else {
+      $(`tr[data-order-id='${orderId}']`).remove();
+    }
   }
 
   function renderOrders(orders) {
