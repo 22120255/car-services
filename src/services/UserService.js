@@ -27,7 +27,7 @@ class UserService {
       }
 
       const users = await User.find(filter)
-        .skip(offset * limit)
+        .skip(offset)
         .limit(limit)
         .sort(sort);
       const total = await User.countDocuments(filter);
@@ -334,7 +334,7 @@ class UserService {
           path: 'items.productId',
           select: 'brand model price images'
         })
-        .skip(0)
+        .skip(offset)
         .limit(limit)
         .sort(sort)
         .lean();
@@ -387,17 +387,17 @@ class UserService {
 
     try {
       const order = await Order.findById(orderId)
-      .populate({
-        path: 'userId',
-        select: 'fullName email phone'
-      })
-      .populate({
-        path: 'items.productId',
-        select: 'brand model price images'
-      })
-      .lean()
-      .exec();
-      
+        .populate({
+          path: 'userId',
+          select: 'fullName email phone'
+        })
+        .populate({
+          path: 'items.productId',
+          select: 'brand model price images'
+        })
+        .lean()
+        .exec();
+
       if (!order) {
         throw new Error(`Order with ID ${orderId} not found`);
       }
@@ -409,7 +409,7 @@ class UserService {
       throw error;
     }
   }
-  
+
   async updateOrderStatus(orderId, status) {
     try {
       if (!status) {
