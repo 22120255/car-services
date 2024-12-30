@@ -315,6 +315,9 @@ class UserService {
       if (status) {
         filter.status = status;
       }
+      if (priceMin && priceMax) {
+        filter.totalAmount = { $gte: priceMin, $lte: priceMax };
+      }
 
       // Xử lý sort
       let sort = {};
@@ -338,10 +341,10 @@ class UserService {
         .limit(limit)
         .sort(sort)
         .lean();
-
-      //console.log('orders:', orders);
+      
+      console.log('orders:', orders);
       const total = await Order.countDocuments(filter);
-      //console.log('total:', total);
+      console.log('total:', total);
 
       return { orders, total };
     } catch (error) {
