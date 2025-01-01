@@ -65,7 +65,12 @@ app.use('/api/', limiter)
 
 // Google Analytics - crawl data every 0h
 cron.schedule('0 0 * * *', async () => {
-  await getDataReport();
+  try {
+    await runReport();
+    infoLog("app.js", "crawl data", "Crawl data successfully");
+  } catch (error) {
+    errorLog("app.js", "crawl data", error);
+  }
 });
 
 // Template engine
