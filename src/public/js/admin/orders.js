@@ -1,26 +1,39 @@
-import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
+import FunctionApi from '../FunctionApi.js';
+import { formatDate } from '../helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Declare variables -----------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
   let orders = null;
-  let limit = urlParams.get('limit') || 8;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
+  let limit = urlParams.get('limit') || 10;
+  let offset = parseInt(urlParams.get('offset')) || 0;
+  let status = urlParams.get('status') || "";
   let totalItems = null;
 
-  let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
-  let priceMaxFilter = parseFloat(urlParams.get('priceMax')) || null;
-  let statusFilter = urlParams.get('status') || null;
-  let searchText = urlParams.get('search') || '';
-  let sortBy = urlParams.get('key') || '';
+  function syncFiltersFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 10;
+    offset = parseInt(urlParams.get('offset')) || 0;
+    const priceMin = parseFloat(urlParams.get('priceMin') || "");
+    const priceMax = parseFloat(urlParams.get('priceMax') || "");
+    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : "";
 
-  // Initialize filters with URL params
-  $('#searchInput').val(searchText);
-  $('#limit').val(limit);
-  $('#statusFilter').val(statusFilter);
-  if (priceMinFilter && priceMaxFilter) $('#priceFilter').val(`${priceMinFilter}-${priceMaxFilter}`);
+    // Đồng bộ với giao diện
+    $('#limit').val(limit);
+    $('#searchInput').val(urlParams.get('search') || "");
+    $('#statusFilter').val(urlParams.get('status') || "");
+    $('#priceFilter').val(price);
+    $('#sortBy').val(urlParams.get('key') || "asc");
+  }
+
+  // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
+  window.addEventListener('popstate', async function () {
+    syncFiltersFromURL();
+    await refresh(); // Tải lại dữ liệu
+  });
+
 
   // ------------------------------------ Setup Filters -----------------------------------------------
   const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
@@ -33,8 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
-      offset = 1;
-      updateQueryParams({ [paramKey]: $(this).val(), offset: offset });
+      offset = 0;
+      const urlParams = new URLSearchParams(window.location.search);
+      limit = parseInt(urlParams.get('limit')) || 10
+      updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
   }
@@ -48,8 +63,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (event.key === 'Enter') {
       const search = $(this).val();
       const urlParams = new URLSearchParams(window.location.search);
-      limit = parseInt(urlParams.get('limit')) || 8
-      offset = 1;
+      limit = parseInt(urlParams.get('limit')) || 10
+      offset = 0;
       updateQueryParams({ search, offset, limit });
       await refresh();
     }
@@ -59,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     const search = $('#searchInput').val();
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8
-    offset = 1;
+    limit = parseInt(urlParams.get('limit')) || 10
+    offset = 0;
     updateQueryParams({ search, offset, limit });
     await refresh();
   });
@@ -69,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#priceFilter').on('change', async function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
-    offset = 1;
+    offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 10
     updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
     await refresh();
   });
@@ -82,79 +97,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const direction = $(this).val();
     offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 10
     updateQueryParams({ key, direction, offset, limit });
     await refresh();
   });
-
-  // ------------------------------------ Pagination -----------------------------------------------
-  function updatePagination() {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    const visibleRange = 1;
-    const firstPage = 1;
-    const lastPage = totalPages;
-
-    $pagination.append(`
-      <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-        <a class="page-link" href="#" id="prevPage">&laquo;</a>
-      </li>
-    `);
-
-    for (let i = firstPage; i <= lastPage; i++) {
-      if (
-        i === firstPage ||
-        i === lastPage ||
-        (i >= offset - visibleRange && i <= offset + visibleRange)
-      ) {
-        $pagination.append(`
-          <li class="page-item ${offset === i ? 'active' : ''}">
-            <a class="page-link" href="#" data-page="${i}">${i}</a>
-          </li>
-        `);
-      } else if (
-        (i === offset - visibleRange - 1 && i > firstPage) ||
-        (i === offset + visibleRange + 1 && i < lastPage)
-      ) {
-        $pagination.append(`
-          <li class="page-item disabled">
-            <span class="page-link">...</span>
-          </li>
-        `);
-      }
-    }
-
-    $pagination.append(`
-      <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-        <a class="page-link" href="#" id="nextPage">&raquo;</a>
-      </li>
-    `);
-  }
 
   // ------------------------------------ Data Loading and Rendering -----------------------------------------------
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
-    const apiQuery = $.param(params);
-    try {
-      const response = await $.ajax({
-        url: `/api/user/orders?${apiQuery}`,
-        type: 'GET'
-      });
 
-      orders = response.orders;
-      totalItems = response.total;
-      totalPages = Math.ceil(totalItems / limit);
+    const getOrdersApi = new FunctionApi(`/api/user/orders`, {
+      query: params,
+    })
+    const data = await getOrdersApi.call();
+    if (data) {
+      orders = data.orders;
+      totalItems = data.total;
       renderOrders(orders);
-    } catch (error) {
-      console.error('Error loading data:', error);
-      showToast('error', 'Failed to load orders. Please try again.');
     }
-  }
-
-  function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString('vi-VN');
   }
 
   function getStatusClass(status) {
@@ -167,24 +128,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function reloadRow(orderId, newStatus) {
+    const urlParams = new URLSearchParams(window.location.search);
+    status = urlParams.get('status') || "";
+    if (status == undefined || status == "") {
     const $row = $(`tr[data-order-id='${orderId}']`);
     const $statusCell = $row.find('.status-cell');
     $statusCell.find('.status-select').remove();
     $statusCell.find('.status').text(newStatus).show();
     $statusCell.find('.status').attr('class', `status ${getStatusClass(newStatus)}`);
-  }
-
-  async function updateOrderStatus(orderId, newStatus) {
-    try {
-      await $.ajax({
-        url: `/api/user/orders/update-status/${orderId}`,
-        type: 'PATCH',
-        data: { status: newStatus }
-      });
-      reloadRow(orderId, newStatus);
-    } catch (error) {
-      console.error('Error updating order status:', error);
-      showToast('error', 'Failed to update order status');
+    }
+    else {
+      $(`tr[data-order-id='${orderId}']`).remove();
     }
   }
 
@@ -195,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
       $ordersTable.append(`
         <tr>
           <td colspan="6" class="text-center">
-            <h2 style="font-size: large; color: #978e8e">No orders found!</h2>
+            <h2 style="font-size: large; color: #9710e10e">No orders found!</h2>
           </td>
         </tr>
       `);
@@ -265,7 +219,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }).on('change', '.status-select', function () {
       const orderId = $(this).data('order-id');
       const newStatus = $(this).val();
-      updateOrderStatus(orderId, newStatus);
+      const updateOrderStatusApi = new FunctionApi(`/api/user/orders/update-status/${orderId}`, {
+        method: "PATCH",
+        body: {
+          status: newStatus
+        },
+        onSuccess(data) {
+          reloadRow(orderId, newStatus)
+        }
+      })
+      updateOrderStatusApi.call();
     });
   }
 
@@ -278,13 +241,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     switch ($this.attr('id')) {
       case 'prevPage':
-        if (offset > 1) offset--;
+        if (offset > 0) offset -= limit;
         break;
       case 'nextPage':
-        if (offset < totalPages) offset++;
+        if (offset < totalItems) offset += limit;
         break;
       default:
-        offset = parseInt($this.data('page'));
+        offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
     updateQueryParams({ offset: offset });
@@ -294,17 +257,18 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#limit').change(async function () {
     limit = $(this).val();
     totalPages = Math.ceil(totalItems / limit);
-    offset = 1;
+    offset = 0;
     updateQueryParams({ limit: limit, offset: offset });
     await refresh();
   });
 
   async function refresh() {
     await loadData();
-    updatePagination();
+    updatePagination({ offset, limit, totalItems });
   }
 
   // Initial load
+  syncFiltersFromURL();
   refresh();
 });
 
@@ -372,14 +336,12 @@ $(document).ready(function () {
         })
         .filter(Boolean)
         .join('');
-      console.log('Order items list:', itemsHtml);
+      // console.log('Order items list:', itemsHtml);
       $('#orderItemsList').html(itemsHtml || '<tr><td colspan="4" class="text-center">No valid items found</td></tr>');
     }
 
     // Show total
     const totalAmount = order.totalAmount || 0;
     $('#totalAmount').text(totalAmount.toLocaleString('vi-VN') + ' đ');
-
-
   });
 });

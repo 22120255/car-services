@@ -83,4 +83,49 @@ const renderSelectOptions = (element, options) => {
   });
 };
 
-export { showToast, showModal, loadCartData, updateQueryParams, renderSelectOptions };
+function updatePagination({ selector = '.pagination', offset, limit, totalItems }) {
+  const $pagination = $(selector);
+  $pagination.empty();
+
+  const currentPage = offset / limit + 1;
+  const visibleRange = 1;
+  const firstPage = 1;
+  const lastPage = Math.ceil(totalItems / limit);
+
+  $pagination.append(`
+      <li class="page-item ${currentPage === firstPage ? 'disabled' : ''}">
+        <a class="page-link" href="#" id="prevPage">&laquo;</a>
+      </li>
+    `);
+
+  for (let i = firstPage; i <= lastPage; i++) {
+    if (
+      i === firstPage ||
+      i === lastPage ||
+      (i >= currentPage - visibleRange && i <= currentPage + visibleRange)
+    ) {
+      $pagination.append(`
+          <li class="page-item ${currentPage === i ? 'active' : ''}">
+            <a class="page-link" href="#" data-page="${i}">${i}</a>
+          </li>
+        `);
+    } else if (
+      (i === currentPage - visibleRange - 1 && i > firstPage) ||
+      (i === currentPage + visibleRange + 1 && i < lastPage)
+    ) {
+      $pagination.append(`
+          <li class="page-item disabled">
+            <span class="page-link">...</span>
+          </li>
+        `);
+    }
+  }
+
+  $pagination.append(`
+      <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
+        <a class="page-link" href="#" id="nextPage">&raquo;</a>
+      </li>
+    `);
+}
+
+export { showToast, showModal, loadCartData, updateQueryParams, renderSelectOptions, updatePagination };

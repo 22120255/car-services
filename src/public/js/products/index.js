@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const urlParams = new URLSearchParams(window.location.search);
-      const search = $('#searchInput').val();
+      const search = $('#searchInput').val().trim();
       offset = 1;
       limit = parseInt(urlParams.get('limit')) || 8
       updateQueryParams({ search, offset, limit });
