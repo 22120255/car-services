@@ -1,13 +1,13 @@
 <div class='accounts-management'>
     <div class='header'>
         <div class='title d-flex justify-content-between align-items-center'>
-            <h2>Quản lý tài khoản</h2>
+            <h2>User Management</h2>
             <div class='search-box d-flex align-items-center'>
                 <input
                     type='text'
                     id='search-input'
                     class='form-control'
-                    placeholder='Tìm kiếm theo tên, email...'
+                    placeholder='Search by name, email...'
                 />
                 <button class='btn btn-primary search-btn'>
                     <i class='fas fa-search'></i>
@@ -18,33 +18,18 @@
             <div class='row mb-3'>
                 <div class='col'>
                     <select id='statusFilter' class='form-select'>
-                        <option value=''>Tất cả trạng thái</option>
-                        <option value='active'>Đang hoạt động</option>
-                        <option value='inactive'>Chưa kích hoạt</option>
-                        <option value='suspended'>Đã khóa</option>
                     </select>
                 </div>
                 <div class='col'>
                     <select id='roleFilter' class='form-select'>
-                        <option value=''>Tất cả vai trò</option>
-                        <option value='user'>User</option>
-                        <option value='admin'>Admin</option>
-                        <option value='sadmin'>Super Admin</option>
                     </select>
                 </div>
                 <div class='col'>
                     <select id='sortBy' class='form-select'>
-                        <option value=''>Sắp xếp theo</option>
-                        <option value='fullName'>Họ tên</option>
-                        <option value='email'>Email</option>
-                        <option value='createdAt'>Thời gian đăng ký</option>
-                        <option value='lastLogin'>Đăng nhập cuối</option>
                     </select>
                 </div>
                 <div class='col'>
                     <select id='sortOrder' class='form-select'>
-                        <option value='asc'>Tăng dần</option>
-                        <option value='desc'>Giảm dần</option>
                     </select>
                 </div>
             </div>
@@ -56,21 +41,21 @@
             <thead>
                 <tr>
                     <th>Avatar</th>
-                    <th>Họ tên</th>
+                    <th>Fullname</th>
                     <th>Email</th>
-                    <th>Vai trò</th>
-                    <th>Trạng thái</th>
-                    <th>Đăng nhập cuối</th>
-                    <th>Thao tác</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Last login</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id='accountsTable'></tbody>
         </table>
     </div>
 
-    <!-- Phân trang -->
+    <!-- Pagination -->
     <div class='d-flex justify-content-between align-items-center mt-3'>
-        <!-- Item fake -->
+        <!-- Fake item -->
         <div></div>
 
         <nav aria-label='Page navigation'>
@@ -85,19 +70,19 @@
                 class='form-select form-select-sm'
                 style='width: auto;'
             >
-                <option value='10'>10 / trang</option>
+                {{!-- <option value='10'>10 / trang</option>
                 <option value='15'>15 / trang</option>
-                <option value='20'>20 / trang</option>
+                <option value='20'>20 / trang</option> --}}
             </select>
         </div>
     </div>
 
-    <!-- Modal chi tiết user -->
+    <!-- User details modal -->
     <div class='modal fade' id='userDetailsModal' tabindex='-1'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
                 <div class='modal-header'>
-                    <h5 class='modal-title'>Chi tiết tài khoản</h5>
+                    <h5 class='modal-title'>Account Details</h5>
                     <button
                         type='button'
                         class='btn-close'

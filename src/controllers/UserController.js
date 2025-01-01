@@ -1,13 +1,19 @@
 const UserService = require('../services/UserService');
+const DataAnalytics = require('../models/DataAnalytics');
 const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
+const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
 const Order = require('../models/Order');
+const Formatter = require('../utils/formatter');
 
 class UserController {
   // [GET] /admin/dashboard
-  index(req, res) {
-    res.render('admin/dashboard', { layout: 'admin', title: 'Dashboard' });
+  async index(req, res) {
+    res.render('admin/dashboard', {
+      layout: 'admin',
+      title: 'Dashboard',
+    });
   }
 
   // [GET] /admin/users/accounts
@@ -25,11 +31,11 @@ class UserController {
 
   // [GET] /admin/users
   async getUsers(req, res) {
-    const { limit, offset, key, direction, search, status, role } = req.query;
+    const { limit = 10, offset = 0, key, direction, search, status, role } = req.query;
     try {
       const { users, total } = await UserService.getUsers({
-        limit: limit || 10,
-        offset: offset || 0,
+        limit,
+        offset,
         key,
         direction,
         search,
@@ -232,7 +238,6 @@ class UserController {
   // [PATCH] /api/user/product/store
   async storeProduct(req, res) {
     if (req.file) {
-      console.log(req.file);
       return res.json({ secure_url: req.file.path }); // Sử dụng secure_url thay vì path
     }
     return res.status(400).json({ message: 'Failed to upload image' });
@@ -248,6 +253,57 @@ class UserController {
     } catch (error) {
       errorLog('UserController', 'orders', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // [GET] /api/user/orders
+  async getOrders(req, res) {
+    const { limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax } = req.query;
+    try {
+      const { orders, total } = await UserService.getOrders({
+        limit,
+        offset,
+        key,
+        direction,
+        search,
+        status,
+        priceMin,
+        priceMax,
+      });
+      return res.status(200).json({ orders, total });
+    } catch (error) {
+      errorLog('UserController', 'getOrders', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // [GET] /api/user/orders/:id
+  async getOrder(req, res) {
+    try {
+      const order = await UserService.getOrder(req.params.id);
+      res.status(200).json({ order });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Internal Server Error',
+        message: error.message
+      });
+    }
+  }
+
+  // [PATCH] /api/user/orders/status/:id
+  async updateOrderStatus(req, res) {
+    try {
+      const orderId = req.params.id;
+      const { status } = req.body;
+
+      if (!orderId || !status) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      await UserService.updateOrderStatus(orderId, status);
+      return res.status(200).json({ message: 'Update order status successfully' });
+    } catch (error) {
+      errorLog('UserController', 'updateOrderStatus', error.message);
+      return res.status(403).json({ error: error.message });
     }
   }
 
@@ -314,7 +370,9 @@ class UserController {
 
       await UserService.updateAvatar(userId, pathFile);
       clearCache(`user/profile/${userId}`);
-      res.status(200).json(pathFile);
+      res.status(200).json({
+        avatar: pathFile,
+      });
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
       res.status(500).json({
@@ -325,25 +383,72 @@ class UserController {
 
   // [GET] /profile/:id
   async profile(req, res) {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
-    res.render('user/profile', {
-      _user: user,
-      title: 'Personal information',
-    });
+    try {
+      const userId = req.params.id;
+      const user = await User.findById(userId)
+        .populate({
+          path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
+          select: 'brand model year mileage price images reviewStatus',
+        })
+        .lean()
+        .exec();
+      res.render('user/profile', {
+        _user: user,
+        title: 'Personal information',
+      });
+    } catch (error) {
+      errorLog('UserController', 'profile', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
   }
-
   async getPurchasedList(req, res) {
     try {
-      // Lấy thông tin user với populate purchasedProducts
+      // Lấy thông tin người dùng và populate sản phẩm đã mua
       const user = await User.findById(req.user._id)
         .populate({
-          path: 'metadata.purchasedProducts',
-          select: 'brand model year mileage price images',
+          path: 'metadata.purchasedProducts.product',
+          select: 'brand model year mileage price images reviewStatus',
+        })
+        .lean()
+        .exec();
+
+      const orders = await Order.find({ userId: req.user._id })
+        .select('items')
+        .populate({
+          path: 'items.productId',
+          select: 'reviewStatus',
         })
         .lean();
 
-      // Sắp xếp recentActivity theo ngày mua mới nhất
+      const productReviewStatuses = {};
+
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          const productId = item.productId._id.toString();
+          const reviewStatus = item.reviewStatus;
+
+          if (!productReviewStatuses[productId]) {
+            productReviewStatuses[productId] = 'not-reviewed';
+          }
+
+          if (reviewStatus === 'reviewed') {
+            productReviewStatuses[productId] = 'reviewed';
+          }
+        });
+      });
+
+      user.metadata.purchasedProducts.forEach((purchasedProduct) => {
+        const productId = purchasedProduct.product._id.toString();
+
+        if (productReviewStatuses[productId] === 'reviewed') {
+          if (purchasedProduct.reviewStatus !== 'reviewed') {
+            purchasedProduct.reviewStatus = 'reviewed';
+          }
+        } else {
+          purchasedProduct.reviewStatus = 'not-reviewed';
+        }
+      });
+
       if (user.metadata.recentActivity) {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);
       }
@@ -361,7 +466,7 @@ class UserController {
   // [POST] /api/user/review/store
   async storeReview(req, res) {
     if (req.file) {
-      console.log(req.file);
+      // console.log(req.file);
       return res.json({ secure_url: req.file.path });
     }
     return res.status(400).json({ message: 'Failed to upload image' });

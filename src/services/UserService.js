@@ -1,5 +1,10 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
+const Order = require('../models/Order');
+const DataAnalytics = require('../models/DataAnalytics');
+const { getDataReport } = require('../config/analytics');
+const Formatter = require('../utils/formatter');
+const { mongooseToObject } = require('../utils/mongoose');
 
 class UserService {
   async getUsers({ limit, offset, key, direction, search, status, role }) {
@@ -20,8 +25,9 @@ class UserService {
         const sortDirection = direction === 'asc' ? 1 : -1;
         sort[key] = sortDirection;
       }
+
       const users = await User.find(filter)
-        .skip(offset * limit)
+        .skip(offset)
         .limit(limit)
         .sort(sort);
       const total = await User.countDocuments(filter);
@@ -271,6 +277,155 @@ class UserService {
       }
     } catch (error) {
       console.error('Error restoring product:', error);
+      throw error;
+    }
+  }
+
+  // Lấy danh sách đơn hàng
+
+  async getOrders({ limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax }) {
+    try {
+      let filter = {};
+      // Xử lý search
+      if (search) {
+        //console.log('search:', search);
+        // Tìm users có tên match với search term
+        const users = await User.find({
+          fullName: { $regex: search, $options: 'i' }
+        }).select('_id');
+        const userIds = users.map(user => user._id);
+        //console.log('userIds:', userIds);
+        // Tìm products có brand hoặc model match với search term
+        const products = await Product.find({
+          $or: [
+            { brand: { $regex: search, $options: 'i' } },
+            { model: { $regex: search, $options: 'i' } }
+          ]
+        }).select('_id');
+        const productIds = products.map(product => product._id);
+        //console.log('productIds:', productIds);
+        // Build filter cho orders
+        filter.$or = [
+          { userId: { $in: userIds } },  // Orders của users match
+          { 'items.productId': { $in: productIds } }  // Orders có products match
+        ];
+      }
+
+      // Filter theo status
+      if (status) {
+        filter.status = status;
+      }
+      if (priceMin && priceMax) {
+        filter.totalAmount = { $gte: priceMin, $lte: priceMax };
+      }
+
+      // Xử lý sort
+      let sort = {};
+      if (key) {
+        direction ||= 'asc';
+        const sortDirection = direction === 'asc' ? 1 : -1;
+        sort[key] = sortDirection;
+      }
+
+      // Query orders với populate
+      const orders = await Order.find(filter)
+        .populate({
+          path: 'userId',
+          select: 'fullName email phone'
+        })
+        .populate({
+          path: 'items.productId',
+          select: 'brand model price images'
+        })
+        .skip(offset)
+        .limit(limit)
+        .sort(sort)
+        .lean();
+      
+      console.log('orders:', orders);
+      const total = await Order.countDocuments(filter);
+      console.log('total:', total);
+
+      return { orders, total };
+    } catch (error) {
+      console.error('Error in getOrders:', error);
+      throw error;
+    }
+  }
+
+  async getOrder(orderId) {
+    if (!orderId) {
+      throw new Error('Order ID is required');
+    }
+
+    try {
+      const order = await Order.findById(orderId)
+        .populate({
+          path: 'userId',
+          select: 'fullName email phone'
+        })
+        .populate({
+          path: 'items.productId',
+          select: 'brand model price images'
+        })
+        .lean()
+        .exec();
+
+      if (!order) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      return order;
+    }
+    catch (error) {
+      console.error('Error fetching order:', error);
+      throw error;
+    }
+  }
+
+  async getOrder(orderId) {
+    if (!orderId) {
+      throw new Error('Order ID is required');
+    }
+
+    try {
+      const order = await Order.findById(orderId)
+        .populate({
+          path: 'userId',
+          select: 'fullName email phone'
+        })
+        .populate({
+          path: 'items.productId',
+          select: 'brand model price images'
+        })
+        .lean()
+        .exec();
+
+      if (!order) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      return order;
+    }
+    catch (error) {
+      console.error('Error fetching order:', error);
+      throw error;
+    }
+  }
+
+  async updateOrderStatus(orderId, status) {
+    try {
+      if (!status) {
+        throw new Error('Status is required');
+      }
+      if (!orderId) {
+        throw new Error('Order ID is required');
+      }
+
+      await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    }
+    catch (error) {
+      console.error('Error updating order status:', error);
       throw error;
     }
   }

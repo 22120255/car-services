@@ -1,0 +1,32 @@
+<div class="container">
+        <div class='verify-container'>
+        <div class='verify-content'>
+            <h1>Verify Email</h1>
+            
+            <div class='verify-box'>
+                <div class='verify-icon'>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                
+                <div class='verify-text'>
+                    <p>We've sent a verification link to:</p>
+                    <div class='email-display'>
+                        <strong id="email">{{email}}</strong>
+                    </div>
+                    <p class='instruction'>Please check your email and click the verification link to activate your account.</p>
+                </div>
+
+                <div class='resend-section'>
+                    <span>Haven't received the email?</span>
+                    <button class='btn-resend' id='resend-code'>
+                        Resend verification email
+                    </button>
+                </div>
+
+                <div class='error-message' id='message-error'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type='module' src='/js/auth/verify-email.js'></script>

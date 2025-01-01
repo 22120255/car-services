@@ -11,13 +11,15 @@ body {
   padding: 1.5rem; }
 
 /* Metric cards */
-.metric-card .metric-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center; }
+.metric-card {
+  min-height: 147px; }
+  .metric-card .metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
 
 .b-l-purple {
   border-left: 4px solid #7c3aed; }
@@ -89,3 +91,72 @@ body {
 
 .revenue-chart-wrapper .btn-open-report {
   color: #7c3aed; }
+
+.top-view-products,
+.top-purchased-products {
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px; }
+  .top-view-products .product-item,
+  .top-purchased-products .product-item {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s; }
+  .top-view-products .hover-bg,
+  .top-purchased-products .hover-bg {
+    transition: background-color 0.2s; }
+  .top-view-products .hover-bg:hover,
+  .top-purchased-products .hover-bg:hover {
+    background-color: rgba(0, 0, 0, 0.03); }
+  .top-view-products .product-rank,
+  .top-purchased-products .product-rank {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px; }
+  .top-view-products .product-image,
+  .top-purchased-products .product-image {
+    width: 60px;
+    height: 40px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #e9ecef; }
+  .top-view-products .product-image img,
+  .top-purchased-products .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; }
+  .top-view-products .product-title,
+  .top-purchased-products .product-title {
+    font-size: 14px;
+    margin: 0;
+    color: #212529; }
+  .top-view-products .product-meta,
+  .top-purchased-products .product-meta {
+    font-size: 12px;
+    color: #6c757d; }
+
+.time-filter .btn-group .btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem; }
+
+.time-filter .btn-group .btn.active {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d; }
+
+.time-filter input[type='date'] {
+  width: 140px; }
+
+.time-filter input[type='date']::-webkit-calendar-picker-indicator {
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0; }
+
+.time-filter input[type='date']::-webkit-datetime-edit {
+  padding: 0; }

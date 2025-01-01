@@ -1,60 +1,145 @@
 const getFilterConfigProduct = () => ({
   years: [
-    { value: '2024', name: '2024' },
-    { value: '2023', name: '2023' },
-    { value: '2022', name: '2022' },
-    { value: '2021', name: '2021' },
-    { value: '2020', name: '2020' },
-    { value: '2019', name: '2019' },
-    { value: '2018', name: '2018' },
+    { value: "", label: "All" },
+    { value: '2024', label: '2024' },
+    { value: '2023', label: '2023' },
+    { value: '2022', label: '2022' },
+    { value: '2021', label: '2021' },
+    { value: '2020', label: '2020' },
+    { value: '2019', label: '2019' },
+    { value: '2018', label: '2018' },
   ],
   brands: [
-    { name: 'Audi', value: 'Audi' },
-    { name: 'BMW', value: 'BMW' },
-    { name: 'Ford', value: 'Ford' },
-    { name: 'Kia', value: 'Kia' },
-    { name: 'Honda', value: 'Honda' },
-    { name: 'Hyundai', value: 'Hyundai' },
-    { name: 'Mazda', value: 'Mazda' },
-    { name: 'Mercedes-Benz', value: 'Mercedes-benz' },
-    { name: 'Mitsubishi', value: 'Mitsubishi' },
-    { name: 'Toyota', value: 'Toyota' },
-    { name: 'Vinfast', value: 'Vinfast' },
+    { value: "", label: "All" },
+    { label: 'Audi', value: 'Audi' },
+    { label: 'BMW', value: 'BMW' },
+    { label: 'Ford', value: 'Ford' },
+    { label: 'Kia', value: 'Kia' },
+    { label: 'Honda', value: 'Honda' },
+    { label: 'Hyundai', value: 'Hyundai' },
+    { label: 'Mazda', value: 'Mazda' },
+    { label: 'Mercedes-Benz', value: 'Mercedes-benz' },
+    { label: 'Mitsubishi', value: 'Mitsubishi' },
+    { label: 'Toyota', value: 'Toyota' },
+    { label: 'Vinfast', value: 'Vinfast' },
   ],
   statuses: [
-    { value: 'new', name: 'New' },
-    { value: 'used', name: 'Used' },
-    { value: 'sold', name: 'Sold' },
+    { value: "", label: "All" },
+    { value: 'new', label: 'New' },
+    { value: 'used', label: 'Used' },
+    { value: 'sold', label: 'Sold' },
   ],
   transmissions: [
-    { value: 'manual', name: 'Manual' },
-    { value: 'automatic', name: 'Automatic' },
+    { value: "", label: "All" },
+    { value: 'manual', label: 'Manual' },
+    { value: 'automatic', label: 'Automatic' },
   ],
   styles: [
-    { value: 'sedan', name: 'Sedan' },
-    { value: 'suv', name: 'SUV' },
-    { value: 'truck', name: 'Truck' },
-    { value: 'roadster', name: 'Roadster' },
+    { value: "", label: "All" },
+    { value: 'sedan', label: 'Sedan' },
+    { value: 'suv', label: 'SUV' },
+    { value: 'truck', label: 'Truck' },
+    { value: 'roadster', label: 'Roadster' },
   ],
   prices: [
-    { priceMin: 0, priceMax: 50000, label: '0 - 50000' },
-    { priceMin: 50000, priceMax: 100000, label: '50000 - 100000' },
-    { priceMin: 100000, priceMax: 200000, label: '100000 - 200000' },
-    { priceMin: 200000, priceMax: 5000000, label: '200000+' },
+    { value: '', label: 'All' },
+    { value: '0 - 50000', label: '0 - 50000' },
+    { value: '50000 - 100000', label: '50000 - 100000' },
+    { value: '100000 - 200000', label: '100000 - 200000' },
+    { value: '200000 - 5000000', label: ' > 200000' },
   ],
   perPages: [
-    { value: 4, name: '4' },
-    { value: 8, name: '8' },
-    { value: 12, name: '12' },
-    { value: 16, name: '16' },
-    { value: 20, name: '20' },
+    { value: 4, label: '4 / page' },
+    { value: 8, label: '8 / page' },
+    { value: 12, label: '12 / page' },
+    { value: 16, label: '16 / page' },
+    { value: 20, label: '20 / page' },
   ],
   fuelTypes: [
-    { value: 'petrol', name: 'Petrol' },
-    { value: 'diesel', name: 'Diesel' },
-    { value: 'electric', name: 'Electric' },
-    { value: 'hybrid', name: 'Hybrid' },
+    { value: "", label: "All" },
+    { value: 'petrol', label: 'Petrol' },
+    { value: 'diesel', label: 'Diesel' },
+    { value: 'electric', label: 'Electric' },
+    { value: 'hybrid', label: 'Hybrid' },
   ],
 });
 
-export { getFilterConfigProduct };
+// Admin/dashboard
+const getFilterConfigAdminDashboard = () => ({
+  time: [
+    {
+      value: "1",
+      label: "1M"
+    },
+    {
+      value: "3",
+      label: "3M"
+    },
+    {
+      value: "6",
+      label: "6M"
+    },
+    {
+      value: "12",
+      label: "12M"
+    },
+  ]
+})
+// Admin/accounts 
+const getFilterConfigAdminAccounts = () => ({
+  status: [
+    { value: '', label: 'All' },
+    { value: 'active', label: "Active" },
+    { value: 'inactive', label: "Inactive" },
+    { value: 'suspended', label: "Suspended" },
+  ],
+  role: [
+    { value: '', label: 'All' },
+    { value: 'sadmin', label: "Super Admin" },
+    { value: 'admin', label: "Admin" },
+    { value: 'suspended', label: "Suspended" },
+  ],
+  sortBy: [
+    { value: '', label: 'Sort by' },
+    { value: 'fullName', label: 'Fullname' },
+    { value: 'email', label: 'Email' },
+    { value: 'createdAt', label: 'Created at' },
+    { value: 'lastLogin', label: 'Last login' },
+  ],
+  direction: [
+    { value: 'asc', label: "Ascending" },
+    { value: 'desc', label: "Descending" },
+  ],
+  offset: [
+    { value: "10", label: "10 / page" },
+    { value: "15", label: "15 / page" },
+    { value: "20", label: "20 / page" },
+  ]
+})
+
+const getFilterConfigOrder = () => ({
+  statuses: [
+    { value: '', label: 'All' },
+    { value: 'pending', label: 'Pending' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'canceled', label: 'Canceled' },
+  ],
+  prices: [
+    { value: '', label: 'All' },
+    { value: '0 - 50000', label: '0 - 50000' },
+    { value: '50000 - 100000', label: '50000 - 100000' },
+    { value: '100000 - 200000', label: '100000 - 200000' },
+    { value: '200000 - 5000000', label: ' > 200000' },
+  ],
+  perPages: [
+    { value: 10, label: '10 / page' },
+    { value: 15, label: '15 / page' },
+    { value: 20, label: '20 / page' },
+  ],
+  createdTime: [
+    { value: 'asc', label: 'Ascending' },
+    { value: 'desc', label: 'Descending' },
+  ],
+});
+
+export { getFilterConfigProduct, getFilterConfigOrder, getFilterConfigAdminDashboard, getFilterConfigAdminAccounts };

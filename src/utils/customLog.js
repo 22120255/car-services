@@ -13,7 +13,6 @@ const errorLog = (file, func, message) => {
 const infoLog = (file, func, message) => {
     if (process.env.NODE_ENV === 'development') {
         console.log(`File: ${file}, func: ${func}, message: ${message}`);
-        logger('info').info(`File: ${file}, func: ${func}, message: ${message}`);
     }
     else {
         logger('info').info(`File: ${file}, func: ${func}, message: ${message}`);

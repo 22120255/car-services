@@ -5,13 +5,27 @@
       <h1 class='h3 mb-1'>Dashboard</h1>
       <p class='text-muted'>Sales overview & summary</p>
     </div>
-    <div class='d-flex gap-3'>
-      <select class='form-select' style='width: 200px;'>
-        <option>Order type</option>
-      </select>
-      <select class='form-select' style='width: 200px;'>
-        <option>Last year</option>
-      </select>
+    <div class='d-flex align-items-center gap-3'>
+      <div class='text-muted small'>
+        <i class="fa-regular fa-clock me-1"></i>
+        <span class="text-danger">Last updated:</span> 
+        <class id="last-update-time">
+            <span class="value"></span>
+            {{> SkeletonText size='sm'}}
+        </class>
+      </div>
+      <button id="refresh-btn" class='btn btn-sm btn-primary'>
+        <i class="fa-solid fa-arrows-rotate me-1"></i>
+      </button>
+        <div class="time-filter d-flex align-items-center gap-2">
+          <input type="date" class="form-control form-control-sm" id="custom-date" />
+          <div class="btn-group" role="group" aria-label="Time period">
+            {{!-- <button type="button" class="btn btn-outline-secondary btn-sm active" data-months="1">1M</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="3">3M</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="6">6M</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-months="12">12M</button> --}}
+          </div>
+      </div>
     </div>
   </div>
 
@@ -20,17 +34,20 @@
     <div class='col-md-3'>
       <div class='card metric-card b-l-purple'>
         <div class='card-body'>
-          <div class='d-flex justify-content-between align-items-start'>
+          <div class='d-flex justify-content-between align-items-start h-100'>
             <div>
-              <h3 class='h2 mb-2'>101.1K</h3>
-              <p class='text-muted mb-0'>Downloads</p>
+              <div class="views">
+                <h3 class='h2 mb-2 value'></h3>
+                {{> SkeletonText size='lg'}}
+              </div>
+                <p class='text-muted mb-0'>Views</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
                 3% from last month
               </small>
             </div>
             <div class='metric-icon bg-purple'>
-             <i class="fa-solid fa-download"></i>
+             <i class="fa-regular fa-eye"></i>
             </div>
           </div>
         </div>
@@ -41,7 +58,10 @@
         <div class='card-body'>
           <div class='d-flex justify-content-between align-items-start'>
             <div>
-              <h3 class='h2 mb-2'>12.2K</h3>
+              <div>
+                <h3 class='h2 mb-2'>12.2K</h3>
+                 {{> SkeletonText size='lg'}}
+              </div>
               <p class='text-muted mb-0'>Purchases</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
@@ -60,7 +80,10 @@
         <div class='card-body'>
           <div class='d-flex justify-content-between align-items-start'>
             <div>
-              <h3 class='h2 mb-2'>5.3K</h3>
+              <div>
+                <h3 class='h2 mb-2'>5.3K</h3>
+                  {{> SkeletonText size='lg'}}
+              </div>
               <p class='text-muted mb-0'>Customers</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
@@ -79,7 +102,10 @@
         <div class='card-body'>
           <div class='d-flex justify-content-between align-items-start'>
             <div>
-              <h3 class='h2 mb-2'>7</h3>
+              <div>
+                <h3 class='h2 mb-2'>7</h3>
+                  {{> SkeletonText size='lg'}}
+              </div>
               <p class='text-muted mb-0'>Channels</p>
               <small class='text-success'>
                 <i class="fa-solid fa-arrow-up"></i>
@@ -169,37 +195,31 @@
     <div class='col-md-6'>
       <div class='card'>
         <div class='card-body'>
-          <div class='d-flex align-items-center gap-4'>
-            <div class='feature-icon bg-purple'>
-              <i class="fa-solid fa-shield"></i>
-            </div>
-            <div>
-              <h5 class='card-title'>Privacy Suggestions</h5>
-              <p class='card-text text-muted mb-0'>Take our privacy checkup to choose which settings are right for you.</p>
-            </div>
+          <div class='d-flex align-items-center border-bottom justify-content-between'>
+            <h5 class='card-title'>Top 10 products with the highest views</h5>
+            <a href="/products" class="btn btn-sm gap-3">
+              More
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           </div>
+          <div class="top-view-products"></div>
         </div>
       </div>
     </div>
     <div class='col-md-6'>
       <div class='card'>
-        <div class='card-body'>
-          <div class='d-flex align-items-center gap-4'>
-            <div class='feature-icon bg-purple'>
-              <i class="fa-solid fa-cloud"></i>
-            </div>
-            <div>
-              <h5 class='card-title'>Account Storage</h5>
-              <p class='card-text text-muted mb-0'>Your account storage is shared across all devices.</p>
-              <div class='progress mt-2' style='height: 6px;'>
-                <div class='progress-bar bg-purple' style='width: 33%'></div>
-              </div>
-              <small class='text-muted'>10 GB of 30 GB used</small>
-            </div>
+         <div class='card-body'>
+          <div class='d-flex align-items-center border-bottom justify-content-between'>
+            <h5 class='card-title'>Top 10 most purchased products</h5>
+            <a href="/products" class="btn btn-sm gap-3">
+              More
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           </div>
+          <div class="top-purchased-products"></div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<script src='/js/admin/dashboard.js'></script>
+<script type="module" src='/js/admin/dashboard.js'></script>

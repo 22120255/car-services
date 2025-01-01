@@ -1,5 +1,7 @@
 // js for all pages
 
+import FunctionApi from './FunctionApi.js'
+
 function showToast(type, message) {
   const toastContainer = $('#toast-container');
 
@@ -43,8 +45,7 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
     .find('.btn-submit')
     .off('click')
     .on('click', async () => {
-      if ((await callback()) !== false)
-        modal.modal('hide');
+      if ((await callback()) !== false) modal.modal('hide');
     });
 
   modal.off('shown.bs.modal').on('shown.bs.modal', () => {
@@ -55,29 +56,15 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
 }
 
 async function loadCartData() {
-  let cart = null;
-  try {
-    await $.ajax({
-      url: '/api/cart/data',
-      type: 'GET',
-      statusCode: {
-        200: function (data) {
-          cart = data; // Lưu lại dữ liệu cart nếu có
-        },
-        404: function () {
-          console.error('Cart data not found.');
-        },
-        500: function () {
-          console.error('Server error occurred.');
-        },
-      },
-    });
-  } catch (error) {
-    console.error('Error loading cart data:', error);
-  }
-  return cart;
+  const getCardDataApi = new FunctionApi('/api/cart/data', {
+    hideToast: true,
+  });
+  const data = await getCardDataApi.call();
+
+  return data;
 }
 
+// Update query params in URL when filter change
 function updateQueryParams(paramsToUpdate) {
   const params = new URLSearchParams(window.location.search);
   Object.entries(paramsToUpdate).forEach(([key, value]) => {
@@ -90,4 +77,55 @@ function updateQueryParams(paramsToUpdate) {
   window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
 
-export { showToast, showModal, loadCartData, updateQueryParams };
+const renderSelectOptions = (element, options) => {
+  options.forEach((option) => {
+    element.append(`<option value="${option.value}">${option.label}</option>`);
+  });
+};
+
+function updatePagination({ selector = '.pagination', offset, limit, totalItems }) {
+  const $pagination = $(selector);
+  $pagination.empty();
+
+  const currentPage = offset / limit + 1;
+  const visibleRange = 1;
+  const firstPage = 1;
+  const lastPage = Math.ceil(totalItems / limit);
+
+  $pagination.append(`
+      <li class="page-item ${currentPage === firstPage ? 'disabled' : ''}">
+        <a class="page-link" href="#" id="prevPage">&laquo;</a>
+      </li>
+    `);
+
+  for (let i = firstPage; i <= lastPage; i++) {
+    if (
+      i === firstPage ||
+      i === lastPage ||
+      (i >= currentPage - visibleRange && i <= currentPage + visibleRange)
+    ) {
+      $pagination.append(`
+          <li class="page-item ${currentPage === i ? 'active' : ''}">
+            <a class="page-link" href="#" data-page="${i}">${i}</a>
+          </li>
+        `);
+    } else if (
+      (i === currentPage - visibleRange - 1 && i > firstPage) ||
+      (i === currentPage + visibleRange + 1 && i < lastPage)
+    ) {
+      $pagination.append(`
+          <li class="page-item disabled">
+            <span class="page-link">...</span>
+          </li>
+        `);
+    }
+  }
+
+  $pagination.append(`
+      <li class="page-item ${currentPage === lastPage ? 'disabled' : ''}">
+        <a class="page-link" href="#" id="nextPage">&raquo;</a>
+      </li>
+    `);
+}
+
+export { showToast, showModal, loadCartData, updateQueryParams, renderSelectOptions, updatePagination };

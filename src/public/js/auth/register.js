@@ -1,4 +1,5 @@
 import { showModal } from '../common.js';
+import FunctionApi from '../FunctionApi.js';
 import { isStrongPassword, isEmailValid } from '../helpers.js'
 
 // Handle event when user click on register button
@@ -13,33 +14,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            try {
-                // Only call API when user stop typing after 500ms
-                clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(async function () {
-                    try {
-                        const resp = await $.ajax({
-                            url: '/api/auth/check-email',
-                            type: 'GET',
-                            data: { email },
-                            dataType: 'json'
-                        });
-
-                        if (resp.isAvailable) {
+            // Only call API when user stop typing after 500ms
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(async function () {
+                const checkEmailApi = new FunctionApi("/api/auth/check-email", {
+                    query: { email },
+                    onSuccess(data) {
+                        if (data.isAvailable) {
                             $('#email-availability-message').text("Email available").css("color", "green");
                         } else {
                             $('#email-availability-message').text("Email already in use").css("color", "red");
                         }
-                        $('#login-btn').prop('disabled', !resp.isAvailable);
-
-                    } catch (error) {
+                        $('#login-btn').prop('disabled', !data.isAvailable);
+                    },
+                    onError(data) {
                         $('#email-availability-message').text("There was an error checking email.");
                     }
-                }, 500);
-
-            } catch (error) {
-                $('#email-availability-message').text("There was an error checking email.");
-            }
+                })
+                await checkEmailApi.call();
+            }, 500);
         }
     });
 
@@ -77,12 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: 'json',
                 statusCode: {
                     200() {
-                        showModal({
-                            title: "Registration successful", content: "Your account has been created successfully, please check your inbox to activate your account!",
-                            callback: function () {
-                                window.location.href = "/auth/login";
-                            }
-                        })
+                        window.location.href = "/auth/email/verify";
                     },
                     400(resp) {
                         console.log(resp.responseJSON);

@@ -38,37 +38,12 @@
             </span>
           {{/if}}
         </div>
-        <p class='product-description'>{{product.description}}</p>
-        <p>
-          <span>
-            <strong>Model:</strong>
-            {{product.year}}
-          </span>
-          -
-          <span>
-            <strong>Mileage:</strong>
-            {{product.mileage}}
-            mi
-          </span>
-          -
-          <span>
-            <strong>Horsepower:</strong>
-            {{product.horsepower}}HP
-          </span>
-          -
-          <span>
-            <strong>Transmission:</strong>
-            {{product.transmission}}
-          </span>
-        </p>
-        <h5 class='colors' style='margin: 7px 0 7px 0;'>
-          TYPE:
-          {{product.style}}</h5>
-        <h5 class='colors'>colors:
-          <span class='color orange not-available' data-toggle='tooltip' title='Not In store'></span>
-          <span class='color green'></span>
-          <span class='color blue'></span>
-        </h5>
+        <div>
+            <p><strong>Model:</strong> {{product.year}}</p>
+            <p><strong>Mileage:</strong> {{product.mileage}} mi</p>
+            <p><strong>Horsepower:</strong> {{product.horsepower}}HP</p>
+            <p><strong>Transmission:</strong> {{product.transmission}}</p>
+          </div>
         <div class='action d-flex gap-3'>
           <div class="position-relative">
             <button class='add-to-cart btn btn-default' type='button' data-id='{{product._id}}'>add to cart</button>
@@ -79,28 +54,55 @@
         <p class='vote'><strong>91%</strong>
           of buyers enjoyed this product!
           <strong>(87 votes)</strong></p>
-
       </div>
       
     </div>
-    <div class='col-12 mt-4'>
-      <h4 class='mb-3'>Customer Reviews</h4>
-      <div class='reviews-container'>
-        {{#each reviews}}
-          <div class='review-item mb-3 p-3 border rounded'>
-            <div class='d-flex justify-content-between align-items-center mb-2'>
-              <h5 class='mb-0'>{{this.userId}}</h5>
-              <div class='review-rating'>
+    <div class="product-tabs-container">
+      <ul class="product-tabs" id="productTabs" role="tablist">
+        <li class="product-tab-item" role="presentation">
+          <button class="product-tab-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="true">Product Details</button>
+        </li>
+        <li class="product-tab-item" role="presentation">
+          <button class="product-tab-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="productTabsContent">
+        <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+          <!-- Product details content -->
+          <p class='product-description'>{{product.description}}</p>
+          <div>
+            <p><strong>Model:</strong> {{product.year}}</p>
+            <p><strong>Mileage:</strong> {{product.mileage}} mi</p>
+            <p><strong>Horsepower:</strong> {{product.horsepower}}HP</p>
+            <p><strong>Transmission:</strong> {{product.transmission}}</p>
+          </div>
+
+          <h5 class='colors' style='margin: 7px 0 7px 0;'>TYPE: {{product.style}}</h5>
+        </div>
+        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+          
+          <div class="reviews-container mt-3">
+            <div class="review-header">
+              <h2 class="review-title">Reviews</h2>
+              
+              <div class="rating-overview">
+                <div class="rating-score">
+                  <div class="average-rating">{{roundUp product.averageRating}} <span class="rating-scale">on 5</span></div>
+                  <div class="stars justify-content-center">
+                  </div>
+                </div>
+                
+                <div class="rating-filters">
+                  
+                </div>
               </div>
             </div>
-            <p class='review-date text-muted'><small>{{formatDate this.createdAt}}</small></p>
-            <p class='review-text'>{{this.comment}}</p>
+            <div class="review-list">
+              <!-- Reviews will be dynamically injected here -->
+            </div>
           </div>
-        {{/each}}
+        </div>
       </div>
-      {{#if (gt reviews.length 3)}}
-        <button class='btn btn-outline-primary mt-3' id='load-more-reviews'>Load More Reviews</button>
-      {{/if}}
     </div>
   </section>
 
@@ -178,8 +180,25 @@
     </div>
   </section>
 </div>
+
+
+<div id="imageModal" class="modal" >
+  <span class="close">&times;</span>
+  <button class="prev">&lt;</button>
+  <img class="modal-content" id="modalImage">
+  <button class="next">&gt;</button>
+</div>
+
+
 <script>
   const product = {{{json product}}};
   const user = {{{json user}}};
+
+  gtag('event', 'view_product', {
+    product_id: product._id,
+    page_path: window.location.pathname
+  })
 </script>
 <script type='module' src='/js/products/detail.js'></script>
+<script type='module' src='/js/products/review.js'></script>
+

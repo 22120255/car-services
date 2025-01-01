@@ -1,4 +1,4 @@
-import { showToast, showModal, updateQueryParams } from '../../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 function formatDate(date) {
@@ -7,22 +7,8 @@ function formatDate(date) {
 
 document.addEventListener('DOMContentLoaded', function () {
   const { perPages } = getFilterConfigProduct();
-  const $limit = $('#limit');
 
-  // Render options
-  const renderSelectOptions = (element, options, defaultText) => {
-    if (defaultText !== 'Items per page') {
-      element.empty().append(`<option value="">${defaultText}</option>`);
-    }
-
-    options.forEach((option) => {
-      if (defaultText === 'Select price') {
-        element.append(`<option value="${option.priceMin}-${option.priceMax}">$${option.priceMin}-$${option.priceMax}</option>`);
-      } else element.append(`<option value="${option.value}">${option.name} ${defaultText === 'Items per page' ? '/trang' : ''}</option>`);
-    });
-  };
-
-  renderSelectOptions($limit, perPages, 'Items per page');
+  renderSelectOptions($('#limit'), perPages);
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -176,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // render products
   function renderProducts(products) {
-    console.log(1);
     $('#trashTable').empty();
     let count = 0;
     if (!products || products.length === 0) {

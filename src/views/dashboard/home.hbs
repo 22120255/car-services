@@ -1,20 +1,20 @@
 <div class='container-fuild welcome-hero'>
   <div class='welcome-hero-txt'>
-    <h2>Sở hữu chiếc xe bạn mong muốn với mức giá hợp lý</h2>
+    <h2>Own the car you desire at a reasonable price</h2>
     <p>
-      Chúng tôi cung cấp các dòng xe đa dạng, từ những mẫu xe phổ thông đến cao cấp, phù hợp với nhu cầu và ngân sách của bạn.
+      We offer a wide range of vehicles, from popular models to high-end ones, suitable for your needs and budget.
     </p>
     <button class='welcome-btn' onclick="window.location.href='/dashboard/contact'">
-      Liên hệ ngay
+      Contact us now
     </button>
   </div>
 </div>
 
-<!-- Phần Promotions -->
+<!-- Promotions Section -->
 <section id='promotions' class='promotions'>
   <div class='container'>
     <div class='section-header'>
-      <h2>Ưu đãi đặc biệt</h2>
+      <h2>Special Promotions</h2>
     </div>
     <div class='row'>
       <div class='col-md-4 col-sm-6'>
@@ -22,9 +22,9 @@
           <div class='promotion-icon'>
             <i class='fas fa-percentage'></i>
           </div>
-          <h3>Giảm giá 10%</h3>
-          <p>Cho tất cả các dòng xe sedan</p>
-          <a href='#' class='btn btn-primary'>Xem chi tiết</a>
+          <h3>10% Discount</h3>
+          <p>For all sedan models</p>
+          <a href='#' class='btn btn-primary'>View Details</a>
         </div>
       </div>
       <div class='col-md-4 col-sm-6'>
@@ -32,9 +32,9 @@
           <div class='promotion-icon'>
             <i class='fas fa-hand-holding-usd'></i>
           </div>
-          <h3>0% lãi suất</h3>
-          <p>Trả góp trong 12 tháng đầu</p>
-          <a href='#' class='btn btn-primary'>Tìm hiểu thêm</a>
+          <h3>0% Interest Rate</h3>
+          <p>12 months installment plan</p>
+          <a href='#' class='btn btn-primary'>Learn More</a>
         </div>
       </div>
       <div class='col-md-4 col-sm-6'>
@@ -42,15 +42,16 @@
           <div class='promotion-icon'>
             <i class='fas fa-tools'></i>
           </div>
-          <h3>Bảo dưỡng miễn phí</h3>
-          <p>Trong 2 năm đầu tiên</p>
-          <a href='dashboard/contact' class='btn btn-primary'>Đăng ký ngay</a>
+          <h3>Free Maintenance</h3>
+          <p>For the first 2 years</p>
+          <a href='dashboard/contact' class='btn btn-primary'>Sign Up Now</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- Services Section -->
 <section id='service' class='service'>
   <div class='container'>
     <div class='service-content'>
@@ -60,9 +61,9 @@
             <div class='single-service-icon'>
               <i class='flaticon-car'></i>
             </div>
-            <h2><a href='#'>Hệ thống đại lý ô tô lớn nhất</a></h2>
+            <h2><a href='#'>Largest Car Dealership Network</a></h2>
             <p>
-              Cung cấp đa dạng mẫu mã với dịch vụ chăm sóc khách hàng tận tình và chu đáo.
+              Offering diverse models with dedicated and attentive customer care.
             </p>
           </div>
         </div>
@@ -71,9 +72,9 @@
             <div class='single-service-icon'>
               <i class='flaticon-car-repair'></i>
             </div>
-            <h2><a href='#'>Bảo hành sửa chữa không giới hạn</a></h2>
+            <h2><a href='#'>Unlimited Warranty and Repairs</a></h2>
             <p>
-              Dịch vụ bảo hành và sửa chữa tận nơi cho khách hàng trong thời gian bảo hành.
+              On-site warranty and repair services during the warranty period.
             </p>
           </div>
         </div>
@@ -82,9 +83,9 @@
             <div class='single-service-icon'>
               <i class='flaticon-car-1'></i>
             </div>
-            <h2><a href='#'>Hỗ trợ bảo hiểm</a></h2>
+            <h2><a href='#'>Insurance Support</a></h2>
             <p>
-              Đối tác bảo hiểm uy tín, giúp quý khách an tâm khi di chuyển.
+              Trusted insurance partners to ensure your peace of mind while traveling.
             </p>
           </div>
         </div>
@@ -93,11 +94,11 @@
   </div>
 </section>
 
-<!-- Phần Featured Products -->
+<!-- Featured Products Section -->
 <section id='featured-products' class='featured-products'>
   <div class='container'>
     <div class='section-header'>
-      <h2>Sản phẩm bán chạy nhất</h2>
+      <h2>Best Selling Products</h2>
     </div>
     <div class='row'>
       {{#each mostProducts}}
@@ -106,7 +107,7 @@
             <div class='product-image'>
               <img src='{{getValueAt this.images 0}}' alt='Sedan Luxury X1' />
               <div class='product-overlay'>
-                <a href='products/{{this.id}}' class='btn btn-primary'>Xem chi tiết</a>
+                <a href='products/{{this.id}}' class='btn btn-primary'>View Details</a>
               </div>
             </div>
             <h3 class='text-uppercase'>{{this.style}}
@@ -123,7 +124,7 @@
 <section id='featured-products' class='featured-products'>
   <div class='container'>
     <div class='section-header'>
-      <h2>Sản phẩm mới nhất</h2>
+      <h2>Latest Products</h2>
     </div>
     <div class='row'>
       {{#each newProducts}}
@@ -132,7 +133,7 @@
             <div class='product-image'>
               <img src='{{getValueAt this.images 0}}' alt='Sedan Luxury X1' />
               <div class='product-overlay'>
-                <a href='products/{{this.id}}' class='btn btn-primary'>Xem chi tiết</a>
+                <a href='products/{{this.id}}' class='btn btn-primary'>View Details</a>
               </div>
               {{#if (eq status 'new')}}<div class='new-arrival-badge'>New Arrival</div>
               {{else}}
@@ -149,10 +150,11 @@
   </div>
 </section>
 
+<!-- Testimonials Section -->
 <section id='clients-say' class='clients-say'>
   <div class='container'>
     <div class='section-header'>
-      <h2>Khách hàng nói gì</h2>
+      <h2>What Our Clients Say</h2>
     </div>
     <div class='row'>
       <div class='owl-carousel testimonial-carousel'>
@@ -161,61 +163,61 @@
             <div class='testimonial-description'>
               <div class='testimonial-info'>
                 <div class='testimonial-img'>
-                  <img src='/vender/images/clients/c1.png' alt='Hình ảnh của khách hàng' />
+                  <img src='/vender/images/clients/c1.png' alt='Client Image' />
                 </div>
               </div>
               <div class='testimonial-comment'>
                 <p>
-                  "Dịch vụ ở đây thực sự tuyệt vời! Tôi đã trải nghiệm và cảm thấy rất hài lòng về chất lượng và sự tận tâm."
+                  "The service here is truly excellent! I had a great experience and was very satisfied with the quality and dedication."
                 </p>
               </div>
               <div class='testimonial-person'>
-                <h2><a href='#'>Nguyễn Văn A</a></h2>
-                <h4>Hà Nội</h4>
+                <h2><a href='#'>Nguyen Van A</a></h2>
+                <h4>Hanoi</h4>
               </div>
             </div>
           </div>
         </div>
         <!--/.col-->
-        <!-- Khách hàng 2 -->
+        <!-- Client 2 -->
         <div class='col-sm-3 col-xs-12'>
           <div class='single-testimonial-box'>
             <div class='testimonial-description'>
               <div class='testimonial-info'>
                 <div class='testimonial-img'>
-                  <img src='/vender/images/clients/c2.png' alt='Hình ảnh của khách hàng' />
+                  <img src='/vender/images/clients/c2.png' alt='Client Image' />
                 </div>
               </div>
               <div class='testimonial-comment'>
                 <p>
-                  "Tôi rất ấn tượng với thái độ phục vụ nhiệt tình của nhân viên. Xe của tôi được bảo dưỡng nhanh chóng và hiệu quả."
+                  "I am very impressed with the enthusiastic service. My car was maintained quickly and effectively."
                 </p>
               </div>
               <div class='testimonial-person'>
-                <h2><a href='#'>Trần Thị B</a></h2>
-                <h4>Đà Nẵng</h4>
+                <h2><a href='#'>Tran Thi B</a></h2>
+                <h4>Da Nang</h4>
               </div>
             </div>
           </div>
         </div>
         <!--/.col-->
-        <!-- Khách hàng 3 -->
+        <!-- Client 3 -->
         <div class='col-sm-3 col-xs-12'>
           <div class='single-testimonial-box'>
             <div class='testimonial-description'>
               <div class='testimonial-info'>
                 <div class='testimonial-img'>
-                  <img src='/vender/images/clients/c3.png' alt='Hình ảnh của khách hàng' />
+                  <img src='/vender/images/clients/c3.png' alt='Client Image' />
                 </div>
               </div>
               <div class='testimonial-comment'>
                 <p>
-                  "Chất lượng dịch vụ cao, giá cả hợp lý. Tôi chắc chắn sẽ quay lại khi cần bảo dưỡng xe lần tới."
+                  "High-quality service at a reasonable price. I will definitely return for future car maintenance."
                 </p>
               </div>
               <div class='testimonial-person'>
-                <h2><a href='#'>Lê C</a></h2>
-                <h4>Hồ Chí Minh</h4>
+                <h2><a href='#'>Le C</a></h2>
+                <h4>Ho Chi Minh</h4>
               </div>
             </div>
           </div>
@@ -225,31 +227,32 @@
   </div>
 </section>
 
+<!-- Brand Section -->
 <section id='brand' class='brand'>
   <div class='container'>
     <div class='brand-area'>
       <div class='owl-carousel owl-theme brand-item'>
         <div class='item'>
           <a href='#'>
-            <img src='/vender/images/brand/br1.png' alt='brand-image' />
+            <img src='/vender/images/brand/br1.png' alt='Brand Image' />
           </a>
         </div>
         <!--/.item-->
         <div class='item'>
           <a href='#'>
-            <img src='/vender/images/brand/br2.png' alt='brand-image' />
+            <img src='/vender/images/brand/br2.png' alt='Brand Image' />
           </a>
         </div>
         <!--/.item-->
         <div class='item'>
           <a href='#'>
-            <img src='/vender/images/brand/br3.png' alt='brand-image' />
+            <img src='/vender/images/brand/br3.png' alt='Brand Image' />
           </a>
         </div>
         <!--/.item-->
         <div class='item'>
           <a href='#'>
-            <img src='/vender/images/brand/br4.png' alt='brand-image' />
+            <img src='/vender/images/brand/br4.png' alt='Brand Image' />
           </a>
         </div>
         <div class='item'>

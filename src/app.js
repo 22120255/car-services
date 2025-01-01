@@ -20,10 +20,12 @@ const passport = require('./config/passport')
 const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
-const { runReport } = require('./config/analytics');
-const { errorLog, infoLog, clearFileLogs } = require('./utils/customLog');
-const app = express();
-const store = db.createSessionStore(session);
+const { getDataReport } = require('./config/analytics');
+const { errorLog, clearFileLogs } = require('./utils/customLog');
+const limiter = require('./middleware/limiterMiddleware');
+
+const app = express()
+const store = db.createSessionStore(session)
 
 // Session
 app.use(
@@ -59,6 +61,7 @@ if (process.env.NODE_ENV === 'development') {
 // Custom middleware
 app.use(navigateUser);
 app.use(refreshSession);
+app.use('/api/', limiter)
 
 // Google Analytics - crawl data every 0h
 cron.schedule('0 0 * * *', async () => {
