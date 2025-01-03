@@ -350,12 +350,12 @@ class UserController {
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
+
   async getPurchasedList(req, res) {
     try {
-      // Lấy thông tin người dùng và populate sản phẩm đã mua
       const user = await User.findById(req.user._id)
         .populate({
-          path: 'metadata.purchasedProducts.product',
+          path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
           select: 'brand model year mileage price images reviewStatus',
         })
         .lean()
@@ -371,33 +371,22 @@ class UserController {
 
       const productReviewStatuses = {};
 
+      // Duyệt qua từng đơn hàng và tạo một mapping giữa productId và reviewStatus
       orders.forEach((order) => {
         order.items.forEach((item) => {
           const productId = item.productId._id.toString();
           const reviewStatus = item.reviewStatus;
-
-          if (!productReviewStatuses[productId]) {
-            productReviewStatuses[productId] = 'not-reviewed';
-          }
-
-          if (reviewStatus === 'reviewed') {
-            productReviewStatuses[productId] = 'reviewed';
-          }
+          productReviewStatuses[productId] = reviewStatus;
         });
       });
 
-      user.metadata.purchasedProducts.forEach((purchasedProduct) => {
-        const productId = purchasedProduct.product._id.toString();
-
-        if (productReviewStatuses[productId] === 'reviewed') {
-          if (purchasedProduct.reviewStatus !== 'reviewed') {
-            purchasedProduct.reviewStatus = 'reviewed';
-          }
-        } else {
-          purchasedProduct.reviewStatus = 'not-reviewed';
-        }
+      // Thêm reviewStatus vào metadata.purchasedProducts
+      user.metadata.purchasedProducts.forEach((Object) => {
+        const reviewStatus = productReviewStatuses[Object.product._id.toString()];
+        Object.reviewStatus = reviewStatus || 'not-reviewed';
       });
 
+      // Sắp xếp recentActivity theo ngày mua mới nhất
       if (user.metadata.recentActivity) {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);
       }
