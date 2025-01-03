@@ -1,4 +1,3 @@
-const moment = require('moment')
 const Formatter = require('./formatter')
 
 module.exports = {
@@ -26,17 +25,6 @@ module.exports = {
   json(context) {
     return JSON.stringify(context)
   },
-  formatDate(date) {
-    if (!date) return ''
-    const options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }
-    return new Date(date).toLocaleDateString('vi-VN', options)
-  },
   isUser(role) {
     return role === 'user'
   },
@@ -50,7 +38,7 @@ module.exports = {
     if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return ''
     return array[index]
   },
-  formatNumber: (number, shorten = false) => Formatter.formatNumber(number, options = { shorten: shorten }),
+  formatNumber: (number, shorten = false) => Formatter.formatNumber(number, { shorten: shorten }),
   formatCurrency: Formatter.formatCurrency,
   formatDate: (value) => Formatter.formatDate(value),
   roundUp: function (value) {
