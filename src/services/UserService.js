@@ -1,41 +1,33 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
-const DataAnalytics = require('../models/DataAnalytics');
-const { getDataReport } = require('../config/analytics');
-const Formatter = require('../utils/formatter');
-const { mongooseToObject } = require('../utils/mongoose');
 
 class UserService {
   async getUsers({ limit, offset, key, direction, search, status, role }) {
-    try {
-      let filter = {};
-      if (search) {
-        filter.$or = [{ fullName: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }];
-      }
-      if (status) {
-        filter.status = status;
-      }
-      if (role) {
-        filter['role.name'] = role;
-      }
-      let sort = {};
-      if (key) {
-        direction ||= 'asc';
-        const sortDirection = direction === 'asc' ? 1 : -1;
-        sort[key] = sortDirection;
-      }
-
-      const users = await User.find(filter)
-        .skip(offset)
-        .limit(limit)
-        .sort(sort);
-      const total = await User.countDocuments(filter);
-
-      return { users, total };
-    } catch (error) {
-      throw error;
+    let filter = {};
+    if (search) {
+      filter.$or = [{ fullName: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }];
     }
+    if (status) {
+      filter.status = status;
+    }
+    if (role) {
+      filter['role.name'] = role;
+    }
+    let sort = {};
+    if (key) {
+      direction ||= 'asc';
+      const sortDirection = direction === 'asc' ? 1 : -1;
+      sort[key] = sortDirection;
+    }
+
+    const users = await User.find(filter)
+      .skip(offset)
+      .limit(limit)
+      .sort(sort);
+    const total = await User.countDocuments(filter);
+
+    return { users, total };
   }
 
   async updateUserRole(userId, role, currentUser) {
@@ -118,36 +110,32 @@ class UserService {
 
   // Lấy danh sách sản phẩm
   async getProducts({ limit, offset, search, status, brand, model, priceMin, priceMax }) {
-    try {
-      let filter = {};
+    let filter = {};
 
-      // Chuẩn hóa giá trị search, status, brand, model về chữ thường
-      if (search) {
-        filter.$or = [{ brand: { $regex: search.toLowerCase(), $options: 'i' } }, { model: { $regex: search.toLowerCase(), $options: 'i' } }];
-      }
-      if (status) {
-        filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
-      }
-      if (brand) {
-        filter.brand = { $regex: `^${brand.toLowerCase()}$`, $options: 'i' };
-      }
-      if (model) {
-        filter.model = { $regex: `^${model.toLowerCase()}$`, $options: 'i' };
-      }
-      if (priceMin && priceMax) {
-        filter.price = { $gte: priceMin, $lte: priceMax };
-      }
-
-      // Tiến hành truy vấn với filter đã chuẩn hóa
-      const products = await Product.find(filter)
-        .skip(offset * limit - limit)
-        .limit(limit);
-      const total = await Product.countDocuments(filter);
-
-      return { products, total };
-    } catch (error) {
-      throw error;
+    // Chuẩn hóa giá trị search, status, brand, model về chữ thường
+    if (search) {
+      filter.$or = [{ brand: { $regex: search.toLowerCase(), $options: 'i' } }, { model: { $regex: search.toLowerCase(), $options: 'i' } }];
     }
+    if (status) {
+      filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
+    }
+    if (brand) {
+      filter.brand = { $regex: `^${brand.toLowerCase()}$`, $options: 'i' };
+    }
+    if (model) {
+      filter.model = { $regex: `^${model.toLowerCase()}$`, $options: 'i' };
+    }
+    if (priceMin && priceMax) {
+      filter.price = { $gte: priceMin, $lte: priceMax };
+    }
+
+    // Tiến hành truy vấn với filter đã chuẩn hóa
+    const products = await Product.find(filter)
+      .skip(offset * limit - limit)
+      .limit(limit);
+    const total = await Product.countDocuments(filter);
+
+    return { products, total };
   }
 
   // Lấy một sản phẩm
@@ -341,7 +329,7 @@ class UserService {
         .limit(limit)
         .sort(sort)
         .lean();
-      
+
       console.log('orders:', orders);
       const total = await Order.countDocuments(filter);
       console.log('total:', total);
@@ -349,36 +337,6 @@ class UserService {
       return { orders, total };
     } catch (error) {
       console.error('Error in getOrders:', error);
-      throw error;
-    }
-  }
-
-  async getOrder(orderId) {
-    if (!orderId) {
-      throw new Error('Order ID is required');
-    }
-
-    try {
-      const order = await Order.findById(orderId)
-        .populate({
-          path: 'userId',
-          select: 'fullName email phone'
-        })
-        .populate({
-          path: 'items.productId',
-          select: 'brand model price images'
-        })
-        .lean()
-        .exec();
-
-      if (!order) {
-        throw new Error(`Order with ID ${orderId} not found`);
-      }
-
-      return order;
-    }
-    catch (error) {
-      console.error('Error fetching order:', error);
       throw error;
     }
   }
