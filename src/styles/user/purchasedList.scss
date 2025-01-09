@@ -1,143 +1,148 @@
 /* Purchased List Styles */
 .purchased-list-wrapper {
-    background-color: #f8f9fa;
-    padding: 50px 0;
+  background-color: #f8f9fa;
+  padding: 50px 0;
 }
 
 .purchased-list-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
 
 .purchased-header {
-    margin-bottom: 2rem;
-    text-align: center;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 1rem;
 }
 
 .purchased-header h1 {
-    color: #007bff;
-    font-size: 2.5rem;
-    font-weight: bold;
+  color: #007bff;
+  font-size: 2.5rem;
+  font-weight: bold;
 }
 
 .car-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
 .car-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .car-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .car-image {
-    height: 200px;
-    overflow: hidden;
+  height: 200px;
+  overflow: hidden;
 }
 
 .car-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
 .car-card:hover .car-image img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .car-details {
-    padding: 1.5rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .car-details h3 {
-    margin-bottom: 1rem;
-    color: #333;
-    font-size: 1.2rem;
-    font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
-.car-info, .purchase-info {
-    margin-bottom: 1rem;
+.car-info,
+.purchase-info {
+  margin-bottom: 1rem;
 }
 
-.car-info p, .purchase-info p {
-    margin: 0.5rem 0;
-    color: #666;
-    font-size: 0.9rem;
+.car-info p,
+.purchase-info p {
+  margin: 0.5rem 0;
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .empty-state {
-    text-align: center;
-    padding: 4rem;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 4rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .empty-icon {
-    font-size: 5rem;
-    color: #007bff;
-    margin-bottom: 1.5rem;
+  font-size: 5rem;
+  color: #007bff;
+  margin-bottom: 1.5rem;
 }
 
 .btn {
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  margin-top: 0.5rem;
 }
 
 .btn-view-details {
-    background-color: #007bff;
-    color: #fff;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .btn-view-details:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .btn-rate-product {
-    background-color: #07ffea;
-    color: #212529;
+  background-color: #07ffea;
+  color: #212529;
 }
 
 .btn-rate-product:hover {
-    background-color: #06e6d3;
-    color: #fff;
+  background-color: #06e6d3;
+  color: #fff;
 }
 
 .btn-reviewed {
-    background-color: #6c757d;
-    color: #fff;
+  background-color: #6c757d;
+  color: #fff;
 }
 
 .star-rating {
   display: flex;
   justify-content: flex-start;
-  /* Đặt thứ tự từ trái sang phải */ }
+  /* Đặt thứ tự từ trái sang phải */
+}
 
 .star-rating i {
   font-size: 30px;
@@ -145,12 +150,14 @@
   /* Màu mặc định */
   margin-right: 5px;
   cursor: pointer;
-  transition: color 0.2s ease; }
+  transition: color 0.2s ease;
+}
 
 .star-rating i.hover,
 .star-rating i.selected {
   color: #f1c40f;
-  /* Màu vàng khi hover hoặc chọn */ }
+  /* Màu vàng khi hover hoặc chọn */
+}
 
 /* Image Container Styles */
 #imageContainer {
@@ -163,21 +170,26 @@
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
   justify-content: flex-start;
-  /* Đảm bảo các hình ảnh căn trái */ }
+  /* Đảm bảo các hình ảnh căn trái */
+}
 
 #imageContainer::-webkit-scrollbar {
-  height: 6px; }
+  height: 6px;
+}
 
 #imageContainer::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 10px; }
+  border-radius: 10px;
+}
 
 #imageContainer::-webkit-scrollbar-thumb {
   background: #888;
-  border-radius: 10px; }
+  border-radius: 10px;
+}
 
 #imageContainer::-webkit-scrollbar-thumb:hover {
-  background: #555; }
+  background: #555;
+}
 
 .image-preview-wrapper {
   position: relative;
@@ -191,12 +203,14 @@
   align-items: center;
   /* Căn chỉnh hình ảnh vào giữa */
   justify-content: center;
-  /* Căn chỉnh hình ảnh vào giữa */ }
+  /* Căn chỉnh hình ảnh vào giữa */
+}
 
 .image-preview {
   width: 100%;
   height: 100%;
-  object-fit: cover; }
+  object-fit: cover;
+}
 
 #addImageBtn {
   width: 80px;
@@ -210,11 +224,13 @@
   border-radius: 8px;
   color: #6c757d;
   background-color: #f8f9fa;
-  transition: all 0.2s ease-in-out; }
+  transition: all 0.2s ease-in-out;
+}
 
 #addImageBtn:hover {
   background-color: #e9ecef;
-  color: #495057; }
+  color: #495057;
+}
 
 .remove-image-btn {
   position: absolute;
@@ -231,46 +247,57 @@
   justify-content: center;
   cursor: pointer;
   color: #dc3545;
-  transition: all 0.2s ease-in-out; }
+  transition: all 0.2s ease-in-out;
+}
 
 .remove-image-btn:hover {
   background-color: white;
-  color: #bd2130; }
+  color: #bd2130;
+}
 
 /* Modal Styles */
 .modal-content {
   border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
 
 .modal-header {
   border-bottom: 1px solid #e9ecef;
-  padding: 1rem 1.5rem; }
+  padding: 1rem 1.5rem;
+}
 
 .modal-body {
-  padding: 1.5rem; }
+  padding: 1.5rem;
+}
 
 .modal-footer {
   justify-content: flex-end;
-  padding: 1rem 1.5rem; }
+  padding: 1rem 1.5rem;
+}
 
 .modal-footer .btn {
-  min-width: 100px; }
+  min-width: 100px;
+}
 
 .form-label {
   font-weight: 600;
   color: #495057;
-  margin-bottom: 0.5rem; }
+  margin-bottom: 0.5rem;
+}
 
 .form-control {
-  border-radius: 6px; }
+  border-radius: 6px;
+}
 
 .btn-primary {
   background-color: #007bff;
-  border-color: #007bff; }
+  border-color: #007bff;
+}
 
 .btn-primary:hover {
   background-color: #0056b3;
-  border-color: #0056b3; }
+  border-color: #0056b3;
+}
 
 .loading-spinner {
   display: flex;
@@ -280,25 +307,27 @@
   height: 80px;
   border-radius: 8px;
   background-color: #f8f9fa;
-  flex-shrink: 0; }
+  flex-shrink: 0;
+}
 
 @media (max-width: 1200px) {
-    .car-details h3 {
-        font-size: 1.1rem;
-    }
-    .car-info p, .purchase-info p {
-        font-size: 0.8rem;
-    }
+  .car-details h3 {
+    font-size: 1.1rem;
+  }
+  .car-info p,
+  .purchase-info p {
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 768px) {
-    .car-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .car-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 576px) {
-    .car-grid {
-        grid-template-columns: 1fr;
-    }
+  .car-grid {
+    grid-template-columns: 1fr;
+  }
 }

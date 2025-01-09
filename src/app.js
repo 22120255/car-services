@@ -8,7 +8,6 @@ require('dotenv').config({
 const cron = require('node-cron');
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 const methodOverride = require('method-override')
 const { engine } = require('express-handlebars')
 const session = require('express-session')
@@ -21,7 +20,7 @@ const { navigateUser } = require('./middleware/authMiddleware')
 const { catch404, catch500 } = require('./middleware/catchError')
 const refreshSession = require('./middleware/refreshSession')
 const { getDataReport } = require('./config/analytics');
-const { errorLog, clearFileLogs } = require('./utils/customLog');
+const { errorLog, clearFileLogs, infoLog } = require('./utils/customLog');
 const limiter = require('./middleware/limiterMiddleware');
 
 const app = express()
@@ -66,7 +65,7 @@ app.use('/api/', limiter)
 // Google Analytics - crawl data every 0h
 cron.schedule('0 0 * * *', async () => {
   try {
-    await runReport();
+    await getDataReport();
     infoLog("app.js", "crawl data", "Crawl data successfully");
   } catch (error) {
     errorLog("app.js", "crawl data", error);

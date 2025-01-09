@@ -10,17 +10,17 @@ class OrderService {
     if (!cart?.items?.length) {
       throw new Error('Cart is empty');
     }
-    const orderItems = cart.items.map(item => ({
+    const orderItems = cart.items.map((item) => ({
       productId: item.productId._id,
       quantity: item.quantity,
-      price: item.productId.price
+      price: item.productId.price,
     }));
     return Order.create({
       userId,
       items: orderItems,
       totalAmount: cart.total,
       shippingDetails: JSON.stringify(shippingDetails),
-      status: 'pending'
+      status: 'pending',
     });
   }
 
@@ -47,7 +47,7 @@ class OrderService {
         userId,
         'items.productId': productId,
         status: 'completed',
-        'items.reviewStatus': 'not-reviewed', // Kiểm tra trạng thái review của sản phẩm
+        'items.reviewStatus': 'not-reviewed',
       });
 
       if (!order) {

@@ -34,7 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const productId = $(this).closest('tr').data('product-id');
 
     showModal({
-      title: 'Delete Product', content: 'Are you sure you want to delete permanently this product?', btnSubmit: 'Delete ', callback: () => {
+      title: 'Delete Product',
+      content: 'Are you sure you want to delete permanently this product?',
+      btnSubmit: 'Delete ',
+      callback: () => {
         $.ajax({
           url: `/api/user/trash/delete/${productId}`,
           type: 'DELETE',
@@ -57,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           },
         });
-      }
+      },
     });
   });
 
@@ -191,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
           statusBadge = 'status-unknown';
       }
 
-      const imageSrc = images?.at(0) || '/default-image.jpg';
+      const imageSrc = images?.at(0) || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image';
       // Thêm hàng mới vào bảng
       // Kiểm tra nếu trường 'deleted' không có hoặc có giá trị là false
       if (deleted && deleted !== false) {
