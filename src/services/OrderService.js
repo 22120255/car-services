@@ -40,20 +40,23 @@ class OrderService {
     }
   }
 
-  addReview = async (userId, productId, rating, comment, images) => {
+  addReview = async (userId, productId, rating, comment, images, orderId) => {
     try {
       // Tìm đơn hàng của người dùng chứa sản phẩm cụ thể với trạng thái "completed"
       const order = await Order.findOne({
+        _id: orderId,
         userId,
         'items.productId': productId,
         status: 'completed',
         'items.reviewStatus': 'not-reviewed',
       });
+      console.log('Order:', order);
 
       if (!order) {
         return { error: true, message: 'Bạn phải hoàn tất đơn hàng và nhận sản phẩm để đánh giá.' };
       }
 
+      console.log(order);
       const orderItem = order.items.find((item) => item.productId.toString() === productId && item.reviewStatus === 'not-reviewed');
 
       if (!orderItem) {

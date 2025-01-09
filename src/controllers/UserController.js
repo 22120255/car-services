@@ -285,7 +285,7 @@ class UserController {
     } catch (error) {
       res.status(500).json({
         error: 'Internal Server Error',
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -442,6 +442,9 @@ class UserController {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);
       }
 
+      user.metadata.purchasedProducts.forEach((product) => {
+        console.log(product.orderId); // Hiển thị orderId của từng phần tử trong mảng
+      });
       res.render('user/purchasedList', {
         layout: 'main',
         user,
