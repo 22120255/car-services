@@ -1,16 +1,27 @@
 import { showToast } from './common.js';
 
 class FunctionApi {
-    loading = false;
     error = null;
     data = null;
 
-    constructor(url, { method = "GET", query = {}, body = {}, options = { showToast: true } }) {
+    constructor(url, params = {}) {
+        const {
+            method = "GET",
+            query = {},
+            body = {},
+            options = {},
+            onSuccess = null,
+            onError = null
+        } = params;
+
+        const { hideToast = false } = options;
         this.url = url;
         this.method = method;
         this.body = body;
         this.query = query;
-        this.options = options;
+        this.options = { hideToast }
+        this.onSuccess = onSuccess;
+        this.onError = onError;
     }
 
     buildQueryParams() {
@@ -19,7 +30,6 @@ class FunctionApi {
     }
 
     async call() {
-        this.loading = true;
         this.error = null;
         this.data = null;
 
@@ -28,24 +38,32 @@ class FunctionApi {
                 $.ajax({
                     url: this.buildQueryParams(),
                     type: this.method,
-                    data: this.body,
-                    success(response) {
+                    contentType: 'application/json',
+                    data: Object.keys(this.body || {}).length > 0
+                        ? JSON.stringify(this.body)
+                        : null,
+                    dataType: 'json',
+                    success: (response) => {
                         resolve(response);
+                        this.onSuccess?.(response);
                     },
-                    error(err) {
-                        reject(err);
-                        if (this.options.showToast) {
-                            showToast('error', err.responseJSON?.message || 'Request failed');
-                        }
+                    error: (err) => {
+                        const errorMessage = err.responseJSON?.message || 'Request failed';
+                        reject(errorMessage);
+                        this.onError?.(err);
                     }
                 });
             });
             return this.data;
         } catch (err) {
+            console.log('err', err);
+
             this.error = err;
-            throw err;
-        } finally {
-            this.loading = false;
+            if (!this.options?.hideToast) {
+                showToast('Error', err);
+            }
+            return null;
+            // throw err;
         }
     }
 }

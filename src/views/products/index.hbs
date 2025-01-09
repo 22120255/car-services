@@ -1,9 +1,9 @@
 <section id='featured-cars' class='featured-cars'>
   <div class='container'>
     <div class='section-header'>
-      <p class='sub-title'>Hãy khám phá những sản phẩm nổi bật của chúng tôi</p>
-      <h2 class='main-title'>Sản phẩm của chúng tôi</h2>
-      <p class='section-description'>Mang đến cho bạn những mẫu xe sang trọng, tiện nghi và đẳng cấp.</p>
+      <p class='sub-title'>Explore our fantastic products</p>
+      <h2 class='main-title'>Our Products</h2>
+      <p class='section-description'>Bringing you luxurious, convenient, and classy car models.</p>
     </div>
     <div class='featured-cars-filter' id='filter-form'>
       <div class='row'>
@@ -24,12 +24,6 @@
                   <h2>Year</h2>
                   <div class='model-select-icon'>
                     <select class='form-control' name='year' id='yearFilter'>
-                      <option value=''>Select year</option>
-                      {{#each years}}
-                        <option value='{{this.value}}'>
-                          {{this.name}}
-                        </option>
-                      {{/each}}
                     </select>
                   </div>
                 </div>
@@ -38,12 +32,6 @@
                   <h2>Style</h2>
                   <div class='model-select-icon'>
                     <select class='form-control' name='style' id='styleFilter'>
-                      <option value=''>Select style</option>
-                      {{#each styles}}
-                        <option value='{{this.value}}'>
-                          {{this.name}}
-                        </option>
-                      {{/each}}
                     </select>
                   </div>
                 </div>
@@ -54,12 +42,6 @@
                   <h2>Brand</h2>
                   <div class='model-select-icon'>
                     <select class='form-control' name='brand' id='brandFilter'>
-                      <option value=''>Select brand</option>
-                      {{#each brands}}
-                        <option value='{{this.value}}'>
-                          {{this.name}}
-                        </option>
-                      {{/each}}
                     </select>
                   </div>
                 </div>
@@ -68,12 +50,6 @@
                   <h2>Status</h2>
                   <div class='model-select-icon'>
                     <select class='form-control' name='status' id='statusFilter'>
-                      <option value=''>Select status</option>
-                      {{#each statuses}}
-                        <option value='{{this.value}}'>
-                          {{this.name}}
-                        </option>
-                      {{/each}}
                     </select>
                   </div>
                 </div>
@@ -84,12 +60,6 @@
                   <h2>Transmission</h2>
                   <div class='model-select-icon'>
                     <select class='form-control' name='transmission' id='transmissionFilter'>
-                      <option value=''>Select transmission</option>
-                      {{#each transmissions}}
-                        <option value='{{this.value}}'>
-                          {{this.name}}
-                        </option>
-                      {{/each}}
                     </select>
                   </div>
                 </div>
@@ -98,14 +68,6 @@
                   <h2>Price Range ($)</h2>
                   <div class='model-select-icon'>
                     <select class='form-control' name='price' id='priceFilter'>
-                      <option value=''>Select price range</option>
-                      {{#each prices}}
-                        <option value='{{this.priceMin}}-{{this.priceMax}}'>
-                          <!-- 1 1 là true -->
-                          ${{this.priceMin}}
-                          - ${{this.priceMax}}
-                        </option>
-                      {{/each}}
                     </select>
                   </div>
                 </div>
@@ -118,7 +80,7 @@
     </div>
     <div class='container'>
       <div class='row featured-cars-content g-3' id='product-list'>
-        <!-- Thêm id cho sản phẩm để jQuery cập nhật -->
+        <!-- Add id for products to be updated by jQuery -->
       </div>
     </div>
     <div class='d-flex justify-content-between align-items-center mt-4' style='gap: 1rem;'>
@@ -131,9 +93,9 @@
       </nav>
       <!-- Items per page select -->
       <select class='form-select' aria-label='Items per page' style='width: auto;' name='limit' id='limit'>
-        {{#each perPages}}
+        {{!-- {{#each perPages}}
           <option value='{{this.value}}'>{{this.name}} / trang</option>
-        {{/each}}
+        {{/each}} --}}
       </select>
 
     </div>

@@ -15,6 +15,15 @@ class AuthController {
     });
   }
 
+  //[GET] /email/verify
+  verify(req, res) {
+    res.render('auth/verify-email', {
+      layout: 'auth',
+      title: 'Verify Email',
+      email: req.session.registeredEmail,
+    });
+  }
+
   //[POST] /login/email/verify
   async verifyEmail(req, res, next) {
     passport.authenticate('local', async (err, user, info) => {
@@ -23,11 +32,12 @@ class AuthController {
       }
 
       if (!user) {
-        return res.status(400).json({ message: 'Login failed' });
+        return res.status(400).json({ message: 'Incorrect email or password' });
       }
       
       // Check if the user's account is verified
       if (user.verificationCode) {
+        req.session.registeredEmail = user.email;
         return res.status(401).json({
           message: 'Account not verified. Please check your email to verify.',
         });
@@ -68,6 +78,8 @@ class AuthController {
   //[POST] /register/email/store
   async storeEmail(req, res) {
     const { email, fullName, password } = req.body;
+    
+    req.session.registeredEmail = email;
 
     try {
       const user = await AuthService.storeUserWithEmail(email, fullName, password);
@@ -212,6 +224,20 @@ class AuthController {
       res.redirect('/dashboard');
     }
   }
+
+  async resendActivationLink(req, res) {
+    const { email } = req.body;
+
+    try {
+      await AuthService.resendActivationLink(email);
+      res.status(200).json({
+        message: 'A verification email has been sent to your email.',
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+  
 }
 
 module.exports = new AuthController();

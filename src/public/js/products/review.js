@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ----------------- Event listeners -----------------
 
   $(document).ready(function () {
-    // Hiển thị modal khi click vào thumbnail
+    // Show modal when clicking on thumbnail
     $(document).on('click', '.image-thumbnail img', function () {
       const reviewImages = $(this).closest('.review-images').find('img');
       images = reviewImages
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
       $('#imageModal').fadeIn();
     });
 
-    // Đóng modal khi click nút đóng hoặc nhấn ESC
+    // Close modal when clicking close button or pressing ESC
     $('.close, .modal').click(function () {
       $('#imageModal').fadeOut();
     });
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Chuyển sang ảnh trước
+    // Switch to previous image
     $('.prev').click(function (e) {
       e.stopPropagation();
       if (currentIndex > 0) {
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Chuyển sang ảnh tiếp theo
+    // Switch to next image
     $('.next').click(function (e) {
       e.stopPropagation();
       if (currentIndex < images.length - 1) {
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ? `
               <button class="like-button">
                 <i class="far fa-thumbs-up"></i>
-                <span>Hữu ích?</span>
+                <span>Helpful?</span>
               </button>
             `
                 : `
@@ -229,8 +229,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <button class="filter-btn" id="onestar" data-value="1">1 Star (${stats.starCounts[1]})</button>
       </div>
       <div class="filter-row">
-        <button class="filter-btn" id="comments">Có Bình Luận (${stats.withComment})</button>
-        <button class="filter-btn" id="images-videos">Có Hình Ảnh / Video (${stats.withMedia})</button>
+        <button class="filter-btn" id="comments">With Comments (${stats.withComment})</button>
+        <button class="filter-btn" id="images-videos">With Images / Videos (${stats.withMedia})</button>
       </div>
     `);
   }

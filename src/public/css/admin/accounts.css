@@ -30,7 +30,7 @@
   .accounts-management .table thead {
     position: sticky;
     top: 0;
-    z-index: 999; }
+    z-index: 10; }
   .accounts-management .table th {
     white-space: nowrap; }
   .accounts-management .table .user-avatar {

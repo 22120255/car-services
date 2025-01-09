@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     401(resp) {
                         console.log(resp.responseJSON);
-                        messageEle.text(resp.responseJSON.message);
+                        window.location.href = "/auth/email/verify";
                         return;
                     },
                     200(resp) {

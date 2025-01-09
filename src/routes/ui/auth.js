@@ -11,4 +11,6 @@ router.get("/activate", authController.activateAccount);
 router.get("/forgot-password", authController.forgotPassword);
 //Function logout password
 router.get("/logout", isAuthenticated, authController.logout);
+
+router.get("/email/verify", authController.verify);
 module.exports = router

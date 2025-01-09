@@ -127,6 +127,29 @@ class AuthService {
 
     return user;
   }
+
+  async resendActivationLink(email) {
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new Error('Email not registered account');
+      }
+
+      const verificationCode = user.verificationCode || crypto.randomBytes(20).toString('hex');
+      const activationLink = `${process.env.DOMAIN_URL}/auth/activate?token=${verificationCode}`;
+
+      await sendEmail(
+        email,
+        'Activate account',
+        `Hello ${user.fullName}, please activate your account by clicking the following link.: ${activationLink}`
+      );
+      await user.save();
+
+      return user;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
 }
 
 module.exports = new AuthService();

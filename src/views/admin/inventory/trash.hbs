@@ -21,37 +21,7 @@
         </tr>
       </thead>
       <tbody id='trashTable'>
-        {{!-- {{#each products}}
-          <tr>
-            <td>
-              <img src="{{this.image}}" alt="{{this.name}}" class="product-image">
-            </td>
-            <td>{{this.brand}} {{this.model}}</td>
-            <td>{{this.deletedBy}}</td>
-            <td>{{formatDate this.createdAt}}</td>
-            <td>{{formatDate this.deletedAt}}</td>
-            <td>
-              <span class="status-badge {{#if this.status}}status-active{{else}}status-deleted{{/if}}">
-                {{#if this.status}}Active{{else}}Deleted{{/if}}
-              </span>
-            </td>
-            <td>
-              <div class="action-buttons">
-                <button class="btn btn-delete" data-id="{{this._id}}">
-                  <i class="fas fa-trash"></i> Delete
-                </button>
-                <button class="btn btn-restore" data-id="{{this._id}}">
-                  <i class="fas fa-undo"></i> Restore
-                </button>
-              </div>
-            </td>
-          </tr>
-        {{else}}
-          <tr>
-            <td colspan="7" class="empty-message">No products in trash</td>
-          </tr>
-        {{/each}} --}}
-
+        <!-- Table rows here -->  
       </tbody>
 
     </table>

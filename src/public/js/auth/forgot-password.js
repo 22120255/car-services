@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const email = $('#email').val().trim();
 
         if (!isEmailValid(email)) {
-            $('#email-availability-message').text("Email không hợp lệ");
+            $('#email-availability-message').text("Invalid email");
             return;
         }
 
-        $(this).text("Đang gửi...").prop('disabled', true);
+        $(this).text("Sending...").prop('disabled', true);
         $.ajax({
             url: '/api/auth/forgot-password/send-code',
             method: 'POST',
@@ -19,12 +19,12 @@ document.addEventListener('DOMContentLoaded', function () {
             data: JSON.stringify({ email }),
             statusCode: {
                 200() {
-                    $('.send-code-button').text("Gửi mã").prop('disabled', false);
-                    showModal({ title: "Gửi mã thành công", content: "Mã đã được gửi về email của bạn, vui lòng kiểm tra hộp thư lấy mã!" })
+                    $('.send-code-button').text("Send code").prop('disabled', false);
+                    showModal({ title: "Code sent successfully", content: "The code has been sent to your email, please check your inbox to get the code!" })
                     $('#email-availability-message').text('');
                 },
                 404(resp) {
-                    $('.send-code-button').text("Gửi mã").prop('disabled', false);
+                    $('.send-code-button').text("Send code").prop('disabled', false);
                     $('#email-availability-message').text(resp.responseJSON.error);
                 },
             }
@@ -41,15 +41,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Validate inputs
         if (!verificationCode || !password || !confirmPassword || !email) {
-            messageEle.text("Vui lòng nhập đầy đủ thông tin");
+            messageEle.text("Please enter all information");
             return;
         }
         if (!isEmailValid(email)) {
-            $('#email-availability-message').text("Email không hợp lệ");
+            $('#email-availability-message').text("Invalid email");
             return;
         }
         if (!isStrongPassword(password)) {
-            messageEle.text("Password must be at least 8 characters, one uppercase letter, one lowercase letter. one special character and one number.");
+            messageEle.text("Password must be at least 8 characters, one uppercase letter, one lowercase letter, one special character and one number.");
             return;
         }
         if (password !== confirmPassword) {

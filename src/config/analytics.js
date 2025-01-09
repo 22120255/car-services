@@ -1,32 +1,26 @@
-const { BetaAnalyticsDataClient } = require('@google-analytics/data');
 const DataAnalytics = require("../models/DataAnalytics");
+const { getViewsData, getTopProductsData } = require('../utils/analytics');
+const { errorLog, infoLog } = require("../utils/customLog");
 
-const propertyId = "465737102";
-
-const analyticsDataClient = new BetaAnalyticsDataClient();
+const propertyId = process.env.GA_PROPERTY_ID;
 
 async function getDataReport() {
-    const [response] = await analyticsDataClient.runReport({
-        property: `properties/${propertyId}`,
-        dateRanges: [
-            {
-                startDate: '30daysAgo', endDate: 'today'
-            },
-        ],
-        metrics: [
-            {
-                name: 'activeUsers',
-            },
-        ],
-    });
+    try {
+        const viewData = await getViewsData(propertyId);
 
-    for (const row of response.rows) {
-        const newRecord = new DataAnalytics({
-            propertyId,
-            views: parseInt(row.metricValues[0].value, 10),
-        });
+        const topProductsData = await getTopProductsData(propertyId, 3);
 
-        await newRecord.save();
+        // Save to database
+        // const newRecord = new DataAnalytics({
+        //     propertyId,
+        //     views: viewData,
+        //     topProductsData,
+        // });
+
+        // await newRecord.save();
+        infoLog("analytics.js", "getDataReport", "Crawl data successfully");
+    } catch (err) {
+        errorLog("analytics.js", "getDataReport", err);
     }
 }
 

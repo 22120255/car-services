@@ -5,14 +5,12 @@ const { errorLog } = require('../utils/customLog');
 const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
 const Order = require('../models/Order');
+const Formatter = require('../utils/formatter');
 
 class UserController {
   // [GET] /admin/dashboard
   async index(req, res) {
-    const analyticLatest = await DataAnalytics.findOne().sort({ createdAt: -1 });
-
     res.render('admin/dashboard', {
-      analyticData: mongooseToObject(analyticLatest),
       layout: 'admin',
       title: 'Dashboard',
     });
@@ -33,11 +31,11 @@ class UserController {
 
   // [GET] /admin/users
   async getUsers(req, res) {
-    const { limit, offset, key, direction, search, status, role } = req.query;
+    const { limit = 10, offset = 0, key, direction, search, status, role } = req.query;
     try {
       const { users, total } = await UserService.getUsers({
-        limit: limit || 10,
-        offset: offset || 0,
+        limit,
+        offset,
         key,
         direction,
         search,
@@ -258,6 +256,57 @@ class UserController {
     }
   }
 
+  // [GET] /api/user/orders
+  async getOrders(req, res) {
+    const { limit = 10, offset = 0, key, direction, search, status, priceMin, priceMax } = req.query;
+    try {
+      const { orders, total } = await UserService.getOrders({
+        limit,
+        offset,
+        key,
+        direction,
+        search,
+        status,
+        priceMin,
+        priceMax,
+      });
+      return res.status(200).json({ orders, total });
+    } catch (error) {
+      errorLog('UserController', 'getOrders', error.message);
+      res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // [GET] /api/user/orders/:id
+  async getOrder(req, res) {
+    try {
+      const order = await UserService.getOrder(req.params.id);
+      res.status(200).json({ order });
+    } catch (error) {
+      res.status(500).json({
+        error: 'Internal Server Error',
+        message: error.message
+      });
+    }
+  }
+
+  // [PATCH] /api/user/orders/status/:id
+  async updateOrderStatus(req, res) {
+    try {
+      const orderId = req.params.id;
+      const { status } = req.body;
+
+      if (!orderId || !status) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+      await UserService.updateOrderStatus(orderId, status);
+      return res.status(200).json({ message: 'Update order status successfully' });
+    } catch (error) {
+      errorLog('UserController', 'updateOrderStatus', error.message);
+      return res.status(403).json({ error: error.message });
+    }
+  }
+
   // [GET] /admin/reports
   async reports(req, res) {
     try {
@@ -321,7 +370,9 @@ class UserController {
 
       await UserService.updateAvatar(userId, pathFile);
       clearCache(`user/profile/${userId}`);
-      res.status(200).json(pathFile);
+      res.status(200).json({
+        avatar: pathFile,
+      });
     } catch (error) {
       errorLog('UserController', 'updateAvatar', error.message);
       res.status(500).json({
@@ -401,17 +452,6 @@ class UserController {
     }
   }
 
-  // [GET] /api/user/data/analytics
-  async getAnalytics(req, res) {
-    const refresh = req.query.refresh === 'true';
-    try {
-      const analytics = await UserService.getAnalytics({ refresh });
-      res.status(200).json(analytics);
-    } catch (error) {
-      errorLog('UserController', 'getAnalytics', error.message);
-      res.status(500).json({ error: 'An error occurred, please try again later!' });
-    }
-  }
   // [POST] /api/user/review/store
   async storeReview(req, res) {
     if (req.file) {
