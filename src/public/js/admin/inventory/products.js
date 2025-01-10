@@ -5,7 +5,9 @@ import { getFilterConfigProduct } from '../../config.js';
 function showProductModal(title, productID = null, product = null) {
   $('#product-modal .modal-title').text(title);
 
-  // Nếu product tồn tại, tức là đang chỉnh sửa
+  const imageContainer = $('#imageContainer');
+  imageContainer.find('.image-preview-wrapper').remove(); // Xóa tất cả các ảnh cũ nếu có
+
   if (product) {
     $('#product-modal').data('is-editing', true); // Đang chỉnh sửa
     $('#product-modal').data('product-id', productID); // Lưu ID sản phẩm
@@ -22,14 +24,23 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
     $('#product-description').val(product.description);
-    product.images.forEach((index, image) => {
-      $(`input[name="images.at(index)"]`).val(image);
+
+    // Hiển thị ảnh dưới dạng preview
+    product.images.forEach((image) => {
+      const imageWrapper = $(`
+        <div class="image-preview-wrapper" style="margin-top: auto;">
+          <img src="${image}" alt="Preview" class="image-preview">
+          <button class="remove-image-btn">&times;</button>
+        </div>
+      `);
+      imageContainer.append(imageWrapper);
+
+      // Xử lý sự kiện xóa ảnh
+      imageWrapper.find('.remove-image-btn').on('click', function () {
+        imageWrapper.remove();
+      });
     });
-    for (let i = 0; i < product.images.length; i++) {
-      $(`input[name="images.image${i + 1}"]`).val(product.images[i]);
-    }
   } else {
-    // Nếu không có sản phẩm, tức là tạo mới
     $('#product-modal').data('is-editing', false); // Tạo mới
     $('#product-modal').data('product-id', null); // Xóa ID sản phẩm
 
@@ -48,7 +59,7 @@ function showModalDetail(product) {
 
   // Cập nhật hình ảnh chính
   $('#mainDetailImage')
-    .attr('src', product.images?.at(0) || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
+    .attr('src', product.images?.at(0) || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
   // Cập nhật các hình ảnh thu nhỏ
@@ -203,7 +214,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hiển thị modal xác nhận xóa
     showModal({
-      title: 'Delete Product', content: 'Are you sure you want to delete this product?', btnSubmit: 'Delete', callback: () => {
+      title: 'Delete Product',
+      content: 'Are you sure you want to delete this product?',
+      btnSubmit: 'Delete',
+      callback: () => {
         $.ajax({
           url: `/api/user/inventory/delete-product/${productId}`,
           type: 'DELETE',
@@ -226,12 +240,16 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           },
         });
-      }
+      },
     });
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
   $('#save-product-btn').on('click', function () {
+    const images = [];
+    $('#imageContainer .image-preview').each(function () {
+      images.push($(this).attr('src')); // Lấy đường dẫn từ src của ảnh
+    });
     const productData = {
       brand: $('#product-brand').val(),
       model: $('#product-model').val(),
@@ -245,14 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
       transmission: $('#product-transmission').val(),
       description: $('#product-description').val(),
       fuelType: $('#product-fuelType').val(),
-      importPrice: parseFloat($('#product-importPrice').val()),
-      images: [
-        $('input[name="images.image1"]').val(),
-        $('input[name="images.image2"]').val(),
-        $('input[name="images.image3"]').val(),
-        $('input[name="images.image4"]').val(),
-        $('input[name="images.image5"]').val(),
-      ],
+      images: images, // Lấy mảng ảnh
     };
 
     // Kiểm tra xem có đang chỉnh sửa hay không
@@ -420,14 +431,14 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log(_id);
 
       const isSelected = status === 'used' || status === 'new';
-      const imageSrc = images?.at(0) || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images?.at(0) || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image'; // Sử dụng ảnh mặc định nếu không có ảnh
 
       $('#inventoryTable').append(`
         <tr data-product-id="${_id}">
             <td>
                 <img
                     src='${imageSrc}'
-                    alt='Toyota Camry'
+                    alt=''
                     class='car-image'
                 />
             </td>

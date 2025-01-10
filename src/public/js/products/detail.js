@@ -3,10 +3,10 @@ import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   const { averageRating = 0 } = product;
-
   let starsHtml = '';
   if (averageRating > 0) {
     const fullStars = Math.floor(averageRating); // Số sao đầy
+    console.log('Full stars:', fullStars);
     const hasHalfStar = averageRating % 1 >= 0.5; // Xác định có nửa sao không
 
     for (let i = 1; i <= 5; i++) {
@@ -149,12 +149,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     products.forEach((product) => {
       const { _id, images, status, brand, price, year, averageRating = 0 } = product;
-      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
-
+      const imageSrc = images[0] || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image'; // Sử dụng ảnh mặc định nếu không có ảnh
+      let avrRating = averageRating;
       let starsHtml = '';
-      if (averageRating > 0) {
-        const fullStars = Math.floor(averageRating); // Số sao đầy
-        const hasHalfStar = averageRating % 1 >= 0.5; // Xác định có nửa sao không
+      if (avrRating > 0) {
+        const fullStars = Math.floor(avrRating); // Số sao đầy
+        const hasHalfStar = avrRating % 1 >= 0.5; // Xác định có nửa sao không
 
         for (let i = 1; i <= 5; i++) {
           if (i <= fullStars) {
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
             starsHtml += `<span class='star-empty'>★</span>`; // Sao rỗng
           }
         }
-        starsHtml += `<span class='rating-text'>${averageRating.toFixed(1)}</span>`;
+        starsHtml += `<span class='rating-text'>${avrRating.toFixed(1)}</span>`;
       } else {
         starsHtml = `<span class='no-rating'>No reviews yet.</span>`;
       }

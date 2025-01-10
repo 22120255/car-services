@@ -30,18 +30,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     limit = parseInt(urlParams.get('limit')) || 8;
     offset = parseInt(urlParams.get('offset')) || 1;
-    const priceMin = parseFloat(urlParams.get('priceMin') || "");
-    const priceMax = parseFloat(urlParams.get('priceMax') || "");
-    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : "";
+    const priceMin = parseFloat(urlParams.get('priceMin') || '');
+    const priceMax = parseFloat(urlParams.get('priceMax') || '');
+    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : '';
 
     // Đồng bộ với giao diện
     $('#limit').val(limit);
-    $('#searchInput').val(urlParams.get('search') || "");
-    $('#statusFilter').val(urlParams.get('status') || "");
-    $('#brandFilter').val(urlParams.get('brand') || "");
-    $('#styleFilter').val(urlParams.get('style') || "");
-    $('#transmissionFilter').val(urlParams.get('transmission') || "");
-    $('#yearFilter').val(parseInt(urlParams.get('year')) || "");
+    $('#searchInput').val(urlParams.get('search') || '');
+    $('#statusFilter').val(urlParams.get('status') || '');
+    $('#brandFilter').val(urlParams.get('brand') || '');
+    $('#styleFilter').val(urlParams.get('style') || '');
+    $('#transmissionFilter').val(urlParams.get('transmission') || '');
+    $('#yearFilter').val(parseInt(urlParams.get('year')) || '');
     $('#priceFilter').val(price);
   }
 
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $(filterElement).on('change', async function () {
       const urlParams = new URLSearchParams(window.location.search);
       offset = 1;
-      limit = parseInt(urlParams.get('limit')) || 8
+      limit = parseInt(urlParams.get('limit')) || 8;
       updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const urlParams = new URLSearchParams(window.location.search);
       const search = $('#searchInput').val().trim();
       offset = 1;
-      limit = parseInt(urlParams.get('limit')) || 8
+      limit = parseInt(urlParams.get('limit')) || 8;
       updateQueryParams({ search, offset, limit });
       await refresh();
     }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     const search = $('#searchInput').val();
     offset = 1;
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 8;
     updateQueryParams({ search, offset, limit });
     await refresh();
   });
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const price = $(this).val();
     const [priceMin, priceMax] = price ? price.split('-') : ['', ''];
     offset = 1;
-    limit = parseInt(urlParams.get('limit')) || 8
+    limit = parseInt(urlParams.get('limit')) || 8;
     updateQueryParams({ priceMin: priceMin.trim(), priceMax: priceMax.trim(), offset });
     refresh();
   });
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     products.forEach((product) => {
       const { _id, images, status, brand, price, year, averageRating = 0 } = product;
-      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images[0] || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image'; // Sử dụng ảnh mặc định nếu không có ảnh
 
       let starsHtml = '';
       if (averageRating > 0) {

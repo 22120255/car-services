@@ -63,4 +63,67 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+  $(document).ready(function () {
+    const imageInput = $('#imageInput');
+    const imageContainer = $('#imageContainer');
+    const addImageBtn = $('#addImageBtn');
+
+    addImageBtn.on('click', function () {
+      imageInput.click();
+    });
+
+    imageInput.on('change', function () {
+      const files = this.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const loadingSpinner = $(`
+          <div class="loading-spinner" style="margin-top: auto;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Uploading...</span>
+            </div>
+          </div>
+        `);
+
+        addImageBtn.before(loadingSpinner);
+
+        $.ajax({
+          url: '/api/user/product/store',
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            console.log('Upload thành công:', response);
+
+            loadingSpinner.remove();
+
+            const imageWrapper = $(`
+              <div class="image-preview-wrapper" style="margin-top: auto;">
+                <img src="${response.secure_url}" alt="Preview" class="image-preview">
+                <button class="remove-image-btn">&times;</button>
+              </div>
+            `);
+
+            addImageBtn.before(imageWrapper);
+
+            imageWrapper.find('.remove-image-btn').on('click', function () {
+              imageWrapper.remove();
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error('Upload thất bại:', error);
+            alert('Có lỗi xảy ra khi upload file.');
+
+            loadingSpinner.remove();
+          },
+        });
+
+        imageInput.val('');
+      }
+    });
+  });
 });

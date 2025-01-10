@@ -10,17 +10,17 @@ class OrderService {
     if (!cart?.items?.length) {
       throw new Error('Cart is empty');
     }
-    const orderItems = cart.items.map(item => ({
+    const orderItems = cart.items.map((item) => ({
       productId: item.productId._id,
       quantity: item.quantity,
-      price: item.productId.price
+      price: item.productId.price,
     }));
     return Order.create({
       userId,
       items: orderItems,
       totalAmount: cart.total,
       shippingDetails: JSON.stringify(shippingDetails),
-      status: 'pending'
+      status: 'pending',
     });
   }
 
@@ -40,15 +40,18 @@ class OrderService {
     }
   }
 
-  addReview = async (userId, productId, rating, comment, images) => {
+  addReview = async (userId, productId, rating, comment, images, orderId) => {
     try {
       // Tìm đơn hàng của người dùng chứa sản phẩm cụ thể với trạng thái "completed"
+      console.log('Order ID:', orderId);
       const order = await Order.findOne({
+        _id: orderId,
         userId,
         'items.productId': productId,
         status: 'completed',
-        'items.reviewStatus': 'not-reviewed', // Kiểm tra trạng thái review của sản phẩm
+        'items.reviewStatus': 'not-reviewed',
       });
+      console.log('Order:', order);
 
       if (!order) {
         return { error: true, message: 'Bạn phải hoàn tất đơn hàng và nhận sản phẩm để đánh giá.' };
@@ -60,7 +63,6 @@ class OrderService {
         return { error: true, message: 'Sản phẩm này đã được đánh giá hoặc không hợp lệ.' };
       }
 
-      console.log('Order item:', orderItem);
       console.log(userId, productId, rating, comment, images);
       // Thêm review
       const review = new Review({
@@ -71,10 +73,7 @@ class OrderService {
         images,
       });
 
-      console.log('Review:', review);
       await review.save();
-
-      console.log('Order item:', orderItem);
 
       // Cập nhật trạng thái review của sản phẩm trong đơn hàng
       orderItem.reviewStatus = 'reviewed';
