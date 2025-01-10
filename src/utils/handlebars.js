@@ -42,9 +42,10 @@ module.exports = {
   formatCurrency: Formatter.formatCurrency,
   formatDate: (value) => Formatter.formatDate(value),
   roundUp: function (value) {
-    return (Math.ceil(value * 10) / 10).toFixed(1);
+    const rounded = Math.round((value + Number.EPSILON) * 10) / 10;
+    return rounded.toFixed(1);
   },
-  toFix: function (value, decimals = 2) {
+  toFix: function (value, decimals = 1) {
     if (typeof value !== 'number') return '';
     return value.toFixed(decimals);
   },

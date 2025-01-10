@@ -413,7 +413,7 @@ class UserController {
         .exec();
 
       const orders = await Order.find({ userId: req.user._id })
-        .select('items')
+        .select('items _id') // Lấy thêm orderId
         .populate({
           path: 'items.productId',
           select: 'reviewStatus',
@@ -422,19 +422,28 @@ class UserController {
 
       const productReviewStatuses = {};
 
-      // Duyệt qua từng đơn hàng và tạo một mapping giữa productId và reviewStatus
+      // Duyệt qua từng đơn hàng và tạo mapping giữa productId, _id (orderId) và reviewStatus
       orders.forEach((order) => {
         order.items.forEach((item) => {
           const productId = item.productId._id.toString();
+          const orderId = order._id.toString(); // Lấy _id làm orderId
+          console.log('productId:', productId);
           const reviewStatus = item.reviewStatus;
-          productReviewStatuses[productId] = reviewStatus;
+          console.log('reviewStatus:', reviewStatus);
+          // Tạo khóa kết hợp productId và orderId
+          const key = `${productId}_${orderId}`;
+          productReviewStatuses[key] = reviewStatus;
         });
       });
 
       // Thêm reviewStatus vào metadata.purchasedProducts
-      user.metadata.purchasedProducts.forEach((Object) => {
-        const reviewStatus = productReviewStatuses[Object.product._id.toString()];
-        Object.reviewStatus = reviewStatus || 'not-reviewed';
+      user.metadata.purchasedProducts.forEach((purchasedProduct) => {
+        const productId = purchasedProduct.product._id.toString();
+        const orderId = purchasedProduct.orderId?.toString(); // Đảm bảo lấy đúng _id của đơn hàng
+        const key = `${productId}_${orderId}`; // Khóa kết hợp
+        const reviewStatus = productReviewStatuses[key];
+
+        purchasedProduct.reviewStatus = reviewStatus || 'not-reviewed';
       });
 
       // Sắp xếp recentActivity theo ngày mua mới nhất
@@ -442,9 +451,7 @@ class UserController {
         user.metadata.recentActivity.sort((a, b) => b.date - a.date);
       }
 
-      user.metadata.purchasedProducts.forEach((product) => {
-        console.log(product.orderId); // Hiển thị orderId của từng phần tử trong mảng
-      });
+      // console.log(user.metadata.purchasedProducts);
       res.render('user/purchasedList', {
         layout: 'main',
         user,

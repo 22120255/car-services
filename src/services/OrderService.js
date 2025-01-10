@@ -43,6 +43,7 @@ class OrderService {
   addReview = async (userId, productId, rating, comment, images, orderId) => {
     try {
       // Tìm đơn hàng của người dùng chứa sản phẩm cụ thể với trạng thái "completed"
+      console.log('Order ID:', orderId);
       const order = await Order.findOne({
         _id: orderId,
         userId,
@@ -56,14 +57,12 @@ class OrderService {
         return { error: true, message: 'Bạn phải hoàn tất đơn hàng và nhận sản phẩm để đánh giá.' };
       }
 
-      console.log(order);
       const orderItem = order.items.find((item) => item.productId.toString() === productId && item.reviewStatus === 'not-reviewed');
 
       if (!orderItem) {
         return { error: true, message: 'Sản phẩm này đã được đánh giá hoặc không hợp lệ.' };
       }
 
-      console.log('Order item:', orderItem);
       console.log(userId, productId, rating, comment, images);
       // Thêm review
       const review = new Review({
@@ -74,10 +73,7 @@ class OrderService {
         images,
       });
 
-      console.log('Review:', review);
       await review.save();
-
-      console.log('Order item:', orderItem);
 
       // Cập nhật trạng thái review của sản phẩm trong đơn hàng
       orderItem.reviewStatus = 'reviewed';
