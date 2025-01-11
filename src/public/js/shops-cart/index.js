@@ -1,4 +1,4 @@
-import { loadCartData, showModal } from '../common.js';
+import { loadCartData, showModal, showToast } from '../common.js';
 import { isPhoneNumberValid, isUsernameValid } from '../helpers.js';
 import { store, updateAmountCart } from '../store/index.js';
 
@@ -64,6 +64,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         content: modalContent,
         btnSubmit: 'Payment',
         callback: () => {
+          cart.items.forEach((item) => {
+            gtag('event', 'purchased_product', {
+              product_id: item.productId._id,
+              time: new Date()
+            })
+          })
+
           const fullName = $('#fullName').val().trim();
           const phone = $('#phone').val().trim();
           const address = $('#address').val().trim();
@@ -121,14 +128,11 @@ document.addEventListener('DOMContentLoaded', async function () {
               }
             },
             error: function (xhr, status, error) {
-              showModal({
-                title: 'Error',
-                content: 'An error occurred. Please try again later.',
-              });
+              showToast('Error', 'An error occurred. Please try again later.');
             },
-            complete: function () {
-              submitBtn.prop('disabled', false).text('Payment');
-            },
+            // complete: function () {
+            //   submitBtn.prop('disabled', false).text('Payment');
+            // },
           });
           return true;
         },
