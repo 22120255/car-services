@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
@@ -60,11 +58,11 @@ services:
       - VNP_HASHSECRET=${VNP_HASHSECRET}
       - VNP_URL=${VNP_URL}
       - VNP_RETURN_URL=${VNP_RETURN_URL}
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
       - VNP_IPN_URL=${VNP_IPN_URL}
 
 volumes:
   esdata:
     driver_opts:
-      device: /Users/xuanthulab/Desktop/xdata/docker/elasticsearch/data
+      type: none
+      device: '/mnt/d/HCMUS/CN/WEB/Final Project/car-services/data/elasticsearch' # Windows path to Docker path
       o: bind

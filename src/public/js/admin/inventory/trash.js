@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <img src="${imageSrc}" alt="${brand} ${model}" class="product-image">
         </td>
         <td>${brand} ${model}</td>
-        <td>${deletedBy}</td>
+        <td>${deletedBy.fullName}</td>
         <td>${formatDate(createdAt)}</td>
         <td>${formatDate(deletedAt)}</td>
         <td>
