@@ -109,20 +109,34 @@ class ProductController {
     const page = parseInt(req.query.offset) || 0;
     const limit = parseInt(req.query.limit) || 10;
     const query = {};
+    const sort = {};
+
     const search = req.query.search;
 
-    // Lọc theo các trường cụ thể với không phân biệt hoa thường
+    // Lọc theo các trường cụ thể
     if (req.query.year) query.year = req.query.year;
-    if (req.query.style) query.style = { $regex: new RegExp(req.query.style, 'i') }; // Không phân biệt hoa thường
-    if (req.query.brand) query.brand = { $regex: new RegExp(req.query.brand, 'i') }; // Không phân biệt hoa thường
-    if (req.query.status) query.status = { $regex: new RegExp(req.query.status, 'i') }; // Không phân biệt hoa thường
-    if (req.query.transmission) query.transmission = { $regex: new RegExp(req.query.transmission, 'i') }; // Không phân biệt hoa thường
+    if (req.query.style) query.style = { $regex: new RegExp(req.query.style, 'i') };
+    if (req.query.brand) query.brand = { $regex: new RegExp(req.query.brand, 'i') };
+    if (req.query.status) query.status = { $regex: new RegExp(req.query.status, 'i') };
+    if (req.query.transmission) query.transmission = { $regex: new RegExp(req.query.transmission, 'i') };
 
     // Lọc theo giá
     if (req.query.priceMin || req.query.priceMax) {
       query.price = {};
       if (req.query.priceMin) query.price.$gte = req.query.priceMin;
       if (req.query.priceMax) query.price.$lte = req.query.priceMax;
+    }
+
+    // Xử lý sort theo giá
+    if (req.query.sortByPrice) {
+      // Nếu sortByPrice là 'lowToHigh', sort theo price tăng dần (1), nếu 'highToLow', sort theo price giảm dần (-1)
+      sort.price = req.query.sortByPrice === 'lowToHigh' ? 1 : req.query.sortByPrice === 'highToLow' ? -1 : 0;
+    }
+
+    // Xử lý sort theo năm
+    if (req.query.sortByYear) {
+      // Nếu sortByYear là 'newest', sort theo năm giảm dần (1), nếu 'oldest', sort theo năm tăng dần (-1)
+      sort.year = req.query.sortByYear === 'newest' ? -1 : req.query.sortByYear === 'oldest' ? 1 : 0;
     }
 
     // Tìm kiếm theo từ khóa
@@ -149,7 +163,7 @@ class ProductController {
 
     try {
       // Lấy dữ liệu từ service
-      const { products, total } = await ProductService.getPaginatedProducts(query, page, limit);
+      const { products, total } = await ProductService.getPaginatedProducts(query, page, limit, sort);
 
 
       return res.status(200).json({

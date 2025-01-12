@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#transmissionFilter').val(urlParams.get('transmission') || '');
     $('#yearFilter').val(parseInt(urlParams.get('year')) || '');
     $('#priceFilter').val(price);
+    $('#sortByYear').val(urlParams.get('sortByYear') || '');
+    $('#sortByPrice').val(urlParams.get('sortByPrice') || '');
   }
 
   // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
@@ -74,6 +76,8 @@ document.addEventListener('DOMContentLoaded', function () {
   setupFilterHandlers('#transmissionFilter', 'transmission');
   setupFilterHandlers('#yearFilter', 'year');
   setupFilterHandlers('#limit', 'limit');
+  setupFilterHandlers('#sortByYear', 'sortByYear');
+  setupFilterHandlers('#sortByPrice', 'sortByPrice');
 
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {

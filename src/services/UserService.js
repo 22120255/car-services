@@ -21,10 +21,7 @@ class UserService {
       sort[key] = sortDirection;
     }
 
-    const users = await User.find(filter)
-      .skip(offset)
-      .limit(limit)
-      .sort(sort);
+    const users = await User.find(filter).skip(offset).limit(limit).sort(sort);
     const total = await User.countDocuments(filter);
 
     return { users, total };
@@ -196,7 +193,15 @@ class UserService {
   async trashAndGetProducts(query) {
     try {
       const { limit, offset } = query;
-      const allDeletedProducts = await Product.findDeleted();
+
+      // Tìm tất cả các sản phẩm đã bị xóa, và sử dụng populate để lấy thông tin người xóa
+      const allDeletedProducts = await Product.findDeleted()
+        .populate({
+          path: 'deletedBy', // Trường này tham chiếu tới ObjectId của User
+          model: 'User', // Tham chiếu đến model 'User'
+          select: 'fullName', // Lấy trường fullName của User
+        })
+        .exec();
 
       const startIndex = (offset - 1) * limit;
       const endIndex = startIndex + limit;
@@ -205,7 +210,7 @@ class UserService {
 
       const total = allDeletedProducts.length;
 
-      console.log(`Total deleted products: ${total}`);
+      console.log('products:', products);
       return { products, total };
     } catch (error) {
       console.error('Error fetching deleted products:', error.message);
@@ -249,23 +254,20 @@ class UserService {
         //console.log('search:', search);
         // Tìm users có tên match với search term
         const users = await User.find({
-          fullName: { $regex: search, $options: 'i' }
+          fullName: { $regex: search, $options: 'i' },
         }).select('_id');
-        const userIds = users.map(user => user._id);
+        const userIds = users.map((user) => user._id);
         //console.log('userIds:', userIds);
         // Tìm products có brand hoặc model match với search term
         const products = await Product.find({
-          $or: [
-            { brand: { $regex: search, $options: 'i' } },
-            { model: { $regex: search, $options: 'i' } }
-          ]
+          $or: [{ brand: { $regex: search, $options: 'i' } }, { model: { $regex: search, $options: 'i' } }],
         }).select('_id');
-        const productIds = products.map(product => product._id);
+        const productIds = products.map((product) => product._id);
         //console.log('productIds:', productIds);
         // Build filter cho orders
         filter.$or = [
-          { userId: { $in: userIds } },  // Orders của users match
-          { 'items.productId': { $in: productIds } }  // Orders có products match
+          { userId: { $in: userIds } }, // Orders của users match
+          { 'items.productId': { $in: productIds } }, // Orders có products match
         ];
       }
 
@@ -289,11 +291,11 @@ class UserService {
       const orders = await Order.find(filter)
         .populate({
           path: 'userId',
-          select: 'fullName email phone'
+          select: 'fullName email phone',
         })
         .populate({
           path: 'items.productId',
-          select: 'brand model price images'
+          select: 'brand model price images',
         })
         .skip(offset)
         .limit(limit)
@@ -320,11 +322,11 @@ class UserService {
       const order = await Order.findById(orderId)
         .populate({
           path: 'userId',
-          select: 'fullName email phone'
+          select: 'fullName email phone',
         })
         .populate({
           path: 'items.productId',
-          select: 'brand model price images'
+          select: 'brand model price images',
         })
         .lean()
         .exec();
@@ -334,8 +336,7 @@ class UserService {
       }
 
       return order;
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error fetching order:', error);
       throw error;
     }
@@ -351,8 +352,7 @@ class UserService {
       }
 
       await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-    }
-    catch (error) {
+    } catch (error) {
       console.error('Error updating order status:', error);
       throw error;
     }

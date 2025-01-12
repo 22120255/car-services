@@ -17,14 +17,14 @@ class ProductService {
       throw new Error(error);
     }
   };
-  getPaginatedProducts = async (query, offset, limit) => {
+  getPaginatedProducts = async (query, offset, limit, sort) => {
     try {
       const products = await Product.find(query)
         .skip(offset)
         .limit(limit)
         .exec();
 
-      // Get the total count of products for pagination
+      // Lấy tổng số sản phẩm để hiển thị phân trang
       const count = await Product.countDocuments(query);
 
       return {
