@@ -444,8 +444,8 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td>${brand} ${model}</td>
             <td>${year}</td>
-            <td>$${importPrice}</td> <!-- Hiển thị giá nhập khẩu -->
-            <td>$${price}</td>
+            <td>$${importPrice.toFixed(2)}</td> <!-- Hiển thị giá nhập khẩu -->
+            <td>$${price.toFixed(2)}</td>
             <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
             <td class='actions'>
                 <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
