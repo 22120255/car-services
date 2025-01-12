@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let starsHtml = '';
   if (averageRating > 0) {
     const fullStars = Math.floor(averageRating); // Số sao đầy
-    console.log('Full stars:', fullStars);
     const hasHalfStar = averageRating % 1 >= 0.5; // Xác định có nửa sao không
 
     for (let i = 1; i <= 5; i++) {

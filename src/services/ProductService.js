@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const { multipleMongooseToObject } = require('../utils/mongoose');
 
 class ProductService {
   getFilteredProducts = async (query) => {
@@ -21,7 +20,7 @@ class ProductService {
   getPaginatedProducts = async (query, offset, limit) => {
     try {
       const products = await Product.find(query)
-        .skip(limit * offset - limit)
+        .skip(offset)
         .limit(limit)
         .exec();
 

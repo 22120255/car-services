@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
         offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
-    updateQueryParams({ offset: offset });
+    updateQueryParams({ offset, limit });
     await refresh();
   });
 

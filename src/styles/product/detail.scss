@@ -117,8 +117,8 @@
 }
 
 .preview-thumbnail.nav-tabs li img {
-  max-width: 100%; /* Ảnh không vượt quá kích thước thumbnail */
-  max-height: 100%; /* Ảnh không vượt quá chiều cao thumbnail */
+  width: 94px;
+  height: 56px;
   object-fit: contain; /* Đảm bảo giữ nguyên tỉ lệ gốc của ảnh */
   cursor: pointer; /* Con trỏ đổi khi hover */
   transition: transform 0.2s ease; /* Hiệu ứng hover */

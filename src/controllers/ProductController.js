@@ -2,8 +2,7 @@ const ProductService = require('../services/ProductService');
 const OrderService = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
-const { clearCache, clearAllCache } = require('../utils/helperCache');
-const { error } = require('winston');
+const { clearCache } = require('../utils/helperCache');
 
 class ProductController {
   index(req, res) {
@@ -33,32 +32,36 @@ class ProductController {
       // Xử lý các trường hợp của activeTab
       switch (activeTab) {
         case 'brand':
-          const brandQuery = { ...baseQuery, brand: fieldData };
-          ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
-          break;
-
+          {
+            const brandQuery = { ...baseQuery, brand: fieldData };
+            ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
+            break;
+          }
         case 'year':
-          const yearQuery = { ...baseQuery, year: fieldData };
-          ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
-          break;
+          {
+            const yearQuery = { ...baseQuery, year: fieldData };
+            ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
+            break;
+          }
 
         case 'price':
           // TODO: Tạm thời mặc định 10000
-          const delta = 10000;
-          const currentPrice = parseFloat(fieldData);
-          if (isNaN(currentPrice)) {
-            return res.status(400).json({ message: 'Giá (price) không hợp lệ.' });
+          {
+            const delta = 10000;
+            const currentPrice = parseFloat(fieldData);
+            if (isNaN(currentPrice)) {
+              return res.status(400).json({ message: 'Giá (price) không hợp lệ.' });
+            }
+            const priceQuery = {
+              ...baseQuery,
+              price: {
+                $gte: currentPrice - delta,
+                $lte: currentPrice + delta,
+              },
+            };
+            ({ products, total } = await ProductService.getPaginatedProducts(priceQuery, offsetNumber, limitNumber));
+            break;
           }
-          const priceQuery = {
-            ...baseQuery,
-            price: {
-              $gte: currentPrice - delta,
-              $lte: currentPrice + delta,
-            },
-          };
-          ({ products, total } = await ProductService.getPaginatedProducts(priceQuery, offsetNumber, limitNumber));
-          break;
-
         default:
           return res.status(400).json({ message: `Loại tìm kiếm "${activeTab}" không hợp lệ.` });
       }
@@ -103,8 +106,8 @@ class ProductController {
 
   // [GET] /api/products
   getProducts = async (req, res, next) => {
-    const page = parseInt(req.query.offset) || 1;
-    const limit = parseInt(req.query.limit) || 8;
+    const page = parseInt(req.query.offset) || 0;
+    const limit = parseInt(req.query.limit) || 10;
     const query = {};
     const search = req.query.search;
 

@@ -83,9 +83,21 @@ const renderSelectOptions = (element, options) => {
   });
 };
 
+const updateURL = ({ key, value }) => {
+  let url = new URL(window.location.href);
+  let params = url.searchParams
+  params.set(key, value);
+  url.search = params.toString();
+  window.history.replaceState(null, '', url.toString());
+}
+
 function updatePagination({ selector = '.pagination', offset, limit, totalItems }) {
   const $pagination = $(selector);
   $pagination.empty();
+
+  // check offset valid 
+  offset = Math.round(offset / 10) * 10
+  updateURL({ key: "offset", value: offset })
 
   const currentPage = offset / limit + 1;
   const visibleRange = 1;
@@ -128,4 +140,12 @@ function updatePagination({ selector = '.pagination', offset, limit, totalItems 
     `);
 }
 
-export { showToast, showModal, loadCartData, updateQueryParams, renderSelectOptions, updatePagination };
+export {
+  showToast,
+  showModal,
+  loadCartData,
+  updateQueryParams,
+  renderSelectOptions,
+  updatePagination,
+  updateURL
+};

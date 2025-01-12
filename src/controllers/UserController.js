@@ -1,11 +1,8 @@
 const UserService = require('../services/UserService');
-const DataAnalytics = require('../models/DataAnalytics');
 const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
-const { mongooseToObject } = require('../utils/mongoose');
 const User = require('../models/User');
 const Order = require('../models/Order');
-const Formatter = require('../utils/formatter');
 
 class UserController {
   // [GET] /admin/dashboard
@@ -93,27 +90,6 @@ class UserController {
       });
     } catch (error) {
       errorLog('UserController', 'products', error.message);
-      res.status(500).json({ error: 'An error occurred, please try again later!' });
-    }
-  }
-
-  // [GET] /admin/inventory/
-  async getProducts(req, res) {
-    const { limit, offset, search, status, brand, model, priceMin, priceMax } = req.query;
-    try {
-      const { products, total } = await UserService.getProducts({
-        limit: limit || 10,
-        offset: offset || 1,
-        search,
-        status,
-        brand,
-        model,
-        priceMin,
-        priceMax,
-      });
-      return res.status(200).json({ products, total });
-    } catch (error) {
-      errorLog('UserController', 'getProducts', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
     }
   }
