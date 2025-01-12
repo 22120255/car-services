@@ -151,13 +151,11 @@ class ProductController {
       // Lấy dữ liệu từ service
       const { products, total } = await ProductService.getPaginatedProducts(query, page, limit);
 
-      const isAjax = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest';
-      if (isAjax && req.headers.referer?.includes('/products')) {
-        return res.status(200).json({
-          products: multipleMongooseToObject(products),
-          total,
-        });
-      }
+
+      return res.status(200).json({
+        products: multipleMongooseToObject(products),
+        total,
+      });
     } catch (error) {
       errorLog('ProductController', 'getProducts', error);
     }

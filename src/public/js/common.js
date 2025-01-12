@@ -96,7 +96,10 @@ function updatePagination({ selector = '.pagination', offset, limit, totalItems 
   $pagination.empty();
 
   // check offset valid 
-  offset = Math.round(offset / 10) * 10
+  if (limit % 4 == 0)
+    offset = Math.round(offset / 8) * 8
+  else
+    offset = Math.round(offset / 10) * 10
   updateURL({ key: "offset", value: offset })
 
   const currentPage = offset / limit + 1;
