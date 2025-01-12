@@ -310,3 +310,23 @@
 
 .find-nothing {
   height: 200px; }
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: none; }
+
+.form-select {
+  border-left: none;
+  cursor: pointer; }
+
+.form-select:focus {
+  box-shadow: none;
+  border-color: #ced4da; }
+
+.input-group:hover .input-group-text,
+.input-group:hover .form-select {
+  border-color: #80bdff; }
+
+@media (max-width: 767.98px) {
+  .col-md-6 {
+    margin-bottom: 1rem; } }

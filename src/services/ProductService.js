@@ -18,14 +18,15 @@ class ProductService {
       throw new Error(error);
     }
   };
-  getPaginatedProducts = async (query, offset, limit) => {
+  getPaginatedProducts = async (query, offset, limit, sort) => {
     try {
       const products = await Product.find(query)
-        .skip(limit * offset - limit)
-        .limit(limit)
+        .skip(limit * offset - limit) // Phân trang
+        .limit(limit) // Giới hạn số lượng sản phẩm trên mỗi trang
+        .sort(sort) // Áp dụng sort theo điều kiện sort đã truyền vào
         .exec();
 
-      // Get the total count of products for pagination
+      // Lấy tổng số sản phẩm để hiển thị phân trang
       const count = await Product.countDocuments(query);
 
       return {
