@@ -49,10 +49,8 @@ const getFilterConfigProduct = () => ({
     { value: '200000 - 5000000', label: ' > 200000' },
   ],
   perPages: [
-    { value: 4, label: '4 / page' },
-    { value: 8, label: '8 / page' },
-    { value: 12, label: '12 / page' },
-    { value: 16, label: '16 / page' },
+    { value: 10, label: '10 / page' },
+    { value: 15, label: '15 / page' },
     { value: 20, label: '20 / page' },
   ],
   fuelTypes: [

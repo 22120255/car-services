@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const { multipleMongooseToObject } = require('../utils/mongoose');
 
 class ProductService {
   getFilteredProducts = async (query) => {
@@ -21,9 +20,8 @@ class ProductService {
   getPaginatedProducts = async (query, offset, limit, sort) => {
     try {
       const products = await Product.find(query)
-        .skip(limit * offset - limit) // Phân trang
-        .limit(limit) // Giới hạn số lượng sản phẩm trên mỗi trang
-        .sort(sort) // Áp dụng sort theo điều kiện sort đã truyền vào
+        .skip(offset)
+        .limit(limit)
         .exec();
 
       // Lấy tổng số sản phẩm để hiển thị phân trang

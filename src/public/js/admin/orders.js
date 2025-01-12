@@ -1,13 +1,25 @@
-import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination } from '../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination, updateURL } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
 import FunctionApi from '../FunctionApi.js';
 import { formatDate } from '../helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
+  // ------------------------------------ Setup Filters -----------------------------------------------
+  const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
+
+  renderSelectOptions($('#statusFilter'), statuses);
+  renderSelectOptions($('#limit'), perPages);
+  renderSelectOptions($('#priceFilter'), prices);
+  renderSelectOptions($('#sortBy'), createdTime);
+
   // ------------------------------------ Declare variables -----------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
   let orders = null;
   let limit = urlParams.get('limit') || 10;
+  if (!perPages.some(({ value }, index) => value === limit)) {
+    limit = 10
+    updateURL({ key: "limit", value: limit })
+  }
   let offset = parseInt(urlParams.get('offset')) || 0;
   let status = urlParams.get('status') || '';
   let totalItems = null;
@@ -34,14 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
     await refresh(); // Tải lại dữ liệu
   });
 
-  // ------------------------------------ Setup Filters -----------------------------------------------
-  const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
-
-  renderSelectOptions($('#statusFilter'), statuses);
-  renderSelectOptions($('#limit'), perPages);
-  renderSelectOptions($('#priceFilter'), prices);
-  renderSelectOptions($('#sortBy'), createdTime);
-
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
@@ -62,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (event.key === 'Enter') {
       const search = $(this).val();
       const urlParams = new URLSearchParams(window.location.search);
-      limit = parseInt(urlParams.get('limit')) || 10;
       offset = 0;
       updateQueryParams({ search, offset, limit });
       await refresh();
@@ -73,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     const search = $('#searchInput').val();
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10;
     offset = 0;
     updateQueryParams({ search, offset, limit });
     await refresh();
@@ -84,8 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
     offset = 0;
-    const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10;
+    const urlParams = new URLSearchParams(window.location.search)
     updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
     await refresh();
   });
@@ -96,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const direction = $(this).val();
     offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10;
     updateQueryParams({ key, direction, offset, limit });
     await refresh();
   });
@@ -248,15 +248,14 @@ document.addEventListener('DOMContentLoaded', function () {
         offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
-    updateQueryParams({ offset: offset });
+    updateQueryParams({ offset, limit });
     await refresh();
   });
 
   $('#limit').change(async function () {
     limit = $(this).val();
-    totalPages = Math.ceil(totalItems / limit);
     offset = 0;
-    updateQueryParams({ limit: limit, offset: offset });
+    updateQueryParams({ limit, offset });
     await refresh();
   });
 

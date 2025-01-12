@@ -1,4 +1,4 @@
-import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination, updateURL } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
@@ -131,23 +131,21 @@ function handleProductAction(action, productId) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  const { brands, statuses, prices, perPages } = getFilterConfigProduct();
+  const { statuses, prices, perPages } = getFilterConfigProduct();
 
-  renderSelectOptions($('#brandFilter'), brands);
   renderSelectOptions($('#statusFilter'), statuses);
   renderSelectOptions($('#limit'), perPages);
   renderSelectOptions($('#priceFilter'), prices);
-});
-
-document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Declare variables -----------------------------------------------
-
   const urlParams = new URLSearchParams(window.location.search);
 
   let products = null;
-  let limit = urlParams.get('limit') || 8;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
+  let limit = urlParams.get('limit') || 10;
+  if (!perPages.some(({ value }, index) => value === limit)) {
+    limit = 10
+    updateURL({ key: "limit", value: limit })
+  }
+  let offset = parseInt(urlParams.get('offset')) || 0;
   let totalItems = null;
 
   let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
@@ -308,8 +306,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
-      offset = 1;
-      updateQueryParams({ [paramKey]: $(this).val(), offset: offset });
+      offset = 0;
+      updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
   }
@@ -322,8 +320,8 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#searchInput').on('keyup keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const search = $('#searchInput').val();
-      offset = 1;
-      updateQueryParams({ search: search, offset: offset });
+      offset = 0;
+      updateQueryParams({ search, offset, limit });
       await refresh();
     }
   });
@@ -331,65 +329,19 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#btn-search').on('click', async function (event) {
     event.preventDefault();
     const search = $('#searchInput').val();
-    offset = 1;
-    updateQueryParams({ search: search, offset: offset });
+    offset = 0;
+    updateQueryParams({ search, offset, limit });
     await refresh();
   });
 
   $('#priceFilter').on('change', async function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
-    offset = 1;
-    updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    offset = 0;
+    updateQueryParams({ priceMin: min, priceMax: max, offset, limit });
     refresh();
   });
 
-  function updatePagination() {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    const visibleRange = 1; // Số trang liền kề cần hiển thị
-    const firstPage = 1;
-    const lastPage = totalPages;
-
-    // Nút "First" và "Prev"
-    $pagination.append(`
-            <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="prevPage">&laquo;</a>
-            </li>
-        `);
-
-    // Vòng lặp hiển thị trang
-    for (let i = firstPage; i <= lastPage; i++) {
-      if (
-        i === firstPage || // Trang đầu
-        i === lastPage || // Trang cuối
-        (i >= offset - visibleRange && i <= offset + visibleRange) // Trang trong khoảng gần offset
-      ) {
-        $pagination.append(`
-                    <li class="page-item ${offset === i ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                    </li>
-                `);
-      } else if (
-        (i === offset - visibleRange - 1 && i > firstPage) || // Dấu "..." trước nhóm trang
-        (i === offset + visibleRange + 1 && i < lastPage) // Dấu "..." sau nhóm trang
-      ) {
-        $pagination.append(`
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
-                    </li>
-                `);
-      }
-    }
-
-    // Nút "Next" và "Last"
-    $pagination.append(`
-            <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="nextPage">&raquo;</a>
-            </li>
-        `);
-  }
 
   // LoadData
   async function loadData() {
@@ -403,7 +355,6 @@ document.addEventListener('DOMContentLoaded', function () {
         200(resp) {
           products = resp.products;
           totalItems = resp.total;
-          totalPages = Math.ceil(totalItems / limit);
         },
         500(resp) {
           console.error('Lỗi khi tải dữ liệu:', resp);
@@ -471,40 +422,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cập nhật giá trị của offset dựa trên nút bấm
     switch ($this.attr('id')) {
-      case 'firstPage':
-        offset = 1; // Trang đầu tiên
-        break;
       case 'prevPage':
-        if (offset > 1) offset--; // Tránh giá trị < 1
+        if (offset > 0) offset -= limit;
         break;
       case 'nextPage':
-        if (offset < totalPages) offset++; // Tránh giá trị > totalPages
-        break;
-      case 'lastPage':
-        offset = totalPages; // Trang cuối cùng
+        if (offset < totalItems) offset += limit;
         break;
       default:
-        offset = parseInt($this.data('page')); // Điều hướng theo trang cụ thể
+        offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
-    // Cập nhật query params và tải lại dữ liệu
-    updateQueryParams({ offset: offset });
+    updateQueryParams({ offset, limit });
     await refresh();
   });
 
   // Handle items per page change
   $('#limit').change(async function () {
     limit = $(this).val();
-    totalPages = Math.ceil(totalItems / limit);
-    offset = 1;
-    // updatePagination();
-    updateQueryParams({ limit: limit, offset: offset });
+    offset = 0;
+    updateQueryParams({ limit, offset });
     await refresh();
   });
 
   async function refresh() {
     await loadData();
-    updatePagination();
+    updatePagination({ offset, limit, totalItems });
   }
 
   refresh();
