@@ -37,7 +37,7 @@ module.exports = {
   getValueAt(array, index) {
     if (!array || index < 0 || index >= array.length || !Array.isArray(array)) return '';
     return array[index];
-  },
+  },  
   formatNumber: (number, shorten = false) => Formatter.formatNumber(number, { shorten: shorten }),
   formatCurrency: Formatter.formatCurrency,
   formatDate: (value) => Formatter.formatDate(value),

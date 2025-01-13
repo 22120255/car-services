@@ -65,6 +65,12 @@ const UserSchema = new mongoose.Schema(
           description: String,
         },
       ],
+      ordersCreated: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Order',
+        },
+      ],
     },
     // Thông tin thêm cho admin
     adminStats: {

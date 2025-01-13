@@ -2,26 +2,60 @@ const Review = require('../models/Review');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const User = require('../models/User');
 const { error } = require('winston');
 
 class OrderService {
   async createOrder(userId, shippingDetails) {
-    const cart = await Cart.findOne({ userId, isPaid: false }).populate('items.productId');
-    if (!cart?.items?.length) {
-      throw new Error('Cart is empty');
-    }
-    const orderItems = cart.items.map((item) => ({
-      productId: item.productId._id,
-      quantity: item.quantity,
-      price: item.productId.price,
-    }));
-    return Order.create({
+    try {
+      const cart = await Cart.findOne({ userId, isPaid: false })
+        .populate('items.productId');
+        
+      if (!cart?.items?.length) {
+        throw new Error('Cart is empty');
+      }
+  
+      const orderItems = cart.items.map((item) => ({
+        productId: item.productId._id,
+        quantity: item.quantity, 
+        price: item.productId.price,
+      }));
+  
+      const order = await Order.create({
+        userId,
+        items: orderItems,
+        totalAmount: cart.total,
+        shippingDetails: JSON.stringify(shippingDetails),
+        status: 'pending',
+      });
+
+      // Update user
+      const user = await User.findById(userId);
+
+      // First ensure the array exists
+    await User.updateOne(
+      { 
+        _id: userId,
+        'metadata.ordersCreated': { $exists: false } 
+      },
+      { 
+        $set: { 'metadata.ordersCreated': [] } 
+      }
+    );
+
+    // Then push the new order
+    await User.findByIdAndUpdate(
       userId,
-      items: orderItems,
-      totalAmount: cart.total,
-      shippingDetails: JSON.stringify(shippingDetails),
-      status: 'pending',
-    });
+      {
+        $push: { 'metadata.ordersCreated': order._id }
+      }
+    );  
+      console.log('check');
+      return order;
+  
+    } catch (error) {
+      throw error;
+    }
   }
 
   async updateAverageRating(productId) {
