@@ -57,7 +57,7 @@ function showModal({ title, content, btnSubmit = 'OK', callback = () => true, on
 
 async function loadCartData() {
   const getCardDataApi = new FunctionApi('/api/cart/data', {
-    hideToast: true,
+    options: { hideToast: true, }
   });
   const data = await getCardDataApi.call();
 
