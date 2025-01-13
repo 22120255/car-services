@@ -5,6 +5,6 @@ const cartController = require('../../controllers/CartController');
 const { isAuthenticated } = require('../../middleware/authMiddleware')
 
 router.get('/payment/:cartID', isAuthenticated, cartController.payment)
-router.get('/', isAuthenticated, cartController.cart)
+router.get('/', cartController.cart)
 
 module.exports = router

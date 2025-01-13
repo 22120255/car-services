@@ -1,5 +1,6 @@
 // controllers/AuthController.js
 const AuthService = require('../services/AuthService');
+const CartService = require('../services/CartService');
 const passport = require('passport');
 const User = require('../models/User');
 const { clearCache, clearAllCache } = require('../utils/helperCache');
@@ -26,7 +27,11 @@ class AuthController {
 
   //[POST] /login/email/verify
   async verifyEmail(req, res, next) {
+    const oldSessionId = req.session.id;
+
     passport.authenticate('local', async (err, user, info) => {
+      await CartService.mergeCartsAfterLogin(oldSessionId, user._id);
+
       if (err) {
         return next(err);
       }

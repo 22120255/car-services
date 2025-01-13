@@ -7,7 +7,8 @@ const CartItemSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const CartSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: false },
+    sessionId: { type: String, required: false },
     items: [CartItemSchema],
     total: { type: Number, required: true, default: 0 },
     isPaid: { type: Boolean, default: false },
