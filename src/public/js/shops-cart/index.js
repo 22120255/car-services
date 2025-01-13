@@ -6,157 +6,167 @@ document.addEventListener('DOMContentLoaded', async function () {
   let cart = await loadCartData();
   if (cart && cart.items.length > 0) {
     renderCartTable(cart);
-
+    
     $('#checkout').on('click', function (event) {
-      const modalContent = `
-        <form id="shipping-form" class="needs-validation" novalidate>
-          <div class="form-group mb-3">
-            <label for="fullName">Full name</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="fullName" 
-              required
-            >
-            <div class="alert alert-warning mt-2 d-none" role="alert">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Please enter your full name
+      if (!user) {
+        showModal({
+          title: 'Notify',
+          content: 'Please login to proceed payment',
+          callback: () => {
+            window.location.href = `/auth/login?returnTo=/cart`;
+          },
+        });
+      } else {
+        const modalContent = `
+          <form id="shipping-form" class="needs-validation" novalidate>
+            <div class="form-group mb-3">
+              <label for="fullName">Full name</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="fullName" 
+                required
+              >
+              <div class="alert alert-warning mt-2 d-none" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Please enter your full name
+              </div>
             </div>
-          </div>
-    
-          <div class="form-group mb-3">
-            <label for="phone">Phone number</label>
-            <input 
-              type="tel" 
-              class="form-control" 
-              id="phone" 
-              required
-            >
-            <div class="alert alert-warning mt-2 d-none" role="alert">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Please enter a valid phone number
+      
+            <div class="form-group mb-3">
+              <label for="phone">Phone number</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                id="phone" 
+                required
+              >
+              <div class="alert alert-warning mt-2 d-none" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Please enter a valid phone number
+              </div>
             </div>
-          </div>
-    
-          <div class="form-group mb-3">
-            <label for="address">Shipping address</label>
-            <textarea 
-              class="form-control" 
-              id="address" 
-              rows="3" 
-              required
-            ></textarea>
-            <div class="alert alert-warning mt-2 d-none" role="alert">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Please enter detailed address
+      
+            <div class="form-group mb-3">
+              <label for="address">Shipping address</label>
+              <textarea 
+                class="form-control" 
+                id="address" 
+                rows="3" 
+                required
+              ></textarea>
+              <div class="alert alert-warning mt-2 d-none" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Please enter detailed address
+              </div>
             </div>
-          </div>
-    
-          <div class="form-group mb-3">
-            <label for="note">Notes (optional)</label>
-            <textarea class="form-control" id="note" rows="2"></textarea>
-          </div>
-        </form>
-      `;
-
-      showModal({
-        title: 'Delivery information',
-        content: modalContent,
-        btnSubmit: 'Payment',
-        callback: () => {
-          const fullName = $('#fullName').val().trim();
-          const phone = $('#phone').val().trim();
-          const address = $('#address').val().trim();
-
-          // Hide all alerts first
-          $('.alert').addClass('d-none');
-
-          let isValid = true;
-
-          if (!isUsernameValid(fullName)) {
-            $('#fullName').next('.alert').removeClass('d-none');
-            isValid = false;
-          }
-
-          if (!isPhoneNumberValid(phone)) {
-            $('#phone').next('.alert').removeClass('d-none');
-            isValid = false;
-          }
-
-          if (address.length < 5) {
-            $('#address').next('.alert').removeClass('d-none');
-            isValid = false;
-          }
-
-          if (!isValid) {
-            return false;
-          }
-
-          $.ajax({
-            url: '/api/orders/create',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-              shippingDetails: {
-                fullName: $('#fullName').val().trim(),
-                phone: $('#phone').val().trim(),
-                address: $('#address').val().trim(),
-                note: $('#note').val().trim(),
+      
+            <div class="form-group mb-3">
+              <label for="note">Notes (optional)</label>
+              <textarea class="form-control" id="note" rows="2"></textarea>
+            </div>
+          </form>
+        `;
+  
+        showModal({
+          title: 'Delivery information',
+          content: modalContent,
+          btnSubmit: 'Payment',
+          callback: () => {
+            const fullName = $('#fullName').val().trim();
+            const phone = $('#phone').val().trim();
+            const address = $('#address').val().trim();
+  
+            // Hide all alerts first
+            $('.alert').addClass('d-none');
+  
+            let isValid = true;
+  
+            if (!isUsernameValid(fullName)) {
+              $('#fullName').next('.alert').removeClass('d-none');
+              isValid = false;
+            }
+  
+            if (!isPhoneNumberValid(phone)) {
+              $('#phone').next('.alert').removeClass('d-none');
+              isValid = false;
+            }
+  
+            if (address.length < 5) {
+              $('#address').next('.alert').removeClass('d-none');
+              isValid = false;
+            }
+  
+            if (!isValid) {
+              return false;
+            }
+  
+            $.ajax({
+              url: '/api/orders/create',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
               },
-            }),
-            success: function (response) {
-              if (response.order) {
-                // Chuyển hướng đến URL thanh toán
-                const paymentUrl = response.order
-                  ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
-                  : response.paymentUrl;
-                window.location.href = paymentUrl;
-              } else {
+              data: JSON.stringify({
+                shippingDetails: {
+                  fullName: $('#fullName').val().trim(),
+                  phone: $('#phone').val().trim(),
+                  address: $('#address').val().trim(),
+                  note: $('#note').val().trim(),
+                },
+              }),
+              success: function (response) {
+                if (response.order) {
+                  // Chuyển hướng đến URL thanh toán
+                  const paymentUrl = response.order
+                    ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                    : response.paymentUrl;
+                  window.location.href = paymentUrl;
+                } else {
+                  showModal({
+                    title: 'Error',
+                    content: 'Unable to create order. Please try again.',
+                  });
+                }
+              },
+              error: function (xhr, status, error) {
                 showModal({
                   title: 'Error',
-                  content: 'Unable to create order. Please try again.',
+                  content: 'An error occurred. Please try again later.',
                 });
-              }
-            },
-            error: function (xhr, status, error) {
-              showModal({
-                title: 'Error',
-                content: 'An error occurred. Please try again later.',
-              });
-            },
-            complete: function () {
-              submitBtn.prop('disabled', false).text('Payment');
-            },
-          });
-          return true;
-        },
-        onShowCallback: () => {
-          // Sửa lại cách ẩn/hiện alert trong JavaScript
-          $('#fullName').on('blur', function () {
-            const value = $(this).val().trim();
-            const alert = $(this).next('.alert');
-
-            alert.toggleClass('d-none', isUsernameValid(value));
-          });
-
-          $('#phone').on('blur', function () {
-            const value = $(this).val().trim();
-            const alert = $(this).next('.alert');
-
-            alert.toggleClass('d-none', isPhoneNumberValid(value));
-          });
-
-          $('#address').on('blur', function () {
-            const value = $(this).val().trim();
-            const alert = $(this).next('.alert');
-
-            alert.toggleClass('d-none', value.length >= 5);
-          });
-          $('#fullName').focus();
-        },
-      });
+              },
+              complete: function () {
+                submitBtn.prop('disabled', false).text('Payment');
+              },
+            });
+            return true;
+          },
+          onShowCallback: () => {
+            // Sửa lại cách ẩn/hiện alert trong JavaScript
+            $('#fullName').on('blur', function () {
+              const value = $(this).val().trim();
+              const alert = $(this).next('.alert');
+  
+              alert.toggleClass('d-none', isUsernameValid(value));
+            });
+  
+            $('#phone').on('blur', function () {
+              const value = $(this).val().trim();
+              const alert = $(this).next('.alert');
+  
+              alert.toggleClass('d-none', isPhoneNumberValid(value));
+            });
+  
+            $('#address').on('blur', function () {
+              const value = $(this).val().trim();
+              const alert = $(this).next('.alert');
+  
+              alert.toggleClass('d-none', value.length >= 5);
+            });
+            $('#fullName').focus();
+          },
+        });
+      }
     });
   } else {
     console.error('Cart is empty or invalid.');
