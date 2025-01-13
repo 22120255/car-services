@@ -89,9 +89,7 @@ class CartService {
   async mergeCartsAfterLogin(sessionId, userId) {
     try {
       const sessionCart = await Cart.findOne({ sessionId: sessionId });
-      console.log('Session cart: ', sessionCart);
       const userCart = await Cart.findOne({ userId: userId, isPaid: false });
-      console.log('User cart: ', userCart);
 
       if (!sessionCart) return;
 

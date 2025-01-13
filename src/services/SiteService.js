@@ -41,8 +41,6 @@ class SiteService {
             }
 
             const orders = await Order.find({ status: 'completed' }).lean();
-            // console.log('orders', orders);
-
 
             return result;
         } catch (error) {

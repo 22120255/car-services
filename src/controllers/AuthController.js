@@ -30,7 +30,6 @@ class AuthController {
     const oldSessionId = req.session.id;
 
     passport.authenticate('local', async (err, user, info) => {
-      await CartService.mergeCartsAfterLogin(oldSessionId, user._id);
 
       if (err) {
         return next(err);
@@ -47,6 +46,9 @@ class AuthController {
           message: 'Account not verified. Please check your email to verify.',
         });
       }
+      
+      // Merge cart after login
+      await CartService.mergeCartsAfterLogin(oldSessionId, user._id);
 
       // Explicitly log in the user
       req.logIn(user, (err) => {
