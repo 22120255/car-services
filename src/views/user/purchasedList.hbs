@@ -35,12 +35,13 @@
                     Already reviewed
                   </a>
                 {{else}}
-                  <a class='btn btn-secondary btn-rate-product' data-id='{{this.product._id}}'>
+                  <a class='btn btn-secondary btn-rate-product' data-id='{{this.product._id}}' data-order-id='{{this.orderId}}'>
                     <i class='fas fa-star'></i>
                     Leave a review
                   </a>
                 {{/if}}
               </div>
+              <input type='hidden' id='orderId' value='{{this.orderId}}' />
             </div>
           {{/each}}
         </div>

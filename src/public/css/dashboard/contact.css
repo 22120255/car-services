@@ -40,7 +40,8 @@
   box-shadow: 10px 40px 40px rgba(0, 0, 0, 0.2);
   pointer-events: none;
   right: auto;
-  width: 100vw; }
+  width: 100vw;
+  z-index: -1; }
 
 .particles-js-canvas-el {
   position: absolute;

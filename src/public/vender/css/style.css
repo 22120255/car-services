@@ -339,7 +339,7 @@ nav.navbar.bootsnav .navbar-toggle i {
   background: #fff;
   box-shadow: 0 10px 40px 0px rgba(38, 40, 64, 0.2);
   position: relative;
-  bottom: -150px;
+  /* bottom: -150px; */
   width: 100%;
   border-radius: 20px;
 }
@@ -554,7 +554,7 @@ nav.navbar.bootsnav .navbar-toggle i {
   padding: 112px 0 120px;
 }
 .featured-cars-content {
-  padding-top: 200px;
+  padding-top: 40px;
 }
 
 /*.single-featured-cars*/

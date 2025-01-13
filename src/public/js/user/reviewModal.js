@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const stars = document.querySelectorAll('#starRating i');
   let starRatingValue = 0;
   let productId = null;
+  let orderId = null;
   $('.btn-rate-product').on('click', function (e) {
     e.preventDefault();
     productId = $(this).data('id');
+    orderId = $(this).data('order-id');
     const stars = document.querySelectorAll('#starRating i');
     stars.forEach((s) => s.classList.remove('selected', 'hover'));
     starRatingValue = 0;
@@ -128,8 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
       images.push($(this).attr('src'));
     });
 
-    const data = { productId, rating, comment, images };
-    console.log('Data:', data);
+    const data = { productId, rating, comment, images, orderId };
     $.ajax({
       url: '/api/orders/review',
       type: 'POST',

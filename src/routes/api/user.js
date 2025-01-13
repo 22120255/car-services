@@ -13,7 +13,7 @@ router.patch('/update-status', checkRole(['admin', 'sadmin']), userController.up
 router.patch('/avatar/store', uploadAvatar.single('avatar'), userController.updateAvatar);
 router.delete('/:id', checkRole(['admin', 'sadmin']), userController.deleteUser);
 router.get('/', checkRole(['admin', 'sadmin']), userController.getUsers);
-router.patch('/product/store', uploadProductImage.single('image'), userController.storeProduct);
+router.post('/product/store', uploadProductImage.single('image'), userController.storeProduct);
 router.patch('/', isAuthenticated, userController.updateProfile);
 
 // user

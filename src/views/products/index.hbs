@@ -3,21 +3,45 @@
     <div class='section-header'>
       <p class='sub-title'>Explore our fantastic products</p>
       <h2 class='main-title'>Our Products</h2>
-      <p class='section-description'>Bringing you luxurious, convenient, and classy car models.</p>
+
+      <div class='row mb-3'>
+        <div class='input-group input-group-sm search-input'>
+          <input type='text' class='form-control' placeholder='Search products...' name='search' value='' id='searchInput' />
+          <button class='btn btn-outline-secondary' id='btn-search'>
+            <i class='fas fa-search'></i>
+          </button>
+        </div>
+      </div>
+      <div class='row justify-content-center'>
+        <div class='col-md-6 col-lg-3 mb-2 mb-lg-0'>
+          <div class='input-group'>
+            <label class='input-group-text' for='sortByPrice'>
+              <i class='fas fa-dollar-sign'></i>
+            </label>
+            <select class='form-select' id='sortByPrice' name='sortByPrice'>
+              <option value='' selected>Sort by Price</option>
+              <option value='lowToHigh'>Low to High</option>
+              <option value='highToLow'>High to Low</option>
+            </select>
+          </div>
+        </div>
+        <div class='col-md-6 col-lg-3'>
+          <div class='input-group'>
+            <label class='input-group-text' for='sortByCreationTime'>
+              <i class='fas fa-clock'></i>
+            </label>
+            <select class='form-select' id='sortByYear' name='sortByYear'>
+              <option value='' selected>Sort by Creation Time</option>
+              <option value='newest'>Newest First</option>
+              <option value='oldest'>Oldest First</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class='featured-cars-filter' id='filter-form'>
-      <div class='row'>
-        <div class='col-md-12'>
-          <div class='model-search-content'>
-            <div class='row mb-3'>
-              <div class='input-group input-group-sm search-input'>
-                <input type='text' class='form-control' placeholder='Search products...' name='search' value='' id='searchInput' />
-                <button class='btn btn-outline-secondary' id='btn-search'>
-                  <i class='fas fa-search'></i>
-                </button>
-              </div>
-            </div>
-            <div class='row justify-content-between mx-0'>
+    <div class='model-search-content'>
+            <div class='d-flex justify-content-between mx-0'>
               <!-- Select Year -->
               <div class='col-md-offset-1 col-md-2 col-sm-12'>
                 <div class='single-model-search'>
@@ -74,10 +98,7 @@
               </div>
 
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+     </div>
     <div class='container'>
       <div class='row featured-cars-content g-3' id='product-list'>
         <!-- Add id for products to be updated by jQuery -->

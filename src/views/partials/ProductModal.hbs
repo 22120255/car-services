@@ -97,26 +97,13 @@
           <div class='mb-3'>
             <label for='product-images' class='form-label'>Images</label>
             <div id='product-images'>
-              <div class='d-flex align-items-center mb-2'>
-                <input type='text' class='form-control me-2' name='images.image1' placeholder='Link image 1' value='' />
-                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image1'>Choose</button>
+              <div id='imageContainer' class='d-flex flex-nowrap overflow-auto'>
+                <button type='button' id='addImageBtn' class='btn btn-outline-secondary'>
+                  <i class='fas fa-plus'></i>
+                </button>
               </div>
-              <div class='d-flex align-items-center mb-2'>
-                <input type='text' class='form-control me-2' name='images.image2' placeholder='Link image 2' value='' />
-                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image2'>Choose</button>
-              </div>
-              <div class='d-flex align-items-center mb-2'>
-                <input type='text' class='form-control me-2' name='images.image3' placeholder='Link image 3' value='' />
-                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image3'>Choose</button>
-              </div>
-              <div class='d-flex align-items-center mb-2'>
-                <input type='text' class='form-control me-2' name='images.image4' placeholder='Link image 4' value='' />
-                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image4'>Choose</button>
-              </div>
-              <div class='d-flex align-items-center mb-2'>
-                <input type='text' class='form-control me-2' name='images.image5' placeholder='Link image 5' value='' />
-                <button type='button' class='btn btn-secondary upload-btn' data-input='images.image5'>Choose</button>
-              </div>
+              <input type='file' id='imageInput' accept='image/*' style='display: none;' />
+              <input type='hidden' id='imagePaths' name='imagePaths' />
             </div>
             <input type='file' id='image-file-input' accept='image/*' style='display: none;' />
           </div>
