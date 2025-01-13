@@ -4,6 +4,7 @@ import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   let cart = await loadCartData();
+
   if (cart && cart.items.length > 0) {
     renderCartTable(cart);
     

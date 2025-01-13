@@ -83,25 +83,15 @@ class CartController {
   // Thêm method để xử lý merge cart sau khi login
 
   async mergeCartsAfterLogin(req, res, next) {
-
     try {
-
       if (req.user && req.session.id) {
-
         await CartService.mergeCartsAfterLogin(req.session.id, req.user._id);
-
       }
-
       next();
-
     } catch (error) {
-
       errorLog('CartController.js', 'mergeCartsAfterLogin', error.message);
-
       next();
-
     }
-
   }
 }
 

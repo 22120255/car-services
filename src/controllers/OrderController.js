@@ -21,11 +21,9 @@ class OrderController {
       const { productId, rating, comment, images, orderId } = req.body;
       const userId = req.user._id; // Lấy ID người dùng từ middleware xác thực
 
-      console.log('orderId', orderId);
       // Gọi service để thêm review
       const result = await OrderService.addReview(userId, productId, rating, comment, images, orderId);
 
-      console.log('Result:', result);
       if (result.error) {
         return res.status(400).json({ message: result.message });
       }

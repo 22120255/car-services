@@ -3,13 +3,18 @@ const Product = require('../models/Product');
 
 class CartService {
   async getCart(userId, sessionId) {
-    return Cart.findOne({
-      $or: [
-        { userId: userId },
-        { sessionId: sessionId }
-      ],
-      isPaid: false
-    }).populate('items.productId');
+    const query = { isPaid: false };
+    
+    // Nếu có userId thì tìm theo userId
+    if (userId) {
+      query.userId = userId;
+    }
+    // Nếu không có userId nhưng có sessionId thì tìm theo sessionId 
+    else if (sessionId) {
+      query.sessionId = sessionId;
+    }
+  
+    return Cart.findOne(query).populate('items.productId');
   }
 
   async addItem(userId, sessionId, productId, quantity) {

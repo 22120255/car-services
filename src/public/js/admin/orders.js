@@ -333,7 +333,6 @@ $(document).ready(function () {
         })
         .filter(Boolean)
         .join('');
-      // console.log('Order items list:', itemsHtml);
       $('#orderItemsList').html(itemsHtml || '<tr><td colspan="4" class="text-center">No valid items found</td></tr>');
     }
 
