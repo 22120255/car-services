@@ -1,47 +1,54 @@
-<section id='car-list' class='active-section'>
-  <div class='section-header'>
-    <h2>Order List</h2>
+<div class="orders-container">
+    <div class="page-title">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    <h2>Your Orders</h2>
   </div>
-  <div class='filters'>
-    <input type='text' placeholder='Search by name or code' id='searchInput' />
-    <select id='statusFilter' placeholder="Status">
-    </select>
-    <select id='priceFilter'>
-    </select>
-    <select id='sortBy'>
-    </select>
-  </div>
-  <div class='container-fluid'>
-    <div class='table-responsive'>
-      <table class='car-table table-striped table-align-middle'>
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Products</th>
-            <th>Total Price</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id='ordersTable'>
-          <!-- Dữ liệu sản phẩm sẽ được hiển thị ở đây -->
-        </tbody>
-      </table>
+  
+  {{#if orders.length}}
+    <div class="orders-grid">
+      {{#each orders}}
+        <div class="order-card">
+          {{#if this.items.[0]}}
+            <div class="order-preview">
+              <img src="{{this.items.[0].product.images}}" alt="{{this.items.[0].product.name}}" class="preview-image">
+            </div>
+          {{/if}}
+          <div class="order-info-grid">
+            <div class="info-item">
+              <strong>Order ID</strong>
+              <span>{{this._id}}</span>
+            </div>
+            <div class="info-item">
+              <strong>Date</strong>
+              <span>{{formatDate this.createdAt}}</span>
+            </div>
+            <div class="info-item">
+              <strong>Status</strong>
+              <span class="status-{{this.status}}">{{this.status}}</span>
+            </div>
+            <div class="info-item">
+              <strong>Total Price</strong>
+              <span>{{formatCurrency this.totalAmount}}</span>
+            </div>
+          </div>
+          <div class="order-actions">
+            <button href="/user/orders/{{this._id}}" class="btn btn-primary view-details" data-order-id="{{this._id}}">See details</button>
+          </div>
+        </div>
+      {{/each}}
     </div>
-  </div>
-  <div class='d-flex justify-content-between align-items-center mt-4' style='gap: 1rem;'>
-    <div class='d-none d-sm-block' style='width: 100px;'></div>
-    <!-- Spacer for small screens and up -->
-    <nav aria-label='Page navigation' class='flex-grow-1 d-flex justify-content-center'>
-      <ul class='pagination' style='margin: 0;'>
-        <!--pagination here-->
-      </ul>
-    </nav>
-    <select class='form-select' aria-label='Items per page' style='width: auto;' name='limit' id='limit'>
-    </select>
-  </div>
-    <div class='modal fade' id='orderDetailsModal' tabindex='-1'>
+  {{else}}
+    <div class="empty-orders">
+      <p>You don't have any order yet</p>
+      <a href="/products" class="btn btn-primary">Buy now</a>
+    </div>
+  {{/if}}
+</div>
+<div class='modal fade' id='orderDetailsModal' tabindex='-1'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -71,9 +78,10 @@
                             <span id="customerPhone"></span>
                           </div>
                         </div>
-                        <h6 class='fw-bold'>Order Details</h6>
+                        <h6 class='fw-bold mt-3'>Order Details</h6>
                         
-                          <div class="info-item mx-3 mb-2 mt-4">
+                          <div class="order-info info-list">
+                            <div class="info-item mx-3 mb-2">
                             <strong>Address:</strong>
                             <span id="shippingAddress"></span>
                           </div>
@@ -84,6 +92,7 @@
                           <div class="info-item mx-3 mb-2">
                             <strong>Status:</strong>
                             <span id="orderStatus"></span>
+                          </div>
                           </div>
                         
                       </div>
@@ -115,5 +124,4 @@
             </div>
         </div>
     </div>
-</section>
-<script type='module' src='\js\admin\orders.js'></script>
+<script type='module' src='/js/user/orders.js'></script>

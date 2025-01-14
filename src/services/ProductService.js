@@ -19,10 +19,7 @@ class ProductService {
   };
   getPaginatedProducts = async (query, offset, limit, sort) => {
     try {
-      const products = await Product.find(query)
-        .skip(offset)
-        .limit(limit)
-        .exec();
+      const products = await Product.find(query).skip(offset).limit(limit).sort(sort).exec();
 
       // Lấy tổng số sản phẩm để hiển thị phân trang
       const count = await Product.countDocuments(query);

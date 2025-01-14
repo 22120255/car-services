@@ -336,6 +336,34 @@ class UserService {
     }
   }
 
+  async getUserOrders(userId) {
+    // Fetch orders for the logged-in user with populated product data
+    const orders = await Order.find({ userId })
+      .populate({
+        path: 'items.productId',
+        select: 'name images price',
+        model: 'Product'
+      })
+      .sort({ createdAt: -1 });
+
+    // Transform orders data to match template requirements
+    return orders.map(order => {
+      const orderObj = order.toObject();
+      
+      // Transform items to match template structure
+      orderObj.items = orderObj.items.map(item => ({
+        product: {
+          images: item.productId.images,
+          name: item.productId.name
+        },
+        quantity: item.quantity,
+        price: item.price
+      }));
+
+      return orderObj;
+    });
+  }
+
   async updateOrderStatus(orderId, status) {
     try {
       if (!status) {
@@ -348,6 +376,39 @@ class UserService {
       await Order.findByIdAndUpdate(orderId, { status }, { new: true });
     } catch (error) {
       console.error('Error updating order status:', error);
+      throw error;
+    }
+  }
+
+  async getTrashProducts({ limit, offset, search, status, brand, model, priceMin, priceMax }) {
+    try {
+      let filter = {};
+
+      // Chuẩn hóa giá trị search, status, brand, model về chữ thường
+      if (search) {
+        filter.$or = [{ brand: { $regex: search.toLowerCase(), $options: 'i' } }, { model: { $regex: search.toLowerCase(), $options: 'i' } }];
+      }
+      if (status) {
+        filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
+      }
+      if (brand) {
+        filter.brand = { $regex: `^${brand.toLowerCase()}$`, $options: 'i' };
+      }
+      if (model) {
+        filter.model = { $regex: `^${model.toLowerCase()}$`, $options: 'i' };
+      }
+      if (priceMin && priceMax) {
+        filter.price = { $gte: priceMin, $lte: priceMax };
+      }
+
+      // Tiến hành truy vấn với filter đã chuẩn hóa
+      const products = await Product.find(filter)
+        .skip(offset * limit - limit)
+        .limit(limit);
+      const total = await Product.countDocuments(filter);
+
+      return { products, total };
+    } catch (error) {
       throw error;
     }
   }
