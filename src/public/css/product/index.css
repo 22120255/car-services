@@ -149,7 +149,17 @@
   font-weight: 700;
   color: #1f2937;
   text-decoration: none;
-  transition: color 0.3s ease; }
+  transition: color 0.3s ease;
+  vertical-align: middle;
+  /* Giữ text căn giữa theo chiều dọc */
+  max-width: 150px;
+  /* Điều chỉnh độ dài tối đa theo ý muốn */
+  white-space: nowrap;
+  /* Ngăn đoạn text xuống dòng */
+  overflow: hidden;
+  /* Ẩn phần text vượt quá giới hạn */
+  text-overflow: ellipsis;
+  /* Thêm dấu "..." nếu text bị cắt */ }
 
 .card-product__brand:hover {
   color: #2563eb; }
@@ -171,16 +181,16 @@
 .star {
   color: #fbbf24;
   /* Màu vàng cho sao đầy */
-  font-size: 1.25rem; }
+  font-size: 1rem; }
 
 .star-empty {
   color: #d1d5db;
   /* Màu xám cho sao rỗng */
-  font-size: 1.25rem; }
+  font-size: 1rem; }
 
 .star-half {
   position: relative;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: #fbbf24;
   /* Màu vàng cho nửa sao */ }
 
