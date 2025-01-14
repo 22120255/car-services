@@ -2,8 +2,7 @@ const ProductService = require('../services/ProductService');
 const OrderService = require('../services/OrderService');
 const { errorLog } = require('../utils/customLog');
 const { multipleMongooseToObject, mongooseToObject } = require('../utils/mongoose');
-const { clearCache, clearAllCache } = require('../utils/helperCache');
-const { error } = require('winston');
+const { clearCache } = require('../utils/helperCache');
 
 class ProductController {
   index(req, res) {
@@ -33,32 +32,36 @@ class ProductController {
       // Xử lý các trường hợp của activeTab
       switch (activeTab) {
         case 'brand':
-          const brandQuery = { ...baseQuery, brand: fieldData };
-          ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
-          break;
-
+          {
+            const brandQuery = { ...baseQuery, brand: fieldData };
+            ({ products, total } = await ProductService.getPaginatedProducts(brandQuery, offsetNumber, limitNumber));
+            break;
+          }
         case 'year':
-          const yearQuery = { ...baseQuery, year: fieldData };
-          ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
-          break;
+          {
+            const yearQuery = { ...baseQuery, year: fieldData };
+            ({ products, total } = await ProductService.getPaginatedProducts(yearQuery, offsetNumber, limitNumber));
+            break;
+          }
 
         case 'price':
           // TODO: Tạm thời mặc định 10000
-          const delta = 10000;
-          const currentPrice = parseFloat(fieldData);
-          if (isNaN(currentPrice)) {
-            return res.status(400).json({ message: 'Giá (price) không hợp lệ.' });
+          {
+            const delta = 10000;
+            const currentPrice = parseFloat(fieldData);
+            if (isNaN(currentPrice)) {
+              return res.status(400).json({ message: 'Giá (price) không hợp lệ.' });
+            }
+            const priceQuery = {
+              ...baseQuery,
+              price: {
+                $gte: currentPrice - delta,
+                $lte: currentPrice + delta,
+              },
+            };
+            ({ products, total } = await ProductService.getPaginatedProducts(priceQuery, offsetNumber, limitNumber));
+            break;
           }
-          const priceQuery = {
-            ...baseQuery,
-            price: {
-              $gte: currentPrice - delta,
-              $lte: currentPrice + delta,
-            },
-          };
-          ({ products, total } = await ProductService.getPaginatedProducts(priceQuery, offsetNumber, limitNumber));
-          break;
-
         default:
           return res.status(400).json({ message: `Loại tìm kiếm "${activeTab}" không hợp lệ.` });
       }
@@ -103,23 +106,37 @@ class ProductController {
 
   // [GET] /api/products
   getProducts = async (req, res, next) => {
-    const page = parseInt(req.query.offset) || 1;
-    const limit = parseInt(req.query.limit) || 8;
+    const page = parseInt(req.query.offset) || 0;
+    const limit = parseInt(req.query.limit) || 10;
     const query = {};
+    const sort = {};
+
     const search = req.query.search;
 
-    // Lọc theo các trường cụ thể với không phân biệt hoa thường
+    // Lọc theo các trường cụ thể
     if (req.query.year) query.year = req.query.year;
-    if (req.query.style) query.style = { $regex: new RegExp(req.query.style, 'i') }; // Không phân biệt hoa thường
-    if (req.query.brand) query.brand = { $regex: new RegExp(req.query.brand, 'i') }; // Không phân biệt hoa thường
-    if (req.query.status) query.status = { $regex: new RegExp(req.query.status, 'i') }; // Không phân biệt hoa thường
-    if (req.query.transmission) query.transmission = { $regex: new RegExp(req.query.transmission, 'i') }; // Không phân biệt hoa thường
+    if (req.query.style) query.style = { $regex: new RegExp(req.query.style, 'i') };
+    if (req.query.brand) query.brand = { $regex: new RegExp(req.query.brand, 'i') };
+    if (req.query.status) query.status = { $regex: new RegExp(req.query.status, 'i') };
+    if (req.query.transmission) query.transmission = { $regex: new RegExp(req.query.transmission, 'i') };
 
     // Lọc theo giá
     if (req.query.priceMin || req.query.priceMax) {
       query.price = {};
       if (req.query.priceMin) query.price.$gte = req.query.priceMin;
       if (req.query.priceMax) query.price.$lte = req.query.priceMax;
+    }
+
+    // Xử lý sort theo giá
+    if (req.query.sortByPrice) {
+      // Nếu sortByPrice là 'lowToHigh', sort theo price tăng dần (1), nếu 'highToLow', sort theo price giảm dần (-1)
+      sort.price = req.query.sortByPrice === 'lowToHigh' ? 1 : req.query.sortByPrice === 'highToLow' ? -1 : 0;
+    }
+
+    // Xử lý sort theo năm
+    if (req.query.sortByYear) {
+      // Nếu sortByYear là 'newest', sort theo năm giảm dần (1), nếu 'oldest', sort theo năm tăng dần (-1)
+      sort.year = req.query.sortByYear === 'newest' ? -1 : req.query.sortByYear === 'oldest' ? 1 : 0;
     }
 
     // Tìm kiếm theo từ khóa
@@ -146,15 +163,13 @@ class ProductController {
 
     try {
       // Lấy dữ liệu từ service
-      const { products, total } = await ProductService.getPaginatedProducts(query, page, limit);
+      const { products, total } = await ProductService.getPaginatedProducts(query, page, limit, sort);
 
-      const isAjax = req.xhr || req.get('X-Requested-With') === 'XMLHttpRequest';
-      if (isAjax && req.headers.referer?.includes('/products')) {
-        return res.status(200).json({
-          products: multipleMongooseToObject(products),
-          total,
-        });
-      }
+
+      return res.status(200).json({
+        products: multipleMongooseToObject(products),
+        total,
+      });
     } catch (error) {
       errorLog('ProductController', 'getProducts', error);
     }

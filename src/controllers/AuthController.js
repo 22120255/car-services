@@ -1,5 +1,6 @@
 // controllers/AuthController.js
 const AuthService = require('../services/AuthService');
+const CartService = require('../services/CartService');
 const passport = require('passport');
 const User = require('../models/User');
 const { clearCache, clearAllCache } = require('../utils/helperCache');
@@ -26,7 +27,10 @@ class AuthController {
 
   //[POST] /login/email/verify
   async verifyEmail(req, res, next) {
+    const oldSessionId = req.session.id;
+
     passport.authenticate('local', async (err, user, info) => {
+
       if (err) {
         return next(err);
       }
@@ -42,6 +46,9 @@ class AuthController {
           message: 'Account not verified. Please check your email to verify.',
         });
       }
+      
+      // Merge cart after login
+      await CartService.mergeCartsAfterLogin(oldSessionId, user._id);
 
       // Explicitly log in the user
       req.logIn(user, (err) => {

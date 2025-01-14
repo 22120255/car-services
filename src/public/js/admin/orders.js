@@ -1,40 +1,9 @@
-import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination } from '../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination, updateURL } from '../common.js';
 import { getFilterConfigOrder } from '../config.js';
 import FunctionApi from '../FunctionApi.js';
 import { formatDate } from '../helpers.js';
 
 document.addEventListener('DOMContentLoaded', function () {
-  // ------------------------------------ Declare variables -----------------------------------------------
-  const urlParams = new URLSearchParams(window.location.search);
-  let orders = null;
-  let limit = urlParams.get('limit') || 10;
-  let offset = parseInt(urlParams.get('offset')) || 0;
-  let status = urlParams.get('status') || "";
-  let totalItems = null;
-
-  function syncFiltersFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10;
-    offset = parseInt(urlParams.get('offset')) || 0;
-    const priceMin = parseFloat(urlParams.get('priceMin') || "");
-    const priceMax = parseFloat(urlParams.get('priceMax') || "");
-    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : "";
-
-    // Đồng bộ với giao diện
-    $('#limit').val(limit);
-    $('#searchInput').val(urlParams.get('search') || "");
-    $('#statusFilter').val(urlParams.get('status') || "");
-    $('#priceFilter').val(price);
-    $('#sortBy').val(urlParams.get('key') || "asc");
-  }
-
-  // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
-  window.addEventListener('popstate', async function () {
-    syncFiltersFromURL();
-    await refresh(); // Tải lại dữ liệu
-  });
-
-
   // ------------------------------------ Setup Filters -----------------------------------------------
   const { statuses, prices, perPages, createdTime } = getFilterConfigOrder();
 
@@ -43,12 +12,46 @@ document.addEventListener('DOMContentLoaded', function () {
   renderSelectOptions($('#priceFilter'), prices);
   renderSelectOptions($('#sortBy'), createdTime);
 
+  // ------------------------------------ Declare variables -----------------------------------------------
+  const urlParams = new URLSearchParams(window.location.search);
+  let orders = null;
+  let limit = urlParams.get('limit') || 10;
+  if (!perPages.some(({ value }, index) => value === limit)) {
+    limit = 10
+    updateURL({ key: "limit", value: limit })
+  }
+  let offset = parseInt(urlParams.get('offset')) || 0;
+  let status = urlParams.get('status') || '';
+  let totalItems = null;
+
+  function syncFiltersFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    limit = parseInt(urlParams.get('limit')) || 10;
+    offset = parseInt(urlParams.get('offset')) || 0;
+    const priceMin = parseFloat(urlParams.get('priceMin') || '');
+    const priceMax = parseFloat(urlParams.get('priceMax') || '');
+    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : '';
+
+    // Đồng bộ với giao diện
+    $('#limit').val(limit);
+    $('#searchInput').val(urlParams.get('search') || '');
+    $('#statusFilter').val(urlParams.get('status') || '');
+    $('#priceFilter').val(price);
+    $('#sortBy').val(urlParams.get('key') || 'asc');
+  }
+
+  // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
+  window.addEventListener('popstate', async function () {
+    syncFiltersFromURL();
+    await refresh(); // Tải lại dữ liệu
+  });
+
   // ------------------------------------ Event Handlers -----------------------------------------------
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
       offset = 0;
       const urlParams = new URLSearchParams(window.location.search);
-      limit = parseInt(urlParams.get('limit')) || 10
+      limit = parseInt(urlParams.get('limit')) || 10;
       updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
@@ -63,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (event.key === 'Enter') {
       const search = $(this).val();
       const urlParams = new URLSearchParams(window.location.search);
-      limit = parseInt(urlParams.get('limit')) || 10
       offset = 0;
       updateQueryParams({ search, offset, limit });
       await refresh();
@@ -74,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault();
     const search = $('#searchInput').val();
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10
     offset = 0;
     updateQueryParams({ search, offset, limit });
     await refresh();
@@ -85,8 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
     offset = 0;
-    const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10
+    const urlParams = new URLSearchParams(window.location.search)
     updateQueryParams({ priceMin: min.trim(), priceMax: max.trim(), offset, limit });
     await refresh();
   });
@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const direction = $(this).val();
     offset = 0;
     const urlParams = new URLSearchParams(window.location.search);
-    limit = parseInt(urlParams.get('limit')) || 10
     updateQueryParams({ key, direction, offset, limit });
     await refresh();
   });
@@ -109,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const getOrdersApi = new FunctionApi(`/api/user/orders`, {
       query: params,
-    })
+    });
     const data = await getOrdersApi.call();
     if (data) {
       orders = data.orders;
@@ -120,24 +119,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function getStatusClass(status) {
     const statusClasses = {
-      'pending': 'status-pending',
-      'completed': 'status-completed',
-      'canceled': 'status-canceled'
+      pending: 'status-pending',
+      completed: 'status-completed',
+      canceled: 'status-canceled',
     };
     return statusClasses[status.toLowerCase()] || '';
   }
 
   function reloadRow(orderId, newStatus) {
     const urlParams = new URLSearchParams(window.location.search);
-    status = urlParams.get('status') || "";
-    if (status == undefined || status == "") {
-    const $row = $(`tr[data-order-id='${orderId}']`);
-    const $statusCell = $row.find('.status-cell');
-    $statusCell.find('.status-select').remove();
-    $statusCell.find('.status').text(newStatus).show();
-    $statusCell.find('.status').attr('class', `status ${getStatusClass(newStatus)}`);
-    }
-    else {
+    status = urlParams.get('status') || '';
+    if (status == undefined || status == '') {
+      const $row = $(`tr[data-order-id='${orderId}']`);
+      const $statusCell = $row.find('.status-cell');
+      $statusCell.find('.status-select').remove();
+      $statusCell.find('.status').text(newStatus).show();
+      $statusCell.find('.status').attr('class', `status ${getStatusClass(newStatus)}`);
+    } else {
       $(`tr[data-order-id='${orderId}']`).remove();
     }
   }
@@ -157,24 +155,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     orders.forEach((order) => {
-      const {
-        _id,
-        userId,
-        items,
-        totalAmount,
-        status,
-        createdAt
-      } = order;
+      const { _id, userId, items, totalAmount, status, createdAt } = order;
 
-      const productsList = items?.map(item => {
-        const product = item.productId;
-        const imageSrc = product?.images[0] || '/default-image.jpg';
-        return product ? `<div class="product-cell"> <img
+      const productsList =
+        items
+          ?.map((item) => {
+            const product = item.productId;
+            const imageSrc = product?.images[0] || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image';
+            return product
+              ? `<div class="product-cell"> <img
                               src='${imageSrc}'
-                              alt='Toyota Camry'
+                              alt=''
                               class='car-image'
-                          /> ${product.brand} ${product.model} (x${item.quantity}) </div>` : 'Unknown Product';
-      }).join('<br>') || 'No products';
+                          /> ${product.brand} ${product.model} (x${item.quantity}) </div>`
+              : 'Unknown Product';
+          })
+          .join('<br>') || 'No products';
 
       $ordersTable.append(`
         <tr data-order-id="${_id}">
@@ -198,38 +194,40 @@ document.addEventListener('DOMContentLoaded', function () {
       `);
     });
 
-    // Sử dụng event delegation 
-    $('#ordersTable').off('click change').on('click', '.btn-edit-status', function () {
-      const orderId = $(this).data('order-id');
-      const currentStatus = $(this).closest('tr').find('.status').text();
-      const $statusCell = $(`tr[data-order-id='${orderId}'] .status-cell`);
+    // Sử dụng event delegation
+    $('#ordersTable')
+      .off('click change')
+      .on('click', '.btn-edit-status', function () {
+        const orderId = $(this).data('order-id');
+        const currentStatus = $(this).closest('tr').find('.status').text();
+        const $statusCell = $(`tr[data-order-id='${orderId}'] .status-cell`);
 
-      // Only create select if it doesn't exist
-      if (!$statusCell.find('.status-select').length) {
-        const statusSelect = $('<select>').addClass('status-select').attr('data-order-id', orderId);
-        $statusCell.find('.status').hide();
-        $statusCell.append(statusSelect);
-        renderSelectOptions(statusSelect, statuses, 'Select status');
-        statusSelect.val(currentStatus.toLowerCase());
-      }
-      else {
-        $statusCell.find('.status-select').remove();
-        $statusCell.find('.status').show();
-      }
-    }).on('change', '.status-select', function () {
-      const orderId = $(this).data('order-id');
-      const newStatus = $(this).val();
-      const updateOrderStatusApi = new FunctionApi(`/api/user/orders/update-status/${orderId}`, {
-        method: "PATCH",
-        body: {
-          status: newStatus
-        },
-        onSuccess(data) {
-          reloadRow(orderId, newStatus)
+        // Only create select if it doesn't exist
+        if (!$statusCell.find('.status-select').length) {
+          const statusSelect = $('<select>').addClass('status-select').attr('data-order-id', orderId);
+          $statusCell.find('.status').hide();
+          $statusCell.append(statusSelect);
+          renderSelectOptions(statusSelect, statuses, 'Select status');
+          statusSelect.val(currentStatus.toLowerCase());
+        } else {
+          $statusCell.find('.status-select').remove();
+          $statusCell.find('.status').show();
         }
       })
-      updateOrderStatusApi.call();
-    });
+      .on('change', '.status-select', function () {
+        const orderId = $(this).data('order-id');
+        const newStatus = $(this).val();
+        const updateOrderStatusApi = new FunctionApi(`/api/user/orders/update-status/${orderId}`, {
+          method: 'PATCH',
+          body: {
+            status: newStatus,
+          },
+          onSuccess(data) {
+            reloadRow(orderId, newStatus);
+          },
+        });
+        updateOrderStatusApi.call();
+      });
   }
 
   // ------------------------------------ Pagination Event Handlers -----------------------------------------------
@@ -250,15 +248,14 @@ document.addEventListener('DOMContentLoaded', function () {
         offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
-    updateQueryParams({ offset: offset });
+    updateQueryParams({ offset, limit });
     await refresh();
   });
 
   $('#limit').change(async function () {
     limit = $(this).val();
-    totalPages = Math.ceil(totalItems / limit);
     offset = 0;
-    updateQueryParams({ limit: limit, offset: offset });
+    updateQueryParams({ limit, offset });
     await refresh();
   });
 
@@ -279,14 +276,14 @@ $(document).ready(function () {
     const orderId = $(this).data('order-id');
     console.debug('View details clicked for order ID:', orderId);
 
-    // Hiển thị loading 
+    // Hiển thị loading
     const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
     modal.show();
 
     // Gọi API
     const response = await $.ajax({
       url: `/api/user/orders/${orderId}`,
-      method: 'GET'
+      method: 'GET',
     });
     console.debug('Order details response:', response);
 
@@ -313,7 +310,7 @@ $(document).ready(function () {
     } else {
       console.debug('Order items:', order.items);
       const itemsHtml = order.items
-        .map(item => {
+        .map((item) => {
           const product = item.productId;
           if (!product) return null;
 
@@ -321,7 +318,7 @@ $(document).ready(function () {
               <tr>
                 <td>
                   <div class="d-flex align-items-center">
-                    <img src="${product.images?.[0] || '/default-image.jpg'}" 
+                    <img src="${product.images?.[0] || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image'}" 
                          alt="${product.brand || ''} ${product.model || ''}" 
                          class="car-image me-2" 
                          style="width: 60px; height: 45px; object-fit: cover;">
@@ -336,7 +333,6 @@ $(document).ready(function () {
         })
         .filter(Boolean)
         .join('');
-      // console.log('Order items list:', itemsHtml);
       $('#orderItemsList').html(itemsHtml || '<tr><td colspan="4" class="text-center">No valid items found</td></tr>');
     }
 

@@ -1,10 +1,15 @@
 import { getFilterConfigProduct } from '../config.js';
-import { renderSelectOptions, updateQueryParams } from '../common.js';
+import { renderSelectOptions, updatePagination, updateQueryParams, updateURL } from '../common.js';
 import FunctionApi from '../FunctionApi.js';
 
 // Load filter
 document.addEventListener('DOMContentLoaded', function () {
-  const { years, styles, brands, transmissions, statuses, prices, perPages } = getFilterConfigProduct();
+  const { years, styles, brands, transmissions, statuses, prices } = getFilterConfigProduct();
+  const perPages = [
+    { value: 8, label: '8 / page' },
+    { value: 12, label: '12 / page' },
+    { value: 16, label: '16 / page' },
+  ]
 
   // Render options
   renderSelectOptions($('#yearFilter'), years);
@@ -14,35 +19,38 @@ document.addEventListener('DOMContentLoaded', function () {
   renderSelectOptions($('#statusFilter'), statuses);
   renderSelectOptions($('#limit'), perPages);
   renderSelectOptions($('#priceFilter'), prices);
-});
 
-document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search);
 
   let products = null;
   let limit = urlParams.get('limit') || 8;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
+  if (!perPages.some(({ value }, index) => value === limit)) {
+    limit = 8
+    updateURL({ key: "limit", value: limit })
+  }
+  let offset = parseInt(urlParams.get('offset')) || 0;
   let totalItems = null;
 
   // TODO: Chưa xử lí trường hợp chỉ nhập một giá trị min trên url
   function syncFiltersFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
     limit = parseInt(urlParams.get('limit')) || 8;
-    offset = parseInt(urlParams.get('offset')) || 1;
-    const priceMin = parseFloat(urlParams.get('priceMin') || "");
-    const priceMax = parseFloat(urlParams.get('priceMax') || "");
-    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : "";
+    offset = parseInt(urlParams.get('offset')) || 0;
+    const priceMin = parseFloat(urlParams.get('priceMin') || '');
+    const priceMax = parseFloat(urlParams.get('priceMax') || '');
+    const price = priceMin || priceMax ? `${priceMin} - ${priceMax}` : '';
 
     // Đồng bộ với giao diện
     $('#limit').val(limit);
-    $('#searchInput').val(urlParams.get('search') || "");
-    $('#statusFilter').val(urlParams.get('status') || "");
-    $('#brandFilter').val(urlParams.get('brand') || "");
-    $('#styleFilter').val(urlParams.get('style') || "");
-    $('#transmissionFilter').val(urlParams.get('transmission') || "");
-    $('#yearFilter').val(parseInt(urlParams.get('year')) || "");
+    $('#searchInput').val(urlParams.get('search') || '');
+    $('#statusFilter').val(urlParams.get('status') || '');
+    $('#brandFilter').val(urlParams.get('brand') || '');
+    $('#styleFilter').val(urlParams.get('style') || '');
+    $('#transmissionFilter').val(urlParams.get('transmission') || '');
+    $('#yearFilter').val(parseInt(urlParams.get('year')) || '');
     $('#priceFilter').val(price);
+    $('#sortByYear').val(urlParams.get('sortByYear') || '');
+    $('#sortByPrice').val(urlParams.get('sortByPrice') || '');
   }
 
   // Hàm xử lý khi quay lại bằng nút "quay lại" trên trình duyệt
@@ -54,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
       const urlParams = new URLSearchParams(window.location.search);
-      offset = 1;
-      limit = parseInt(urlParams.get('limit')) || 8
+      offset = 0;
+      limit = parseInt(urlParams.get('limit')) || 8;
       updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
@@ -68,13 +76,14 @@ document.addEventListener('DOMContentLoaded', function () {
   setupFilterHandlers('#transmissionFilter', 'transmission');
   setupFilterHandlers('#yearFilter', 'year');
   setupFilterHandlers('#limit', 'limit');
+  setupFilterHandlers('#sortByYear', 'sortByYear');
+  setupFilterHandlers('#sortByPrice', 'sortByPrice');
 
   $('#searchInput').on('keyup', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const urlParams = new URLSearchParams(window.location.search);
       const search = $('#searchInput').val().trim();
-      offset = 1;
-      limit = parseInt(urlParams.get('limit')) || 8
+      offset = 0;
       updateQueryParams({ search, offset, limit });
       await refresh();
     }
@@ -84,8 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     event.preventDefault();
     const search = $('#searchInput').val();
-    offset = 1;
-    limit = parseInt(urlParams.get('limit')) || 8
+    offset = 0;
     updateQueryParams({ search, offset, limit });
     await refresh();
   });
@@ -94,63 +102,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const price = $(this).val();
     const [priceMin, priceMax] = price ? price.split('-') : ['', ''];
-    offset = 1;
-    limit = parseInt(urlParams.get('limit')) || 8
+    offset = 0;
     updateQueryParams({ priceMin: priceMin.trim(), priceMax: priceMax.trim(), offset });
     refresh();
   });
 
-  function updatePagination() {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    const visibleRange = 1; // Số trang liền kề cần hiển thị
-    const firstPage = 1;
-    const lastPage = totalPages;
-
-    // Nút "First" và "Prev"
-    $pagination.append(`
-            <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="prevPage">&lsaquo;</a>
-            </li>
-    `);
-
-    // Vòng lặp hiển thị trang
-    for (let i = firstPage; i <= lastPage; i++) {
-      if (
-        i === firstPage || // Trang đầu
-        i === lastPage || // Trang cuối
-        (i >= offset - visibleRange && i <= offset + visibleRange) // Trang trong khoảng gần offset
-      ) {
-        $pagination.append(`
-                    <li class="page-item ${offset === i ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                    </li>
-                `);
-      } else if (
-        (i === offset - visibleRange - 1 && i > firstPage) || // Dấu "..." trước nhóm trang
-        (i === offset + visibleRange + 1 && i < lastPage) // Dấu "..." sau nhóm trang
-      ) {
-        $pagination.append(`
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
-                    </li>
-                `);
-      }
-    }
-
-    // Nút "Next" và "Last"
-    $pagination.append(`
-            <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="nextPage">&rsaquo;</a>
-            </li>
-        `);
-  }
 
   // LoadData
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
+    if (!params.limit) {
+      params.limit = 8;
+    }
 
     const getProductsApi = new FunctionApi(`/api/products`, {
       query: params,
@@ -159,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (data) {
       products = data.products;
       totalItems = data.total;
-      totalPages = Math.ceil(totalItems / limit);
     }
 
     renderProducts(products);
@@ -180,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     products.forEach((product) => {
       const { _id, images, status, brand, price, year, averageRating = 0 } = product;
-      const imageSrc = images[0] || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images[0] || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image'; // Sử dụng ảnh mặc định nếu không có ảnh
 
       let starsHtml = '';
       if (averageRating > 0) {
@@ -242,40 +205,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cập nhật giá trị của offset dựa trên nút bấm
     switch ($this.attr('id')) {
-      case 'firstPage':
-        offset = 1; // Trang đầu tiên
-        break;
       case 'prevPage':
-        if (offset > 1) offset--; // Tránh giá trị < 1
+        if (offset > 0) offset -= limit;
         break;
       case 'nextPage':
-        if (offset < totalPages) offset++; // Tránh giá trị > totalPages
-        break;
-      case 'lastPage':
-        offset = totalPages; // Trang cuối cùng
+        if (offset < totalItems) offset += limit;
         break;
       default:
-        offset = parseInt($this.data('page')); // Điều hướng theo trang cụ thể
+        offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
     // Cập nhật query params và tải lại dữ liệu
-    updateQueryParams({ offset });
+    updateQueryParams({ offset, limit });
     await refresh();
   });
 
   // Handle items per page change
   $('#limit').change(async function () {
     limit = $(this).val();
-    totalPages = Math.ceil(totalItems / limit);
-    offset = 1;
-    // updatePagination();
+    offset = 0;
     updateQueryParams({ limit, offset });
     await refresh();
   });
 
   async function refresh() {
     await loadData();
-    updatePagination();
+    updatePagination({ limit, offset, totalItems });
   }
 
   syncFiltersFromURL();

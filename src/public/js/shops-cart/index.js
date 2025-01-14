@@ -1,54 +1,65 @@
-import { loadCartData, showModal } from '../common.js';
+import { loadCartData, showModal, showToast } from '../common.js';
 import { isPhoneNumberValid, isUsernameValid } from '../helpers.js';
 import { store, updateAmountCart } from '../store/index.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   let cart = await loadCartData();
+
   if (cart && cart.items.length > 0) {
     renderCartTable(cart);
 
     $('#checkout').on('click', function (event) {
-      const modalContent = `
-        <form id="shipping-form" class="needs-validation" novalidate>
-          <div class="form-group mb-3">
-            <label for="fullName">Full name</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="fullName" 
-              required
-            >
-            <div class="alert alert-warning mt-2 d-none" role="alert">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Please enter your full name
+      if (!user) {
+        showModal({
+          title: 'Notify',
+          content: 'Please login to proceed payment',
+          callback: () => {
+            window.location.href = `/auth/login?returnTo=/cart`;
+          },
+        });
+      } else {
+        const modalContent = `
+          <form id="shipping-form" class="needs-validation" novalidate>
+            <div class="form-group mb-3">
+              <label for="fullName">Full name</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="fullName" 
+                required
+              >
+              <div class="alert alert-warning mt-2 d-none" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Please enter your full name
+              </div>
             </div>
-          </div>
-    
-          <div class="form-group mb-3">
-            <label for="phone">Phone number</label>
-            <input 
-              type="tel" 
-              class="form-control" 
-              id="phone" 
-              required
-            >
-            <div class="alert alert-warning mt-2 d-none" role="alert">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Please enter a valid phone number
+      
+            <div class="form-group mb-3">
+              <label for="phone">Phone number</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                id="phone" 
+                required
+              >
+              <div class="alert alert-warning mt-2 d-none" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Please enter a valid phone number
+              </div>
             </div>
-          </div>
-    
-          <div class="form-group mb-3">
-            <label for="address">Shipping address</label>
-            <textarea 
-              class="form-control" 
-              id="address" 
-              rows="3" 
-              required
-            ></textarea>
-            <div class="alert alert-warning mt-2 d-none" role="alert">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-              Please enter detailed address
+      
+            <div class="form-group mb-3">
+              <label for="address">Shipping address</label>
+              <textarea 
+                class="form-control" 
+                id="address" 
+                rows="3" 
+                required
+              ></textarea>
+              <div class="alert alert-warning mt-2 d-none" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Please enter detailed address
+              </div>
             </div>
           </div>
     
@@ -59,107 +70,111 @@ document.addEventListener('DOMContentLoaded', async function () {
         </form>
       `;
 
-      showModal({
-        title: 'Delivery information',
-        content: modalContent,
-        btnSubmit: 'Payment',
-        callback: () => {
-          const fullName = $('#fullName').val().trim();
-          const phone = $('#phone').val().trim();
-          const address = $('#address').val().trim();
+        showModal({
+          title: 'Delivery information',
+          content: modalContent,
+          btnSubmit: 'Payment',
+          callback: () => {
+            cart.items.forEach((item) => {
+              gtag('event', 'purchased_product', {
+                product_id: item.productId._id,
+                time: new Date()
+              })
+            })
 
-          // Hide all alerts first
-          $('.alert').addClass('d-none');
+            const fullName = $('#fullName').val().trim();
+            const phone = $('#phone').val().trim();
+            const address = $('#address').val().trim();
 
-          let isValid = true;
+            // Hide all alerts first
+            $('.alert').addClass('d-none');
 
-          if (!isUsernameValid(fullName)) {
-            $('#fullName').next('.alert').removeClass('d-none');
-            isValid = false;
-          }
+            let isValid = true;
 
-          if (!isPhoneNumberValid(phone)) {
-            $('#phone').next('.alert').removeClass('d-none');
-            isValid = false;
-          }
+            if (!isUsernameValid(fullName)) {
+              $('#fullName').next('.alert').removeClass('d-none');
+              isValid = false;
+            }
 
-          if (address.length < 5) {
-            $('#address').next('.alert').removeClass('d-none');
-            isValid = false;
-          }
+            if (!isPhoneNumberValid(phone)) {
+              $('#phone').next('.alert').removeClass('d-none');
+              isValid = false;
+            }
 
-          if (!isValid) {
-            return false;
-          }
+            if (address.length < 5) {
+              $('#address').next('.alert').removeClass('d-none');
+              isValid = false;
+            }
 
-          $.ajax({
-            url: '/api/orders/create',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-              shippingDetails: {
-                fullName: $('#fullName').val().trim(),
-                phone: $('#phone').val().trim(),
-                address: $('#address').val().trim(),
-                note: $('#note').val().trim(),
+            if (!isValid) {
+              return false;
+            }
+
+            $.ajax({
+              url: '/api/orders/create',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
               },
-            }),
-            success: function (response) {
-              if (response.order) {
-                // Chuyển hướng đến URL thanh toán
-                const paymentUrl = response.order
-                  ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
-                  : response.paymentUrl;
-                window.location.href = paymentUrl;
-              } else {
-                showModal({
-                  title: 'Error',
-                  content: 'Unable to create order. Please try again.',
-                });
-              }
-            },
-            error: function (xhr, status, error) {
-              showModal({
-                title: 'Error',
-                content: 'An error occurred. Please try again later.',
-              });
-            },
-            complete: function () {
-              submitBtn.prop('disabled', false).text('Payment');
-            },
-          });
-          return true;
-        },
-        onShowCallback: () => {
-          // Sửa lại cách ẩn/hiện alert trong JavaScript
-          $('#fullName').on('blur', function () {
-            const value = $(this).val().trim();
-            const alert = $(this).next('.alert');
+              data: JSON.stringify({
+                shippingDetails: {
+                  fullName: $('#fullName').val().trim(),
+                  phone: $('#phone').val().trim(),
+                  address: $('#address').val().trim(),
+                  note: $('#note').val().trim(),
+                },
+              }),
+              success: function (response) {
+                if (response.order) {
+                  // Chuyển hướng đến URL thanh toán
+                  const paymentUrl = response.order
+                    ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                    : response.paymentUrl;
+                  window.location.href = paymentUrl;
+                } else {
+                  showModal({
+                    title: 'Error',
+                    content: 'Unable to create order. Please try again.',
+                  });
+                }
+              },
+              error: function (xhr, status, error) {
+                showToast('Error', 'An error occurred. Please try again later.');
+              },
+              // complete: function () {
+              //   submitBtn.prop('disabled', false).text('Payment');
+              // },
+            });
+            return true;
+          },
+          onShowCallback: () => {
+            // Sửa lại cách ẩn/hiện alert trong JavaScript
+            $('#fullName').on('blur', function () {
+              const value = $(this).val().trim();
+              const alert = $(this).next('.alert');
 
-            alert.toggleClass('d-none', isUsernameValid(value));
-          });
+              alert.toggleClass('d-none', isUsernameValid(value));
+            });
 
-          $('#phone').on('blur', function () {
-            const value = $(this).val().trim();
-            const alert = $(this).next('.alert');
+            $('#phone').on('blur', function () {
+              const value = $(this).val().trim();
+              const alert = $(this).next('.alert');
 
-            alert.toggleClass('d-none', isPhoneNumberValid(value));
-          });
+              alert.toggleClass('d-none', isPhoneNumberValid(value));
+            });
 
-          $('#address').on('blur', function () {
-            const value = $(this).val().trim();
-            const alert = $(this).next('.alert');
+            $('#address').on('blur', function () {
+              const value = $(this).val().trim();
+              const alert = $(this).next('.alert');
 
-            alert.toggleClass('d-none', value.length >= 5);
-          });
-          $('#fullName').focus();
-        },
-      });
-    });
+              alert.toggleClass('d-none', value.length >= 5);
+            });
+            $('#fullName').focus();
+          },
+        });
+      }
+    })
   } else {
-    console.error('Cart is empty or invalid.');
     $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
     $('#total-price').html('');
   }

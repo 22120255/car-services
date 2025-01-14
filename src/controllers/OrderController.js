@@ -8,22 +8,21 @@ class OrderController {
     try {
       const order = await OrderService.createOrder(req.user._id, req.body.shippingDetails);
       res.status(201).json({ order });
-    }
-    catch (error) {
+    } catch (error) {
       res.status(500).json({
         error: 'Internal Server Error',
-        message: error.message
+        message: error.message,
       });
     }
   }
 
   async addReview(req, res) {
     try {
-      const { productId, rating, comment, images } = req.body;
+      const { productId, rating, comment, images, orderId } = req.body;
       const userId = req.user._id; // Lấy ID người dùng từ middleware xác thực
 
       // Gọi service để thêm review
-      const result = await OrderService.addReview(userId, productId, rating, comment, images);
+      const result = await OrderService.addReview(userId, productId, rating, comment, images, orderId);
 
       if (result.error) {
         return res.status(400).json({ message: result.message });

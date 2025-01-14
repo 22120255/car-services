@@ -12,10 +12,8 @@ class CartController {
 
   async getCartData(req, res) {
     try {
-      const cart = await CartService.getCart(req.user._id);
-      if (!cart) {
-        return res.status(404).json({ message: 'Cart not found' });
-      }
+      const cart = await CartService.getCart(req.user?._id, req.session.id);
+      
       return res.status(200).json(cart);
     } catch (error) {
       errorLog('CartController.js', 'getCartData', error.message);
@@ -26,7 +24,8 @@ class CartController {
   async addToCart(req, res) {
     try {
       await CartService.addItem(
-        req.user._id,
+        req.user?._id,
+        req.session.id,
         req.params.productId,
         parseInt(req.body.quantity)
       );
@@ -78,6 +77,20 @@ class CartController {
     } catch (error) {
       errorLog('CartController.js', 'updatePaymentStatus', error.message);
       return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  // Thêm method để xử lý merge cart sau khi login
+
+  async mergeCartsAfterLogin(req, res, next) {
+    try {
+      if (req.user && req.session.id) {
+        await CartService.mergeCartsAfterLogin(req.session.id, req.user._id);
+      }
+      next();
+    } catch (error) {
+      errorLog('CartController.js', 'mergeCartsAfterLogin', error.message);
+      next();
     }
   }
 }

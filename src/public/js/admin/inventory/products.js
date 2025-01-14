@@ -1,11 +1,13 @@
-import { showToast, showModal, updateQueryParams, renderSelectOptions } from '../../common.js';
+import { showToast, showModal, updateQueryParams, renderSelectOptions, updatePagination, updateURL } from '../../common.js';
 import { getFilterConfigProduct } from '../../config.js';
 
 // show product modal for create or update
 function showProductModal(title, productID = null, product = null) {
   $('#product-modal .modal-title').text(title);
 
-  // Nếu product tồn tại, tức là đang chỉnh sửa
+  const imageContainer = $('#imageContainer');
+  imageContainer.find('.image-preview-wrapper').remove(); // Xóa tất cả các ảnh cũ nếu có
+
   if (product) {
     $('#product-modal').data('is-editing', true); // Đang chỉnh sửa
     $('#product-modal').data('product-id', productID); // Lưu ID sản phẩm
@@ -22,14 +24,23 @@ function showProductModal(title, productID = null, product = null) {
     $('#product-horsepower').val(product.horsepower);
     $('#product-transmission').val(product.transmission);
     $('#product-description').val(product.description);
-    product.images.forEach((index, image) => {
-      $(`input[name="images.at(index)"]`).val(image);
+
+    // Hiển thị ảnh dưới dạng preview
+    product.images.forEach((image) => {
+      const imageWrapper = $(`
+        <div class="image-preview-wrapper" style="margin-top: auto;">
+          <img src="${image}" alt="Preview" class="image-preview">
+          <button class="remove-image-btn">&times;</button>
+        </div>
+      `);
+      imageContainer.append(imageWrapper);
+
+      // Xử lý sự kiện xóa ảnh
+      imageWrapper.find('.remove-image-btn').on('click', function () {
+        imageWrapper.remove();
+      });
     });
-    for (let i = 0; i < product.images.length; i++) {
-      $(`input[name="images.image${i + 1}"]`).val(product.images[i]);
-    }
   } else {
-    // Nếu không có sản phẩm, tức là tạo mới
     $('#product-modal').data('is-editing', false); // Tạo mới
     $('#product-modal').data('product-id', null); // Xóa ID sản phẩm
 
@@ -48,7 +59,7 @@ function showModalDetail(product) {
 
   // Cập nhật hình ảnh chính
   $('#mainDetailImage')
-    .attr('src', product.images?.at(0) || 'https://th.bing.com/th/id/OIP.bacWE2DlJQTSbG6kvNrzegHaEK?w=294&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')
+    .attr('src', product.images?.at(0) || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image')
     .attr('alt', `${product.brand || 'Unknown Brand'} ${product.model || ''}`);
 
   // Cập nhật các hình ảnh thu nhỏ
@@ -120,23 +131,21 @@ function handleProductAction(action, productId) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  const { brands, statuses, prices, perPages } = getFilterConfigProduct();
+  const { statuses, prices, perPages } = getFilterConfigProduct();
 
-  renderSelectOptions($('#brandFilter'), brands);
   renderSelectOptions($('#statusFilter'), statuses);
   renderSelectOptions($('#limit'), perPages);
   renderSelectOptions($('#priceFilter'), prices);
-});
-
-document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------ Declare variables -----------------------------------------------
-
   const urlParams = new URLSearchParams(window.location.search);
 
   let products = null;
-  let limit = urlParams.get('limit') || 8;
-  let offset = parseInt(urlParams.get('offset')) || 1;
-  let totalPages = null;
+  let limit = urlParams.get('limit') || 10;
+  if (!perPages.some(({ value }, index) => value === limit)) {
+    limit = 10
+    updateURL({ key: "limit", value: limit })
+  }
+  let offset = parseInt(urlParams.get('offset')) || 0;
   let totalItems = null;
 
   let priceMinFilter = parseFloat(urlParams.get('priceMin')) || null;
@@ -203,7 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hiển thị modal xác nhận xóa
     showModal({
-      title: 'Delete Product', content: 'Are you sure you want to delete this product?', btnSubmit: 'Delete', callback: () => {
+      title: 'Delete Product',
+      content: 'Are you sure you want to delete this product?',
+      btnSubmit: 'Delete',
+      callback: () => {
         $.ajax({
           url: `/api/user/inventory/delete-product/${productId}`,
           type: 'DELETE',
@@ -226,12 +238,16 @@ document.addEventListener('DOMContentLoaded', function () {
             },
           },
         });
-      }
+      },
     });
   });
 
   // Đăng ký sự kiện cho nút Save trong modal
   $('#save-product-btn').on('click', function () {
+    const images = [];
+    $('#imageContainer .image-preview').each(function () {
+      images.push($(this).attr('src')); // Lấy đường dẫn từ src của ảnh
+    });
     const productData = {
       brand: $('#product-brand').val(),
       model: $('#product-model').val(),
@@ -245,14 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
       transmission: $('#product-transmission').val(),
       description: $('#product-description').val(),
       fuelType: $('#product-fuelType').val(),
-      importPrice: parseFloat($('#product-importPrice').val()),
-      images: [
-        $('input[name="images.image1"]').val(),
-        $('input[name="images.image2"]').val(),
-        $('input[name="images.image3"]').val(),
-        $('input[name="images.image4"]').val(),
-        $('input[name="images.image5"]').val(),
-      ],
+      images: images, // Lấy mảng ảnh
     };
 
     // Kiểm tra xem có đang chỉnh sửa hay không
@@ -297,8 +306,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function setupFilterHandlers(filterElement, paramKey) {
     $(filterElement).on('change', async function () {
-      offset = 1;
-      updateQueryParams({ [paramKey]: $(this).val(), offset: offset });
+      offset = 0;
+      updateQueryParams({ [paramKey]: $(this).val(), offset, limit });
       await refresh();
     });
   }
@@ -311,8 +320,8 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#searchInput').on('keyup keydown', async function (event) {
     if (event.key === 'Enter' || event.keyCode === 13) {
       const search = $('#searchInput').val();
-      offset = 1;
-      updateQueryParams({ search: search, offset: offset });
+      offset = 0;
+      updateQueryParams({ search, offset, limit });
       await refresh();
     }
   });
@@ -320,65 +329,19 @@ document.addEventListener('DOMContentLoaded', function () {
   $('#btn-search').on('click', async function (event) {
     event.preventDefault();
     const search = $('#searchInput').val();
-    offset = 1;
-    updateQueryParams({ search: search, offset: offset });
+    offset = 0;
+    updateQueryParams({ search, offset, limit });
     await refresh();
   });
 
   $('#priceFilter').on('change', async function () {
     const price = $(this).val();
     const [min, max] = price ? price.split('-') : ['', ''];
-    offset = 1;
-    updateQueryParams({ priceMin: min, priceMax: max, offset: offset });
+    offset = 0;
+    updateQueryParams({ priceMin: min, priceMax: max, offset, limit });
     refresh();
   });
 
-  function updatePagination() {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    const visibleRange = 1; // Số trang liền kề cần hiển thị
-    const firstPage = 1;
-    const lastPage = totalPages;
-
-    // Nút "First" và "Prev"
-    $pagination.append(`
-            <li class="page-item ${offset === firstPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="prevPage">&laquo;</a>
-            </li>
-        `);
-
-    // Vòng lặp hiển thị trang
-    for (let i = firstPage; i <= lastPage; i++) {
-      if (
-        i === firstPage || // Trang đầu
-        i === lastPage || // Trang cuối
-        (i >= offset - visibleRange && i <= offset + visibleRange) // Trang trong khoảng gần offset
-      ) {
-        $pagination.append(`
-                    <li class="page-item ${offset === i ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                    </li>
-                `);
-      } else if (
-        (i === offset - visibleRange - 1 && i > firstPage) || // Dấu "..." trước nhóm trang
-        (i === offset + visibleRange + 1 && i < lastPage) // Dấu "..." sau nhóm trang
-      ) {
-        $pagination.append(`
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
-                    </li>
-                `);
-      }
-    }
-
-    // Nút "Next" và "Last"
-    $pagination.append(`
-            <li class="page-item ${offset === lastPage ? 'disabled' : ''}">
-                <a class="page-link" href="#" id="nextPage">&raquo;</a>
-            </li>
-        `);
-  }
 
   // LoadData
   async function loadData() {
@@ -392,7 +355,6 @@ document.addEventListener('DOMContentLoaded', function () {
         200(resp) {
           products = resp.products;
           totalItems = resp.total;
-          totalPages = Math.ceil(totalItems / limit);
         },
         500(resp) {
           console.error('Lỗi khi tải dữ liệu:', resp);
@@ -420,21 +382,21 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log(_id);
 
       const isSelected = status === 'used' || status === 'new';
-      const imageSrc = images?.at(0) || '/default-image.jpg'; // Sử dụng ảnh mặc định nếu không có ảnh
+      const imageSrc = images?.at(0) || 'https://dummyimage.com/300x200/cccccc/ffffff&text=No+Image'; // Sử dụng ảnh mặc định nếu không có ảnh
 
       $('#inventoryTable').append(`
         <tr data-product-id="${_id}">
             <td>
                 <img
                     src='${imageSrc}'
-                    alt='Toyota Camry'
+                    alt=''
                     class='car-image'
                 />
             </td>
             <td>${brand} ${model}</td>
             <td>${year}</td>
-            <td>$${importPrice}</td> <!-- Hiển thị giá nhập khẩu -->
-            <td>$${price}</td>
+            <td>$${importPrice.toFixed(2)}</td> <!-- Hiển thị giá nhập khẩu -->
+            <td>$${price.toFixed(2)}</td>
             <td><span class='status ${isSelected ? 'available' : 'sold'}'>${status}</span></td>
             <td class='actions'>
                 <button class='detail' data-bs-toggle="modal" data-bs-target="#productDetailModal"><i
@@ -460,40 +422,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cập nhật giá trị của offset dựa trên nút bấm
     switch ($this.attr('id')) {
-      case 'firstPage':
-        offset = 1; // Trang đầu tiên
-        break;
       case 'prevPage':
-        if (offset > 1) offset--; // Tránh giá trị < 1
+        if (offset > 0) offset -= limit;
         break;
       case 'nextPage':
-        if (offset < totalPages) offset++; // Tránh giá trị > totalPages
-        break;
-      case 'lastPage':
-        offset = totalPages; // Trang cuối cùng
+        if (offset < totalItems) offset += limit;
         break;
       default:
-        offset = parseInt($this.data('page')); // Điều hướng theo trang cụ thể
+        offset = (parseInt($this.data('page')) - 1) * limit;
     }
 
-    // Cập nhật query params và tải lại dữ liệu
-    updateQueryParams({ offset: offset });
+    updateQueryParams({ offset, limit });
     await refresh();
   });
 
   // Handle items per page change
   $('#limit').change(async function () {
     limit = $(this).val();
-    totalPages = Math.ceil(totalItems / limit);
-    offset = 1;
-    // updatePagination();
-    updateQueryParams({ limit: limit, offset: offset });
+    offset = 0;
+    updateQueryParams({ limit, offset });
     await refresh();
   });
 
   async function refresh() {
     await loadData();
-    updatePagination();
+    updatePagination({ offset, limit, totalItems });
   }
 
   refresh();

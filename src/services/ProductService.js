@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const { multipleMongooseToObject } = require('../utils/mongoose');
 
 class ProductService {
   getFilteredProducts = async (query) => {
@@ -18,14 +17,14 @@ class ProductService {
       throw new Error(error);
     }
   };
-  getPaginatedProducts = async (query, offset, limit) => {
+  getPaginatedProducts = async (query, offset, limit, sort) => {
     try {
       const products = await Product.find(query)
-        .skip(limit * offset - limit)
+        .skip(offset)
         .limit(limit)
         .exec();
 
-      // Get the total count of products for pagination
+      // Lấy tổng số sản phẩm để hiển thị phân trang
       const count = await Product.countDocuments(query);
 
       return {

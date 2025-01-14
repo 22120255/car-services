@@ -15,6 +15,7 @@ class FunctionApi {
         } = params;
 
         const { hideToast = false } = options;
+
         this.url = url;
         this.method = method;
         this.body = body;
