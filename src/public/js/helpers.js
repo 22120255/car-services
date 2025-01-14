@@ -21,5 +21,20 @@ export const isValidDate = (dateString) => {
 };
 
 export const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('vi-VN');
+    return new Date(dateString).toLocaleDateString('en-US');
 }
+
+export const formatNumber = (number, amount = 2) => {
+    if (number >= 1e9)
+        return (number / 1e6).toFixed(amount) + "M";
+    if (number >= 1e6) {
+        return (number / 1e6).toFixed(amount) + "M";
+    } else if (number >= 1e3) {
+        return (number / 1e3).toFixed(amount) + "K";
+    } else {
+        return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: amount,
+            maximumFractionDigits: amount
+        }).format(number);
+    }
+};

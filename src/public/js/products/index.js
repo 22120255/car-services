@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', function () {
   async function loadData() {
     const urlParams = new URLSearchParams(window.location.search);
     const params = Object.fromEntries(urlParams.entries());
+    if (!params.limit) {
+      params.limit = 8;
+    }
 
     const getProductsApi = new FunctionApi(`/api/products`, {
       query: params,

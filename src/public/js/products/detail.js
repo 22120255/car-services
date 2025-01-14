@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (error.status === 401) {
           showToast('Error', 'Please login to add to cart');
         } else {
-          console.log(error);
+          // console.log(error);
           showToast('Error', 'Failed to add to cart');
         }
       },
