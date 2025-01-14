@@ -773,7 +773,7 @@
   padding: 10px 15px;
   border-radius: 50%;
   transform: translateY(-50%);
-  transition: background-color 0.2s ease, transform 0.2s ease; }
+  transition: background-color 0.2s ease, transform 0.2s ease; }
 
 .prev {
   left: 20px; }
@@ -786,3 +786,85 @@
   background-color: rgba(255, 255, 255, 0.3);
   transform: scale(1.1) translateY(-50%);
   /* Tăng kích thước khi hover */ }
+
+.product-detail-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); }
+
+.product-title {
+  color: #333;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px; }
+
+.product-description {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6; }
+
+.specs-title {
+  color: #007bff;
+  font-weight: bold; }
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease; }
+
+.spec-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+
+.spec-icon {
+  font-size: 1.2rem;
+  color: #007bff;
+  margin-right: 10px;
+  width: 20px;
+  text-align: center; }
+
+.spec-label {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #555; }
+
+.spec-value {
+  color: #333; }
+
+.price-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center; }
+
+.price-title {
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 10px; }
+
+.price-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 20px; }
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  transition: all 0.3s ease; }
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3); }
+
+@media (max-width: 767.98px) {
+  .price-card {
+    margin-top: 2rem; } }
