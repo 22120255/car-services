@@ -33,7 +33,7 @@ router.get('/trash', checkRole(['admin', 'sadmin']), userController.trashAndGetP
 
 // order
 router.get('/orders', checkRole(['admin', 'sadmin']), userController.getOrders);
-router.get('/orders/:id', checkRole(['admin', 'sadmin']), userController.getOrder);
+router.get('/orders/:id', userController.getOrder);
 router.patch('/orders/update-status/:id', checkRole(['admin', 'sadmin']), userController.updateOrderStatus);
 
 module.exports = router;
