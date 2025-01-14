@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema(
       address: { type: String },
       purchasedProducts: [
         {
-          orderId: { 
+          orderId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order',
           },
@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
           },
-          purchaseDate:{
+          purchaseDate: {
             type: Date,
             default: Date.now,
           },
