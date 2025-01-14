@@ -390,35 +390,11 @@ class UserController {
   // controllers/UserController.js
   async getUserOrders(req, res) {
     try {
-      // Fetch orders for the logged-in user with populated product data
-      const orders = await Order.find({ userId: req.user._id })
-        .populate({
-          path: 'items.productId',
-          select: 'name images price',
-          model: 'Product'
-        })
-        .sort({ createdAt: -1 });
-  
-      // Transform orders data to match template requirements
-      const transformedOrders = orders.map(order => {
-        const orderObj = order.toObject();
-        
-        // Transform items to match template structure
-        orderObj.items = orderObj.items.map(item => ({
-          product: {
-            images: item.productId.images,
-            name: item.productId.name
-          },
-          quantity: item.quantity,
-          price: item.price
-        }));
-  
-        return orderObj;
-      });
+      const orders = await UserService.getUserOrders(req.user._id);
   
       // Render the orders page with data and custom helpers
       res.render('user/orders', {
-        orders: transformedOrders,
+        orders,
         helpers: {
           formatDate: (date) => Formatter.formatDate(date, { 
             showTime: false, // Since the template only shows date

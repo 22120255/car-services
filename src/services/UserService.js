@@ -336,6 +336,34 @@ class UserService {
     }
   }
 
+  async getUserOrders(userId) {
+    // Fetch orders for the logged-in user with populated product data
+    const orders = await Order.find({ userId })
+      .populate({
+        path: 'items.productId',
+        select: 'name images price',
+        model: 'Product'
+      })
+      .sort({ createdAt: -1 });
+
+    // Transform orders data to match template requirements
+    return orders.map(order => {
+      const orderObj = order.toObject();
+      
+      // Transform items to match template structure
+      orderObj.items = orderObj.items.map(item => ({
+        product: {
+          images: item.productId.images,
+          name: item.productId.name
+        },
+        quantity: item.quantity,
+        price: item.price
+      }));
+
+      return orderObj;
+    });
+  }
+
   async updateOrderStatus(orderId, status) {
     try {
       if (!status) {
