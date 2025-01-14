@@ -8,6 +8,7 @@ const { checkRole } = require('../../middleware/authMiddleware');
 
 router.get('/profile/:id', isAuthenticated, cacheMiddleware, userController.profile);
 router.get('/purchased-list', isAuthenticated, userController.getPurchasedList);
+router.get('/orders', isAuthenticated, userController.getUserOrders);
 router.get('/:id', checkRole(['admin', 'sadmin']), userController.getUser); // render view user detail
 
 module.exports = router;

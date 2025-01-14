@@ -3,6 +3,7 @@ const { clearCache } = require('../utils/helperCache');
 const { errorLog } = require('../utils/customLog');
 const User = require('../models/User');
 const Order = require('../models/Order');
+const Formatter = require('../utils/formatter');
 
 class UserController {
   // [GET] /admin/dashboard
@@ -366,6 +367,14 @@ class UserController {
           path: 'metadata.purchasedProducts.product', // Populate theo đường dẫn mới
           select: 'brand model year mileage price images reviewStatus',
         })
+        .populate({
+          path: 'metadata.ordersCreated',
+          options: {
+            limit: 2, // Only get 2 latest orders
+            sort: { createdAt: -1 } // Sort by newest first
+          },
+          select: 'items totalAmount status createdAt'
+        })
         .lean()
         .exec();
       res.render('user/profile', {
@@ -375,6 +384,31 @@ class UserController {
     } catch (error) {
       errorLog('UserController', 'profile', error.message);
       res.status(500).json({ error: 'An error occurred, please try again later!' });
+    }
+  }
+
+  // controllers/UserController.js
+  async getUserOrders(req, res) {
+    try {
+      const orders = await UserService.getUserOrders(req.user._id);
+  
+      // Render the orders page with data and custom helpers
+      res.render('user/orders', {
+        orders,
+        helpers: {
+          formatDate: (date) => Formatter.formatDate(date, { 
+            showTime: false, // Since the template only shows date
+            locale: 'en-US'  // Using Vietnamese locale
+          }),
+          formatCurrency: (amount) => Formatter.formatCurrency(amount, 'VND')
+        }
+      });
+  
+    } catch (error) {
+      console.error('Error fetching user orders:', error);
+      res.status(500).render('error', {
+        message: 'Unable to fetch your orders. Please try again later.'
+      });
     }
   }
 

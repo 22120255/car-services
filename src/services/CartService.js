@@ -28,24 +28,33 @@ class CartService {
       });
     }
 
-    const existingItem = cart.items.find(item => {
-      const itemProductId = item.productId instanceof Object ?
-        item.productId.toString() : item.productId;
-      return itemProductId === productId;
-    });
+    // Tìm item trong cart với productId tương ứng
+    const existingItemIndex = cart.items.findIndex(item => 
+      (item.productId?._id || item.productId).toString() === productId.toString()
+  );
 
-    if (existingItem) {
-      existingItem.quantity += quantity;
-      cart.total += existingItem.price * quantity;
-    } else {
+  if (existingItemIndex !== -1) {
+      // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+      cart.items[existingItemIndex].quantity += quantity;
+      
+      // Cập nhật tổng tiền
+      const itemPrice = cart.items[existingItemIndex].price;
+      cart.total += itemPrice * quantity;
+  } else {
+      // Nếu là sản phẩm mới
       const product = await Product.findById(productId);
+      if (!product) {
+          throw new Error('Product not found');
+      }
+
+      // Thêm sản phẩm mới vào cart
       cart.items.push({
-        productId,
-        quantity,
-        price: product.price
+          productId,
+          quantity,
+          price: product.price
       });
       cart.total += product.price * quantity;
-    }
+  }
 
     return cart.save();
   }
