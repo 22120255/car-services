@@ -68,16 +68,63 @@
       </ul>
       <div class="tab-content" id="productTabsContent">
         <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
-          <!-- Product details content -->
-          <p class='product-description'>{{product.description}}</p>
-          <div>
-            <p><strong>Model:</strong> {{product.year}}</p>
-            <p><strong>Mileage:</strong> {{product.mileage}} mi</p>
-            <p><strong>Horsepower:</strong> {{product.horsepower}}HP</p>
-            <p><strong>Transmission:</strong> {{product.transmission}}</p>
+          <div class="product-detail-container">
+  <h2 class="product-title mb-4">{{product.brand}} {{product.model}}</h2>
+  
+  <div class="row">
+    <div class="col-md-8">
+      <p class="product-description mb-4">{{product.description}}</p>
+      
+      <div class="product-specs">
+        <h4 class="specs-title mb-3">Specifications</h4>
+        <div class="row">
+          <div class="col-sm-6 mb-3">
+            <div class="spec-item">
+              <i class="fas fa-calendar-alt spec-icon"></i>
+              <span class="spec-label">Year:</span>
+              <span class="spec-value">{{product.year}}</span>
+            </div>
           </div>
-
-          <h5 class='colors' style='margin: 7px 0 7px 0;'>TYPE: {{product.style}}</h5>
+          <div class="col-sm-6 mb-3">
+            <div class="spec-item">
+              <i class="fas fa-tachometer-alt spec-icon"></i>
+              <span class="spec-label">Mileage:</span>
+              <span class="spec-value">{{product.mileage}} mi</span>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="spec-item">
+              <i class="fas fa-horse spec-icon"></i>
+              <span class="spec-label">Horsepower:</span>
+              <span class="spec-value">{{product.horsepower}} HP</span>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="spec-item">
+              <i class="fas fa-cogs spec-icon"></i>
+              <span class="spec-label">Transmission:</span>
+              <span class="spec-value">{{product.transmission}}</span>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="spec-item">
+              <i class="fas fa-car spec-icon"></i>
+              <span class="spec-label">Style:</span>
+              <span class="spec-value">{{product.style}}</span>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="spec-item">
+              <i class="fas fa-gas-pump spec-icon"></i>
+              <span class="spec-label">Fuel Type:</span>
+              <span class="spec-value">{{product.fuelType}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
         <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
           
@@ -192,7 +239,6 @@
 
 <script>
   const product = {{{json product}}};
-  const user = {{{json user}}};
 
   gtag('event', 'view_product', {
     product_id: product._id,

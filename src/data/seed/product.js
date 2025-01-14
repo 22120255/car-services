@@ -93,9 +93,9 @@ async function generateMockProducts(num = 10) {
     }
 
     // Add default images if not enough
-    while (productImages.length < 5) {
-      productImages.push(DEFAULT_IMAGE);
-    }
+    // while (productImages.length < 5) {
+    //   productImages.push(DEFAULT_IMAGE);
+    // }
 
     products.push({
       brand: randomBrand.name,

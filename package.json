@@ -10,6 +10,7 @@
     "seed:products": "cross-env NODE_ENV=development node src/data/seed/product.js",
     "seed:accessory": "cross-env NODE_ENV=development node src/data/seed/accessory.js",
     "seed:analytics": "cross-env NODE_ENV=development node src/data/seed/data-analytics.js",
+    "seed:order": "cross-env NODE_ENV=development node src/data/seed/order.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint ."
   },

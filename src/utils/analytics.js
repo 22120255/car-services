@@ -55,8 +55,6 @@ const getTopProductsData = async (propertyId, amount) => {
         limit: amount,
     });
     const res = topProductsResponse.rows.map(row => row.dimensionValues[0].value);
-    console.log('res', topProductsResponse.rows[0].dimensionValues);
-
 
     return res;
 }

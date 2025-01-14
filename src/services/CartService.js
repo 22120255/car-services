@@ -20,16 +20,16 @@ class CartService {
   async addItem(userId, sessionId, productId, quantity) {
     let cart = await this.getCart(userId, sessionId);
     if (!cart) {
-      cart = new Cart({ 
-        userId, 
+      cart = new Cart({
+        userId,
         sessionId,
-        items: [], 
-        total: 0 
+        items: [],
+        total: 0
       });
     }
 
     const existingItem = cart.items.find(item => {
-      const itemProductId = item.productId instanceof Object ? 
+      const itemProductId = item.productId instanceof Object ?
         item.productId.toString() : item.productId;
       return itemProductId === productId;
     });
@@ -54,13 +54,13 @@ class CartService {
     const cart = await Cart.findOne({ _id: cartId }).populate('items.productId');
     if (!cart) throw new Error('Cart not found');
 
-    const item = cart.items.find(item => 
+    const item = cart.items.find(item =>
       item.productId._id.toString() === productId
     );
     if (!item) throw new Error('Product not found in cart');
 
     item.quantity = newQuantity;
-    cart.total = cart.items.reduce((sum, item) => 
+    cart.total = cart.items.reduce((sum, item) =>
       sum + item.quantity * item.price, 0
     );
 
@@ -71,7 +71,7 @@ class CartService {
     const cart = await Cart.findOne({ _id: cartId }).populate('items.productId');
     if (!cart) throw new Error('Cart not found');
 
-    const itemIndex = cart.items.findIndex(item => 
+    const itemIndex = cart.items.findIndex(item =>
       item.productId._id.toString() === productId
     );
     if (itemIndex === -1) throw new Error('Product not found in cart');
@@ -92,40 +92,36 @@ class CartService {
   }
 
   async mergeCartsAfterLogin(sessionId, userId) {
-    try {
-      const sessionCart = await Cart.findOne({ sessionId: sessionId });
-      const userCart = await Cart.findOne({ userId: userId, isPaid: false });
+    const sessionCart = await Cart.findOne({ sessionId: sessionId });
+    const userCart = await Cart.findOne({ userId: userId, isPaid: false });
 
-      if (!sessionCart) return;
+    if (!sessionCart) return;
 
-      if (!userCart) {
-        sessionCart.userId = userId;
-        sessionCart.sessionId = null;
-        await sessionCart.save();
-        return;
-      }
+    if (!userCart) {
+      sessionCart.userId = userId;
+      sessionCart.sessionId = null;
+      await sessionCart.save();
+      return;
+    }
 
-      for (const sessionItem of sessionCart.items) {
-        const existingItem = userCart.items.find(item =>
-          item.productId.toString() === sessionItem.productId.toString()
-        );
-
-        if (existingItem) {
-          existingItem.quantity += sessionItem.quantity;
-        } else {
-          userCart.items.push(sessionItem);
-        }
-      }
-
-      userCart.total = userCart.items.reduce((total, item) => 
-        total + (item.price * item.quantity), 0
+    for (const sessionItem of sessionCart.items) {
+      const existingItem = userCart.items.find(item =>
+        item.productId.toString() === sessionItem.productId.toString()
       );
 
-      await userCart.save();
-      await Cart.deleteOne({ _id: sessionCart._id });
-    } catch (error) {
-      throw error;
+      if (existingItem) {
+        existingItem.quantity += sessionItem.quantity;
+      } else {
+        userCart.items.push(sessionItem);
+      }
     }
+
+    userCart.total = userCart.items.reduce((total, item) =>
+      total + (item.price * item.quantity), 0
+    );
+
+    await userCart.save();
+    await Cart.deleteOne({ _id: sessionCart._id });
   }
 }
 

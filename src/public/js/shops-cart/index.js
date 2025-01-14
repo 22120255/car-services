@@ -1,4 +1,4 @@
-import { loadCartData, showModal } from '../common.js';
+import { loadCartData, showModal, showToast } from '../common.js';
 import { isPhoneNumberValid, isUsernameValid } from '../helpers.js';
 import { store, updateAmountCart } from '../store/index.js';
 
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   if (cart && cart.items.length > 0) {
     renderCartTable(cart);
-    
+
     $('#checkout').on('click', function (event) {
       if (!user) {
         showModal({
@@ -61,47 +61,55 @@ document.addEventListener('DOMContentLoaded', async function () {
                 Please enter detailed address
               </div>
             </div>
-      
-            <div class="form-group mb-3">
-              <label for="note">Notes (optional)</label>
-              <textarea class="form-control" id="note" rows="2"></textarea>
-            </div>
-          </form>
-        `;
-  
+          </div>
+    
+          <div class="form-group mb-3">
+            <label for="note">Notes (optional)</label>
+            <textarea class="form-control" id="note" rows="2"></textarea>
+          </div>
+        </form>
+      `;
+
         showModal({
           title: 'Delivery information',
           content: modalContent,
           btnSubmit: 'Payment',
           callback: () => {
+            cart.items.forEach((item) => {
+              gtag('event', 'purchased_product', {
+                product_id: item.productId._id,
+                time: new Date()
+              })
+            })
+
             const fullName = $('#fullName').val().trim();
             const phone = $('#phone').val().trim();
             const address = $('#address').val().trim();
-  
+
             // Hide all alerts first
             $('.alert').addClass('d-none');
-  
+
             let isValid = true;
-  
+
             if (!isUsernameValid(fullName)) {
               $('#fullName').next('.alert').removeClass('d-none');
               isValid = false;
             }
-  
+
             if (!isPhoneNumberValid(phone)) {
               $('#phone').next('.alert').removeClass('d-none');
               isValid = false;
             }
-  
+
             if (address.length < 5) {
               $('#address').next('.alert').removeClass('d-none');
               isValid = false;
             }
-  
+
             if (!isValid) {
               return false;
             }
-  
+
             $.ajax({
               url: '/api/orders/create',
               method: 'POST',
@@ -131,14 +139,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
               },
               error: function (xhr, status, error) {
-                showModal({
-                  title: 'Error',
-                  content: 'An error occurred. Please try again later.',
-                });
+                showToast('Error', 'An error occurred. Please try again later.');
               },
-              complete: function () {
-                submitBtn.prop('disabled', false).text('Payment');
-              },
+              // complete: function () {
+              //   submitBtn.prop('disabled', false).text('Payment');
+              // },
             });
             return true;
           },
@@ -147,30 +152,29 @@ document.addEventListener('DOMContentLoaded', async function () {
             $('#fullName').on('blur', function () {
               const value = $(this).val().trim();
               const alert = $(this).next('.alert');
-  
+
               alert.toggleClass('d-none', isUsernameValid(value));
             });
-  
+
             $('#phone').on('blur', function () {
               const value = $(this).val().trim();
               const alert = $(this).next('.alert');
-  
+
               alert.toggleClass('d-none', isPhoneNumberValid(value));
             });
-  
+
             $('#address').on('blur', function () {
               const value = $(this).val().trim();
               const alert = $(this).next('.alert');
-  
+
               alert.toggleClass('d-none', value.length >= 5);
             });
             $('#fullName').focus();
           },
         });
       }
-    });
+    })
   } else {
-    console.error('Cart is empty or invalid.');
     $('#cart-table').html('<tr><td colspan="5" class="text-center">Your cart is empty.</td></tr>');
     $('#total-price').html('');
   }
