@@ -351,6 +351,39 @@ class UserService {
       throw error;
     }
   }
+
+  async getTrashProducts({ limit, offset, search, status, brand, model, priceMin, priceMax }) {
+    try {
+      let filter = {};
+
+      // Chuẩn hóa giá trị search, status, brand, model về chữ thường
+      if (search) {
+        filter.$or = [{ brand: { $regex: search.toLowerCase(), $options: 'i' } }, { model: { $regex: search.toLowerCase(), $options: 'i' } }];
+      }
+      if (status) {
+        filter.status = { $regex: `^${status.toLowerCase()}$`, $options: 'i' };
+      }
+      if (brand) {
+        filter.brand = { $regex: `^${brand.toLowerCase()}$`, $options: 'i' };
+      }
+      if (model) {
+        filter.model = { $regex: `^${model.toLowerCase()}$`, $options: 'i' };
+      }
+      if (priceMin && priceMax) {
+        filter.price = { $gte: priceMin, $lte: priceMax };
+      }
+
+      // Tiến hành truy vấn với filter đã chuẩn hóa
+      const products = await Product.find(filter)
+        .skip(offset * limit - limit)
+        .limit(limit);
+      const total = await Product.countDocuments(filter);
+
+      return { products, total };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new UserService();

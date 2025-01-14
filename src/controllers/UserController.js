@@ -160,7 +160,7 @@ class UserController {
   async trash(req, res) {
     try {
       const { limit, offset, search, status, brand, model, priceMin, priceMax } = req.query;
-      const products = await UserService.getProducts({ limit, offset, search, status, brand, model, priceMin, priceMax });
+      const products = await UserService.getTrashProducts({ limit, offset, search, status, brand, model, priceMin, priceMax });
       res.render('admin/inventory/trash', {
         layout: 'admin',
         title: 'Trash',
