@@ -123,6 +123,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                   note: $('#note').val().trim(),
                 },
               }),
+              success: function (response) {
+                if (response.order) {
+                  // Chuyển hướng đến URL thanh toán
+                  const paymentUrl = response.order
+                    ? `/payment/create_payment_url?amount=${response.order.totalAmount}&orderId=${response.order._id}`
+                    : response.paymentUrl;
+                  window.location.href = paymentUrl;
+                } else {
+                  showModal({
+                    title: 'Error',
+                    content: 'Unable to create order. Please try again.',
+                  });
+                }
+              },
               error: function (xhr, status, error) {
                 showToast('Error', 'An error occurred. Please try again later.');
               },
