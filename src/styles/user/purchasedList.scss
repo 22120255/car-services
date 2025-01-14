@@ -1,7 +1,11 @@
+@import '../variables';
 /* Purchased List Styles */
 .purchased-list-wrapper {
   background-color: #f8f9fa;
   padding: 50px 0;
+}
+.header-area {
+  background-color: $bg-header;
 }
 
 .purchased-list-container {

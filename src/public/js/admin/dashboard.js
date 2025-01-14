@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     $("#refresh-btn").on("click", async () => {
         renderData(null);
+        urlParams = new URLSearchParams(window.location.search); // thêm
         dataAnalytics = await fetchData({
             refresh: true,
             time: urlParams.get('time'),

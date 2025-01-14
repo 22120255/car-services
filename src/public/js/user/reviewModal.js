@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'POST',
       data: data,
       success: function (response) {
-        showToast('success', 'Gửi đánh giá thành công.');
+        showToast('Success', 'Review sent successfully.');
 
         $('#addReviewModal').modal('hide');
         setTimeout(() => {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
       },
       error: function (xhr, status, error) {
-        showToast('error', 'You have already reviewed this product.');
+        showToast('Error', 'You have already reviewed this product.');
       },
     });
   });
