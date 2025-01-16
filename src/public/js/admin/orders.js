@@ -292,15 +292,14 @@ $(document).ready(function () {
     }
 
     const order = response.order;
-    console.debug('Order details:', order);
+
     // Render customer info
     $('#customerName').text(order.userId?.fullName || 'N/A');
     $('#customerEmail').text(order.userId?.email || 'N/A');
     $('#customerPhone').text(order.userId?.phone || 'N/A');
 
     // Render order info
-    const shippingDetails = JSON.parse(order.shippingDetails);
-    $('#shippingAddress').text(shippingDetails.address || 'N/A');
+    $('#shippingAddress').text(order.shippingDetails || 'N/A');
     $('#dateCreated').text(new Date(order.createdAt).toLocaleDateString('vi-VN') || 'N/A');
     $('#orderStatus').text(order.status || 'N/A');
 
